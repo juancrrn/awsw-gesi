@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Contacto Pr_1</title>
+		<meta charset="utf-8">
+	<head/>
+	
+	<body>
+		<h1>Formulario de contacto:</h1>
+		<div id="form">
+			<form action="mailto:andrra01@ucm.es" method="get">
+				<fieldset>
+					<p>Nombre:</p>
+					<input type="text" name="nombre" value="Ricardo" pattern="[A-Za-z]{1,32}" required />
+					<p>Correo Electrónico:</p>
+					<input type="text" name="mail" value="ricardito11@ucm.es" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" required />
+					<p>Motivo de la consulta:</p>
+					<input type="radio" name="motivo" value="evaluacion" checked/> Evaluación
+					<input type="radio" name="motivo" value="sugerencias" /> Sugerencias
+					<input type="radio" name="motivo" value="criticas" /> Críticas
+					<p>Marque esta casilla para verificar que se ha leido nuestros términos y condiciones de servicio:</p>
+					<input name="terminos" type="checkbox" value="terminos" required /> Acepto
+					<p>Escriba aquí su consulta:</p>
+					<textarea name="consulta" rows="4" cols="50" required></textarea>
+					<p><input type="submit" value="Enviar" /></p>
+				</fieldset>
+			</form>
+		</div>
+	</body>
+</html>
