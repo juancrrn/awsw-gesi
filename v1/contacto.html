@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="es">
 	<head>
 		<meta charset="utf-8">
-		<title>Gesi - Contacto</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		<title>Gesi – Contacto</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-	<head/>
-	
+	</head>
 	<body>
-		<div id="contenedor">
-			<div id="cabecera">
-				<img src="img/logo.svg" height="64" width="64">
-				<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
-			</div>
-			
-			<div id="sidebar-left">
+		<header id="cabecera">
+			<img src="img/logo.svg" height="64" width="64">
+			<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
+		</header>
+
+		<div id="contenedor">			
+			<aside id="sidebar-left">
 				<h3>Navegación</h3>
 					<ul>
 						<li><a href="index.html">Inicio</a></li>
@@ -24,29 +23,50 @@
 						<li><a href="planificacion.html">Planificaión</a></li>
 						<li><a href="contacto.html">Contacto</a></li>
 					</ul>
-			</div>
-			<div id="contenido">
-				<div id="form">
-					<form action="mailto:andrra01@ucm.es" method="get">
-						<fieldset >
-							<legend>Formulario de Contacto</legend>
-							<p>Nombre:</p>
-							<input type="text" name="nombre" value="Ricardo" pattern="[A-Za-z]{1,32}" required />
-							<p>Correo Electrónico:</p>
-							<input type="text" name="mail" value="ricardito11@ucm.es" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" required />
-							<p>Motivo de la consulta:</p>
-							<input type="radio" name="motivo" value="evaluacion" checked/> Evaluación
-							<input type="radio" name="motivo" value="sugerencias" /> Sugerencias
-							<input type="radio" name="motivo" value="criticas" /> Críticas
-							<p>Marque esta casilla para verificar que se ha leido nuestros términos y condiciones de servicio:</p>
-							<input name="terminos" type="checkbox" value="terminos" required /> Acepto
-							<p>Escriba aquí su consulta:</p>
-							<textarea name="consulta" rows="10" cols="100" required></textarea>
-							<p><input type="submit" value="Enviar" /></p>
-						</fieldset>
-					</form>
-				</div>
-			</div>
+			</aside>
+			
+			<section id="contenido">
+				<form action="mailto:andrra01@ucm.es" method="get">
+					<fieldset>
+						<legend>Formulario de Contacto</legend>
+						
+						<p>
+							<label for="nombre">Nombre</label>
+						</p>
+						<p>
+							<input type="text" name="nombre" id="nombre" value="Ricardo" pattern="[A-Za-z]{1,32}" required />
+						</p>
+						
+						<p>
+							<label for="email">Correo electrónico</label>
+						</p>
+						<p>
+							<input type="email" name="mail" id="email" value="ricardito11@ucm.es" required />
+						</p>
+
+						<p>
+							Motivo de la consulta
+
+							<ul>
+								<li><input type="radio" name="motivo" value="evaluacion" id="motivo_evaluacion" checked/> <label for="motivo_evaluacion">Evaluación</label></li>
+								<li><input type="radio" name="motivo" value="sugerencias" id="motivo_sugerencias" /> <label for="motivo_sugerencias">Sugerencias</label></li>
+								<li><input type="radio" name="motivo" value="criticas" id="motivo_criticas" /> <label for="motivo_criticas">Críticas</label></li>
+							</ul>
+						</p>
+
+						<p>
+							<input name="terminos" type="checkbox" value="terminos" id="terminos" required /> <label for="terminos">He leído y acepto los términos y condiciones de servicio.</label></p>
+
+						<p><label for="consulta">Escriba aquí su consulta</label></p>
+
+						<textarea name="consulta" id="consulta" required></textarea>
+
+						<p><input type="submit" value="Enviar" /></p>
+					</fieldset>
+				</form>
+			</sections>
+
+			<div class="clearfix"></div>
 		</div>
 	</body>
 </html>

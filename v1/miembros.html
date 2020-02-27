@@ -1,18 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 		<title>Gesi – Miembros</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		<div id="contenedor">
-			<div id="cabecera">
-				<img src="img/logo.svg" height="64" width="64">
-				<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
-			</div>
-			
-			<div id="sidebar-left">
+		<header id="cabecera">
+			<img src="img/logo.svg" height="64" width="64">
+			<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
+		</header>
+
+		<div id="contenedor">			
+			<aside id="sidebar-left">
 				<h3>Navegación</h3>
 					<ul>
 						<li><a href="index.html">Inicio</a></li>
@@ -22,45 +23,56 @@
 						<li><a href="planificacion.html">Planificaión</a></li>
 						<li><a href="contacto.html">Contacto</a></li>
 					</ul>
-			</div>
+			</aside>
 			
-			<div id="contenido">
+			<section id="contenido">
 				<h1>Miembros</h1>
-				<p>
-					<a href ="#Pablo">Pablo</a>
-				   <a href ="#Andrés">Andrés</a>
-				   <a href ="#Cintia">Cintia</a>
-				   <a href ="#Nicolás">Nicolás</a>
-				   <a href ="#Juan">Juan</a>
-				</p>
+				
+				<ul>
+					<li><a href ="#pablo">Pablo</a></li>
+					<li><a href ="#andres">Andrés</a></li>
+					<li><a href ="#cintia">Cintia</a></li>
+					<li><a href ="#nicolas">Nicolás</a></li>
+					<li><a href ="#juan">Juan</a></li>
+				</ul>
 
-				<div id="Pablo">
-				<img src="img/001.jpg">
-				<p>Pablo</p>
+				<div id="pablo" class="perfil">
+					<img src="img/001.jpg" class="imagen-perfil">
+					<p>Pablo Morer</p>
+					<p>pmorer@ucm.es</p>
+			    	<p>Estudio ingeniería de Computadores, tengo 22 años y me gusta el baloncesto.</p>
 				</div>
 
-				<div id="Andrés">
-				<img src="img/005.jpg">
-				<p>Andrés</p>
+				<div id="andres" class="perfil">
+					<img src="img/005.jpg" class="imagen-perfil">
+					<p>Andrés Ramiro</p>
+					<p>andrra01@ucm.es</p>
+					<p>Estudio ingeniería de Computadores, tengo 24 años y me gustan los coches.</p>
+				</div>
+
+				<div id="cintia" class="perfil">
+					<img src="img/002.jpg" class="imagen-perfil">
+					<p>Cintia Herrera</p>
+					<p>cintiamh@ucm.es </p>
+					<p>Estudio ingeniería de Computadores, tengo 20 años  y me gusta la fotografía. </p>
+				</div>
+
+				<div id="nicolas" class="perfil">
+					<img src="img/003.jpg" class="imagen-perfil">
+					<p>Nicolás Pardina</p>
+					<p> npardina@ucm.es</p>
+					<p> Estudio ingeniería de Computadores, tengo 22 años y me apasiona la programación web.  </p>
+				</div>
+
+				<div id="juan" class="perfil">
+					<img src="img/004.jpg" class="imagen-perfil">
+					<p>Juan Carrión</p>
+					<p> juanfrca@ucm.es </p>
+					<p> Estudio ingeniería informática, tengo 20 años y me gusta la música </p>
 			   </div>
+			</section>
 
-				<div id="Cintia">
-				<img src="img/002.jpg">
-				<p>Cintia</p>
-			   </div>
-
-
-				<div id="Nicolás">
-				<img src="img/003.jpg">
-				<p>Nicolás</p>
-			   </div>
-
-
-				<div id="Juan">
-				<img src="img/004.jpg">
-				<p>Juan</p>
-			   </div>
-			</div>
+			<div class="clearfix"></div>
 
 		</div> <!-- Fin del contenedor -->
 		

@@ -1,18 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 		<title>Gesi – Detalles</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		<div id="contenedor">
-			<div id="cabecera">
-				<img src="img/logo.svg" height="64" width="64">
-				<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
-			</div>
-			
-			<div id="sidebar-left">
+		<header id="cabecera">
+			<img src="img/logo.svg" height="64" width="64">
+			<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
+		</header>
+
+		<div id="contenedor">			
+			<aside id="sidebar-left">
 				<h3>Navegación</h3>
 					<ul>
 						<li><a href="index.html">Inicio</a></li>
@@ -22,45 +23,55 @@
 						<li><a href="planificacion.html">Planificaión</a></li>
 						<li><a href="contacto.html">Contacto</a></li>
 					</ul>
-			</div>
+			</aside>
 			
-			<div id="contenido">
-				<h1> Concepto </h1>
-				<p> Gesi es una aplicación web que habilita la gestión de procesos académicos y administrativos de forma ágil e intuitiva, dirigido a institutos de educación secundaria que quieran centralizar y digitalizar los trámites y el día a día de su centro. </p>
+			<section id="contenido">
+				<h1>Concepto</h1>
 
+				<p>Gesi es una aplicación web que habilita la gestión de procesos académicos y administrativos de forma ágil e intuitiva, dirigido a institutos de educación secundaria que quieran centralizar y digitalizar los trámites y el día a día de su centro.</p>
 
 				<p>Gesi es un espacio en el que la comunidad educativa puede interactuar, compartir recursos, debatir en foros, estar al tanto de la actividad del centro e, incluso, intercambiar libros de texto.</p>
 
 				<p>A diferencia de otros sistemas en el mercado, esta opción es flexible y permite un trabajo en la nube desde cualquier lugar y a cualquier hora de forma segura y eficaz. </p>
 
-				<h3> Usuarios y tareas </h3>
-				<h4>
-				Personal de administración y servicios (PAS)
-				</h4>
-				<li> Gestión de usuarios y grupos: Puede añadir usuarios y grupos al sistema, modificar datos de alumnos, profesores y grupos a lo largo del curso y eliminarlos. </li>
-				<li> Gestión de espacios: Gestiona los distintos espacios pertenecientes al centro </li>
-				<li>Gestión de asignaturas: Puede añadir asignaturas al sistema, modificar los de datos de las asignaturas y eliminarlas a lo largo del curso. Relaciona asignaturas con profesor y grupo de alumnos</li>
-				<li>Gestión de foros: Administra un foro general y distintos foros por grupos </li>
-				<li>Gestión de horarios: Se encarga de planificar el horario de cada grupo y modificarlo en caso que haga falta </li>
-				<li>Gestión de matrículas: Introduce al sistema los datos de los alumnos al inicio de curso, asignando a cada alumno con un grupo  </li>
-				<li>Gestión de calendario: Añade a un calendario general distintos eventos que suceden durante el curso (fiestas académicas y dias festivos)</li>
-				<li>Gestión de biblioteca: Añade , da de alta o de baja ejemplares de libros al Sistema </li>
-				<li>Permite consultar los distintos mensajes de cualquier usuario o invitado </li>
-				<h4>
-				Personal docente (profesores)
-				</h4>
-				<li>Gestión de asignaturas: Publica contenido de su asignatura (Power Points, PDFs, videos, etc) </li>
-				<h4>
-				Estudiante
-				</h4>
-				<li>Visualizar las asignaturas en las que está matriculado</li>
-				<li>Publicar tanto en el foro general como en el foro asignado a su grupo y en los de sus asignaturas matriculadas </li>
-				<li>Gestión de biblioteca: Visualizar el catálogo de ejemplares, renovar ejemplares adquiridos y reservar en caso de que sea posible </li>
-				<h4>
-				Invitado (es el único que no necesita iniciar sesión)
-				</h4>
-				<li>Visualizar el calendario general, contactar con secretaría.</li>
-			</div>
+				<h3>Usuarios y tareas</h3>
+				
+				<h4>Personal de administración y servicios (PAS)</h4>
+				
+				<ul>
+					<li> Gestión de usuarios y grupos: Puede añadir usuarios y grupos al sistema, modificar datos de alumnos, profesores y grupos a lo largo del curso y eliminarlos. </li>
+					<li> Gestión de espacios: Gestiona los distintos espacios pertenecientes al centro </li>
+					<li>Gestión de asignaturas: Puede añadir asignaturas al sistema, modificar los de datos de las asignaturas y eliminarlas a lo largo del curso. Relaciona asignaturas con profesor y grupo de alumnos</li>
+					<li>Gestión de foros: Administra un foro general y distintos foros por grupos </li>
+					<li>Gestión de horarios: Se encarga de planificar el horario de cada grupo y modificarlo en caso que haga falta </li>
+					<li>Gestión de matrículas: Introduce al sistema los datos de los alumnos al inicio de curso, asignando a cada alumno con un grupo  </li>
+					<li>Gestión de calendario: Añade a un calendario general distintos eventos que suceden durante el curso (fiestas académicas y dias festivos)</li>
+					<li>Gestión de biblioteca: Añade , da de alta o de baja ejemplares de libros al Sistema </li>
+					<li>Permite consultar los distintos mensajes de cualquier usuario o invitado </li>
+				</ul>
+
+				<h4>Personal docente (profesores)</h4>
+				
+				<ul>
+					<li>Gestión de asignaturas: Publica contenido de su asignatura (Power Points, PDFs, videos, etc) </li>
+				</ul>
+
+				<h4>Estudiante</h4>
+				
+				<ul>
+					<li>Visualizar las asignaturas en las que está matriculado</li>
+					<li>Publicar tanto en el foro general como en el foro asignado a su grupo y en los de sus asignaturas matriculadas </li>
+					<li>Gestión de biblioteca: Visualizar el catálogo de ejemplares, renovar ejemplares adquiridos y reservar en caso de que sea posible </li>
+				</ul>
+
+				<h4>Invitado (es el único que no necesita iniciar sesión)</h4>
+
+				<ul>
+					<li>Visualizar el calendario general, contactar con secretaría.</li>
+				</ul>
+			</section>
+
+			<div class="clearfix"></div>
 
 		</div> <!-- Fin del contenedor -->
 		

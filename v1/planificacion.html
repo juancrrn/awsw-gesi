@@ -1,18 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 		<title>Gesi – Planificación</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		<div id="contenedor">
-			<div id="cabecera">
-				<img src="img/logo.svg" height="64" width="64">
-				<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
-			</div>
-			
-			<div id="sidebar-left">
+		<header id="cabecera">
+			<img src="img/logo.svg" height="64" width="64">
+			<h1>Gesi: Aplicación de gestión de institutos de educación secundaria</h1>
+		</header>
+
+		<div id="contenedor">			
+			<aside id="sidebar-left">
 				<h3>Navegación</h3>
 					<ul>
 						<li><a href="index.html">Inicio</a></li>
@@ -22,10 +23,10 @@
 						<li><a href="planificacion.html">Planificaión</a></li>
 						<li><a href="contacto.html">Contacto</a></li>
 					</ul>
-			</div>
+			</aside>
 			
-			<div id="contenido">
-			<h1>Planificación:</h1>
+			<section id="contenido">
+				<h1>Planificación:</h1>
 				<table>
 					<tr>
 						<th> Tareas </th>
@@ -75,7 +76,9 @@
 				<p>
 					*El reparto del trabajo será equitativo entre los distintos miembros del grupo teniendo en cuenta la complejidad de cada tarea.
 				</p>
-			</div>
+			</section>
+
+			<div class="clearfix"></div>
 
 		</div> <!-- Fin del contenedor -->
 		

@@ -1,44 +1,111 @@
-div#contenedor {
-	margin: auto;
-	margin-top: 10px;
-	font-family: sans-serif;
+* {
+	box-sizing: border-box;
 }
 
-div#cabecera {
+html, body {
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+ * Cabecera
+ */
+
+#cabecera {
 	padding: 20px;
 	font-size: 20px;
 }
 
-div#sidebar-left {
-	padding: 30px;
-	float: left;
-	width: 170px;
-	font-size: 20px;
+#cabecera h1 {
+	margin-bottom: 0;
 }
 
-div#sidebar-left a, div#sidebar-left a:visited {
-	color: red;
-	font-weight: bold;
+/*
+ * Contenedor
+ */
+
+#contenedor {
+}
+
+.clearfix {
+	clear: both;
+}
+
+/*
+ * Barra lateral
+ */
+
+#sidebar-left {
+	width: 30%;
+	padding: 30px;
+	float: left;
+}
+
+@media (max-width: 600px) {
+	#sidebar-left {
+		width: 100%;
+		float: none;
+	}
+}
+
+#sidebar-left h3 {
+	margin-top: 0;
+}
+
+#sidebar-left a, #sidebar-left a:visited {
+	color: #7b1fa2;
 	text-decoration: none;
 } 
 
-div#sidebar-left a:hover {
+#sidebar-left a:hover {
 	color: red;
 	text-decoration: underline;
-} 
-
-div#contenido {
-	float: left;
-	min-height: 600px;
-	width: 1250px;
-	font-size: 22px;
-	padding: 10px;
-	padding: 0 0 100px;
 }
+
+/*
+ * Contenido
+ */
+
+#contenido {
+	float: left;
+	padding: 30px;
+	width: 70%;
+}
+
+@media (max-width: 600px) {
+	#contenido {
+		width: 100%;
+		float: none;
+	}
+}
+
+#contenido h1 {
+	margin-top: 0;
+}
+
+/*
+ * Perfiles
+ */
+
+.perfil {
+    margin-bottom: 24px;
+    padding: 16px;
+    border: 1px solid 
+    #ccc;
+    border-radius: 10px;
+}
+
+.imagen-perfil {
+    border-radius: 50%;
+}
+
+/*
+ * Formulario
+ */
 
 fieldset {
 	border: 1px solid black;
-	margin: 0 auto;
 }
 
 legend {
@@ -48,9 +115,38 @@ legend {
 	padding: 2px 6px;
 } 
 
+textarea {
+	display: block;
+	width: 100%;
+	min-height: 150px;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-family: inherit;
+}
+
+input[type="text"], input[type="email"] {
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 0.9em;
+    font-family: inherit;
+}
+
+/*
+ * Formulario
+ */
+
+table {
+	border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
 tr {
 	text-align: center;
 	padding: 20px;
 }
-
-
