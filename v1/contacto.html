@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-		<title>Gesi – Contacto</title>
+		<title>Contacto – Gesi – Aplicación de gestión de institutos de educación secundaria</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
@@ -15,53 +15,47 @@
 		<div id="contenedor">			
 			<aside id="sidebar-left">
 				<h3>Navegación</h3>
-					<ul>
-						<li><a href="index.html">Inicio</a></li>
-						<li><a href="detalles.html">Detalles</a></li>
-						<li><a href="bocetos.html">Bocetos</a></li>
-						<li><a href="miembros.html">Miembros</a></li>
-						<li><a href="planificacion.html">Planificaión</a></li>
-						<li><a href="contacto.html">Contacto</a></li>
-					</ul>
+				
+				<ul>
+					<li><a href="index.html">Inicio</a></li>
+					<li><a href="detalles.html">Detalles</a></li>
+					<li><a href="bocetos.html">Bocetos</a></li>
+					<li><a href="miembros.html">Miembros</a></li>
+					<li><a href="planificacion.html">Planificaión</a></li>
+					<li><a href="contacto.html">Contacto</a></li>
+				</ul>
 			</aside>
 			
 			<section id="contenido">
-				<form action="mailto:andrra01@ucm.es" method="get">
+				<form action="mailto:andrra01@ucm.es" method="post" enctype="text/plain">
 					<fieldset>
 						<legend>Formulario de Contacto</legend>
 						
-						<p>
-							<label for="nombre">Nombre</label>
-						</p>
-						<p>
-							<input type="text" name="nombre" id="nombre" value="Ricardo" pattern="[A-Za-z]{1,32}" required />
-						</p>
+						<p><label for="nombre">Nombre</label></p>
+						<p><input type="text" name="name" id="nombre" placeholder="Nombre" pattern="[A-Za-z]{1,32}" required /></p>
 						
-						<p>
-							<label for="email">Correo electrónico</label>
-						</p>
-						<p>
-							<input type="email" name="mail" id="email" value="ricardito11@ucm.es" required />
-						</p>
+						<p><label for="email">Correo electrónico</label></p>
+						<p><input type="email" name="mail" id="email" placeholder="Correo electrónico" required /></p>
+
+						<p>Motivo de la consulta</p>
+						<ul>
+							<li><input type="radio" name="motivo" value="evaluacion" id="motivo_evaluacion" /> <label for="motivo_evaluacion">Evaluación</label></li>
+							<li><input type="radio" name="motivo" value="sugerencias" id="motivo_sugerencias" /> <label for="motivo_sugerencias">Sugerencias</label></li>
+							<li><input type="radio" name="motivo" value="criticas" id="motivo_criticas" /> <label for="motivo_criticas">Críticas</label></li>
+						</ul>
 
 						<p>
-							Motivo de la consulta
-
-							<ul>
-								<li><input type="radio" name="motivo" value="evaluacion" id="motivo_evaluacion" checked/> <label for="motivo_evaluacion">Evaluación</label></li>
-								<li><input type="radio" name="motivo" value="sugerencias" id="motivo_sugerencias" /> <label for="motivo_sugerencias">Sugerencias</label></li>
-								<li><input type="radio" name="motivo" value="criticas" id="motivo_criticas" /> <label for="motivo_criticas">Críticas</label></li>
-							</ul>
+							<input name="terminos" type="checkbox" value="terminos" id="terminos" required />
+							<label for="terminos">He leído y acepto los términos y condiciones de servicio.</label>
 						</p>
-
-						<p>
-							<input name="terminos" type="checkbox" value="terminos" id="terminos" required /> <label for="terminos">He leído y acepto los términos y condiciones de servicio.</label></p>
 
 						<p><label for="consulta">Escriba aquí su consulta</label></p>
+						<textarea name="comment" id="consulta" placeholder="Consulta" required></textarea>
 
-						<textarea name="consulta" id="consulta" required></textarea>
-
-						<p><input type="submit" value="Enviar" /></p>
+						<p>
+							<input type="submit" value="Enviar" />
+							<input type="reset" value="Cancelar" />
+						</p>
 					</fieldset>
 				</form>
 			</sections>

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-		<title>Gesi – Detalles</title>
+		<title>Detalles – Gesi – Aplicación de gestión de institutos de educación secundaria</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
@@ -15,18 +15,21 @@
 		<div id="contenedor">			
 			<aside id="sidebar-left">
 				<h3>Navegación</h3>
-					<ul>
-						<li><a href="index.html">Inicio</a></li>
-						<li><a href="detalles.html">Detalles</a></li>
-						<li><a href="bocetos.html">Bocetos</a></li>
-						<li><a href="miembros.html">Miembros</a></li>
-						<li><a href="planificacion.html">Planificaión</a></li>
-						<li><a href="contacto.html">Contacto</a></li>
-					</ul>
+				
+				<ul>
+					<li><a href="index.html">Inicio</a></li>
+					<li><a href="detalles.html">Detalles</a></li>
+					<li><a href="bocetos.html">Bocetos</a></li>
+					<li><a href="miembros.html">Miembros</a></li>
+					<li><a href="planificacion.html">Planificaión</a></li>
+					<li><a href="contacto.html">Contacto</a></li>
+				</ul>
 			</aside>
 			
 			<section id="contenido">
-				<h1>Concepto</h1>
+				<h1>Detalles</h1>
+
+				<h2>Concepto</h2>
 
 				<p>Gesi es una aplicación web que habilita la gestión de procesos académicos y administrativos de forma ágil e intuitiva, dirigido a institutos de educación secundaria que quieran centralizar y digitalizar los trámites y el día a día de su centro.</p>
 
@@ -34,47 +37,152 @@
 
 				<p>A diferencia de otros sistemas en el mercado, esta opción es flexible y permite un trabajo en la nube desde cualquier lugar y a cualquier hora de forma segura y eficaz. </p>
 
-				<h3>Usuarios y tareas</h3>
+				<h2>Usuarios y tareas</h2>
+
+				<p>Establecemos una jerarquía de manera que los usuarios de mayor rango heredan capacidades de los de menor. Por ejemplo, el personal de administración y servicios dispone de sus capacidades y, además, de las de personal docente, estudiantes e invitados.</p>
+
+				<p>Utilizamos el acrónimo <em>CRUD</em> para referirnos a creación, visualización, actualización y eliminación de información (<em>create, read, update and delete</em>).</p>
+
+				<p><sup>1</sup>Algunas funcionalidades se implementan como calendarios especiales.</p>
 				
-				<h4>Personal de administración y servicios (PAS)</h4>
+				<h3>Personal de administración y servicios (PAS)</h3>
 				
 				<ul>
-					<li> Gestión de usuarios y grupos: Puede añadir usuarios y grupos al sistema, modificar datos de alumnos, profesores y grupos a lo largo del curso y eliminarlos. </li>
-					<li> Gestión de espacios: Gestiona los distintos espacios pertenecientes al centro </li>
-					<li>Gestión de asignaturas: Puede añadir asignaturas al sistema, modificar los de datos de las asignaturas y eliminarlas a lo largo del curso. Relaciona asignaturas con profesor y grupo de alumnos</li>
-					<li>Gestión de foros: Administra un foro general y distintos foros por grupos </li>
-					<li>Gestión de horarios: Se encarga de planificar el horario de cada grupo y modificarlo en caso que haga falta </li>
-					<li>Gestión de matrículas: Introduce al sistema los datos de los alumnos al inicio de curso, asignando a cada alumno con un grupo  </li>
-					<li>Gestión de calendario: Añade a un calendario general distintos eventos que suceden durante el curso (fiestas académicas y dias festivos)</li>
-					<li>Gestión de biblioteca: Añade , da de alta o de baja ejemplares de libros al Sistema </li>
-					<li>Permite consultar los distintos mensajes de cualquier usuario o invitado </li>
+					<li>
+						Usuarios y grupos
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de usuarios</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de grupos de usuarios</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de asociaciones entre usuarios y grupos de usuarios</li>
+						</ul>
+					</li>
+
+					<li>
+						Espacios
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de espacios</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de ocupación y reservas de espacios<sup>1</sup></li>
+						</ul>
+					</li>
+					
+					<li>
+						Asignaturas
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de asignaturas</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de relaciones entre asignaturas, profesores, estudiantes y grupos de usuarios</li>
+						</ul>
+					</li>
+
+					<li>
+						Foros
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de foros</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de relaciones entre foros de asignatura y asignaturas</li>
+						</ul>
+					</li>
+
+					<li>
+						Horarios
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de horarios<sup>1</sup></li>
+						</ul>
+					</li>
+
+					<li>
+						Matrículas
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de matrículas, es decir, relaciones entre estudiantes y grupos</li>
+						</ul>
+					</li>
+
+					<li>
+						Calendario
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de calendarios</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de eventos en los calendarios</li>
+						</ul>
+					</li>
+
+					<li>
+						Biblioteca
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de publicaciones y ejemplares</li>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de préstamos</li>
+						</ul>
+					</li>
+
+					<li>
+						Mensajes de Secretaría
+						<ul>
+							<li>Visualización y respuesta de mensajes de Secretaría</li>
+						</ul>
+					</li>
 				</ul>
 
-				<h4>Personal docente (profesores)</h4>
+				<h3>Personal docente (profesores)</h3>
 				
 				<ul>
-					<li>Gestión de asignaturas: Publica contenido de su asignatura (Power Points, PDFs, videos, etc) </li>
+					<li>
+						Asignaturas
+						<ul>
+							<li><abbr title="Creación, visualización, actualización y eliminación">CRUD</abbr> de contenido en asignaturas (presentaciones, documentos, vídeos, etc.)</li>
+						</ul>
+					</li>
 				</ul>
 
-				<h4>Estudiante</h4>
+				<h3>Estudiante</h3>
 				
 				<ul>
-					<li>Visualizar las asignaturas en las que está matriculado</li>
-					<li>Publicar tanto en el foro general como en el foro asignado a su grupo y en los de sus asignaturas matriculadas </li>
-					<li>Gestión de biblioteca: Visualizar el catálogo de ejemplares, renovar ejemplares adquiridos y reservar en caso de que sea posible </li>
+					<li>
+						Aignaturas
+						<ul>
+							<li>Visualizar las asignaturas en las que está matriculado y los recursos de las mismas</li>
+						</ul>
+					</li>
+
+					<li>
+						Foros
+						<ul>
+							<li>Visualizar y publicar en el foro general</li>
+							<li>Visualizar y publicar en los foros de las asignaturas en las que está matriculado</li>
+						</ul>
+					</li>
+
+					<li>
+						Biblioteca
+						<ul>
+							<li>Gestionar movimientos con la biblioteca, ampliar préstamos y reservar ejemplares</li>
+						</ul>
+					</li>
 				</ul>
 
-				<h4>Invitado (es el único que no necesita iniciar sesión)</h4>
+				<h3>Invitado (es el único que no necesita iniciar sesión)</h3>
 
 				<ul>
-					<li>Visualizar el calendario general, contactar con secretaría.</li>
+					<li>
+						Calendario
+						<ul>
+							<li>Visualizar el calendario general del centro</li>
+						</ul>
+					</li>
+
+					<li>
+						Mensajes de Secretaría
+						<ul>
+							<li>Enviar un mensaje a Secretaría</li>
+						</ul>
+					</li>
+
+					<li>
+						Biblioteca
+						<ul>
+							<li>Visualizar el catálogo de publicaciones de la biblioteca y la disponibilidad de ejemplares</li>
+						</ul>
+					</li>
 				</ul>
 			</section>
 
 			<div class="clearfix"></div>
-
-		</div> <!-- Fin del contenedor -->
-		
+		</div>
 	</body>
 </html>
-

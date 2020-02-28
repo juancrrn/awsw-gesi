@@ -13,7 +13,7 @@ html, body {
  */
 
 #cabecera {
-	padding: 20px;
+	padding: 30px;
 	font-size: 20px;
 }
 
@@ -81,7 +81,13 @@ html, body {
 }
 
 #contenido h1 {
-	margin-top: 0;
+    margin-top: 0;
+    font-weight: normal;
+    font-size: 2em;
+}
+
+#contenido h3 {
+	font-size: inherit;
 }
 
 /*
@@ -140,13 +146,25 @@ input[type="text"], input[type="email"] {
 
 table {
 	border-collapse: collapse;
+	width: 100%;
+	max-width: 700px;
 }
 
 table, th, td {
-  border: 1px solid black;
+	border: 1px solid black;
 }
 
-tr {
-	text-align: center;
-	padding: 20px;
+th, td {
+	padding: 10px;
+	vertical-align: top;
+	text-align: left;
+}
+
+/*
+ * Bocetos
+ */
+
+ .boceto-item img {
+    width: 100%;
+    max-width: 450px;
 }
