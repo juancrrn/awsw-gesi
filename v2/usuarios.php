@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Pie HTML (append).
+ * Vista de gestión de usuarios.
+ *
+ * - PAS: único permitido.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,13 +18,4 @@
  * @version 0.0.2
  */
 
-?>
-		<div id="main-footer-background">
-			<div class="wrapper">
-				<footer id="main-footer" class="container">
-					<p>Gesi</p>
-				</footer>
-			</div>
-		</div>
-	</body>
-</html>
+require_once __DIR__ . "/sistema/configuracion.php";

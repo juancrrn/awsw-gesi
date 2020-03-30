@@ -20,11 +20,27 @@ namespace Awsw\Gesi;
 
 class Evento
 {
+	// Identificador único de evento
+	private $id;
+
+	// Fecha del evento
+	private $fecha;
+
+	// Nombre del evento
+	private $nombre;
+
+	// Lugar donde se va a producir el evento
+	private $lugar;
+
 	/**
 	 * Constructor.
 	 */
-	private __construct()
+	private __construct($id, $fecha, $nombre, $lugar)
 	{
+		$this->id = $id;
+		$this->fecha = $fecha;
+		$this->nombre = $nombre;
+		$this->lugar = $lugar;
 	}
 
 	/**

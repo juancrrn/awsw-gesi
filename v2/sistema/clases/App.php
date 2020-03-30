@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 /**
  * Inicialización y métodos de la aplicación.
@@ -20,8 +20,6 @@ namespace Awsw\Gesi;
 
 class App
 {
-	// Nombre de la cookie de sesión.
-	const NOMBRE_SESION = "gesi_sesion";
 
 	// Instancia actual de la aplicación.
 	private static $instancia;
@@ -39,8 +37,7 @@ class App
 	private $url;
 
 	/**
-	 * Constructor. Al ser privado, asegura que solo habrá
-	 * una única instancia de la clase (patrón singleton).
+	 * Constructor. Al ser privado, asegura que solo habrá una única instancia * de la clase (patrón singleton).
 	 */
 	private function __construct()
 	{
@@ -89,64 +86,20 @@ class App
 	public function init($bbdd_datos, $raiz, $url)
 	{
 		$this->bbdd_datos = $bbdd_datos;
-
 		$this->raiz = $raiz;
-
-		// Añadir barra de directorio final.
-		$raiz_len = mb_strlen($raiz);
-		if ($raiz_len > 0 && $raiz[$raiz_len - 1] !== "/") {
-			$this->raiz .= "/";
-		}
-
 		$this->url = $url;
-
-		// Añadir barra de directorio final.
-		$url_len = mb_strlen($url);
-		if ($url_len > 0 && $raiz[$url_len - 1] !== "/") {
-			$this->url .= "/";
-		}
-
 		$this->bbdd_con = null;
 
 		session_start();
-	}
 
-	/**
-	 * Inicia la sesión de un usuario.
-	 *
-	 * @requires No hay ninguna sesión ya iniciada.
-	 */
-	public function doLogin(Usuario $user)
-	{
-		$_SESSION[self::NOMBRE_SESION] = $user->getId();
-	}
-
-	/**
-	 * Cierra la sesión de un usuario.
-	 */
-	public function doLogout()
-	{
-		unset($_SESSION[self::NOMBRE_SESION]);
-
-		session_destroy();
-
-		session_start();
-	}
-
-	/**
-	 * Devuelve el is del usuario que ha iniciado sesión.
-	 *
-	 * @requires Un usuario ha iniciado sesión previamente.
-	 */
-	public function idLogueado()
-	{
-		return $_SESSION[self::NOMBRE_SESION];
+		// Inicializar gestión de la sesión de usuario.
+		Sesion::init();
 	}
 
 	/**
 	 * Inicia una conexión con la base de datos.
 	 */
-	public function bbddConecta()
+	public function bbddCon() : \mysqli
 	{
 		if (! $this->bbdd_con) {
 			$host = $this->bbdd_datos["host"];
@@ -159,7 +112,7 @@ class App
 			try {
 				$this->bbdd_con = new \mysqli($host, $user, $password, $name);
 			} catch (\mysqli_sql_exception $e) {
-				throw new \Exception("Error al conectar con la base de datos.", 0, $e)
+				throw new \Exception("Error al conectar con la base de datos.", 0, $e);
 			}
 
 			try {
@@ -171,6 +124,23 @@ class App
 
 		return $this->bbdd_con;
 	}
+
+	/**
+	 * Directorio raíz de la instalación.
+	 */
+	public function getRaiz() : string
+	{
+		return $this->raiz;
+	}
+
+	/**
+	 * URL pública de la instalación.
+	 */
+	public function getUrl() : string
+	{
+		return $this->url;
+	}
+
 }
 
 ?>

@@ -20,11 +20,24 @@ namespace Awsw\Gesi;
 
 class Foro
 {
+	// Identificador único del foro
+	private $id;
+
+	// Tema a tratar en el foro
+	private $tema;
+
+	// Identificador de la relación profesor-grupo-asignatura del foro. Si es NULL, el foro es público
+	private $profesor_grupo_asignatura;
+
+
 	/**
 	 * Constructor.
 	 */
-	private __construct()
+	private function __construct($id, $tema, $profesor_grupo_asignatura)
 	{
+		$this->id = $id;
+		$this->tema = $tema;
+		$this->profesor_grupo_asignatura = $profesor_grupo_asignatura;
 	}
 
 	/**
@@ -36,7 +49,7 @@ class Foro
 	 *
 	 * @return Foro
 	 */
-	public static dbGet(int $id)
+	public static function dbGet(int $id)
 	{
 		return new Foro();
 	}
@@ -50,7 +63,7 @@ class Foro
 	 *
 	 * @return array<MensajeForo>
 	 */
-	public dbGetMessages()
+	public static function dbGetMessages()
 	{
 		return array();
 	}

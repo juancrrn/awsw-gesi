@@ -20,10 +20,22 @@ namespace Awsw\Gesi;
 
 class MensajeForo
 {
+	// Identificador único de un mensaje en el foro
+	private $id;
+
+	// Foro al que pertenece el mensaje
+	private $foro;
+
+	// Mensaje al que responde, NULL si es el original
+	private $padre;
+
 	/**
 	 * Constructor.
 	 */
-	private __construct()
+	private function __construct($id, $foro, $padre)
 	{
+		$this->id = $id;
+		$this->foro = $foro;
+		$this->padre = $padre;
 	}
 }

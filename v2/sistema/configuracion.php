@@ -21,6 +21,12 @@
  */
 
 /**
+ * Habilitar escritura estricta (strict typing) en PHP para mayor seguridad.
+ */
+
+declare(strict_types = 1);
+
+/**
  * Habilitar errores para depuración.
  */
 
@@ -30,15 +36,18 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 /**
  * Definición de constantes.
+ * 
+ * La raíz y la URL no deben incluir el separador final (trailing slash).
  */
 
 define("GESI_DB_HOST", "localhost");
 define("GESI_DB_USER", "root");
 define("GESI_DB_PASSWORD", "");
+define("GESI_DB_NAME", "gesi");
 define("GESI_DB_TABLE_PREFIX", "gesi_");
 
 define("GESI_ROOT", "__DIR__");
-define("GESI_URL", "http://localhost");
+define("GESI_URL", "http://localhost/gesi");
 
 /**
  * Configuración de codificación y zona horaria.
@@ -49,14 +58,14 @@ setLocale(LC_ALL, "es_ES.UTF.8");
 date_default_timezone_set("Europe/Madrid");
 
 /**
- * Preparar autocarga de clases registrando una función anónima
- * como implementación de __autoload().
+ * Preparar autocarga de clases registrando una función anónima como
+ * implementación de __autoload().
  *
  * @see https://www.php.net/manual/en/function.spl-autoload-register.php
  * @see https://www.php-fig.org/psr/psr-4/
  */
 
-spl_autoload_register(function ($class)) {
+spl_autoload_register(function ($class) {
 	// Prefijo de espacio de nombres específico del proyecto.
 	$prefix = "Awsw\\Gesi\\";
 
@@ -74,11 +83,11 @@ spl_autoload_register(function ($class)) {
 	// Obtener el nombre relativo de la clase.
 	$relative_class = substr($class, $len);
 
-	// Reemplazar el prefijo del espacio de nombres con el
-	// directorio base, reemplazar los separadores del espacio
-	// de nombres con separadores de directorio en el nombre
-	// relativo de la clase y añadir la extensión de PHP.
-	$ffile = $base_dir . str_replace("\\", "/", $relative_class) . ".php";
+	// Reemplazar el prefijo del espacio de nombres con directorio base,
+	// reemplazar los separadores del espacio de nombres con separadores de
+	// directorio en el nombre relativo de la clase y añadir la extensión de
+	// PHP.
+	$file = $base_dir . "clases/" . str_replace("\\", "/", $relative_class) . ".php";
 
 	// Si el fichero existe, cargarlo.
 	if (file_exists($file)) {
@@ -91,6 +100,7 @@ spl_autoload_register(function ($class)) {
  */
 
 $app = \Awsw\Gesi\App::getSingleton();
+
 $app->init(
 	array(
 		"host" => GESI_DB_HOST,

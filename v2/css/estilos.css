@@ -1,0 +1,176 @@
+/**
+ * Estilos principales.
+ *
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Cintia María Herrera Arenas
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.2
+ */
+
+/*
+ * Inicializaciones.
+ */
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	font-family: sans-serif;
+}
+
+/*
+ * Enlaces.
+ */
+
+a {
+	text-decoration: none;
+	color: #7b1fa2;
+	border-bottom: 1px solid;
+}
+
+/*
+ * Texto visible solo para lectores de pantalla.
+ */
+
+ .screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #eee;
+	clip: auto !important;
+	clip-path: none;
+	color: #444;
+	display: block;
+	font-size: 1em;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000; /* Above WP toolbar. */
+}
+
+/*
+ * Alineación con float.
+ */
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.clearfix {
+	clear: both;
+}
+
+/*
+ * Contenedores.
+ */
+
+.wrapper {
+	max-width: 1000px;
+	margin: 16px auto;
+}
+
+.container {
+	padding: 16px 32px;
+}
+
+/* 
+ * Cabecera principal.
+ */
+
+#main-header-background {
+	border-bottom: 1px solid #ddd;
+}
+
+header#main-header #app-logo {
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: .5rem;	
+}
+
+header#main-header #app-logo img {
+	display: block;
+}
+
+header#main-header #app-name {
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 2rem;
+}
+
+header#main-header #app-name h1 {
+	font-size: 1.5rem;
+	font-weight: normal;
+	line-height: 32px;
+}
+
+header#main-header nav#main-menu {
+	display: inline-block;
+}
+
+header#main-header nav#main-menu ul li,
+header#main-header nav#user-menu ul li {
+	display: inline-block;
+	vertical-align: middle;
+	list-style: none;
+	line-height: 32px;
+	margin: 0;
+}
+
+header#main-header nav#main-menu ul li {
+	margin-right: 1rem;
+}
+
+header#main-header nav#user-menu ul li {
+	margin-left: 1rem;
+}
+
+/* 
+ * Pie principal.
+ */
+
+#main-footer-background {
+	border-top: 1px solid #ddd;
+}
+
+/* 
+ * Contenido de la página.
+ */
+
+header.page-header {
+	margin-bottom: 1rem;
+}
+
+section.page-content p {
+	text-align: justify;
+	margin-bottom: 1rem;
+	line-height: 1.5rem;
+	text-indent: 2rem;
+}
