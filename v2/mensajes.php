@@ -21,3 +21,25 @@
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
+
+use \Awsw\Gesi\Vistas\Vista;
+
+Vista::setPaginaActual("Mensajes de secretaría", "mensajes");
+
+Vista::incluirCabecera();
+
+?>
+<div class="wrapper">
+	<div class="container">
+		<header class="page-header">
+			<h1>Mensajes de secretaría</h1>
+		</header>
+
+		<section class="page-content">
+			...
+		</section>
+	</div>
+</div>
+<?php
+
+Vista::incluirPie();
