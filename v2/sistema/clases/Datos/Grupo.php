@@ -16,25 +16,36 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi;
+namespace Awsw\Gesi\Datos;
 
 class Grupo
 {
-	private $id;				// Identificador único de grupo
+	// Identificador único de grupo
+	private $id;
 
-	private $curso;				// Tipo 1-6 (desde 1ºESO hasta 2ºBach).
+	// Tipo 1-6 (desde 1ºESO hasta 2ºBach).
+	private $curso;
 
-	private $nombre_corto;		// Tipo “B1A”.
+	// Tipo “B1A”.
+	private $nombre_corto;
 
-	private $nombre_completo;	// Tipo “Primer curso de Bachillerato A”.
+	// Tipo “Primer curso de Bachillerato A”.
+	private $nombre_completo;
 
-	private $tutor;				// Profesor responsable del grupo.
+	// Profesor responsable del grupo.
+	private $tutor;
 	
 	/**
 	 * Constructor.
 	 */
 
-	private function __construct($id, $curso, $nombre_corto, $nombre_completo, $tutor)
+	private function __construct(
+		$id,
+		$curso,
+		$nombre_corto,
+		$nombre_completo,
+		$tutor
+	)
 	{
 		$this->id = $id;
 		$this->curso =$curso; 
@@ -52,7 +63,7 @@ class Grupo
 	 *
 	 * @return array<Usuario>
 	 */
-	public static function dbGetEstudiantes(int $id)
+	public static function dbGetEstudiantes(int $id) : array
 	{
 		/*
 		$array;
