@@ -16,7 +16,7 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi;
+namespace Awsw\Gesi\Datos;
 
 class Foro
 {
@@ -33,7 +33,11 @@ class Foro
 	/**
 	 * Constructor.
 	 */
-	private function __construct($id, $tema, $profesor_grupo_asignatura)
+	private function __construct(
+		$id, 
+		$tema, 
+		$profesor_grupo_asignatura
+	)
 	{
 		$this->id = $id;
 		$this->tema = $tema;
