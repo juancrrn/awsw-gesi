@@ -20,3 +20,25 @@
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
+
+use \Awsw\Gesi\Vistas\Vista;
+
+Vista::setPaginaActual("Horarios", "horarios");
+
+Vista::incluirCabecera();
+
+?>
+<div class="wrapper">
+	<div class="container">
+		<header class="page-header">
+			<h1>Horarios</h1>
+		</header>
+
+		<section class="page-content">
+			...
+		</section>
+	</div>
+</div>
+<?php
+
+Vista::incluirPie();
