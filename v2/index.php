@@ -21,7 +21,7 @@
 
 require_once __DIR__ . "/sistema/configuracion.php";
 
-use \Awsw\Gesi\Vista;
+use \Awsw\Gesi\Vistas\Vista;
 
 Vista::setPaginaActual("Inicio", "home");
 

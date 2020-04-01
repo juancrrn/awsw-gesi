@@ -19,3 +19,9 @@
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
+
+use \Awsw\Gesi\Sesion;
+
+Sesion::logout();
+
+header("Location: index.php");

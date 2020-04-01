@@ -18,10 +18,11 @@
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
+require_once __DIR__ . "/sistema/clases/formulario/FormularioRegistro.php";
+
 
 use \Awsw\Gesi\App;
-use \Awsw\Gesi\Vistas\Vista;
-use \Awsw\Gesi\Formularios\Sesion\Login as FormularioSesionLogin;
+use \Awsw\Gesi\Vista;
 
 Vista::setPaginaActual("Iniciar sesión", "login");
 
@@ -35,12 +36,15 @@ Vista::incluirCabecera();
 		</header>
 
 		<section class="page-content">
-			<?php
 
-$form = new FormularioSesionLogin(); 
-$form->gestiona();
+			<?php 
+   				 $form = new FormularioRegistro(); 
+   				 $form->gestiona();
 
 			?>
+
+
+
 		</section>
 	</div>
 </div>

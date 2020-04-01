@@ -18,24 +18,27 @@
 
 namespace Awsw\Gesi;
 
+use \Awsw\Gesi\Datos\Usuario;
+
 class Sesion
 {
 	// Nombre de la cookie de sesión.
 	const NOMBRE_SESION = "gesi_sesion";
 
     // Usuario que ha iniciado sesión.
-    private static $logged_in_user = null;
+    private static $usuario_en_sesion = null;
 
     /**
      * Inicializa la gestión de la sesión de usuario.
      */
-    public static function init() {
+    public static function init() : void
+    {
         if (
             isset($_SESSION[self::NOMBRE_SESION]) &&
             is_object($_SESSION[self::NOMBRE_SESION]) &&
             $_SESSION[self::NOMBRE_SESION] instanceof Usuario
         ) {
-            self::$logged_in_user = $_SESSION[self::NOMBRE_SESION];
+            self::$usuario_en_sesion = $_SESSION[self::NOMBRE_SESION];
         }
     }
 
@@ -44,16 +47,23 @@ class Sesion
 	 *
 	 * @requires No hay ninguna sesión ya iniciada.
 	 */
-	public static function login(Usuario $user) : void
+	public static function iniciar(Usuario $usuario) : void
 	{
-		self::$logged_in_user = $user;
-        $_SESSION[self::NOMBRE_SESION] = self::$logged_in_user;
+        // Actualizamos la última vez que el usuario inició sesión a ahora.
+        $usuario->dbActualizaUltimaSesion();
+
+        // Por seguridad, forzamos que se genere una nueva cookie de sesión por 
+        // si la han capturado antes de hacer login.
+        session_regenerate_id(true);
+
+		self::$usuario_en_sesion = $usuario;
+        $_SESSION[self::NOMBRE_SESION] = self::$usuario_en_sesion;
 	}
 
 	/**
 	 * Cierra la sesión de un usuario.
 	 */
-	public static function logout() : void
+	public static function cerrar() : void
 	{
         self::$logged_in_user = null;
 		unset($_SESSION[self::NOMBRE_SESION]);
@@ -66,18 +76,18 @@ class Sesion
     /**
      * Comprueba si la sesión está iniciada.
      *
-     * Para ello, simplemente comprueba si self::$logged_in_user no es nula.
+     * Para ello, simplemente comprueba si self::$usuario_en_sesion no es nula.
      *
-     * TODO: Comprobar que los valores de self::$logged_in_user aún coindicen
+     * TODO: Comprobar que los valores de self::$usuario_en_sesion aún coindicen
      * con los que hay en la base de datos.
      */
-    public static function isLogged() : bool
+    public static function isSesionIniciada() : bool
     {
         /*return Usuario::dbExiste(array(
             "id" => $_SESSION[self::NOMBRE_SESION]
         ));*/
 
-        return self::$logged_in_user !== null;
+        return self::$usuario_en_sesion !== null;
     }
 
 	/**
@@ -85,8 +95,8 @@ class Sesion
      *
      * @requires Que haya una sesión iniciada.
 	 */
-	public static function getLoggedInUser() : Usuario
+	public static function getUsuarioEnSesion() : Usuario
 	{
-        return self::$logged_in_user;
+        return self::$usuario_en_sesion;
     }
 }

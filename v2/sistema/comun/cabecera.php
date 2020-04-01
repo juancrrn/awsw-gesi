@@ -17,7 +17,7 @@
  */
 
 use \Awsw\Gesi\App;
-use \Awsw\Gesi\Vista;
+use \Awsw\Gesi\Vistas\Vista;
 use \Awsw\Gesi\Sesion;
 
 ?>
@@ -62,7 +62,8 @@ use \Awsw\Gesi\Sesion;
 
 if (Sesion::isLogged()) {
 					
-								?><li><a href="logout.php">Cerrar sesión</a></li><?php
+								?><li><?php echo Sesion::getLoggedInUser()->getNombre(); ?></li>
+								<li><a href="logout.php">Cerrar sesión</a></li><?php
 
 } else {
 	
