@@ -19,3 +19,25 @@
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
+
+use \Awsw\Gesi\Vistas\Vista;
+
+Vista::setPaginaActual("Mis movimientos en la biblioteca", "biblioteca-movimientos");
+
+Vista::incluirCabecera();
+
+?>
+<div class="wrapper">
+	<div class="container">
+		<header class="page-header">
+			<h1>Mis movimientos en la biblioteca</h1>
+		</header>
+
+		<section class="page-content">
+			...
+		</section>
+	</div>
+</div>
+<?php
+
+Vista::incluirPie();
