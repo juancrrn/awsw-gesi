@@ -1,0 +1,489 @@
+/**
+ * Estilos principales.
+ *
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Cintia María Herrera Arenas
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.2
+ */
+
+/*
+ * Inicializaciones.
+ */
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	font-family: "Montserrat", sans-serif;
+}
+
+/*
+ * Enlaces.
+ */
+
+a {
+	text-decoration: none;
+	color: #7b1fa2;
+	border-bottom: 1px solid;
+}
+
+/*
+ * Texto visible solo para lectores de pantalla.
+ */
+
+ .screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #eee;
+	clip: auto !important;
+	clip-path: none;
+	color: #444;
+	display: block;
+	font-size: 1em;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000; /* Above WP toolbar. */
+}
+
+/*
+ * Alineación con float.
+ */
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.clearfix {
+	clear: both;
+}
+
+/*
+ * Contenedores.
+ */
+
+.wrapper {
+	max-width: 1000px;
+	margin: 16px auto;
+}
+
+.container {
+	padding: 16px 32px;
+}
+
+/* 
+ * Distribución de grid principal.
+ *
+ * Inicializado a una distribución móvil.
+ */
+
+#master-grid-wrapper {
+	display: grid;
+	grid-template-areas: 
+		"header"
+		"user"
+		"nav"
+		"content"
+		"sidebar"
+		"ad"
+		"footer";
+}
+
+#master-grid-header {
+	grid-area: header;
+	background-color: #fff;
+	z-index: 2;
+}
+
+#master-grid-user {
+	grid-area: user;
+	background-color: #fff;
+	z-index: 2;
+}
+
+#master-grid-content {
+	grid-area: content;
+	background-color: #fff;
+	z-index: 0;
+}
+
+#master-grid-nav {
+	grid-area: nav;
+	background-color: #fff;
+	z-index: 1;
+}
+
+#master-grid-side {
+	grid-area: sidebar;
+	background-color: #fff;
+	z-index: 0;
+}
+
+#master-grid-footer {
+	grid-area: footer;
+	background-color: #fff;
+	z-index: 0;
+}
+
+/* 
+ * Distribución de grid principal.
+ *
+ * Breakpoint para espacio suficiente para dos columnas.
+ */
+
+@media (min-width: 500px) {
+	#master-grid-wrapper {
+		grid-template-columns: 1fr 3fr;
+		grid-template-areas: 
+			"header  header"
+			"user    nav"
+			"sidebar content"
+			"footer  footer";
+	}
+
+	#master-grid-user ul {
+		display: flex;
+		justify-content: left;
+	}
+
+	#master-grid-nav ul {
+		display: flex;
+		justify-content: right;
+	}
+}
+
+/* 
+ * Distribución de grid principal.
+ *
+ * Breakpoint para espacio suficiente para tres columnas.
+ */
+
+@media (min-width: 700px) {
+	#master-grid-wrapper {
+		grid-template-columns: 1fr 4fr 1fr;
+		grid-template-areas: 
+			"header user    user"
+			"nav    content sidebar"
+			"nav    content sidebar"
+			"nav    footer  footer";
+		grid-template-rows: 65px auto auto 65px;		
+		width: 100vw;
+		height: 100vh;
+	}
+
+	#master-grid-user ul {
+		flex-direction: row;
+		justify-content: right;
+	}
+
+	#master-grid-nav ul {
+		flex-direction: column;
+	}
+}
+
+/*
+ * Cabecera principal.
+ */
+
+#master-grid-header {
+    padding: 19px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+#master-grid-header #app-logo {
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: .5rem;	
+}
+
+#master-grid-header #app-logo img {
+	display: block;
+	width: 24px;
+	height: 24px;
+}
+
+#master-grid-header #app-name {
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 2rem;
+}
+
+#master-grid-header #app-name h1 {
+	font-size: 1.5rem;
+	font-weight: normal;
+	line-height: 24px;
+	margin: 0;
+}
+
+/*
+ * Menú de usuario
+ */
+
+#master-grid-user {
+    padding: 19px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+#master-grid-user ul li {
+	list-style: none;
+}
+
+@media (min-width: 700px) {
+	#master-grid-user ul li a {
+		margin: 8px;
+		line-height: 27px;
+	}
+}
+
+/*
+ * Menú principal
+ */
+
+#master-grid-nav ul li {
+	margin: 8px;
+	list-style: none;
+}
+
+@media (min-width: 700px) {
+	#master-grid-nav {
+		box-shadow: 0 4px 4px 0 rgba(60,64,67,0.302),0 8px 12px 6px rgba(60,64,67,0.149);
+		padding: 16px;
+	}
+}
+
+/*
+ * Sidebar
+ */
+
+#master-grid-side {
+	padding: 16px;
+}
+
+#master-grid-side ul li {
+	margin: 8px;
+	list-style: none;
+}
+
+/*
+ * Pie
+ */
+
+#master-grid-footer {
+    padding: 19px;
+    border-top: 1px solid #e8e8e8;
+}
+
+/*
+ * Contenido principal
+ */
+
+#master-grid-content h1,
+#master-grid-content h2,
+#master-grid-content h3,
+#master-grid-content h4,
+#master-grid-content h5,
+#master-grid-content h6 {
+	font-weight: normal;
+	letter-spacing: -1px;
+	margin: 5px 0 10px;
+}
+
+#master-grid-content p {
+	margin: 5px 0 10px;
+}
+
+/*
+ * Mecanismo de mensajes.
+ */
+
+.mensaje {
+    padding: 7px 16px;
+    border-left: 2px solid;
+}
+
+.mensaje.error {
+    border-color: #dc3545;
+}
+
+.mensaje.exito {
+	border-color: #28a745;
+}
+
+/*
+ * Formularios.
+ */
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+	display: inline-block;
+    margin-bottom: .5rem;
+}
+
+.form-control {
+	font-family: inherit;
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+
+.form-control:disabled {
+    background-color: #eee;
+}
+
+.btn {
+	font-family: inherit;
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #7b1fa2;
+    border: 1px solid #7b1fa2;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+}
+
+.default-form {
+    background-color: #fff;
+    max-width: 600px;
+    padding: 32px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+}
+
+/*
+ * Formulario de inicio de sesión.
+ */
+
+ #form-login {
+    max-width: 400px;
+}
+
+
+/*
+ * Mensajes de secretaría.
+ */
+
+.mensaje-secretaria {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+section.page-content .mensaje-secretaria p {
+	text-indent: 0;
+	margin-bottom: 0;
+}
+
+.mensaje-secretaria header {
+    background-color: #eee;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 12px 24px;
+}
+
+.mensaje-secretaria section.content {
+    padding: 12px 24px;
+}
+
+/*
+ * Landing
+ */
+
+#landing-welcome {
+	text-align: center;
+}
+
+#landing-welcome img {
+	display: block;
+	max-width: 600px;
+	width: 100%;
+	margin: 0 auto 4rem;
+}
+
+#landing-welcome h1 {
+	margin-bottom: 2rem;
+}
+
+section.page-content #landing-welcome p {
+	text-indent: 0;
+	text-align: center;
+	max-width: 600px;
+	margin: 0 auto 2rem;
+}
+
+/*
+ * Lista de usuarios
+ */
+
+#usuarios-lista .grid-table-row {
+    display: grid;
+    grid-template-columns: 150px auto 200px;
+}
+
+.grid-table-row > div {
+	border-bottom: 1px solid #ccc;
+	padding: 8px;
+}
+
+.grid-table-header .grid-table-row > div {
+	font-weight: bold;
+}
+
+/*
+ * Badges
+ */
+
+.badge {
+	display: inline-block;
+	padding: .25em .4em;
+	font-size: 75%;
+	line-height: 1;
+	vertical-align: middle;
+	border-radius: .25rem;
+	background-color: #7b1fa2;
+	color: #fff;
+}
