@@ -87,16 +87,17 @@ $url_inicio = $app->getUrl();
 
 HTML;
 
-if (Sesion::getUsuarioEnSesion()->isEst()) {
+if (Sesion::isSesionIniciada()) {
+	if (Sesion::getUsuarioEnSesion()->isEst()) {
 
-	$url_mensajes = $app->getUrl() . '/mi/secretaria/';
-	$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
-	$url_horarios = $app->getUrl() . '/mi/horarios/';
-	$url_eventos = $app->getUrl() . '/mi/eventos/';
-	$url_foros = $app->getUrl() . '/mi/foros/';
-	$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
+		$url_mensajes = $app->getUrl() . '/mi/secretaria/';
+		$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
+		$url_horarios = $app->getUrl() . '/mi/horarios/';
+		$url_eventos = $app->getUrl() . '/mi/eventos/';
+		$url_foros = $app->getUrl() . '/mi/foros/';
+		$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
 
-					echo <<< HTML
+						echo <<< HTML
 					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
 					<li><a href="$url_asignaturas">Asignaturas</a></li>
 					<li><a href="$url_horarios">Horarios</a></li>
@@ -106,18 +107,18 @@ if (Sesion::getUsuarioEnSesion()->isEst()) {
 					
 HTML;
 
-} elseif (Sesion::getUsuarioEnSesion()->isPd()) {
+	} elseif (Sesion::getUsuarioEnSesion()->isPd()) {
 
-	$url_mensajes = $app->getUrl() . '/mi/secretaria/';
-	$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
-	$url_grupos = $app->getUrl() . '/mi/grupos/';
-	$url_asignaciones = $app->getUrl() . '/mi/asignaciones/';
-	$url_horarios = $app->getUrl() . '/mi/horarios/';
-	$url_eventos = $app->getUrl() . '/mi/eventos/';
-	$url_foros = $app->getUrl() . '/mi/foros/';
-	$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
+		$url_mensajes = $app->getUrl() . '/mi/secretaria/';
+		$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
+		$url_grupos = $app->getUrl() . '/mi/grupos/';
+		$url_asignaciones = $app->getUrl() . '/mi/asignaciones/';
+		$url_horarios = $app->getUrl() . '/mi/horarios/';
+		$url_eventos = $app->getUrl() . '/mi/eventos/';
+		$url_foros = $app->getUrl() . '/mi/foros/';
+		$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
 
-					echo <<< HTML
+						echo <<< HTML
 					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
 					<li><a href="$url_asignaturas">Asignaturas</a></li>
 					<li><a href="$url_grupos">Grupos</a></li>
@@ -129,19 +130,19 @@ HTML;
 
 HTML;
 	
-} elseif (Sesion::getUsuarioEnSesion()->isPs()) {
+	} elseif (Sesion::getUsuarioEnSesion()->isPs()) {
 
-	$url_mensajes = $app->getUrl() . '/admin/secretaria/';
-	$url_asignaturas = $app->getUrl() . '/admin/asignaturas/';
-	$url_grupos = $app->getUrl() . '/admin/grupos/';
-	$url_usuarios = $app->getUrl() . '/admin/usuarios/';
-	$url_asignaciones = $app->getUrl() . '/admin/asignaciones/';
-	$url_horarios = $app->getUrl() . '/admin/horarios/';
-	$url_eventos = $app->getUrl() . '/admin/eventos/';
-	$url_foros = $app->getUrl() . '/admin/foros/';
-	$url_biblioteca = $app->getUrl() . '/admin/biblioteca/';
+		$url_mensajes = $app->getUrl() . '/admin/secretaria/';
+		$url_asignaturas = $app->getUrl() . '/admin/asignaturas/';
+		$url_grupos = $app->getUrl() . '/admin/grupos/';
+		$url_usuarios = $app->getUrl() . '/admin/usuarios/';
+		$url_asignaciones = $app->getUrl() . '/admin/asignaciones/';
+		$url_horarios = $app->getUrl() . '/admin/horarios/';
+		$url_eventos = $app->getUrl() . '/admin/eventos/';
+		$url_foros = $app->getUrl() . '/admin/foros/';
+		$url_biblioteca = $app->getUrl() . '/admin/biblioteca/';
 
-					echo <<< HTML
+						echo <<< HTML
 					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
 					<li><a href="$url_asignaturas">Asignaturas</a></li>
 					<li><a href="$url_grupos">Grupos</a></li>
@@ -154,6 +155,7 @@ HTML;
 
 HTML;
 
+	}
 }
 
 					?>
