@@ -35,7 +35,7 @@ class Ver extends Modelo
 
 	public function __construct(int $asignatura_id)
 	{
-		if (false) { // TODO: Comprobar que el id recibido existe
+		if (Asignatura::dbExisteId($asignatura_id) {
 			$this->asignatura = Asignatura::dbGet($asignatura_id);
 		} else {
 			// TODO: Redireccionar y mostrar errores

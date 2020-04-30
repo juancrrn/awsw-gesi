@@ -18,8 +18,8 @@
 
 namespace Awsw\Gesi;
 
-use \Awsw\Gesi\Datos\Usuario;
-use \Awsw\Gesi\Vistas\Vista;
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Vistas\Vista;
 
 class Sesion
 {

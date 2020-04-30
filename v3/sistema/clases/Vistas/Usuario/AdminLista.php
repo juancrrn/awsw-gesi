@@ -51,21 +51,21 @@ class AdminLista extends Modelo
 		$app = App::getSingleton();
 
 		$html = <<< HTML
-					<header class="page-header">
-						<h1>Usuarios</h1>
-					</header>
-				
-					<section class="page-content">
-						<div id="usuarios-lista" class="grid-table">
-							<div class="grid-table-header">
-								<div class="grid-table-row">
-									<div>NIF o NIE</div>
-									<div>Nombre completo</div>
-									<div></div>
-									<div>Roles</div>
-								</div>
-							</div>
-							<div class="grid-table-body">
+		<header class="page-header">
+			<h1>Usuarios</h1>
+		</header>
+	
+		<section class="page-content">
+			<div id="usuarios-lista" class="grid-table">
+				<div class="grid-table-header">
+					<div class="grid-table-row">
+						<div>NIF o NIE</div>
+						<div>Nombre completo</div>
+						<div></div>
+						<div>Roles</div>
+					</div>
+				</div>
+				<div class="grid-table-body">
 
 HTML;
 					
@@ -84,16 +84,16 @@ HTML;
 							$nombre = $u->getNombreCompleto();
 
 							$html .= <<< HTML
-								<div class="grid-table-row">
-									<div>$nif</div>
-									<div><a href="$url_ver">$nombre</a></div>
-									<div>
-										<a href="$url_ver">Ver</a>
-										<a href="$url_editar">Editar</a>
-										<a href="$url_eliminar">Eliminar</a>
-									</div>
-									<div>$badges</div>
+							<div class="grid-table-row">
+								<div>$nif</div>
+								<div><a href="$url_ver">$nombre</a></div>
+								<div>
+									<a href="$url_ver">Ver</a>
+									<a href="$url_editar">Editar</a>
+									<a href="$url_eliminar">Eliminar</a>
 								</div>
+								<div>$badges</div>
+							</div>
 
 HTML;
 
@@ -101,18 +101,18 @@ HTML;
 					} else {
 							
 							$html .= <<< HTML
-								<div class="grid-table-row-empty">
-									No se han encontrado usuarios.
-								</div>
+							<div class="grid-table-row-empty">
+								No se han encontrado usuarios.
+							</div>
 
 HTML;
 
 					}
 
 		$html .= <<< HTML
-							</div>
-						</div>
-					</section>
+				</div>
+			</div>
+		</section>
 
 HTML;
 

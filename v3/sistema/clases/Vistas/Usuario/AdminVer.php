@@ -20,6 +20,7 @@
 
 namespace Awsw\Gesi\Vistas\Usuario;
 
+use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
@@ -55,14 +56,40 @@ class AdminVer extends Modelo
 
 		// TODO: Rellenar formulario con $this->usuario
 
-		$html = <<< HTML
-					<header class="page-header">
-						<h1>$this->nombre</h1>
-					</header>
+		$grupo_id = $this->usuario->getGrupo();
 
-					<section class="page-content">
-						Aquí el formulario.
-					</section>
+		if ($grupo_id) {
+
+			$grupo = Grupo::dbGet($grupo_id);
+			$completo = $grupo->getNombreCompleto();
+			$corto = $grupo->getNombreCorto();
+
+			$matricula = <<< HTML
+			<p>Este usuario está matriculado en el grupo $completo ($corto).</p>
+
+HTML;
+
+		} else {
+
+			$matricula = <<< HTML
+			<p>Este usuario no está matriculado en ningún grupo.</p>
+
+HTML;
+
+		}
+
+		$html = <<< HTML
+		<header class="page-header">
+			<h1>$this->nombre</h1>
+		</header>
+
+		<section class="page-content">
+			<h2>Datos personales</h2>
+			
+
+			<h2>Matrícula</h2>
+			$matricula
+		</section>
 
 HTML;
 

@@ -1,0 +1,48 @@
+TODO P3
+
+# Vista ver perfil
+Awsw\Gesi\Vistas\Sesion\Perfil
+
+#####
+# Usuarios
+#####
+
+# Vista admin ver usuario
+Awsw\Gesi\Vistas\Usuario\AdminVer
+
+# Vista admin crear usuario
+Awsw\Gesi\Vistas\Usuario\AdminCrear
+* Posibilidad de añadir el usuario a un grupo (select)
+
+# Vista admin editar usuario
+Awsw\Gesi\Vistas\Usuario\AdminEditar
+Awsw\Gesi\Formularios\Usuario\AdminEditar
+* Posibilidad de añadir el usuario a un grupo (select)
+
+# Vista admin eliminar usuario
+Awsw\Gesi\Vistas\Usuario\AdminEliminar
+Awsw\Gesi\Formularios\Usuario\AdminEliminar
+
+#####
+# Grupos
+#####
+
+# Vista admin lista grupos
+Awsw\Gesi\Vistas\Grupo\AdminLista
+
+# Vista admin ver grupo
+Awsw\Gesi\Vistas\Grupo\AdminVer
+
+# Vista admin crear grupo
+Awsw\Gesi\Vistas\Grupo\AdminCrear
+* Posibilidad de añadir usuarios al grupo (multiselect)
+
+# Vista admin editar grupo
+Awsw\Gesi\Vistas\Grupo\AdminEditar
+* Posibilidad de añadir usuarios al grupo (multiselect)
+
+# Vista admin eliminar grupo
+Awsw\Gesi\Vistas\Grupo\AdminEliminar
+
+# Vista lista grupos que imparte el usuario en sesión (profesor)
+Awsw\Gesi\Vistas\Grupo\MiLista

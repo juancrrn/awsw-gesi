@@ -24,20 +24,38 @@ namespace Awsw\Gesi\Vistas\Asignatura;
 
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Asignatura;
-use \Awsw\Gesi\Sesion;
+use Awsw\Gesi\Sesion;
+
 class Lista extends Modelo
 {
 	private const VISTA_NOMBRE = "Asignaturas";
 	private const VISTA_ID = "asignaturas-lista";
 
 	private $listado;
+	private $curso;
 
 	public function __construct()
 	{
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
-		$this->listado = Asignatura::dbGetAll();
+	
+		$usuario_rol = Sesion::getUsuarioEnSesion()->getRol();
+		
+		
+		if($usuario_rol == 3){
+			$this->curso = "Todas las Asignaturas";
+			$this->listado = Asignatura::dbGetAll();
+			
+		}else if($usuario_rol == 1){
+
+			$usuario_curso = Sesion::getUsuarioEnSesion()->getGrupo();
+			$this->curso = $usuario_curso;
+			$this->listado = Asignatura::dbGetAsigCurso($usuario_curso);
+		}else{
+			$this->listado = null;
+		}
+		
 	}
 
 	public function procesaAntesDeLaCabecera(): void
@@ -45,55 +63,70 @@ class Lista extends Modelo
 		Sesion::requerirSesionPs();
 	}
 
-	public function procesa() : void {
+	public function procesaContent() : void 
+	{
 
-?>
-<div class="wrapper">
-	<div class="container">
-		<header class="page-header">
-			<h1>Asignaturas</h1>
-		</header>
+		// Comprobar si hay alguna asignatura.
+		if (! empty($this->listado)) {
 
-		<section class="page-content">
-			<p>A conticuación se muestra una lista con las asignaturas.</p>
-			<?php
+			$lista = <<< HTML
+						<div id="asignatura-lista">
 
+HTML;
 
-//Comprobar si hay asignaturas
+			foreach($this->listado as $m){
+				$nombre_largo = $m->getNombreLargo();
+				
+			
+				$lista .= <<< HTML
+							<div class="asignatura-curso">
+								<header>
+									<p class="from">
+										<strong>$this->curso</strong>
+									</p>
+								
+								</header>
 
-if(Asignatura::dbAny()){
-			?><div id="asignatura-lista"><?php
-	$asignaturas = Asignatura::dbGetAll();
+								<section class="content">
+									$nombre_largo;
+								</section>
+							</div>
 
-	foreach($asignaturas as $asignatura){
-		?>
-		<article class="asignatura">
-			<header>
-				<p class="from"><?php echo '<strong>' . $asignatura->getNombreLargo() . '</strong>' ?> </p>
-				</header>
-			<section class="content">
-				<?php echo $asignatura->getCurso(); ?>
-			</section>
-	</article>
+HTML;
+
+			}
+
+			$lista .= <<< HTML
+						</div>
+
+HTML;
+
+		// Si no eres ni estudiante ni personal de secretaria
+		} else {
+
+			$lista = <<< HTML
+						<p>Inicia sesion para ver las asignaturas.</p>
+
+HTML;
+
+		}
+
+		$html = <<< HTML
+					<header class="page-header">
+						<h1>Asignaturas </h1>
+					</header>
+			
+					<section class="page-content">
+						<p>A continuación se muestra una lista con las asignaturas.</p>
+
+						$lista
+					</section>
+
+HTML;
+
+		echo $html;
+
 	}
 }
 
-		</section>
-	</div>
-</div>
-<?php
-
-	}
-}else{
-
-	?><p>En estos momentos no hay ninguna asignatura</p><?php
-}
-
-					?>
-			</section>
-		</div>
-	</div>
-	<?php
-	}
-}
 ?>

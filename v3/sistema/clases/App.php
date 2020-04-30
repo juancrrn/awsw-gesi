@@ -39,6 +39,9 @@ class App
 	// Base del front controller.
 	private $base_controlador;
 
+	// Contraseña por defecto para los usuarios creados.
+	private $default_password;
+
 	/**
 	 * Constructor. Al ser privado, asegura que solo habrá una única instancia * de la clase (patrón singleton).
 	 */
@@ -86,12 +89,13 @@ class App
 	/**
 	 * Inicializar la instancia.
 	 */
-	public function init($bbdd_datos, $raiz, $url, $base_controlador)
+	public function init($bbdd_datos, $raiz, $url, $base_controlador, $default_password)
 	{
 		$this->bbdd_datos = $bbdd_datos;
 		$this->raiz = $raiz;
 		$this->url = $url;
 		$this->base_controlador = $base_controlador;
+		$this->default_password = $default_password;
 		$this->bbdd_con = null;
 
 		session_start();
@@ -151,6 +155,14 @@ class App
 	public function getBaseControlador() : string
 	{
 		return $this->base_controlador;
+	}
+
+	/**
+	 * Contraseña por defecto.
+	 */
+	public function getDefaultPassword() : string
+	{
+		return $this->default_password;
 	}
 
 }

@@ -124,7 +124,7 @@ class Valido
 	 *
 	 * @return true if valid phone number format is found, else false
 	 */
-	public static function testPhoneNumber($phone_number) : bool {
+	public static function testNumeroTelefono($phone_number) : bool {
 		return preg_match("/^(\+[0-9]{1,4})?([\s0-9]*){4,15}$/", $phone_number) ? true : false;;
 	}
 
@@ -159,5 +159,21 @@ class Valido
 	 */
 	public static function testStdInt($integer) : bool {
 		return filter_var($integer, FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range"=> 999999))) !== false;
+	}
+
+	/**
+	 * Validatar fecha en formato dd/mm/yyyy
+	 * 
+	 * @see https://tools.ietf.org/html/rfc3339
+	 * @see https://www.w3.org/TR/2011/WD-html-markup-20110405/input.date.html
+	 *
+	 * @param $date Date to be validated
+	 *
+	 * @return true if valid standard date format is found, else false
+	 */
+	public static function testDate($date) : bool {
+		$format = 'd/m/Y';
+		$d = \DateTime::createFromFormat($format, $date);
+    	return $d && $d->format($format) == $date;
 	}
 }

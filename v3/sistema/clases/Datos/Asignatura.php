@@ -54,22 +54,8 @@ class Asignatura
 		 * @param $nombreAsign Nombre de la asignatura a crear
 		 * 
 		 */
-	public function crea($nombreAsignatura, $nombreAsign, $curso): bool{
-
-		if(self::dbExiste($nombreAsignatura, $curso)){
-			$crea = false;
-		}else{
-			$asignatura = new Asignatura(0, $curso, $nombreAsignatura, $nombreAsign);
-			if(){
-				$crea = true;
-			}else{
-				$crea =
-			}
-		}
-
-		return $crea;
-	}
-
+	
+	
 	public static function dbExiste($nombre, $curso): bool{
 
 		$bbdd = App::getSingleton()->bbddCon();
@@ -187,6 +173,53 @@ id,
 		return $existe;
 	}
 
+	public static function dbInsertar(){
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+		
+			INSERT
+			INTO
+				gesi_usuarios
+				(
+					id,
+					curso_escolar,
+					nombre_corto,
+					nombre_completo
+				)
+			VALUES
+			(?,?,?,?)
+		
+		");
+
+		$curso_escolar = $this->curso;
+		$nombre_corto = $this->nombre_corto;
+		$nombre_largo = $this->nombre_largo;
+
+
+
+		$sentencia->bind_param(
+			"iiss",
+			$curso_escolar,
+			$nombre_corto,
+			$nombre_largo
+		);
+
+
+		$sentencia->execute();
+
+		$id_insertado = $bbdd->insert_id;
+
+		$sentencia->close();
+
+
+		$this->id = $id_insertado;
+
+		return $this->id;
+
+
+	} 
+
 
 	/**
 	 * Actualiza la información de una asignatura en la base de datos.
@@ -291,6 +324,101 @@ id,
 		$sentencia->close();
 
 		return $existe;
+	}
+
+	public static function dbGetAsigCurso($usuario_curso){
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				curso,
+				nombre_corto,
+				nombre_largo
+			FROM
+				gesi_asignaturas		
+			WHERE
+				curso = ?	
+		");
+
+
+		$sentencia->bind_param(
+			"i",
+			$usuario_curso
+		);
+
+		$sentencia->execute();
+
+		$sentencia->store_result();
+
+		$sentencia->bind_result(
+			$result_id,
+			$result_curso,
+			$result_nombre_corto,
+			$result_nombre_largo
+		);
+
+		$asignaturas = array();
+
+		while($sentencia->fetch()) {
+			$asginaturas[] = new Asignatura(
+				$result_id,
+				$result_curso,
+				$result_nombre_corto,
+				$result_nombre_largo
+			);	
+		}
+		$sentencia->close();
+
+
+		return $asignaturas;	
+
+	}
+
+	/** 
+	 * Trae una asignatura de la base de datos.
+	 *
+	 * @param int $id
+	 *
+	 * @requires Existe una asignatura con el id especificado.
+	 *
+	 * @return Asignatura
+	 */
+	public static function dbGet(int $id) : Asignatura
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				curso,
+				nombre_corto,
+				nombre_largo
+			FROM
+				gesi_asignaturas
+			WHERE
+				id = ?
+			LIMIT 1
+		");
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+		
+		$sentencia->execute();
+
+		$resultado = $sentencia->get_result()->fetch_object();
+
+		$asignatura = new Asignatura(
+			$resultado->id,
+			$resultado->curso,
+			$resultado->nombre_corto,
+			$resultado->nombre_largo
+		);
+
+		$sentencia->close();
+		
+		return $asignatura;
 	}
 
 	public function getId(){

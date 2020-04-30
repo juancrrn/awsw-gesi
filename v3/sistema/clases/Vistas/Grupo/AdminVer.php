@@ -23,7 +23,7 @@ namespace Awsw\Gesi\Vistas\Grupo;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Vistas\Modelo;
 
-class Ver extends Modelo
+class AdminVer extends Modelo
 {
 
 	private const VISTA_NOMBRE = "Grupo";

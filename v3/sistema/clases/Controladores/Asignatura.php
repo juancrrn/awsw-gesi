@@ -25,7 +25,15 @@ class Asignatura extends Controlador
 	public static function controla() : void
 	{
 
+		parent::go('/mi/asignaturas/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\Lista());
+		});
+
 		parent::go('/asignaturas/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\Lista());
+		});
+
+		parent::go('/admin/asignaturas/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\Lista());
 		});
 		

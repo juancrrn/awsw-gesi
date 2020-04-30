@@ -142,8 +142,8 @@ class Grupo
 
 		$id = $grupo->getId();
 		$curso_escolar = $grupo->getCurso();
-		$nombre_corto = $grupo->getNombre_Corto();
-		$nombre_completo = $grupo->getNombre_Completo();
+		$nombre_corto = $grupo->getNombreCorto();
+		$nombre_completo = $grupo->getNombreCompleto();
 		$tutor = $grupo->getTutor();
 
 		$sentencia->bind_param(
@@ -165,6 +165,46 @@ class Grupo
 	}
 
 
+	public static function dbGet(int $id) : Grupo{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				curso_escolar,
+				nombre_corto,
+				nombre_completo,
+				tutor
+		
+			FROM
+				gesi_grupos
+			WHERE
+				id = ?
+			LIMIT 1
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+
+		$sentencia->execute();
+
+		$resultado = $sentencia->get_result()->fetch_object();
+
+		$grupo = new Grupo(
+			$resultado->id,
+			$resultado->curso_escolar,
+			$resultado->nombre_corto,
+			$resultado->nombre_completo,
+			$resultado->tutor
+		);
+
+		$sentencia->close();
+
+		return $grupo;		
+	}
+
 	public function getId(){
 		return $this->id;
 	}
@@ -172,11 +212,11 @@ class Grupo
     public function getCurso(){
 		return $this->curso;
 	}
-	public function getNombre_Corto(){
+	public function getNombreCorto(){
 		return $this->nombre_corto;
 	}
 
-	public function getNombre_Completo(){
+	public function getNombreCompleto(){
 		return $this->nombre_completo;
 	}
 

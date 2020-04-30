@@ -53,6 +53,8 @@ define("GESI_ROOT", "__DIR__");
 define("GESI_URL", "http://localhost:60001");
 define("GESI_BASE_CONTROLADOR", "");
 
+define("GESI_DEFAULT_PASSWORD", "cambiame");
+
 /**
  * Configuración de codificación y zona horaria.
  */
@@ -117,5 +119,7 @@ $app->init(
 
 	GESI_ROOT,
 	GESI_URL,
-	GESI_BASE_CONTROLADOR
+	GESI_BASE_CONTROLADOR,
+
+	GESI_DEFAULT_PASSWORD
 );

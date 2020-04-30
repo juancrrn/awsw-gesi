@@ -1,9 +1,7 @@
 <?php 
 
 /**
- * Creación de un usuario.
- * 
- * - PAS: solo PAS puede acceder
+ * TODO: NOMBRE DE LA CLASE
  *
  * @package awsw-gesi
  * Gesi
@@ -18,34 +16,30 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Usuario;
+namespace Awsw\Gesi\Vistas\Grupo;
 
 use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Formularios\Usuario\AdminCrear as Formulario;
+use Awsw\Gesi\Sesion;
 
-class AdminCrear extends Modelo
+
+class MiLista extends Modelo
 {
-
-	private const VISTA_NOMBRE = "Nuevo usuario";
-	private const VISTA_ID = "usuario-crear";
+	private const VISTA_NOMBRE = "Grupos asignados";
+	private const VISTA_ID = "grupo-mi-lista";
 
 	public function __construct()
 	{
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
-
-		$this->form = new Formulario("/admin/usuarios/crear/"); 
 	}
 
-	public function procesaAntesDeLaCabecera() : void
+	public function procesaAntesDeLaCabecera(): void
 	{
-		$this->form->gestiona();
+		Sesion::requerirSesionPs();
 	}
 
-	public function procesaContent() : void
+	public function procesaContent() : void 
 	{
-
-		$formulario = $this->form->getHtml();
 
 		$html = <<< HTML
 		<header class="page-header">
@@ -53,7 +47,7 @@ class AdminCrear extends Modelo
 		</header>
 
 		<section class="page-content">
-			$formulario
+			<p>Contenido</p>
 		</section>
 
 HTML;

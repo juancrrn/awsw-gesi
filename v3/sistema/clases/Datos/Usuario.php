@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /**
  * Métodos relacionados con los usuarios.
@@ -39,7 +39,7 @@ class Usuario
 	/**
 	 * Constructor.
 	 */
-	private function __construct(
+	public function __construct(
 		$id,
 		$nif,
 		$rol,
@@ -142,7 +142,8 @@ class Usuario
 		return $this->fecha_registro;	
 	}
 	
-	public function getGrupo() : int
+	// Puede devolver null
+	public function getGrupo()
 	{
 		return $this->grupo;
 	}
@@ -172,7 +173,8 @@ class Usuario
 	 */
 	public function dbInsertar() : int
 	{
-		$bbdd = App::getSingleton()->bbddCon();
+		$app = App::getSingleton();
+		$bbdd = $app->bbddCon();
 		
 		$sentencia = $bbdd->prepare("
 			INSERT
@@ -183,6 +185,7 @@ class Usuario
 					rol,
 					nombre,
 					apellidos,
+					password,
 					fecha_nacimiento,
 					numero_telefono,
 					email,
@@ -198,6 +201,7 @@ class Usuario
 		$rol = $this->getRol();
 		$nombre = $this->getNombre();
 		$apellidos = $this->getApellidos();
+		$password = password_hash($app->getDefaultPassword(), PASSWORD_DEFAULT);
 		$fecha_nacimiento = $this->getFechaNacimiento();
 		$numero_telefono = $this->getNumeroTelefono();
 		$email = $this->getEmail();
@@ -206,11 +210,12 @@ class Usuario
 		$grupo = $this->getGrupo();
 		
 		$sentencia->bind_param(
-			"sisssiisiii", 
+			"sisssissiii", 
 			$nif,
 			$rol,
 			$nombre,
 			$apellidos,
+			$password,
 			$fecha_nacimiento,
 			$numero_telefono,
 			$email,
@@ -622,23 +627,6 @@ class Usuario
 		
 		$sentencia->close();
 		return $usuarios;	
-	}
-
-	public function crea($nombreUsuario, $nombre, $password, 'user'): bool{
-
-		if(self::dbExiste($nombreAsignatura, $curso)){
-			$crea = false;
-		}else{
-			$asignatura = new Asignatura(0, $curso, $nombreAsignatura, $nombreAsign);
-			$asignatura_id = $asignatura->dbInsertar();
-			if($asignatura_id){
-				$crea = true;
-			}else{
-				$crea = false;
-			}
-		}
-
-		return $crea;
 	}
 
 }

@@ -22,10 +22,11 @@ namespace Awsw\Gesi\Vistas\Grupo;
 
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Grupo;
-class Lista extends Modelo
+
+class AdminLista extends Modelo
 {
 	private const VISTA_NOMBRE = "Grupos";
-	private const VISTA_ID = "grupo-lista";
+	private const VISTA_ID = "grupo-admin-lista";
 
 	private $listado;
 
@@ -34,7 +35,7 @@ class Lista extends Modelo
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
-		$this->listado = Grupo::dbGetAll(); // TODO: recuperar el listado de grupos
+		$this->listado = Grupo::dbGetAll();
 	}
 
 	public function procesa() : void

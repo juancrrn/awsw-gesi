@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Gesión del formulario de creación de usuario.
+ * Gesión del formulario de creación de usuario.
  *
  * @package awsw-gesi
  * Gesi
@@ -20,9 +20,10 @@ namespace Awsw\Gesi\Formularios\Usuario;
 
 use Awsw\Gesi\Formularios\Formulario;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\Vistas\Vista;
 
-class Crear extends Formulario
+class AdminCrear extends Formulario
 {
     public function __construct(string $action) {
         parent::__construct('form-usuario-crear', array('action' => $action));
@@ -52,7 +53,7 @@ class Crear extends Formulario
         $this->html .= <<< HTML
 <div class="form-group">
     <label>NIF</label>
-    <input class="form-control" type="text" name="nombre" value="$nif" placeholder="NIF" required="required" />
+    <input class="form-control" type="text" name="nif" value="$nif" placeholder="NIF" required="required" />
 </div>
 <div class="form-group">
     <label for="nombre">Nombre</label>
@@ -64,7 +65,7 @@ class Crear extends Formulario
 </div>
 <div class="form-group">
     <label for="fecha_nacimiento">Fecha de nacimiento</label>
-    <input class="form-control" type="date" name="fecha_nacimiento" id="fecha_nacimiento" value="$fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+    <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" value="$fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
 </div>
 <div class="form-group">
     <label for="numero_telefono">Número de teléfono</label>
@@ -107,7 +108,9 @@ HTML;
         if (empty($nombre)) {
             Vista::encolaMensajeError('El campo nombre no puede estar vacío.');
         } else {
-            // TODO: comprobar formato de cadena estándar
+            if (! Valido::testStdString($nombre)) {
+                Vista::encolaMensajeError('El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
+            }
         }
 
         $apellidos = isset($datos['apellidos']) ? $datos['apellidos'] : null;
@@ -115,7 +118,9 @@ HTML;
         if (empty($apellidos)) {
             Vista::encolaMensajeError('El campo apellidos no puede estar vacío.');
         } else {
-            // TODO: comprobar formato de cadena estándar
+            if (! Valido::testStdString($apellidos)) {
+                Vista::encolaMensajeError('El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
+            }
         }
 
         $fecha_nacimiento = isset($datos['fecha_nacimiento']) ?
@@ -124,7 +129,13 @@ HTML;
         if (empty($fecha_nacimiento)) {
             Vista::encolaMensajeError('El campo fecha de nacimiento no puede estar vacío.');
         } else {
-            // TODO: comprobar formato de fecha y transformar a UNIX
+            if (! Valido::testDate($fecha_nacimiento)) {
+                Vista::encolaMensajeError('El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.');
+            } else {
+                $format = 'd/m/Y';
+                $d = \DateTime::createFromFormat($format, $fecha_nacimiento);
+                $fecha_nacimiento = $d->getTimestamp();
+            }
         }
 
         $numero_telefono = isset($datos['numero_telefono']) ?
@@ -133,7 +144,9 @@ HTML;
         if (empty($numero_telefono)) {
             Vista::encolaMensajeError('El campo número de teléfono no puede estar vacío.');
         } else {
-            // TODO: comprobar formato de número de teléfono
+            if (! Valido::testNumeroTelefono($numero_telefono)) {
+                Vista::encolaMensajeError('El campo número de teléfono no es válido.');
+            }
         }
 
         $email = isset($datos['email']) ? $datos['email'] : null;
@@ -141,7 +154,9 @@ HTML;
         if (empty($email)) {
             Vista::encolaMensajeError('El campo dirección de correo electrónico no puede estar vacío.');
         } else {
-            // TODO: comprobar formato de email
+            if (! Valido::testEmail($email)) {
+                Vista::encolaMensajeError('El campo dirección de correo electrónico no es válid.');
+            }
         }
 
         /*
@@ -190,6 +205,8 @@ HTML;
             }
 
         }
+
+        $this->genera($datos);
 
     }
 }
