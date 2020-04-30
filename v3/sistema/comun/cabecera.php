@@ -161,5 +161,3 @@ HTML;
 					?>
 				</ul>
 			</nav>
-
-			<article id="master-grid-content">

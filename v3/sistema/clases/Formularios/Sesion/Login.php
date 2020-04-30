@@ -38,18 +38,28 @@ class Login extends Formulario
             $nif = isset($datos_iniciales['nif']) ? $datos_iniciales['nif'] : $nif;
         }
 
-       $this->html .= <<< HTML
-        <div class="form-group">
-            <label for="nif">NIF o NIE</label>
-            <input class="form-control" id="nif" type="text" name="nif" placeholder="NIF o NIE" value="$nif">
-        </div>
+        $url_restablecer = App::getSingleton()->getUrl() . '/sesion/reset/';
 
-        <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input class="form-control" id="password" type="password" name="password" placeholder="Contraseña">
-        </div>
+        $this->html .= <<< HTML
+						    <header class="form-header">
+                                <h1>Iniciar sesión</h1>
+                            </header>
 
-        <button type="submit" class="btn" name="login">Entrar</button>
+						    <div class="form-group">
+                                <label for="nif">NIF o NIE</label>
+                                <input class="form-control" id="nif" type="text" name="nif" placeholder="NIF o NIE" value="$nif">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input class="form-control" id="password" type="password" name="password" placeholder="Contraseña">
+                            </div>
+
+                            <button type="submit" class="btn" name="login">Entrar</button>
+
+                            <div class="form-note">
+                                <p>Si tienes problemas para iniciar sesión, puedes <a href="$url_restablecer">reestablecer tu contraseña</a>.</p>
+                            </div>
 
 HTML;
 

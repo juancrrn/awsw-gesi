@@ -17,13 +17,6 @@
  */
 
 ?>
-			</article>
-
-			<aside id="master-grid-side">
-				<ul>
-					<li><a href="">Otros enlaces</a></li>
-				</ul>
-			</aside>
 
 			<footer id="master-grid-footer"><p>Gesi</p></footer>
 		</div>

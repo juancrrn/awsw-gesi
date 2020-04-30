@@ -42,13 +42,11 @@ class Home extends Modelo
 		$app = App::getSingleton();
 
 		$html = <<< HTML
-		<div class="wrapper">
-			<div class="container">
-				<header class="page-header">
-					<h1>Inicio</h1>
-				</header>
-		
-				<section class="page-content">
+				<article id="master-grid-content">
+					<header class="page-header">
+						<h1>Inicio</h1>
+					</header>
+					<section class="page-content">
 
 HTML;
 		
@@ -57,21 +55,21 @@ HTML;
 			$nombre = Sesion::getUsuarioEnSesion()->getNombre();
 
 			$html .= <<< HTML
-					<p>¡Te damos la bienvenida, $nombre!</p>
+						<p>¡Te damos la bienvenida, $nombre!</p>
 
 HTML;
 		
 			if (Sesion::getUsuarioEnSesion()->isPs()) {
 
 				$html .= <<< HTML
-					<p>Por el momento, puedes <a href="mensajes.php">ver los mensajes dirigidos a la secretaría del centro</a>.</p>
+						<p>Por el momento, puedes <a href="mensajes.php">ver los mensajes dirigidos a la secretaría del centro</a>.</p>
 
 HTML;
 		
 			} else {
 
 				$html .= <<< HTML
-					<p>Por el momento, puedes <a href="mensajes.php">enviar un mensaje a la secretaría del centro</a>.</p>
+						<p>Por el momento, puedes <a href="mensajes.php">enviar un mensaje a la secretaría del centro</a>.</p>
 
 HTML;
 		
@@ -82,26 +80,31 @@ HTML;
 			$url = $app->getUrl();
 
 			$html .= <<< HTML
-					<div id="landing-welcome">
-		
-						<img src="$url/img/landing.svg" alt="">
-		
-						<h1>¡Hola!</h1>
-		
-						<p>Te damos la bienvenida. Gesi es la aplicación web que gestiona tu instituto de educación secundaria. Accede a los contenidos iniciando sesión.</p>
-		
-						<p id="landing-login"><a class="btn" href="$url/sesion/iniciar/">Iniciar sesión</a></p>
-					
-					</div>
+						<div id="landing-welcome">
+			
+							<img src="$url/img/landing.svg" alt="">
+			
+							<h1>¡Hola!</h1>
+			
+							<p>Te damos la bienvenida. Gesi es la aplicación web que gestiona tu instituto de educación secundaria. Accede a los contenidos iniciando sesión.</p>
+			
+							<p id="landing-login"><a class="btn" href="$url/sesion/iniciar/">Iniciar sesión</a></p>
+						
+						</div>
 
 HTML;
 		
 		}
 
 		$html .= <<< HTML
-				</section>
-			</div>
-		</div>
+					</section>
+				</article>
+
+				<aside id="master-grid-side">
+					<ul>
+						<li><a href="">Otros enlaces</a></li>
+					</ul>
+				</aside>
 
 HTML;
 

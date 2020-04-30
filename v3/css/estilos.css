@@ -250,7 +250,7 @@ a {
  */
 
 #master-grid-user {
-    padding: 19px;
+    padding: 19px 16px;
     border-bottom: 1px solid #e8e8e8;
 }
 
@@ -289,6 +289,10 @@ a {
 	padding: 16px;
 }
 
+#master-grid-side ul {
+    border-left: 1px solid #eee;
+}
+
 #master-grid-side ul li {
 	margin: 8px;
 	list-style: none;
@@ -307,6 +311,10 @@ a {
  * Contenido principal
  */
 
+#master-grid-content {
+	padding: 16px;
+}
+
 #master-grid-content h1,
 #master-grid-content h2,
 #master-grid-content h3,
@@ -318,6 +326,10 @@ a {
 	margin: 5px 0 10px;
 }
 
+#master-grid-content h1 {
+    font-size: 2em;
+}
+
 #master-grid-content p {
 	margin: 5px 0 10px;
 }
@@ -326,16 +338,28 @@ a {
  * Mecanismo de mensajes.
  */
 
-.mensaje {
-    padding: 7px 16px;
-    border-left: 2px solid;
+#mensajes-wrapper {
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+	z-index: 3;
 }
 
-.mensaje.error {
+.mensaje {
+    padding: 12px 20px;
+    border-left: 10px solid;
+        border-left-color: currentcolor;
+    box-shadow: 0 4px 4px 0 rgba(60,64,67,0.302),0 8px 12px 6px rgba(60,64,67,0.149);
+    background-color: #fff;
+    border-radius: 6px;
+    margin-top: 12px;
+}
+
+.mensaje.mensaje-error {
     border-color: #dc3545;
 }
 
-.mensaje.exito {
+.mensaje.mensaje-exito {
 	border-color: #28a745;
 }
 
@@ -388,10 +412,18 @@ label {
 .default-form {
     background-color: #fff;
     max-width: 600px;
-    padding: 32px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+    padding: 48px 32px;
+    border-radius: 8px;
+    border: 1px solid #e1e3e6;
     margin: 0 auto;
+}
+
+.form-header {
+    margin-bottom: 24px;
+}
+
+.form-note {
+    margin-top: 24px;
 }
 
 /*
@@ -400,6 +432,7 @@ label {
 
  #form-login {
     max-width: 400px;
+    margin: 50px auto;
 }
 
 

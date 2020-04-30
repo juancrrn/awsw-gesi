@@ -135,10 +135,10 @@ class Vista
 	public static function imprimeMensajes() : void
 	{
 		if (! empty($_SESSION[self::SESSION_MENSAJES])) {
-			echo '<div class="wrapper"><div id="mensajes" class="container">';
+			echo '<div id="mensajes-wrapper"><div id="mensajes">';
 
 			foreach ($_SESSION[self::SESSION_MENSAJES] as $clave => $mensaje) {
-				echo '<div class="mensaje ' . $mensaje["tipo"] . '"><p>' . $mensaje["contenido"] . '</p></div>';
+				echo '<div class="mensaje mensaje-' . $mensaje["tipo"] . '"><p>' . $mensaje["contenido"] . '</p></div>';
 
 				// Eliminar mensaje de la cola tras mostrarlo.
 				unset($_SESSION[self::SESSION_MENSAJES][$clave]);
