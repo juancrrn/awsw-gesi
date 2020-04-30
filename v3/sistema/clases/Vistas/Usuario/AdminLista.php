@@ -25,7 +25,7 @@ use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Usuario;
 use \Awsw\Gesi\Sesion;
 
-class Lista extends Modelo
+class AdminLista extends Modelo
 {
 	private const VISTA_NOMBRE = "Usuarios";
 	private const VISTA_ID = "usuario-lista";
@@ -45,32 +45,27 @@ class Lista extends Modelo
 		Sesion::requerirSesionPs();
 	}
 
-	public function procesa() : void
+	public function procesaContent() : void
 	{
 
 		$app = App::getSingleton();
-		$url_crear = $app->getUrl() . '/usuarios/crear/';
 
 		$html = <<< HTML
-		<div class="wrapper">
-			<div class="container">
-				<header class="page-header">
-					<h1>Usuarios</h1>
-				</header>
+					<header class="page-header">
+						<h1>Usuarios</h1>
+					</header>
 				
-				<section class="page-content">
-					<a href="url_crear" class="btn">Nuevo usuario</a>
-					<p>A continuación se muestra una lista con los Usuarios de la Base de Datos.</p>
-		
-					<div id="usuarios-lista" class="grid-table">
-						<div class="grid-table-header">
-							<div class="grid-table-row">
-								<div>NIF o NIE</div>
-								<div>Nombre completo</div>
-								<div>Roles</div>
+					<section class="page-content">
+						<div id="usuarios-lista" class="grid-table">
+							<div class="grid-table-header">
+								<div class="grid-table-row">
+									<div>NIF o NIE</div>
+									<div>Nombre completo</div>
+									<div></div>
+									<div>Roles</div>
+								</div>
 							</div>
-						</div>
-						<div class="grid-table-body">
+							<div class="grid-table-body">
 
 HTML;
 					
@@ -83,15 +78,22 @@ HTML;
 							$badges .= $u->isPs() ? '<span class="badge">Personal de Secretaría</span>' : '';
 
 							$nif = $u->getNif();
-							$url_editar = $app->getUrl() . '/usuarios/' . $u->getId() . '/editar/';
+							$url_ver = $app->getUrl() . '/admin/usuarios/' . $u->getId() . '/ver/';
+							$url_editar = $app->getUrl() . '/admin/usuarios/' . $u->getId() . '/editar/';
+							$url_eliminar = $app->getUrl() . '/admin/usuarios/' . $u->getId() . '/eliminar/';
 							$nombre = $u->getNombreCompleto();
 
 							$html .= <<< HTML
-							<div class="grid-table-row">
-								<div>$nif</div>
-								<div><a href="$url_editar">$nombre</a></div>
-								<div>$badges</div>
-							</div>
+								<div class="grid-table-row">
+									<div>$nif</div>
+									<div><a href="$url_ver">$nombre</a></div>
+									<div>
+										<a href="$url_ver">Ver</a>
+										<a href="$url_editar">Editar</a>
+										<a href="$url_eliminar">Eliminar</a>
+									</div>
+									<div>$badges</div>
+								</div>
 
 HTML;
 
@@ -99,20 +101,35 @@ HTML;
 					} else {
 							
 							$html .= <<< HTML
-							<div class="grid-table-row-empty">
-								No se han encontrado usuarios.
-							</div>
+								<div class="grid-table-row-empty">
+									No se han encontrado usuarios.
+								</div>
 
 HTML;
 
 					}
 
 		$html .= <<< HTML
+							</div>
 						</div>
-					</div>
-				</section>
-			</div>
-		</div>
+					</section>
+
+HTML;
+
+		echo $html;
+
+	}
+
+	public function procesaSide(): void
+	{
+
+		$app = App::getSingleton();
+		$url_crear = $app->getUrl() . '/admin/usuarios/crear/';
+
+		$html = <<< HTML
+					<ul>
+						<li><a href="$url_crear" class="btn">Nuevo usuario</a></li>
+					</ul>
 
 HTML;
 

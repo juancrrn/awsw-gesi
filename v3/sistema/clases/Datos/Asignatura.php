@@ -48,71 +48,71 @@ class Asignatura
 		}
 
 
-	/**
+		/**
+		 * Crea una nueva Asignatura
+		 * 
+		 * @param $nombreAsign Nombre de la asignatura a crear
+		 * 
+		 */
+	public function crea($nombreAsignatura, $nombreAsign, $curso): bool{
+
+		if(self::dbExiste($nombreAsignatura, $curso)){
+			$crea = false;
+		}else{
+			$asignatura = new Asignatura(0, $curso, $nombreAsignatura, $nombreAsign);
+			if(){
+				$crea = true;
+			}else{
+				$crea =
+			}
+		}
+
+		return $crea;
+	}
+
+	public static function dbExiste($nombre, $curso): bool{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT id
+			FROM gesi_usuarios
+			WHERE nombre = ? AND curso = ?
+			LIMIT 1
+		");
+
+		$sentencia->bind_param(
+			"si",
+			$nombre,
+			$curso
+		);
+		
+		$sentencia->execute();
+		
+		$sentencia->store_result();
+
+		if ($sentencia->num_rows > 0) {
+			$existe = true;
+		} else {
+			$existe = false;
+		}
+
+		$sentencia->close();
+
+		return $existe;
+	 
+
+	/** 
 	 * 	Insertar una nueva Asignatura en la base de datos
 	 * 
 	 * @param Asignatura
 	 * 
 	 * @return int
-	 */
-
-	public static function dbInsertar() : int{
-			$bbdd = App::getSingleton()->bbddCon();
-
-			$sentencia = $bbdd->prepare("
-				INSERT
-				INTO 
-					gesi_asignaturas
-					(
-						curso,
-						nombre_corto,
-						nombre_largo
-					)
-				VALUES
-					(?,?,?,?)
-			");
-
-			$curso = $this->getCurso();
-			$nombre_corto = $this->getNombreCorto();
-			$nombre_largo = $this->getNombreLargo();
-
-			$sentencia->bind_param(
-				"iiss",
-				$id,
-				$curso,
-				$nombre_corto,
-				$nombre_largo
-			);
-
-			$sentencia->execute();
-
-			$id_insertado = $bbdd->insert_id;
-
-			$this->id = $id_insertado;
-
-			$sentencia->close();
-
-			return $id_insertado;
-			
-	 }
-
-	 /**
-	 * Trae una asignatura de la base de datos.
-	 *
-	 * @param int $id
-	 *
-	 * @requires Existe una asignatura con el id especificado.
-	 *
-	 * @return Asignatura
-	 */
-
-	 public static function dbGet(int $id) : Asignatura
-	{
-		$bbdd = App::getSingleton()->bbddCon();
+	 */		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
 			SELECT 
-			id,
+id,
 			curso,
 			nombre_corto,
 			nombre_largo

@@ -24,7 +24,7 @@ namespace Awsw\Gesi\Vistas\MensajeSecretaria;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class Crear extends Modelo
+class MiCrear extends Modelo
 {
 
 	private const VISTA_NOMBRE = "Nuevo mensaje de Secretaría";

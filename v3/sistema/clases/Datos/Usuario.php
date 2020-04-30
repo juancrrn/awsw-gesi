@@ -623,4 +623,22 @@ class Usuario
 		$sentencia->close();
 		return $usuarios;	
 	}
+
+	public function crea($nombreUsuario, $nombre, $password, 'user'): bool{
+
+		if(self::dbExiste($nombreAsignatura, $curso)){
+			$crea = false;
+		}else{
+			$asignatura = new Asignatura(0, $curso, $nombreAsignatura, $nombreAsign);
+			$asignatura_id = $asignatura->dbInsertar();
+			if($asignatura_id){
+				$crea = true;
+			}else{
+				$crea = false;
+			}
+		}
+
+		return $crea;
+	}
+
 }

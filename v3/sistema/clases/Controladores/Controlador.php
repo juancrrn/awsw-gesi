@@ -16,9 +16,9 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi;
+namespace Awsw\Gesi\Controladores;
 
-class Controlador
+abstract class Controlador
 {
 
 	private static $base = '';
@@ -103,5 +103,10 @@ class Controlador
 		}
 
 	}
+
+	/**
+	 * Lanza varios controladores de puntos de entrada.
+	 */
+	abstract public static function controla() : void;
 
 }

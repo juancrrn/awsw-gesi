@@ -177,7 +177,25 @@ class Vista
 
 		self::imprimeMensajes();
 
-		$vista->procesa();
+		echo <<< HTML
+				<article id="master-grid-content">
+
+HTML;
+
+		$vista->procesaContent();
+
+		echo <<< HTML
+				</article>
+				<aside id="master-grid-side">
+
+HTML;
+
+		$vista->procesaSide();
+
+		echo <<< HTML
+				</aside>
+
+HTML;
 
 		self::incluirPie();
 	}

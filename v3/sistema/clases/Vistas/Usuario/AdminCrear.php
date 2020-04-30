@@ -21,8 +21,9 @@
 namespace Awsw\Gesi\Vistas\Usuario;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Formularios\Usuario\Crear as Formulario;
 
-class Crear extends Modelo
+class AdminCrear extends Modelo
 {
 
 	private const VISTA_NOMBRE = "Nuevo usuario";
@@ -32,24 +33,32 @@ class Crear extends Modelo
 	{
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
+
+		$this->form = new Formulario("/admin/usuarios/crear/"); 
 	}
 
-	public function procesa() : void
+	public function procesaAntesDeLaCabecera(): void
+	{
+		$this->form->gestiona();
+	}
+
+	public function procesaContent() : void
 	{
 
-		?>
-<div class="wrapper">
-	<div class="container">
-		<header class="page-header">
-			<h1>Nuevo usuario</h1>
-		</header>
+		$formulario = $this->form->getHtml();
 
-		<section class="page-content">
-		
-		</section>
-	</div>
-</div>
-		<?php
+		$html = <<< HTML
+						    <header class="page-header">
+								<h1>$this->nombre</h1>
+							</header>
+							
+							<section class="page-content">
+								$formulario
+							</section>
+
+HTML;
+
+		echo $html;
 
 	}
 }

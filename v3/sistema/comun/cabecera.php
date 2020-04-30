@@ -17,10 +17,14 @@
  */
 
 use \Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Sesion\Cerrar;
 use \Awsw\Gesi\Vistas\Vista;
 use \Awsw\Gesi\Sesion;
 
 $app = App::getSingleton();
+
+$formulario_logout = new Cerrar('');
+$formulario_logout->gestiona();
 
 ?>
 <!DOCTYPE html>
@@ -37,11 +41,11 @@ $app = App::getSingleton();
 		<div id="master-grid-wrapper">
 			<header id="master-grid-header">
 				<div id="app-logo">
-					<img src="<?php echo $app->getUrl(); ?>/img/logo.svg" height="24" width="24" alt="Gesi">
+					<a href="<?php echo $app->getUrl(); ?>"><img src="<?php echo $app->getUrl(); ?>/img/logo.svg" height="24" width="24" alt="Gesi"></a>
 				</div>
 
 				<div id="app-name">
-					<h1>Gesi</h1>
+					<h1><a href="<?php echo $app->getUrl(); ?>">Gesi</a></h1>
 				</div>
 			</header>
 
@@ -51,13 +55,31 @@ $app = App::getSingleton();
 
 if (Sesion::isSesionIniciada()) {
 
-	$nombre = Sesion::getUsuarioEnSesion()->getNombreCompleto();
+	$u = Sesion::getUsuarioEnSesion();
+
+	$nombre = $u->getNombreCompleto();
+
 	$url_editar = $app->getUrl() . '/sesion/perfil/';
-	$url_cerrar = $app->getUrl() . '/sesion/cerrar/';
+	
+	$badges = '';
+	$badges .= $u->isEst() ? '<span class="badge">Estudiante</span>' : '';
+	$badges .= $u->isPd() ? '<span class="badge">Personal docente</span>' : '';
+	$badges .= $u->isPs() ? '<span class="badge">Personal de Secretaría</span>' : '';
+
+
+	
 		
-					echo <<< HTML
+	echo <<< HTML
+					<li>$badges</li>
 					<li><a href="$url_editar">$nombre</a></li>
-					<li><a href="$url_cerrar">Cerrar sesión</a></li>
+					<li>
+
+HTML;
+
+	$formulario_logout->imprime();
+
+	echo <<< HTML
+					</li>
 
 HTML;
 
@@ -83,50 +105,47 @@ HTML;
 $url_inicio = $app->getUrl();
 
 					echo <<< HTML
-					<li><a href="$url_inicio">Inicio</a></li>
+					<li class="link"><a href="$url_inicio">Inicio</a></li>
 
 HTML;
 
 if (Sesion::isSesionIniciada()) {
+
+	$url_mensajes = $app->getUrl() . '/mi/secretaria/';
+	$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
+	$url_horarios = $app->getUrl() . '/mi/horarios/';
+	$url_eventos = $app->getUrl() . '/mi/eventos/';
+	$url_foros = $app->getUrl() . '/mi/foros/';
+	$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
+
+	echo <<< HTML
+					<li class="divider">Acciones personales</li>
+					<li class="link"><a href="$url_mensajes">Mensajes de Secretaría</a></li>
+					<li class="link"><a href="$url_eventos">Eventos</a></li>
+					<li class="link"><a href="$url_foros">Foros</a></li>
+					<li class="link"><a href="$url_biblioteca">Biblioteca</a></li>
+HTML;
+
 	if (Sesion::getUsuarioEnSesion()->isEst()) {
 
-		$url_mensajes = $app->getUrl() . '/mi/secretaria/';
-		$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
-		$url_horarios = $app->getUrl() . '/mi/horarios/';
-		$url_eventos = $app->getUrl() . '/mi/eventos/';
-		$url_foros = $app->getUrl() . '/mi/foros/';
-		$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
+		echo <<< HTML
+					<li class="divider">Acciones de estudiante</li>
+					<li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
+					<li class="link"><a href="$url_horarios">Horarios</a></li>
 
-						echo <<< HTML
-					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
-					<li><a href="$url_asignaturas">Asignaturas</a></li>
-					<li><a href="$url_horarios">Horarios</a></li>
-					<li><a href="$url_eventos">Eventos</a></li>
-					<li><a href="$url_foros">Foros</a></li>
-					<li><a href="$url_biblioteca">Biblioteca</a></li>
-					
 HTML;
 
 	} elseif (Sesion::getUsuarioEnSesion()->isPd()) {
-
-		$url_mensajes = $app->getUrl() . '/mi/secretaria/';
-		$url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
+		
 		$url_grupos = $app->getUrl() . '/mi/grupos/';
 		$url_asignaciones = $app->getUrl() . '/mi/asignaciones/';
-		$url_horarios = $app->getUrl() . '/mi/horarios/';
-		$url_eventos = $app->getUrl() . '/mi/eventos/';
-		$url_foros = $app->getUrl() . '/mi/foros/';
-		$url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
 
-						echo <<< HTML
-					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
-					<li><a href="$url_asignaturas">Asignaturas</a></li>
-					<li><a href="$url_grupos">Grupos</a></li>
-					<li><a href="$url_asignaciones">Asignaciones</a></li>
-					<li><a href="$url_horarios">Horarios</a></li>
-					<li><a href="$url_eventos">Eventos</a></li>
-					<li><a href="$url_foros">Foros</a></li>
-					<li><a href="$url_biblioteca">Biblioteca</a></li>
+		echo <<< HTML
+					<li class="divider">Acciones de personal docente</li>
+					<li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
+					<li class="link"><a href="$url_horarios">Horarios</a></li>
+					<li class="link"><a href="$url_grupos">Grupos</a></li>
+					<li class="link"><a href="$url_asignaciones">Asignaciones</a></li>
 
 HTML;
 	
@@ -143,15 +162,16 @@ HTML;
 		$url_biblioteca = $app->getUrl() . '/admin/biblioteca/';
 
 						echo <<< HTML
-					<li><a href="$url_mensajes">Mensajes de Secretaría</a></li>
-					<li><a href="$url_asignaturas">Asignaturas</a></li>
-					<li><a href="$url_grupos">Grupos</a></li>
-					<li><a href="$url_usuarios">Usuarios</a></li>
-					<li><a href="$url_asignaciones">Asignaciones</a></li>
-					<li><a href="$url_horarios">Horarios</a></li>
-					<li><a href="$url_eventos">Eventos</a></li>
-					<li><a href="$url_foros">Foros</a></li>
-					<li><a href="$url_biblioteca">Biblioteca</a></li>
+					<li class="divider">Acciones de administración</li>
+					<li class="link"><a href="$url_mensajes">Mensajes de Secretaría</a></li>
+					<li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
+					<li class="link"><a href="$url_grupos">Grupos</a></li>
+					<li class="link"><a href="$url_usuarios">Usuarios</a></li>
+					<li class="link"><a href="$url_asignaciones">Asignaciones</a></li>
+					<li class="link"><a href="$url_horarios">Horarios</a></li>
+					<li class="link"><a href="$url_eventos">Eventos</a></li>
+					<li class="link"><a href="$url_foros">Foros</a></li>
+					<li class="link"><a href="$url_biblioteca">Biblioteca</a></li>
 
 HTML;
 

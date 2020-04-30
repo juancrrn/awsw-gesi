@@ -36,59 +36,37 @@ class Home extends Modelo
 		$this->id = self::VISTA_ID;
 	}
 
-	public function procesa() : void
+	public function procesaContent() : void
 	{
 
 		$app = App::getSingleton();
 
-		$html = <<< HTML
-				<article id="master-grid-content">
-					<header class="page-header">
-						<h1>Inicio</h1>
-					</header>
-					<section class="page-content">
+		$saludo = '';
 
-HTML;
-		
 		if (Sesion::isSesionIniciada()) {
 
 			$nombre = Sesion::getUsuarioEnSesion()->getNombre();
 
-			$html .= <<< HTML
+			$saludo .= <<< HTML
 						<p>¡Te damos la bienvenida, $nombre!</p>
 
 HTML;
 		
-			if (Sesion::getUsuarioEnSesion()->isPs()) {
-
-				$html .= <<< HTML
-						<p>Por el momento, puedes <a href="mensajes.php">ver los mensajes dirigidos a la secretaría del centro</a>.</p>
-
-HTML;
-		
-			} else {
-
-				$html .= <<< HTML
-						<p>Por el momento, puedes <a href="mensajes.php">enviar un mensaje a la secretaría del centro</a>.</p>
-
-HTML;
-		
-			}
-		
 		} else {
 
-			$url = $app->getUrl();
+			$url_imagen = $app->getUrl() . '/img/landing.svg';
+			$url_iniciar = $app->getUrl() . '/sesion/iniciar/';
 
-			$html .= <<< HTML
+			$saludo .= <<< HTML
 						<div id="landing-welcome">
 			
-							<img src="$url/img/landing.svg" alt="">
+							<img src="$url_imagen" alt="">
 			
 							<h1>¡Hola!</h1>
 			
 							<p>Te damos la bienvenida. Gesi es la aplicación web que gestiona tu instituto de educación secundaria. Accede a los contenidos iniciando sesión.</p>
 			
-							<p id="landing-login"><a class="btn" href="$url/sesion/iniciar/">Iniciar sesión</a></p>
+							<p id="landing-login"><a class="btn" href="$url_iniciar">Iniciar sesión</a></p>
 						
 						</div>
 
@@ -96,15 +74,13 @@ HTML;
 		
 		}
 
-		$html .= <<< HTML
+		$html = <<< HTML
+					<header class="page-header">
+						<h1>Inicio</h1>
+					</header>
+					<section class="page-content">
+						$saludo
 					</section>
-				</article>
-
-				<aside id="master-grid-side">
-					<ul>
-						<li><a href="">Otros enlaces</a></li>
-					</ul>
-				</aside>
 
 HTML;
 

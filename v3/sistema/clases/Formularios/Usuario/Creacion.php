@@ -21,7 +21,7 @@ namespace Awsw\Gesi\Formularios\Usuario;
 use \Awsw\Gesi\Formularios\Formulario;
 use \Awsw\Gesi\Datos\Usuario;
 
-class Creacion extends Formulario
+class Crear extends Formulario
 {
     public function __construct() {
         parent::__construct('formRegistro');

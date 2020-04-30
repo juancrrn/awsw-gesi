@@ -53,6 +53,7 @@ class Ver extends Modelo
 	<div class="container">
 		<header class="page-header">
 			<h1>Asignatura</h1>
+						
 		</header>
 
 		<section class="page-content">

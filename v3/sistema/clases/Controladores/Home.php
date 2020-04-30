@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Pie HTML (append).
- *
+ * Puntos de entrada relacionados con la vista de landing.
+ * 
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
@@ -16,12 +16,18 @@
  * @version 0.0.2
  */
 
-?>
+namespace Awsw\Gesi\Controladores;
 
-			<footer id="master-grid-footer">
-				<p>Gesi</p>
-				<p>Versión 0.0.3</p>
-			</footer>
-		</div>
-	</body>
-</html>
+use Awsw\Gesi\Vistas\Vista as V;
+
+class Home extends Controlador
+{
+	public static function controla() : void
+	{
+
+		parent::go('/?', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Home\Home());
+		});
+
+	}
+}

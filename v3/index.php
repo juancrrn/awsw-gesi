@@ -19,133 +19,70 @@
 require_once __DIR__ . "/sistema/configuracion.php";
 
 use Awsw\Gesi\App;
-use \Awsw\Gesi\Controlador;
-use \Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\Controladores\Controlador;
 
 Controlador::setGetBase(App::getSingleton()->getBaseControlador());
 
 /**
- * Vista de landing.
+ * Puntos de entrada de vistas relacionadas con landing.
  */
 
-Controlador::go('/?', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Home\Home());
-});
+\Awsw\Gesi\Controladores\Home::controla();
 
 /**
- * Vistas relacionadas con las asignaturas
+ * Puntos de entrada de vistas relacionadas con asignaturas.
  */
 
-Controlador::go('/asignaturas/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\Lista());
-});
-
-Controlador::go('/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\Ver($asignatura_id));
-});
+\Awsw\Gesi\Controladores\Asignatura::controla();
 
 /**
- * Vistas relacionadas con la biblioteca
+ * Puntos de entrada de vistas relacionadas con la biblioteca.
  */
 
-Controlador::go('/biblioteca/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\General());
-});
-
-Controlador::go('/biblioteca/movimientos/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\Movimientos());
-});
+\Awsw\Gesi\Controladores\Biblioteca::controla();
 
 /**
- * Vistas relacionadas con eventos y calendario
+ * Puntos de entrada de vistas relacionadas con eventos.
  */
 
-Controlador::go('/eventos/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Evento\Lista());
-});
-
-Controlador::go('/eventos/([0-9]+)/ver/', function ($evento_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\Evento\Ver($evento_id));
-});
+\Awsw\Gesi\Controladores\Evento::controla();
 
 /**
- * Vistas relacionadas con foros
+ * Puntos de entrada de vistas relacionadas con foros.
  */
 
-Controlador::go('/foros/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Foro\Lista());
-});
-
-Controlador::go('/foros/([0-9]+)/ver/', function ($foro_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\Foro\Ver($foro_id));
-});
+\Awsw\Gesi\Controladores\Foro::controla();
 
 /**
- * Vistas relacionadas con grupos
+ * Puntos de entrada de vistas relacionadas con grupos.
  */
 
-Controlador::go('/grupos/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Grupo\Lista());
-});
-
-Controlador::go('/grupos/([0-9]+)/ver/', function ($grupo_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\Grupo\Ver($grupo_id));
-});
+\Awsw\Gesi\Controladores\Grupo::controla();
 
 /**
- * Vistas relacionadas con mensajes de secretaría
+ * Puntos de entrada de vistas relacionadas con mensajes de Secretaría.
  */
 
-Controlador::go('/secretaria/mensajes/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\Lista());
-});
-
-Controlador::go('/secretaria/mensajes/crear/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\Crear());
-});
-
-Controlador::go('/secretaria/mensajes/([0-9]+)/ver/', function ($mensaje_secretaria_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\Ver($mensaje_secretaria_id));
-});
+\Awsw\Gesi\Controladores\MensajeSecretaria::controla();
 
 /**
- * Vistas relacionadas con sesión
+ * Puntos de entrada de vistas relacionadas con la sesión.
  */
 
-Controlador::go('/sesion/iniciar/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Iniciar());
-});
-
-Controlador::go('/sesion/cerrar/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Cerrar());
-});
-
-Controlador::go('/sesion/reset/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Sesion\RestablecerContrasena());
-});
+\Awsw\Gesi\Controladores\Sesion::controla();
 
 /**
  * Vistas relacionadas con usuarios
  */
 
-Controlador::go('/usuarios/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Usuario\Lista());
-});
-
-Controlador::go('/usuarios/crear/', function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Usuario\Crear());
-});
-
-Controlador::go('/usuarios/([0-9]+)/ver/', function ($usuario_id) {
-	V::dibuja(new \Awsw\Gesi\Vistas\Usuario\Ver($usuario_id));
-});
+\Awsw\Gesi\Controladores\Usuario::controla();
 
 /**
  * Vista por defecto.
  */
 
 Controlador::default(function () {
-	V::dibuja(new \Awsw\Gesi\Vistas\Error\Error404());
+	\Awsw\Gesi\Vistas\Vista::dibuja(new \Awsw\Gesi\Vistas\Error\Error404());
 });
 
 ?>

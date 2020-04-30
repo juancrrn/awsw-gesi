@@ -165,7 +165,7 @@ class MensajeSecretaria
 			$result_contenido
 		);
 		
-		$mensajes = null;
+		$mensajes = array();
 
 		while($sentencia->fetch()) {
 			$mensajes[] = new MensajeSecretaria(
@@ -176,6 +176,68 @@ class MensajeSecretaria
 				$result_from_telefono,
 				$result_fecha,
 				$result_contenido
+			);
+		}
+		
+		$sentencia->close();
+
+		return $mensajes;
+	}
+
+	/**
+	 * Trae todos los mensajes de Secretaría de la base de datos que 
+	 * pertenezcan a un Usuario.
+	 *
+	 * @return array<MensajeSecretaria>
+	 */
+	public static function dbGetByUsuario(int $usuario_id) : array
+	{	
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				usuario,
+				from_nombre,
+				from_email,
+				from_telefono,
+				fecha,
+				contenido
+			FROM
+				gesi_mensajes_secretaria
+			WHERE
+				usuario = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$usuario_id
+		);
+
+		$sentencia->execute();
+		$sentencia->store_result();
+
+		$sentencia->bind_result(
+			$id,
+			$usuario,
+			$from_nombre,
+			$from_email,
+			$from_telefono,
+			$fecha,
+			$contenido
+		);
+		
+		$mensajes = array();
+
+		while($sentencia->fetch()) {
+			$mensajes[] = new MensajeSecretaria(
+				$id,
+				$usuario,
+				$from_nombre,
+				$from_email,
+				$from_telefono,
+				$fecha,
+				$contenido
 			);
 		}
 		

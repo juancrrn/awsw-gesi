@@ -24,16 +24,24 @@ abstract class Modelo
 	protected $id;
 
 	/**
-	 * Procesa la lógica de la vista, que deberá imprimir HTML y realizar lo que
-	 * sea conveniente.
-	 */
-	abstract public function procesa() : void;
-
-	/**
 	 * Se llama a esta función antes de procesar la cabecera. En su caso, puede 
 	 * servir para comprobar permisos, mostrar mensajes, etc.
 	 */
 	public function procesaAntesDeLaCabecera() : void
+	{
+	}
+
+	/**
+	 * Procesa la lógica de la vista en el elemento <article>, que deberá 
+	 * imprimir HTML y realizar lo que sea conveniente.
+	 */
+	abstract public function procesaContent() : void;
+
+	/**
+	 * Procesa la lógica de la vista en el elemento <aside>, que deberá 
+	 * imprimir HTML y realizar lo que sea conveniente.
+	 */
+	public function procesaSide() : void
 	{
 	}
 

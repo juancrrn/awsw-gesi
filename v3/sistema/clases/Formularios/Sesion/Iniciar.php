@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Gesión del formulario de inicio de sesión.
+ * Gesión del formulario de inicio de sesión.
  *
  * @package awsw-gesi
  * Gesi
@@ -24,7 +24,7 @@ use \Awsw\Gesi\Datos\Usuario;
 use \Awsw\Gesi\Sesion;
 use \Awsw\Gesi\Vistas\Vista;
 
-class Login extends Formulario
+class Iniciar extends Formulario
 {
     public function __construct(string $action) {
         parent::__construct('form-login', array('action' => $action));
@@ -72,38 +72,36 @@ HTML;
     {
         $nif = isset($datos['nif']) ? $datos['nif'] : null;
                 
-        if ( empty($nif) ) {
+        if (empty($nif)) {
             Vista::encolaMensajeError("El NIF o NIE no puede estar vacío.");
+        } elseif (! Usuario::dbExisteNif($nif)) {
+            Vista::encolaMensajeError("El NIF o NIE y la contraseña introducidos no coinciden.");
         }
         
         $password = isset($datos['password']) ? $datos['password'] : null;
         
-        if ( empty($password) ) {
+        if (empty($password)) {
             Vista::encolaMensajeError("La contraseña no puede estar vacía.");
         }
         
         // Si no hay ningún error, continuar.
         if (! Vista::hayMensajesError()) {
 
-            // Comprobar si el NIF o NIE introducido existe.
-            if (! Usuario::dbExisteNif($nif)) {
-                Vista::encolaMensajeError("El NIF o NIE y la contraseña introducidos no coinciden. 1");
+            $id = Usuario::dbGetIdDesdeNif($nif);
+
+            // Comprobar si la contraseña es correcta.
+            if (! password_verify($password, Usuario::dbGetPasswordDesdeId($id))) {
+                Vista::encolaMensajeError("El NIF o NIE y la contraseña introducidos no coinciden.");
             } else {
-                $id = Usuario::dbGetIdDesdeNif($nif);
+                $usuario = Usuario::dbGet($id);
+                Sesion::inicia($usuario);
+                
+                $app = App::getSingleton();
 
-                // Comprobar si la contraseña es correcta.
-                if (! password_verify($password, Usuario::dbGetPasswordDesdeId($id))) {
-                    Vista::encolaMensajeError("El NIF o NIE y la contraseña introducidos no coinciden. 2");
-                } else {
-                    $usuario = Usuario::dbGet($id);
-                    Sesion::inicia($usuario);
-                    
-                    $app = App::getSingleton();
-
-                    header("Location: " . $app->getUrl());
-                    die();
-                }
+                header("Location: " . $app->getUrl());
+                die();
             }
+
         }
 
         $this->genera($datos);

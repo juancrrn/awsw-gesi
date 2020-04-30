@@ -21,7 +21,7 @@ namespace Awsw\Gesi\Vistas\Sesion;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Formularios\Sesion\Login as Formulario;
+use Awsw\Gesi\Formularios\Sesion\Iniciar as Formulario;
 
 class Iniciar extends Modelo
 {
@@ -43,20 +43,16 @@ class Iniciar extends Modelo
 		$this->form->gestiona();
 	}
 
-	public function procesa() : void
+	public function procesaContent() : void
 	{
 
 		$formulario = $this->form->getHtml();
 		
 
 		$html = <<< HTML
-				<article id="master-grid-content">
 					<section class="page-content">
 						$formulario
 					</section>
-				</article>
-
-				<aside id="master-grid-side"></aside>
 
 HTML;
 

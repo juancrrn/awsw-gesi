@@ -1,7 +1,9 @@
 <?php 
 
 /**
- * Error 404: no encontrado.
+ * Vista de perfil de un usuario en particular.
+ *
+ * - Cualquier usuario con sesión puede acceder.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,18 +18,23 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Error;
+namespace Awsw\Gesi\Vistas\Sesion;
 
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Vistas\Vista;
 
-class Error404 extends Modelo
+class Perfil extends Modelo
 {
 
-	private const VISTA_NOMBRE = "Error 404";
-	private const VISTA_ID = "error-404";
+	private const VISTA_NOMBRE = "Mi perfil";
+	private const VISTA_ID = "sesion-perfil";
 
 	public function __construct()
 	{
+		Sesion::requerirSesionIniciada();
+
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 	}
@@ -35,13 +42,15 @@ class Error404 extends Modelo
 	public function procesaContent() : void
 	{
 
+		// TODO: Rellenar formulario con Sesion::getUsuarioLogueado
+
 		$html = <<< HTML
 					<header class="page-header">
-						<h1>Error 404</h1>
+						<h1>Mi perfil</h1>
 					</header>
-					
+
 					<section class="page-content">
-						<p>No se ha podido encontrar la página solicitada.</p>
+						Aquí el formulario read-only.
 					</section>
 
 HTML;

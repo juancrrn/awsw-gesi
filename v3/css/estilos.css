@@ -35,7 +35,6 @@ html, body {
 a {
 	text-decoration: none;
 	color: #7b1fa2;
-	border-bottom: 1px solid;
 }
 
 /*
@@ -122,37 +121,31 @@ a {
 #master-grid-header {
 	grid-area: header;
 	background-color: #fff;
-	z-index: 2;
 }
 
 #master-grid-user {
 	grid-area: user;
 	background-color: #fff;
-	z-index: 2;
 }
 
 #master-grid-content {
 	grid-area: content;
 	background-color: #fff;
-	z-index: 0;
 }
 
 #master-grid-nav {
 	grid-area: nav;
 	background-color: #fff;
-	z-index: 1;
 }
 
 #master-grid-side {
 	grid-area: sidebar;
 	background-color: #fff;
-	z-index: 0;
 }
 
 #master-grid-footer {
 	grid-area: footer;
 	background-color: #fff;
-	z-index: 0;
 }
 
 /* 
@@ -165,9 +158,10 @@ a {
 	#master-grid-wrapper {
 		grid-template-columns: 1fr 3fr;
 		grid-template-areas: 
-			"header  header"
-			"user    nav"
-			"sidebar content"
+			"header  user"
+			"nav     nav"
+			"content content"
+			"sidebar sidebar"
 			"footer  footer";
 	}
 
@@ -190,7 +184,7 @@ a {
 
 @media (min-width: 700px) {
 	#master-grid-wrapper {
-		grid-template-columns: 1fr 4fr 1fr;
+		grid-template-columns: minmax(256px, 1fr) 4fr 1fr;
 		grid-template-areas: 
 			"header user    user"
 			"nav    content sidebar"
@@ -199,11 +193,6 @@ a {
 		grid-template-rows: 65px auto auto 65px;		
 		/*width: 100vw;*/
 		min-height: 100vh;
-	}
-
-	#master-grid-user ul {
-		flex-direction: row;
-		justify-content: right;
 	}
 
 	#master-grid-nav ul {
@@ -250,7 +239,7 @@ a {
  */
 
 #master-grid-user {
-    padding: 19px 16px;
+    padding: 22px 16px;
     border-bottom: 1px solid #e8e8e8;
 }
 
@@ -258,10 +247,27 @@ a {
 	list-style: none;
 }
 
+#master-grid-user ul li a {
+	display: block;
+}
+
+#master-grid-user .badge {
+    display: block;
+}
+
 @media (min-width: 700px) {
+	#master-grid-user ul {
+		flex-direction: row;
+		justify-content: right;
+	}
+
+	#master-grid-user ul li {
+		margin-left: 24px;
+		align-self: center;
+	}
+
 	#master-grid-user ul li a {
-		margin: 8px;
-		line-height: 27px;
+		line-height: 20px;
 	}
 }
 
@@ -270,14 +276,38 @@ a {
  */
 
 #master-grid-nav ul li {
-	margin: 8px;
+	padding: 10px 24px;
 	list-style: none;
+}
+
+#master-grid-nav ul li:first-child {
+	margin-top: 16px;
+}
+
+#master-grid-nav ul li:last-child {
+	margin-bottom: 16px;
+}
+
+#master-grid-nav ul li.divider {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    margin: 8px 0;
+}
+
+#master-grid-nav ul li.link {
+	padding: 0;
+}
+
+#master-grid-nav ul li.link a {
+	display: block;
+	padding: 10px 24px;
+	border: none;
+	font-size: .9em;
 }
 
 @media (min-width: 700px) {
 	#master-grid-nav {
-		box-shadow: 0 4px 4px 0 rgba(60,64,67,0.302),0 8px 12px 6px rgba(60,64,67,0.149);
-		padding: 16px;
+		border-right: 1px solid #e8e8e8;
 	}
 }
 
@@ -303,8 +333,14 @@ a {
  */
 
 #master-grid-footer {
-    padding: 19px;
-    border-top: 1px solid #e8e8e8;
+	padding: 19px 32px;
+	display: flex;
+	flex-direction: row;
+	font-size: .9em;
+}
+
+#master-grid-footer p {
+	margin-right: 24px;
 }
 
 /*
@@ -312,7 +348,7 @@ a {
  */
 
 #master-grid-content {
-	padding: 16px;
+	padding: 64px;
 }
 
 #master-grid-content h1,
@@ -334,6 +370,10 @@ a {
 	margin: 5px 0 10px;
 }
 
+#master-grid-content p a {
+	border-bottom: 1px solid;
+}
+
 /*
  * Mecanismo de mensajes.
  */
@@ -342,7 +382,7 @@ a {
     position: fixed;
     bottom: 32px;
     left: 32px;
-	z-index: 3;
+	z-index: 1;
 }
 
 .mensaje {
@@ -394,6 +434,7 @@ label {
 }
 
 .btn {
+	cursor: pointer;
 	font-family: inherit;
     display: inline-block;
     font-weight: 400;
@@ -435,6 +476,51 @@ label {
     margin: 50px auto;
 }
 
+/*
+ * Formulario de cierre de sesión.
+ */
+
+#form-logout {
+    background: transparent;
+    padding: 0;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+}
+
+#form-logout button {
+	cursor: pointer;
+    color: rgb(123, 31, 162);
+    font-family: inherit;
+    line-height: 20px;
+    background: none;
+    border: none;
+    font-size: inherit;
+    display: block;
+}
+
+/*
+ * Formulario de creación de usuario
+ */
+
+@media (min-width: 700px) {
+	#form-usuario-crear {
+		max-width: 100%;
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-gap: 16px;
+	}
+
+	#form-usuario-crear .form-group {
+		margin-bottom: 0;
+	}
+
+	#form-usuario-crear .form-actions {
+		display: flex;
+		justify-content: right;
+		align-content: end;
+	}
+}
 
 /*
  * Mensajes de secretaría.
@@ -494,12 +580,21 @@ section.page-content #landing-welcome p {
 
 #usuarios-lista .grid-table-row {
     display: grid;
-    grid-template-columns: 150px auto 200px;
+    grid-template-columns: 100px auto 220px 200px;
 }
 
 .grid-table-row > div {
-	border-bottom: 1px solid #ccc;
-	padding: 8px;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 12px;
+    font-size: .9em;
+}
+
+.grid-table-row > div:first-child {
+	padding-left: 0;
+}
+
+.grid-table-row > div:last-child {
+	padding-right: 0;
 }
 
 .grid-table-header .grid-table-row > div {
