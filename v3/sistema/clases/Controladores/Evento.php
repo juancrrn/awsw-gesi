@@ -26,11 +26,15 @@ class Evento extends Controlador
 	{
 
 		parent::go('/eventos/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Evento\Lista());
+			V::dibuja(new \Awsw\Gesi\Vistas\Evento\InvLista());
 		});
-		
-		parent::go('/eventos/([0-9]+)/ver/', function ($evento_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Evento\Ver($evento_id));
+
+		parent::go('/mi/eventos/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Evento\MiLista());
+		});
+
+		parent::go('/admin/eventos/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Evento\AdminLista());
 		});
 
 	}

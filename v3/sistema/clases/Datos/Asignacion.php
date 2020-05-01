@@ -23,6 +23,7 @@ use Awsw\Gesi\App;
 
 class Asignacion
 {
+
 	// Identificador único de la relación.
 	private $id;
 
@@ -44,44 +45,69 @@ class Asignacion
 	/**
 	 * Constructor.
 	 */
-	private function __construct($id, $asignatura, $grupo, $profesor, $horario, $foro_principal)
+	public function __construct(
+		$id,
+		$asignatura, 
+		$grupo,
+		$profesor,
+		$horario,
+		$foro_principal
+	)
 	{
 		$this->id = $id;
-		$this->asignatur = $asignatura;
+		$this->asignatura = $asignatura;
 		$this->grupo = $grupo;
 		$this->profesor = $profesor;
-		$this->hoario = $horario;
+		$this->horario = $horario;
 		$this->foro_principal = $foro_principal;
+	}
+
+	public static function fromDbFetch(Object $o) : Asignacion
+	{
+		return new self(
+			$o->id,
+			$o->asignatura,
+			$o->grupo,
+			$o->profesor,
+			$o->horario,
+			$o->foro_principal
+		);
 	}
 	
 	/**
 	 * Getters.
 	 */
-	public function getId(){
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function getAsignatura(){
+	public function getAsignatura()
+	{
 		return $this->asignatura;
 	}
 
-	public function getGrupo(){
+	public function getGrupo()
+	{
 		return $this->grupo;
 	}
 
-	public function getProfesor(){
+	public function getProfesor()
+	{
 		return $this->profesor;
 	}
 
-	public function getHorario(){
+	public function getHorario()
+	{
 		return $this->horario;
 	}
 
-	public function getForo(){
+	public function getForoPrincipal()
+	{
 		return $this->foro_principal;
 	}
 
-		/*
+	/*
 	 *
 	 * 
 	 * Funciones de acceso a la base de datos (patrón de acceso a datos).
@@ -117,7 +143,7 @@ class Asignacion
 					grupo,
 					asignatura,
 					horario,
-					foro_principal,
+					foro_principal
 				)
 			VALUES
 				(?, ?, ?, ?, ?)
@@ -127,10 +153,10 @@ class Asignacion
 		$grupo = $this->getGrupo();
 		$asignatura = $this->getAsignatura();
 		$horario = $this->getHorario();
-		$foro_principal = $this->getForo();
+		$foro_principal = $this->getForoPrincipal();
 		
 		$sentencia->bind_param(
-			"iiiii", 
+			"iiisi", 
 			$profesor,
 			$grupo,
 			$asignatura,
@@ -205,6 +231,13 @@ class Asignacion
 		return $asignacion;
 	}
 
+	/** 
+	 * Trae todas las asignaciones
+	 * 
+	 * @param int $id del
+	 * 
+	 * @return array<Asignacion>
+	 */
 	public static function dbGetAll(): array {
 
 		$bbdd = App::getSingleton()->bbddCon();
@@ -249,6 +282,96 @@ class Asignacion
 		return $asignaciones;	
 	}
 
+	/** 
+	 * Trae todas las asignaciones de un grupo.
+	 * 
+	 * @param int $id grupo
+	 * 
+	 * @return array<Asignacion>
+	 */
+	public static function dbGetByGrupo(int $grupo_id) : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				profesor,
+				grupo,
+				asignatura,
+				horario,
+				foro_principal
+			FROM
+				gesi_asignacion
+			WHERE
+				grupo = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$grupo_id
+		);
+	
+		$sentencia->execute();
+
+		$r = $sentencia->get_result();
+
+		$as = array();
+
+		while ($a = $r->fetch_object()) {
+			$as[] = self::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+		return $as;	
+	}
+
+	/**
+	 * Trae las asignaturas que imparte un profesor
+	 * 
+	 * @param int $id del profesor
+	 * 
+	 * @return array<Asignatura>
+	 */
+	public static function dbGetByProfesor(int $profesor) : array
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				profesor,
+				asignatura,
+				grupo,
+				horario,
+				foro_principal
+			FROM
+				gesi_asignacion		
+			WHERE
+				profesor = ?	
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$profesor
+		);
+
+		$sentencia->execute();
+
+		$r = $sentencia->get_result();
+
+		$as = array();
+
+		while ($a = $r->fetch_object()) {
+			$as[] = self::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+
+		return $as;	
+	}	
+
 	/*
 	 *
 	 * Operaciones UPDATE.
@@ -274,7 +397,7 @@ class Asignacion
 				grupo = ?,
 				asignatura = ?,
 				horario = ?,
-				foro_principal = ?,
+				foro_principal = ?
 			WHERE
 				id = ?
 		");
@@ -284,16 +407,129 @@ class Asignacion
 		$grupo = $this->getGrupo();
 		$asignatura = $this->getAsignatura();
 		$horario = $this->getHorario();
-		$foro_principal = $this->getForo();
+		$foro_principal = $this->getForoPrincipal();
 
 		$sentencia->bind_param(
-			"iiiiii", 
-			$id,
+			"iiiisi", 
 			$profesor,
 			$grupo,
 			$asignatura,
 			$horario,
-			$foro_principal
+			$foro_principal,
+			$id
+		);
+
+		$resultado = $sentencia->execute();
+
+		$sentencia->close();
+
+		return $resultado;
+	}
+
+
+	/**
+	 * 
+	 * Comprobar si hay asignacion con un grupo
+	 */
+
+	public static function gpAsigGp($id_grupo) : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT
+				id
+			FROM
+				gesi_asignacion
+			WHERE
+				grupo = ?
+			LIMIT 1
+		
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id_grupo
+			);
+
+		$sentencia->execute();
+		$sentencia->store_result();
+
+		if ($sentencia->num_rows > 0) {
+			$existe = true;
+		} else {
+			$existe = false;
+		}
+
+		$sentencia->close();
+
+		return $existe;
+	}
+
+	/**
+	 * 
+	 * Trae las asignaciones de una Asignatura
+	 */
+
+	public static function dbGetByAsignatura($id_asignatura) : array
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT
+				id,
+				profesor,
+				asignatura,
+				grupo,
+				horario,
+				foro_principal
+			FROM
+				gesi_asignacion
+			WHERE
+				asignatura = ?		
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id_asignatura
+			);
+
+		$sentencia->execute();
+			
+		$r = $sentencia->get_result();
+
+		$asignaciones = array();
+
+		while ($a = $r->fetch_object()) {
+			$asignaciones[] = self::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+
+		return $asignaciones;
+	}
+
+	/**
+	 * 
+	 * Eliminar
+	 */
+
+
+	public static function dbEliminar(int $id) : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			DELETE
+			FROM
+				gesi_asignacion
+			WHERE
+				id = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id
 		);
 
 		$resultado = $sentencia->execute();
@@ -303,4 +539,5 @@ class Asignacion
 		return $resultado;
 	}
 }
+
 

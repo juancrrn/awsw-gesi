@@ -26,12 +26,8 @@ class Biblioteca extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/biblioteca/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\General());
-		});
-		
-		parent::go('/biblioteca/movimientos/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\Movimientos());
+		parent::go('/mi/biblioteca/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\MiGeneral());
 		});
 
 	}

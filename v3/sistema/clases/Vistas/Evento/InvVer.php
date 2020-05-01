@@ -1,7 +1,11 @@
 <?php 
 
 /**
- * Vista de un foro en particular.
+ * Vista de una asignatura en particular.
+ *
+ * - PAS: puede editar la asignatura (información, datos, etc.).
+ * - PD: puede publicar en el foro y así añadir recursos, etc.
+ * - Estudiante: puede ver los foros etc.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,23 +20,23 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Foro;
+namespace Awsw\Gesi\Vistas\Evento;
 
-use Awsw\Gesi\Datos\Foro;
+use Awsw\Gesi\Datos\Evento;
 use Awsw\Gesi\Vistas\Modelo;
 
-class Ver extends Modelo
+class InvVer extends Modelo
 {
 
-	private const VISTA_NOMBRE = "Foro";
-	private const VISTA_ID = "foro-ver";
+	private const VISTA_NOMBRE = "Evento";
+	private const VISTA_ID = "evento-ver";
 
-	private $foro;
+	private $asignatura;
 
-	public function __construct(int $foro_id)
+	public function __construct(int $evento_id)
 	{
 		if (false) { // TODO: Comprobar que el id recibido existe
-			$this->foro = Foro::dbGet($foro_id);
+			$this->evento = Evento::dbGet($evento_id);
 		} else {
 			// TODO: Redireccionar y mostrar errores
 		}
@@ -41,20 +45,20 @@ class Ver extends Modelo
 		$this->id = self::VISTA_ID;
 	}
 
-	public function procesa() : void
+	public function procesaContent() : void
 	{
 
 		?>
 <div class="wrapper">
 	<div class="container">
 		<header class="page-header">
-			<h1>Foro</h1>
+			<h1>Evento</h1>
 		</header>
 
 		<section class="page-content">
 			<?php
 
-var_dump($this->foro);
+var_dump($this->evento);
 
 			?>
 		</section>

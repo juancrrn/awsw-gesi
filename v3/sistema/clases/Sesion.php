@@ -114,6 +114,19 @@ class Sesion
             Vista::encolaMensajeError('Necesitas haber iniciado sesión para acceder a este contenido.', '/sesion/iniciar/');
         }
     }
+
+    /**
+     * Requiere que NO haya una sesión iniciada para acceder al contenido.
+     * En caso de que haya alguna sesión iniciada, redirige a inicio.
+     * 
+     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     */
+    public static function requerirSesionNoIniciada() : void
+    {
+        if (self::isSesionIniciada()) {
+            Vista::encolaMensajeError('No puedes acceder a esta página habiendo iniciado sesión.', '');
+        }
+    }
     
     /**
      * Requiere que haya una sesión iniciada con permisos de personal docente
@@ -144,6 +157,22 @@ class Sesion
 
         if (! self::$usuario_en_sesion->isPs()) {
             Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+        }
+    }
+    
+    /**
+     * Requiere que haya una sesión iniciada pero SIN permisos de personal de 
+     * secretaría para acceder al contenido. En caso negativo, redirige al 
+     * inicio de sesión.
+     * 
+     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     */
+    public static function requerirSesionNoPs() : void
+    {
+        self::requerirSesionIniciada();
+
+        if (self::$usuario_en_sesion->isPs()) {
+            Vista::encolaMensajeError('Esta vista solo permite el acceso de personal docente y estudiantes.', '');
         }
     }
 }

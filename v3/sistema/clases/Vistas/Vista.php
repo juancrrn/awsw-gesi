@@ -169,8 +169,6 @@ class Vista
 	 */
 	public static function dibuja(Modelo $vista) : void
 	{
-		$vista->procesaAntesDeLaCabecera();
-
 		self::setPaginaActual($vista->getNombre(), $vista->getId());
 		
 		self::incluirCabecera();

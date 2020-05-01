@@ -21,46 +21,45 @@
 namespace Awsw\Gesi\Vistas\Usuario;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Formularios\Usuario\AdminCrear as Formulario;
 
 class AdminCrear extends Modelo
 {
 
-	private const VISTA_NOMBRE = "Nuevo usuario";
-	private const VISTA_ID = "usuario-crear";
+    private const VISTA_NOMBRE = "Nuevo usuario";
+    private const VISTA_ID = "usuario-crear";
 
-	public function __construct()
-	{
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
+    private $formulario;
 
-		$this->form = new Formulario("/admin/usuarios/crear/"); 
-	}
+    public function __construct()
+    {
+        Sesion::requerirSesionPs();
 
-	public function procesaAntesDeLaCabecera() : void
-	{
-		$this->form->gestiona();
-	}
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
 
-	public function procesaContent() : void
-	{
+        $this->formulario = new Formulario("/admin/usuarios/crear/");
+        $this->formulario->gestiona();
+    }
 
-		$formulario = $this->form->getHtml();
+    public function procesaContent() : void
+    {
+        $form = $this->formulario->getHtml();
 
-		$html = <<< HTML
-		<header class="page-header">
-			<h1>$this->nombre</h1>
-		</header>
+        $html = <<< HTML
+        <header class="page-header">
+            <h1>$this->nombre</h1>
+        </header>
+        
+        <section class="page-content">
+            $form
+        </section>
 
-		<section class="page-content">
-			$formulario
-		</section>
+        HTML;
 
-HTML;
-
-		echo $html;
-
-	}
+        echo $html;
+    }
 }
 
 ?>

@@ -19,136 +19,153 @@
 namespace Awsw\Gesi\Datos;
 
 use \Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Valido;
 
 class Grupo
 {
-	private $id;				// Identificador único de grupo
+	
+	// Identificador único de grupo
+	private $id;
 
-	private $curso;				// Tipo 1-6 (desde 1ºESO hasta 2ºBach).
+	// Tipo 1 - 6 (desde ESO 1 hasta Bach. 2)
+	private $nivel;
 
-	private $nombre_corto;		// Tipo “B1A”.
+	// Tipo 2019 (para el curso 2019 - 2020)
+	private $curso_escolar;
 
-	private $nombre_completo;	// Tipo “Primer curso de Bachillerato A”.
+	// Tipo “B1A”
+	private $nombre_corto;
 
-	private $tutor;				// Profesor responsable del grupo.
+	// Tipo “Primer curso de Bachillerato A”
+	private $nombre_completo;
+
+	// Profesor responsable del grupo
+	private $tutor;
 	
 	/**
 	 * Constructor.
 	 */
 
-	private function __construct($id, $curso, $nombre_corto, $nombre_completo, $tutor)
+	public function __construct(
+		$id,
+		$nivel,
+		$curso_escolar,
+		$nombre_corto,
+		$nombre_completo,
+		$tutor
+	)
 	{
 		$this->id = $id;
-		$this->curso =$curso; 
+		$this->nivel = $nivel;
+		$this->curso_escolar = $curso_escolar; 
 		$this->nombre_corto = $nombre_corto; 
 		$this->nombre_completo = $nombre_completo; 
 		$this->tutor = $tutor; 
 	}
 
-	/**
-	 * Trae todos los estudiantes de un grupo.
-	 *
-	 * @param int $id
-	 *
-	 * @requires Existe un grupo con el id especificado.
-	 *
-	 * @return array<Usuario>
-	 */
-	public static function dbGetEstudiantes(int $id): array{
-	
-		$result = [];
-		$bbdd = App::getSingleton()->bbddCon();
-
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				nif,
-				rol,
-				nombre,
-				apellidos,
-				fecha_nacimiento,
-				numero_telefono,
-				email,
-				fecha_ultimo_acceso,
-				fecha_registro,
-				grupo
-			FROM
-				gesi_grupos G, gesi_usuarios E
-			WHERE
-				E.grupo = G.curso && E.roll = 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
+	public static function fromDbFetch(Object $o) : Grupo
+	{
+		return new self(
+			$o->id,
+			$o->nivel,
+			$o->curso_escolar,
+			$o->nombre_corto,
+			$o->nombre_completo,
+			$o->tutor
 		);
-		
-		$sentencia->execute();
-		$sentencia->store_result();
-
-		$sentencia->bind_result(
-			$result_id,
-			$result_nif,
-			$result_rol,
-			$result_nombre,	
-		    $result_apellidos,			
-			$result_fecha_nacimiento,
-			$result_numero_telefono,			
-			$result_email,
-			$result_fecha_ultimo_acceso,			
-			$result_fecha_registro,
-			$result_grupo			
-		);
-		
-		$estudiantes = array();
-
-		while($sentencia->fetch()) {
-			$estudiantes[] = new Usuario(
-				$result_id,
-				$result_nif,
-				$result_rol,
-				$result_nombre,	
-				$result_apellidos,
-				$result_fecha_nacimiento,
-				$result_numero_telefono,			
-				$result_email,
-				$result_fecha_ultimo_acceso,			
-				$result_fecha_registro,
-				$result_grupo);		
-		}
-		
-		$sentencia->close();
-		return $estudiantes;		
 	}
 
+	public function getId()
+	{
+		return $this->id;
+	}
 
-	public static function dbInsertar(Grupo $grupo) : int {
+	public function getNivel()
+	{
+		return Valido::rawToNivel($this->nivel);
+	}
+
+	public function getNivelRaw()
+	{
+		return $this->nivel;
+	}
+
+	public function getCursoEscolar()
+	{
+		return Valido::rawToCursoEscolar($this->curso_escolar);
+	}
+
+	public function getCursoEscolarRaw()
+	{
+		return $this->curso_escolar;
+	}
+
+	public function getNombreCorto()
+	{
+		return $this->nombre_corto;
+	}
+
+	public function getNombreCompleto()
+	{
+		return $this->nombre_completo;
+	}
+
+	public function getTutor()
+	{
+		return $this->tutor;
+	}
+
+	/*
+	 *
+	 * 
+	 * Funciones de acceso a la base de datos (patrón de acceso a datos).
+	 * 
+	 * 
+	 */
+
+	/*
+	 *
+	 * Operaciones INSERT.
+	 *  
+	 */
+
+	/**
+	 * Inserta un grupo en la base de datos
+	 * 
+	 * @param Grupo $this Grupo a insertar
+	 * 
+	 * @return int Identificador del grupo insertado
+	 */
+	public function dbInsertar() : int
+	{
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
-		
-		INSERT
-		INTO
-			gesi_grupos(
-				id,
-				curso_escolar,
-				nombre_corto,
-				nombre_completo,
-				tutor
-			)
-		VALUES
-		(?,?,?,?,?)	
+			INSERT
+			INTO
+				gesi_grupos(
+					id,
+					nivel,
+					curso_escolar,
+					nombre_corto,
+					nombre_completo,
+					tutor
+				)
+			VALUES
+				(?, ?, ?, ?, ?, ?)	
 		");
 
-
-		$id = $grupo->getId();
-		$curso_escolar = $grupo->getCurso();
-		$nombre_corto = $grupo->getNombreCorto();
-		$nombre_completo = $grupo->getNombreCompleto();
-		$tutor = $grupo->getTutor();
+		$id = $this->getId();
+		$nivel = $this->getNivelRaw();
+		$curso_escolar = $this->getCursoEscolarRaw();
+		$nombre_corto = $this->getNombreCorto();
+		$nombre_completo = $this->getNombreCompleto();
+		$tutor = $this->getTutor();
 
 		$sentencia->bind_param(
-			"iisss",
+			"iiisss",
 			$id,
+			$nivel,
 			$curso_escolar,
 			$nombre_corto,
 			$nombre_completo,
@@ -164,18 +181,30 @@ class Grupo
 		return $id_insertado;
 	}
 
+	/*
+	 *
+	 * Operaciones SELECT.
+	 *  
+	 */
 
+	/**
+	 * Trae un grupo de la base de datos
+	 * 
+	 * @param int $id Identificador del grupo a seleccionar
+	 * 
+	 * @return Grupo Grupo seleccionado
+	 */
 	public static function dbGet(int $id) : Grupo{
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
 			SELECT 
 				id,
+				nivel,
 				curso_escolar,
 				nombre_corto,
 				nombre_completo,
 				tutor
-		
 			FROM
 				gesi_grupos
 			WHERE
@@ -190,39 +219,214 @@ class Grupo
 
 		$sentencia->execute();
 
-		$resultado = $sentencia->get_result()->fetch_object();
+		$resultado = $sentencia->get_result();
 
-		$grupo = new Grupo(
-			$resultado->id,
-			$resultado->curso_escolar,
-			$resultado->nombre_corto,
-			$resultado->nombre_completo,
-			$resultado->tutor
-		);
+		$grupo = self::fromDbFetch($resultado->fetch_object());
 
 		$sentencia->close();
 
 		return $grupo;		
 	}
 
-	public function getId(){
-		return $this->id;
+	/**
+	 * Trae todos los grupos de la base de datos.
+	 *
+	 * @return array<Grupo>
+	 */
+	public static function dbGetAll() : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+			id,
+			nivel,
+			curso_escolar,
+			nombre_corto,
+			nombre_completo,
+			tutor
+		FROM
+			gesi_grupos
+			
+		");
+	
+		$sentencia->execute();
+		$resultado = $sentencia->get_result();
+
+		$grupos = array();
+
+		while ($g = $resultado->fetch_object()) {
+			$grupos[] = self::fromDbFetch($g);
+		}
+
+		$sentencia->close();
+
+		return $grupos;	
 	}
 
-    public function getCurso(){
-		return $this->curso;
-	}
-	public function getNombreCorto(){
-		return $this->nombre_corto;
+	/**
+	 * Trae todos los grupos de la base de datos.
+	 *
+	 * @return array<Grupo>
+	 */
+	public static function dbGetGruposId($id) : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+			id,
+			nivel,
+			curso_escolar,
+			nombre_corto,
+			nombre_completo,
+			tutor
+		FROM
+			gesi_grupos
+		WHERE
+			id = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+	
+		$sentencia->execute();
+		$resultado = $sentencia->get_result();
+
+		$grupos = array();
+
+		while ($g = $resultado->fetch_object()) {
+			$grupos[] = self::fromDbFetch($g);
+		}
+
+		$sentencia->close();
+
+		return $grupos;	
 	}
 
-	public function getNombreCompleto(){
-		return $this->nombre_completo;
+	/**
+	 * Comprueba si un grupo existe en la base de datos en base a su
+	 * identificador.
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public static function dbExisteId(int $id) : bool
+	{		
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT
+				id
+			FROM
+				gesi_grupos
+			WHERE
+				id = ?
+			LIMIT 1
+		");
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+		
+		$sentencia->execute();
+		
+		$sentencia->store_result();
+
+		if ($sentencia->num_rows > 0) {
+			$existe = true;
+		} else {
+			$existe = false;
+		}
+
+		$sentencia->close();
+
+		return $existe;
 	}
 
-	public function getTutor(){
-		return $this->tutor;
+
+	/*
+	 *
+	 * Operaciones UPDATE.
+	 *  
+	 */
+
+	public function dbActualizar() : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			UPDATE
+				gesi_grupos
+			SET
+				id = ?,
+				nivel = ?,
+				curso_escolar = ?,
+				nombre_corto = ?,
+				nombre_completo = ?,
+				tutor = ?
+				WHERE
+				id = ?
+		");
+
+		$id = $this->getId();
+		$nivel = $this->getNivelRaw();
+		$curso_escolar = $this->getCursoEscolar();
+		$nombre_corto = $this->getNombreCorto();
+		$nombre_completo = $this->getNombreCompleto();
+		$tutor= $this->getTutor();
+		
+
+		$sentencia->bind_param(
+			"iiisssi",
+			$id,
+			$nivel,
+			$curso_escolar,
+			$nombre_corto,
+			$nombre_completo,
+			$tutor,
+			$id
+		);
+
+		$resultado = $sentencia->execute();
+
+		$sentencia->close();
+
+		return $resultado;
+	}
+
+
+	/**
+	 * Eliminar un grupo
+	 */
+	public static function dbEliminar(int $id) : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			DELETE
+			FROM
+				gesi_grupos
+			WHERE
+				id = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+
+		$resultado = $sentencia->execute();
+
+		$sentencia->close();
+
+		return $resultado;
 	}
 }
 
-		
+?>

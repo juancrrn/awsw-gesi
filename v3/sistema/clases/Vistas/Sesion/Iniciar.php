@@ -36,10 +36,7 @@ class Iniciar extends Modelo
 		$this->id = self::VISTA_ID;
 
 		$this->form = new Formulario("/sesion/iniciar/"); 
-	}
 
-	public function procesaAntesDeLaCabecera(): void
-	{
 		$this->form->gestiona();
 	}
 

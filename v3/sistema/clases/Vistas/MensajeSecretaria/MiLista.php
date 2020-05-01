@@ -18,6 +18,7 @@
 
 namespace Awsw\Gesi\Vistas\MensajeSecretaria;
 
+use Awsw\Gesi\App;
 use Awsw\Gesi\Vistas\Modelo;
 use \Awsw\Gesi\Datos\MensajeSecretaria;
 use \Awsw\Gesi\Sesion;
@@ -32,16 +33,13 @@ class MiLista extends Modelo
 
 	public function __construct()
 	{
+		Sesion::requerirSesionIniciada();
+		
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
 		$usuario_id = Sesion::getUsuarioEnSesion()->getId();
 		$this->listado = MensajeSecretaria::dbGetByUsuario($usuario_id);
-	}
-
-	public function procesaAntesDeLaCabecera() : void
-	{
-		Sesion::requerirSesionIniciada();
 	}
 
 	public function procesaContent() : void
@@ -102,6 +100,23 @@ HTML;
 
 						$lista
 					</section>
+
+HTML;
+
+		echo $html;
+
+	}
+
+	public function procesaSide(): void
+	{
+
+		$app = App::getSingleton();
+		$url_crear = $app->getUrl() . '/mi/secretaria/crear/';
+
+		$html = <<< HTML
+		<ul>
+			<li><a href="$url_crear" class="btn">Nuevo mensaje</a></li>
+		</ul>
 
 HTML;
 

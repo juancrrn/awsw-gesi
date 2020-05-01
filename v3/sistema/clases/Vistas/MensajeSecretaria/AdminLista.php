@@ -22,6 +22,7 @@
 
 namespace Awsw\Gesi\Vistas\MensajeSecretaria;
 
+use Awsw\Gesi\App;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\MensajeSecretaria;
 use Awsw\Gesi\Sesion;
@@ -36,15 +37,12 @@ class AdminLista extends Modelo
 
 	public function __construct()
 	{
+		Sesion::requerirSesionPs();
+
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
 		$this->listado = MensajeSecretaria::dbGetAll();
-	}
-
-	public function procesaAntesDeLaCabecera() : void
-	{
-		Sesion::requerirSesionPs();
 	}
 
 	public function procesaContent() : void

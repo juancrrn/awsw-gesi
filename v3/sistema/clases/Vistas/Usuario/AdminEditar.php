@@ -25,6 +25,8 @@ use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Vistas\Vista;
 
+use Awsw\Gesi\Formularios\Usuario\AdminEditar as Formulario;
+
 class AdminEditar extends Modelo
 {
 
@@ -32,6 +34,7 @@ class AdminEditar extends Modelo
 	private const VISTA_ID = "usuario-editar";
 
 	private $usuario;
+	private $formulario;
 
 	public function __construct(int $usuario_id)
 	{
@@ -48,12 +51,14 @@ class AdminEditar extends Modelo
 
 		$this->nombre = self::VISTA_NOMBRE . $this->usuario->getNombreCompleto();
 		$this->id = self::VISTA_ID;
+
+		$this->formulario = new Formulario("/admin/usuarios/$usuario_id/editar/", $this->usuario); 		
+		$this->formulario->gestiona();
 	}
 
 	public function procesaContent() : void
-	{
-
-		// TODO: Rellenar formulario con $this->usuario
+	{	
+		$formulario = $this->formulario->getHtml();
 
 		$html = <<< HTML
 					<header class="page-header">
@@ -61,7 +66,7 @@ class AdminEditar extends Modelo
 					</header>
 
 					<section class="page-content">
-						Aquí el formulario.
+						$formulario
 					</section>
 
 HTML;

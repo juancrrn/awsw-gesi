@@ -26,11 +26,15 @@ class Foro extends Controlador
 	{
 
 		parent::go('/foros/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Foro\Lista());
+			V::dibuja(new \Awsw\Gesi\Vistas\Foro\InvLista());
 		});
-		
-		parent::go('/foros/([0-9]+)/ver/', function ($foro_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Foro\Ver($foro_id));
+
+		parent::go('/mi/foros/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Foro\MiLista());
+		});
+
+		parent::go('/admin/foros/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Foro\AdminLista());
 		});
 
 	}

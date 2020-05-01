@@ -22,38 +22,38 @@ use Awsw\Gesi\Vistas\Vista as V;
 
 class MensajeSecretaria extends Controlador
 {
-	public static function controla() : void
-	{
+    public static function controla() : void
+    {
 
-		/**
-		 * Admin
-		 */
+        /**
+         * Admin
+         */
 
-		parent::go('/admin/secretaria/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\AdminLista());
-		});
+        parent::go('/admin/secretaria/', function () {
+            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\AdminLista());
+        });
 
-		/**
-		 * Sesión iniciada
-		 */
-		
-		parent::go('/mi/secretaria/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiLista());
-		});
+        /**
+         * Sesión iniciada
+         */
+        
+        parent::go('/mi/secretaria/', function () {
+            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiLista());
+        });
 
-		parent::go('/mi/secretaria/crear/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiCrear());
-		});
+        parent::go('/mi/secretaria/crear/', function () {
+            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiCrear());
+        });
 
-		/**
-		 * Públicos
-		 */
+        /**
+         * Públicos
+         */
 
-		parent::go('/secretaria/crear/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\PublicoCrear());
-		});
+        parent::go('/secretaria/crear/', function () {
+            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\InvCrear());
+        });
 
-	}
+    }
 }
 
 ?>

@@ -29,8 +29,8 @@ class Grupo extends Controlador
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminLista());
 		});
 		
-		parent::go('/admin/grupos/crear/', function ($grupo_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminCrear($grupo_id));
+		parent::go('/admin/grupos/crear/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminCrear());
 		});
 		
 		parent::go('/admin/grupos/([0-9]+)/ver/', function ($grupo_id) {
@@ -47,6 +47,10 @@ class Grupo extends Controlador
 
 		parent::go('/mi/grupos/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\MiLista());
+		});
+
+		parent::go('/mi/grupos/([0-9]+)/ver/', function($grupo_id) {
+			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\MiVer($grupo_id));
 		});
 
 	}

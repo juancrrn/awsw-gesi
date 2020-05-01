@@ -104,6 +104,6 @@ HTML;
 
         }
 
-        $this->genera($datos);
+        $this->genera();
     }
 }

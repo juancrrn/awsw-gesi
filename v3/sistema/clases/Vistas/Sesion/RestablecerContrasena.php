@@ -1,9 +1,7 @@
-<?php
+<?php 
 
 /**
- * Vista de recuperación de contraseña.
- *
- * - Invitado (cualquiera): puede recuperar su contraseña.
+ * Vistas de restablecer contraseña.
  *
  * @package awsw-gesi
  * Gesi
@@ -20,31 +18,34 @@
 
 namespace Awsw\Gesi\Vistas\Sesion;
 
-use \Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Vistas\Modelo;
 
-class RestablecerContrasena implements Modelo
+class RestablecerContrasena extends Modelo
 {
-	public const NOMBRE = "Restablecer contraseña";
-	public const ID = "sesion-restablecer-contrasena";
+    private const VISTA_NOMBRE = "Restablecer contraseña";
+    private const VISTA_ID = "sesion-restablecer-contrasena";
 
-	public static function genera() : void
-	{
+    public function __construct()
+    {
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
+    }
 
-		?>
-<div class="wrapper">
-	<div class="container">
-		<header class="page-header">
-			<h1>Recuperar contraseña</h1>
-		</header>
+    public function procesaContent() : void
+    {
 
-		<section class="page-content">
-			...
-		</section>
-	</div>
-</div>
-<?php
+        echo <<< HTML
+        <header class="page-header">
+            <h1>$this->nombre</h1>
+        </header>
+        
+        <section class="page-content">
+            Esta vista aún no está implementada.
+        </section>
+        
+        HTML;
 
-	}
+    }
 }
 
 ?>

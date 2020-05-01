@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-04-2020 a las 19:14:01
--- Versión del servidor: 5.7.26
--- Versión de PHP: 7.2.18
+-- Tiempo de generación: 01-05-2020 a las 21:36:59
+-- Versión del servidor: 10.4.10-MariaDB
+-- Versión de PHP: 7.4.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,9 +35,18 @@ CREATE TABLE IF NOT EXISTS `gesi_asignacion` (
   `grupo` int(16) NOT NULL,
   `asignatura` int(16) NOT NULL,
   `horario` varchar(512) NOT NULL,
-  `foro_principal` varchar(16) NOT NULL,
+  `foro_principal` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `gesi_asignacion`
+--
+
+INSERT INTO `gesi_asignacion` (`id`, `profesor`, `grupo`, `asignatura`, `horario`, `foro_principal`) VALUES
+(11, 2, 5, 9, 'todos los dias', NULL),
+(9, 2, 1, 1, 'todos los dias', NULL),
+(12, 7, 2, 9, 'todo', NULL);
 
 -- --------------------------------------------------------
 
@@ -48,11 +57,22 @@ CREATE TABLE IF NOT EXISTS `gesi_asignacion` (
 DROP TABLE IF EXISTS `gesi_asignaturas`;
 CREATE TABLE IF NOT EXISTS `gesi_asignaturas` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nivel` int(1) NOT NULL,
   `curso_escolar` int(16) NOT NULL,
   `nombre_corto` varchar(256) NOT NULL,
   `nombre_completo` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `gesi_asignaturas`
+--
+
+INSERT INTO `gesi_asignaturas` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nombre_completo`) VALUES
+(1, 4, 2021, 'LCL1E', 'Lengua castellana y Literatura de primer curso de Enseñanza Secundaria Obligatoria'),
+(6, 3, 2023, 'MAT3', 'Matematicas Tercero de ESO'),
+(10, 4, 2021, 'EFIS', 'Educación Física'),
+(9, 2, 2020, 'CISO', 'Ciencias Sociales');
 
 -- --------------------------------------------------------
 
@@ -113,12 +133,23 @@ CREATE TABLE IF NOT EXISTS `gesi_foros` (
 DROP TABLE IF EXISTS `gesi_grupos`;
 CREATE TABLE IF NOT EXISTS `gesi_grupos` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nivel` int(1) NOT NULL,
   `curso_escolar` int(16) NOT NULL,
   `nombre_corto` varchar(256) NOT NULL,
   `nombre_completo` varchar(256) NOT NULL,
   `tutor` int(16) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `gesi_grupos`
+--
+
+INSERT INTO `gesi_grupos` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nombre_completo`, `tutor`) VALUES
+(1, 4, 2019, 'GCEC', 'Grupo Cuarto ESO C', 2),
+(4, 3, 2019, 'ESO 3', 'Grupo A de tercer curso de Bachillerato', 2),
+(2, 5, 2018, 'B2B', 'Grupo B de segundo curso de Bachillerato', 2),
+(5, 2, 2019, 'GSE A', 'Grupo Segundo ESO A', 2);
 
 -- --------------------------------------------------------
 
@@ -169,7 +200,17 @@ CREATE TABLE IF NOT EXISTS `gesi_mensajes_secretaria` (
   `fecha` int(16) NOT NULL,
   `contenido` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `gesi_mensajes_secretaria`
+--
+
+INSERT INTO `gesi_mensajes_secretaria` (`id`, `usuario`, `from_nombre`, `from_email`, `from_telefono`, `fecha`, `contenido`) VALUES
+(4, 3, NULL, NULL, NULL, 1588366403, 'Hola mundo'),
+(2, 2, NULL, NULL, NULL, 1588248512, 'Hola mundo!'),
+(3, 3, NULL, NULL, NULL, 1588248567, 'Hola mundo!'),
+(5, NULL, 'Pedro picapiedra', 'pedro@localhost', 5644564, 1588366847, '56465456');
 
 -- --------------------------------------------------------
 
@@ -194,16 +235,17 @@ CREATE TABLE IF NOT EXISTS `gesi_usuarios` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nif_nie` (`nif`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `gesi_usuarios`
 --
 
 INSERT INTO `gesi_usuarios` (`id`, `nif`, `rol`, `nombre`, `apellidos`, `password`, `fecha_nacimiento`, `numero_telefono`, `email`, `fecha_ultimo_acceso`, `fecha_registro`, `grupo`) VALUES
-(1, '00000001R', 1, 'María', 'Casas Ortuño', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', 942796800, 612345678, 'marcasort@localhost', 1585846984, 1585699200, NULL),
-(2, '00000002W', 2, 'Mariano', 'Sánchez González', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', 942796800, 612345678, 'marsangon@localhost', 0, 1585699200, NULL),
-(3, '00000003A', 3, 'Fernando', 'Martínez Perez', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', 942796800, 612345678, 'fermarper@localhost', 1585847021, 1585699200, NULL);
+(2, '00000002W', 2, 'Mariana', 'Sánchez González', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', 942855011, 612345678, 'marsangon@localhost.es', 1588368648, 1585699200, NULL),
+(3, '00000003A', 3, 'Fernando', 'Martínez Perez', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', 942796800, 612345678, 'fermarper@localhost', 1588368683, 1585699200, NULL),
+(4, '49195253R', 1, 'Juan Francisco', 'Carrión Molina', '$2y$10$nw9Hjb2XGIug9wgSfclO1OhGElL2j8iL0EuLMel.ZrVkmwoRiOzau', 942875144, 628411806, 'juanfrca@ucm.es', 1588368065, 1588279848, 4),
+(6, '651654646A', 1, 'Fulgencio', 'Roses Cuevas', '$2y$10$nw9Hjb2XGIug9wgSfclO1OhGElL2j8iL0EuLMel.ZrVkmwoRiOzau', 942875448, 628411806, 'fulgencio@localhost', 1588353005, 1588279848, 1);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -20,6 +20,7 @@
 
 namespace Awsw\Gesi\Vistas\Usuario;
 
+use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Sesion;
@@ -29,8 +30,8 @@ use Awsw\Gesi\Vistas\Vista;
 class AdminVer extends Modelo
 {
 
-	private const VISTA_NOMBRE = "Ver a ";
-	private const VISTA_ID = "usuario-editar";
+	private const VISTA_NOMBRE = "Usuario ";
+	private const VISTA_ID = "usuario-ver";
 
 	private $usuario;
 
@@ -53,49 +54,142 @@ class AdminVer extends Modelo
 
 	public function procesaContent() : void
 	{
+		$nombre_completo = $this->usuario->getNombreCompleto();
 
-		// TODO: Rellenar formulario con $this->usuario
+		$nif = $this->usuario->getNif();
 
-		$grupo_id = $this->usuario->getGrupo();
-
-		if ($grupo_id) {
-
-			$grupo = Grupo::dbGet($grupo_id);
-			$completo = $grupo->getNombreCompleto();
-			$corto = $grupo->getNombreCorto();
-
-			$matricula = <<< HTML
-			<p>Este usuario está matriculado en el grupo $completo ($corto).</p>
-
-HTML;
-
-		} else {
-
-			$matricula = <<< HTML
-			<p>Este usuario no está matriculado en ningún grupo.</p>
-
-HTML;
-
+		switch ($this->usuario->getRol()) {
+			case 1: $rol = 'Estudiante'; break;
+			case 2: $rol = 'Personal docente'; break;
+			case 3: $rol = 'Personal de Secretaría'; break;
 		}
 
-		$html = <<< HTML
-		<header class="page-header">
-			<h1>$this->nombre</h1>
-		</header>
+		$fecha_nacimiento = date("d/m/Y", $this->usuario->getFechaNacimiento());
+		$numero_telefono = $this->usuario->getNumeroTelefono();
+		$email = $this->usuario->getEmail();
+		$fecha_ultimo_acceso = date("d/m/Y", $this->usuario->getFechaUltimoAcceso());
+		$fecha_registro = date("d/m/Y", $this->usuario->getFechaRegistro());
+		
+		$lista_grupo = $this->generaGrupo();
 
-		<section class="page-content">
-			<h2>Datos personales</h2>
-			
+        $app = App::getSingleton();
+        $url_volver = $app->getUrl() . '/admin/usuarios/';
 
-			<h2>Matrícula</h2>
-			$matricula
-		</section>
+        $html = <<< HTML
+        <header class ="page-header">
+            <p class="page-back-button"><a href="$url_volver">Volver a Usuarios</a></p>
+            <h1>$nombre_completo</h1>
+        </header>
+        
+        <section class="page-content">
+            <div class="data-field-wrapper">
+                <div class="data-field">
+                    <span class="label">NIF</span>
+                    <span class="value">$nif</span>
+                </div>
+                <div class="data-field">
+                    <span class="label">Fecha nacimiento</span>
+                    <span class="value">$fecha_nacimiento</span>
+                </div>
+                <div class="data-field">
+                    <span class="label">Número de teléfono</span>
+                    <span class="value">$numero_telefono</span>
+                </div>
+                <div class="data-field">
+                    <span class="label">Dirección de correo electrónico</span>
+                    <span class="value">$email</span>
+                </div>
+            </div>
+            
+            <h2>Usuario</h2>
+            
+            <div class="data-field-wrapper">
+                <div class="data-field">
+                    <span class="label">Rol</span>
+                    <span class="value">$rol</span>
+                </div>
+                <div class="data-field">
+                    <span class="label">Fecha de registro</span>
+                    <span class="value">$fecha_registro</span>
+                </div>
+                <div class="data-field">
+                    <span class="label">Fecha de último acceso</span>
+                    <span class="value">$fecha_ultimo_acceso</span>
+                </div>
+            </div>
+            
+            <h2>Grupo</h2>
+            
+            <div id="usuario-admin-ver-grupo-lista" class="grid-table">
+                <div class="grid-table-header">
+                    <div class="grid-table-row">
+                        <div></div>
+                        <div>Nombre</div>
+                        <div>Nivel</div>
+                    </div>
+                </div>
+                <div class="grid-table-body">
+                    $lista_grupo
+                </div>
+            </div>
+        </section>
 
-HTML;
+        HTML;
 
 		echo $html;
 
 	}
+
+	public function generaGrupo() : string
+	{
+		$grupo_id = $this->usuario->getGrupo();
+
+		$html = '';
+
+		if ($grupo_id) {
+			$grupo = Grupo::dbGet($grupo_id);
+			$completo = $grupo->getNombreCompleto();
+			$corto = $grupo->getNombreCorto();
+            $nivel = $grupo->getNivel();
+            
+            $app = App::getSingleton();
+            $url_ver = $app->getUrl() . "/admin/grupos/$grupo_id/ver/";
+
+			$html .= <<< HTML
+			<div class="grid-table-row">
+                <div><a href="$url_ver">$corto</a></div>
+                <div><a href="$url_ver">$completo</a></div>
+                <div>$nivel</div>
+            </div>
+
+HTML;
+		} else {
+			$html = <<< HTML
+			<div class="grid-table-row-empty">
+                Este usuario no está matriculado en ningún grupo.
+            </div>
+
+HTML;
+		}
+
+		return $html;
+	}
+
+    public function procesaSide() : void
+    {
+        $app = App::getSingleton();
+        $usuario_id = $this->usuario->getId();
+        $url_editar = $app->getUrl() . "/admin/usuarios/$usuario_id/editar/";
+
+        $html = <<< HTML
+        <ul>
+            <li><a href="$url_editar" class="btn">Editar usuario</a></li>
+        </ul>
+
+        HTML;
+
+        echo $html;
+    }
 }
 
 ?>

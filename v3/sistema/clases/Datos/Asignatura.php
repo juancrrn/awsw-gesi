@@ -19,116 +19,153 @@
 namespace Awsw\Gesi\Datos;
 
 use \Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Valido;
 
 class Asignatura
 {
 
 	private $id;
 
-	private $curso;
+	private $nivel;
+
+	private $curso_escolar;
 
 	private $nombre_corto;
 
-	private $nombre_largo;
+	private $nombre_completo;
 
 	/**
 	 * Constructor.
 	 */
-	private function __construct(
+	public function __construct(
 		$id,
-		$curso,
+		$nivel,
+		$curso_escolar,
 		$nombre_corto,
-		$nombre_largo
-		)
-		{
-		    $this->id = $id;
-			$this->curso = $curso;
-			$this->nombre_corto = $nombre_corto;
-			$this->nombre_largo = $nombre_largo;
-		}
+		$nombre_completo
+	)
+	{
+		$this->id = $id;
+		$this->nivel = $nivel;
+		$this->curso_escolar = $curso_escolar;
+		$this->nombre_corto = $nombre_corto;
+		$this->nombre_completo = $nombre_completo;
+	}
 
+	public static function fromDbFetch(Object $o) : Asignatura
+	{
+		return new self(
+			$o->id,
+			$o->nivel,
+			$o->curso_escolar,
+			$o->nombre_corto,
+			$o->nombre_completo
+		);
+	}
 
-		/**
-		 * Crea una nueva Asignatura
-		 * 
-		 * @param $nombreAsign Nombre de la asignatura a crear
-		 * 
-		 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	public function getNivel()
+	{
+		return Valido::rawToNivel($this->nivel);
+	}
+
+	public function getNivelRaw()
+	{
+		return $this->nivel;
+	}
+
+	public function getCursoEscolar()
+	{
+		return Valido::rawToCursoEscolar($this->curso_escolar);
+	}
+
+	public function getCursoEscolarRaw()
+	{
+		return $this->curso_escolar;
+	}
+
+	public function getNombreCorto()
+	{
+		return $this->nombre_corto;
+	}
+
+	public function getNombreCompleto()
+	{
+		return $this->nombre_completo;
+	}
+
+	/*
+	 *
+	 * 
+	 * Funciones de acceso a la base de datos (patrón de acceso a datos).
+	 * 
+	 * 
+	 */
+
+	/*
+	 *
+	 * Operaciones INSERT.
+	 *  
+	 */
 	
-	
-	public static function dbExiste($nombre, $curso): bool{
-
+	/** 
+	 * Insertar una nueva Asignatura en la base de datos
+	 * 
+	 * @param Asignatura $this
+	 * 
+	 * @return int
+	 */
+	public function dbInsertar() : int
+	{
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
-			SELECT id
-			FROM gesi_usuarios
-			WHERE nombre = ? AND curso = ?
-			LIMIT 1
+			INSERT
+			INTO
+				gesi_asignaturas(
+					id,
+					nivel,
+					curso_escolar,
+					nombre_corto,
+					nombre_completo
+				)
+			VALUES
+				(?, ?, ?, ?, ?)	
 		");
 
-		$sentencia->bind_param(
-			"si",
-			$nombre,
-			$curso
-		);
-		
-		$sentencia->execute();
-		
-		$sentencia->store_result();
+		$id = $this->getId();
+		$nivel = $this->getNivelRaw();
+		$curso_escolar = $this->getCursoEscolarRaw();
+		$nombre_corto = $this->getNombreCorto();
+		$nombre_completo = $this->getNombreCompleto();
 
-		if ($sentencia->num_rows > 0) {
-			$existe = true;
-		} else {
-			$existe = false;
-		}
+		$sentencia->bind_param(
+			"iiiss",
+			$id,
+			$nivel,
+			$curso_escolar,
+			$nombre_corto,
+			$nombre_completo,
+		);
+
+		$sentencia->execute();
+
+		$id_insertado = $bbdd->insert_id;
 
 		$sentencia->close();
 
-		return $existe;
-	 
-
-	/** 
-	 * 	Insertar una nueva Asignatura en la base de datos
-	 * 
-	 * @param Asignatura
-	 * 
-	 * @return int
-	 */		$bbdd = App::getSingleton()->bbddCon();
-
-		$sentencia = $bbdd->prepare("
-			SELECT 
-id,
-			curso,
-			nombre_corto,
-			nombre_largo
-			FROM
-				gesi_asignatura
-			WHERE
-				id = ?
-			LIMIT 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
-		$sentencia->execute();
-		$resultado = $sentencia->get_result()->fetch_object();
-		
-		$asignatura = new Asignatura(
-			$resultado->id,
-			$resultado->curso,
-			$resultado->nombre_corto,
-			$resultado->nombre_largo
-
-		);
-		
-		$sentencia->close();
-
-		return $asignatura;
+		return $id_insertado;
 	}
 
+	/*
+	 *
+	 * Operaciones SELECT.
+	 *  
+	 */
 
 	/**
 	 * Comprueba si una asignatura existe en la base de datos en base a su
@@ -138,8 +175,7 @@ id,
 	 *
 	 * @return bool
 	 */
-
-	public static function  dbExisteId(int $id) : bool
+	public static function dbExisteId(int $id) : bool
 	{		
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -147,7 +183,7 @@ id,
 			SELECT
 				id
 			FROM
-				gesi_asignatura
+				gesi_asignaturas
 			WHERE
 				id = ?
 			LIMIT 1
@@ -173,206 +209,81 @@ id,
 		return $existe;
 	}
 
-	public static function dbInsertar(){
-		$bbdd = App::getSingleton()->bbddCon();
-
-		$sentencia = $bbdd->prepare("
-		
-			INSERT
-			INTO
-				gesi_usuarios
-				(
-					id,
-					curso_escolar,
-					nombre_corto,
-					nombre_completo
-				)
-			VALUES
-			(?,?,?,?)
-		
-		");
-
-		$curso_escolar = $this->curso;
-		$nombre_corto = $this->nombre_corto;
-		$nombre_largo = $this->nombre_largo;
-
-
-
-		$sentencia->bind_param(
-			"iiss",
-			$curso_escolar,
-			$nombre_corto,
-			$nombre_largo
-		);
-
-
-		$sentencia->execute();
-
-		$id_insertado = $bbdd->insert_id;
-
-		$sentencia->close();
-
-
-		$this->id = $id_insertado;
-
-		return $this->id;
-
-
-	} 
-
-
 	/**
-	 * Actualiza la información de una asignatura en la base de datos.
+	 * Seleccionar todas las asignaturas de la base de datos.
 	 * 
-	 * @param asignatura la asignatura cuya información se va a actualizar.
-	 * 
-	 * @return bool Resultado de la ejecución de la sentencia.
+	 * @return array<Asignatura>
 	 */
-	public static function dbActualizar() : bool
+	public static function dbGetAll() : array
 	{
-		$bbdd = App::getSingleton()->bbddCon();
-
-		$sentencia = $bbdd->prepare("
-			UPDATE
-				gesi_asignatura
-			SET
-				curso = ?,
-				nombre_corto = ?,
-				nombre_largo = ?,
-			WHERE
-				id = ?
-		");
-
-		$id = $this->getId();
-		$curso = $this->getCurso();
-		$nombre_corto = $this->getNombreCorto();
-		$nombre_largo = $this->getNombreLargo();
-
-		$sentencia->bind_param(
-			"issi", 
-			$curso,
-			$nombre_corto,
-			$nombre_largo,
-			$id
-		);
-
-		$resultado = $sentencia->execute();
-
-		$sentencia->close();
-
-		return $resultado;
-	}
-
-	public function dbGetAll(): array {
-
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
 			SELECT 
 				id,
-				curso,
+				nivel,
+				curso_escolar,
 				nombre_corto,
-				nombre_largo
+				nombre_completo
 			FROM
 				gesi_asignaturas			
 		");
 	
 		$sentencia->execute();
-		$sentencia->store_result();
-
-		$sentencia->bind_result(
-			$result_id,
-			$result_curso,
-			$result_nombre_corto,
-			$result_nombre_largo
-		);
+		$resultado = $sentencia->get_result();
 
 		$asignaturas = array();
 
-		while($sentencia->fetch()) {
-			$asginaturas[] = new Asignatura(
-				$result_id,
-				$result_curso,
-				$result_nombre_corto,
-				$result_nombre_largo
-			);	
+		while ($a = $resultado->fetch_object()) {
+			$asignaturas[] = Asignatura::fromDbFetch($a);
 		}
+
 		$sentencia->close();
+
 		return $asignaturas;	
 	}
 
-	public function dbAny(): bool {
-		$bbdd = App::getSingleton()->bbddCon();
-
-		$sentencia = $bbdd->prepare("
-			SELECT
-				id
-			FROM
-				gesi_mensajes_secretaria
-		");
-
-		$sentencia->execute();
-		$sentencia->store_result();
-
-		if($sentencia->num_rows > 0){
-			$existe = true;
-		}
-		else{
-			$existe = false;
-		}
-
-		$sentencia->close();
-
-		return $existe;
-	}
-
-	public static function dbGetAsigCurso($usuario_curso){
+	/**
+	 * Trae las asignaturas de un curso escolar específico.
+	 * 
+	 * @param int $curso escolar
+	 * 
+	 * @return array<Asignatura>
+	 */
+	public static function dbGetByCursoEscolar(int $curso_escolar) : array
+	{
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
 			SELECT 
 				id,
-				curso,
+				nivel,
+				curso_escolar,
 				nombre_corto,
-				nombre_largo
+				nombre_completo
 			FROM
 				gesi_asignaturas		
 			WHERE
-				curso = ?	
+				curso_escolar = ?	
 		");
-
 
 		$sentencia->bind_param(
 			"i",
-			$usuario_curso
+			$curso_escolar
 		);
 
 		$sentencia->execute();
-
-		$sentencia->store_result();
-
-		$sentencia->bind_result(
-			$result_id,
-			$result_curso,
-			$result_nombre_corto,
-			$result_nombre_largo
-		);
+		$resultado = $sentencia->get_result();
 
 		$asignaturas = array();
 
-		while($sentencia->fetch()) {
-			$asginaturas[] = new Asignatura(
-				$result_id,
-				$result_curso,
-				$result_nombre_corto,
-				$result_nombre_largo
-			);	
+		while ($a = $resultado->fetch_object()) {
+			$asignaturas[] = Asignatura::fromDbFetch($a);
 		}
+
 		$sentencia->close();
 
-
 		return $asignaturas;	
-
 	}
 
 	/** 
@@ -391,9 +302,10 @@ id,
 		$sentencia = $bbdd->prepare("
 			SELECT 
 				id,
-				curso,
+				nivel,
+				curso_escolar,
 				nombre_corto,
-				nombre_largo
+				nombre_completo
 			FROM
 				gesi_asignaturas
 			WHERE
@@ -407,33 +319,98 @@ id,
 		
 		$sentencia->execute();
 
-		$resultado = $sentencia->get_result()->fetch_object();
+		$resultado = $sentencia->get_result();
 
-		$asignatura = new Asignatura(
-			$resultado->id,
-			$resultado->curso,
-			$resultado->nombre_corto,
-			$resultado->nombre_largo
-		);
+		$asignatura = Asignatura::fromDbFetch($resultado->fetch_object());
 
 		$sentencia->close();
 		
 		return $asignatura;
 	}
 
-	public function getId(){
-		return $this->id;
+	/*
+	 *
+	 * Operaciones UPDATE.
+	 *  
+	 */
+
+	/**
+	 * Actualiza la información de una asignatura en la base de datos.
+	 * 
+	 * @param asignatura la asignatura cuya información se va a actualizar.
+	 * 
+	 * @return bool Resultado de la ejecución de la sentencia.
+	 */
+	public function dbActualizar() : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			UPDATE
+				gesi_asignaturas
+			SET
+				nivel = ?,
+				curso_escolar = ?,
+				nombre_corto = ?,
+				nombre_completo = ?
+			WHERE
+				id = ?
+		");
+		
+		$id = $this->getId();
+		$nivel = $this->getNivelRaw();
+		$curso_escolar = $this->getCursoEscolarRaw();
+		$nombre_corto = $this->getNombreCorto();
+		$nombre_completo = $this->getNombreCompleto();
+
+		$sentencia->bind_param(
+			"iissi",
+			$nivel,
+			$curso_escolar,
+			$nombre_corto,
+			$nombre_completo,
+			$id
+		);
+
+		$resultado = $sentencia->execute();
+		
+		$sentencia->close();
+
+		return $resultado;
 	}
 
-	public function getCurso(){
-		return $this->curso;
-	}
 
-	public function getNombreCorto(){
-		return $this->nombre_corto;
-	}
+	/*
+	 *
+	 * Operaciones DELETE.
+	 *  
+	 */
 
-	public function getNombreLargo(){
-		return $this->nombre_largo;
+
+
+	public static function dbEliminar(int $id) : bool
+	{
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			DELETE
+			FROM
+				gesi_asignaturas
+			WHERE
+				id = ?
+		");
+
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+
+		$resultado = $sentencia->execute();
+
+		$sentencia->close();
+
+		return $resultado;
 	}
 }
+
+?>

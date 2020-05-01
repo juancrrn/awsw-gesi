@@ -25,43 +25,32 @@ namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class Lista extends Modelo
+class InvLista extends Modelo
 {
-	private const VISTA_NOMBRE = "Eventos";
-	private const VISTA_ID = "evento-lista";
+    private const VISTA_NOMBRE = "Eventos públicos";
+    private const VISTA_ID = "evento-lista";
 
-	private $listado;
+    public function __construct()
+    {
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
+    }
 
-	public function __construct()
-	{
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
+    public function procesaContent() : void
+    {
 
-		$this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
-	}
+        echo <<< HTML
+        <header class="page-header">
+            <h1>$this->nombre</h1>
+        </header>
+        
+        <section class="page-content">
+            Esta vista aún no está implementada.
+        </section>
+        
+        HTML;
 
-	public function procesa() : void
-	{
-
-		?>
-		<div class="wrapper">
-			<div class="container">
-				<header class="page-header">
-					<h1>Eventos</h1>
-				</header>
-		
-				<section class="page-content">
-					<?php
-
-var_dump($this->listado);
-
-					?>
-				</section>
-			</div>
-		</div>
-		<?php
-
-	}
+    }
 }
 
 ?>

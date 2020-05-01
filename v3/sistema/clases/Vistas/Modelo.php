@@ -24,14 +24,6 @@ abstract class Modelo
 	protected $id;
 
 	/**
-	 * Se llama a esta función antes de procesar la cabecera. En su caso, puede 
-	 * servir para comprobar permisos, mostrar mensajes, etc.
-	 */
-	public function procesaAntesDeLaCabecera() : void
-	{
-	}
-
-	/**
 	 * Procesa la lógica de la vista en el elemento <article>, que deberá 
 	 * imprimir HTML y realizar lo que sea conveniente.
 	 */

@@ -25,6 +25,8 @@ use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Vistas\Vista;
 
+use Awsw\Gesi\Formularios\Usuario\AdminEliminar as Formulario;
+
 class AdminEliminar extends Modelo
 {
 
@@ -32,7 +34,8 @@ class AdminEliminar extends Modelo
 	private const VISTA_ID = "usuario-eliminar";
 
 	private $usuario;
-
+	private $form;
+	
 	public function __construct(int $usuario_id)
 	{
 		Sesion::requerirSesionPs();
@@ -48,20 +51,23 @@ class AdminEliminar extends Modelo
 
 		$this->nombre = self::VISTA_NOMBRE . $this->usuario->getNombreCompleto();
 		$this->id = self::VISTA_ID;
+		$this->form = new Formulario("/admin/usuarios/$usuario_id/eliminar/", $this->usuario->getNombreCompleto(), $this->usuario->getId()); 
+		
+		$this->form->gestiona();
 	}
 
 	public function procesaContent() : void
 	{
-
-		// TODO: Rellenar formulario con $this->usuario
+		$formulario = $this->form->getHtml();
 
 		$html = <<< HTML
+				
 					<header class="page-header">
 						<h1>$this->nombre</h1>
 					</header>
 
 					<section class="page-content">
-						Aquí el formulario.
+						$formulario
 					</section>
 
 HTML;

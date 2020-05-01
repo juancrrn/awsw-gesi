@@ -23,26 +23,23 @@ namespace Awsw\Gesi\Vistas\Usuario;
 use Awsw\Gesi\App;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Usuario;
-use \Awsw\Gesi\Sesion;
+use Awsw\Gesi\Sesion;
 
 class AdminLista extends Modelo
 {
-	private const VISTA_NOMBRE = "Usuarios";
-	private const VISTA_ID = "usuario-lista";
+	private const VISTA_NOMBRE = "Gestionar usuarios";
+	private const VISTA_ID = "usuario-admin-lista";
 
 	private $listado;
 
 	public function __construct()
 	{
+		Sesion::requerirSesionPs();
+
 		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
 		$this->listado = Usuario::dbGetAll();
-	}
-
-	public function procesaAntesDeLaCabecera() : void
-	{
-		Sesion::requerirSesionPs();
 	}
 
 	public function procesaContent() : void
@@ -52,7 +49,7 @@ class AdminLista extends Modelo
 
 		$html = <<< HTML
 		<header class="page-header">
-			<h1>Usuarios</h1>
+			<h1>$this->nombre</h1>
 		</header>
 	
 		<section class="page-content">

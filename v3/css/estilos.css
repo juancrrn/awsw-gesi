@@ -359,7 +359,7 @@ a {
 #master-grid-content h6 {
 	font-weight: normal;
 	letter-spacing: -1px;
-	margin: 5px 0 10px;
+	margin: 1.5rem 0 1rem;
 }
 
 #master-grid-content h1 {
@@ -372,6 +372,14 @@ a {
 
 #master-grid-content p a {
 	border-bottom: 1px solid;
+}
+
+#master-grid-content .page-back-button a::before {
+    content: "<";margin-right: .5em;
+}
+
+#master-grid-content .page-back-button a {
+    border: none;
 }
 
 /*
@@ -465,6 +473,39 @@ label {
 
 .form-note {
     margin-top: 24px;
+}
+
+.form-help {
+    font-size: .8em;
+    color: #666;
+}
+
+/*
+ * Visualización de datos
+ */
+
+.data-field-wrapper {
+	margin: 4px 0 8px;
+}
+
+.data-field {
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    margin: 4px 8px 8px 0;
+    display: inline-block;
+}
+
+.data-field .label {
+    display: inline-block;
+    background-color: #e8e8e8;
+    padding: 6px 8px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.data-field .value {
+    display: inline-block;
+	padding: 6px 8px;
 }
 
 /*
@@ -575,12 +616,11 @@ section.page-content #landing-welcome p {
 }
 
 /*
- * Lista de usuarios
+ * Lista general
  */
 
-#usuarios-lista .grid-table-row {
-    display: grid;
-    grid-template-columns: 100px auto 220px 200px;
+.grid-table-row {
+	display: grid;
 }
 
 .grid-table-row > div {
@@ -599,6 +639,70 @@ section.page-content #landing-welcome p {
 
 .grid-table-header .grid-table-row > div {
 	font-weight: bold;
+}
+
+/*
+ * Lista de usuarios
+ */
+
+ #usuarios-lista .grid-table-row {
+    grid-template-columns: 100px auto 220px 200px;
+}
+
+/*
+ * Lista de grupos
+ */
+
+#grupos-lista .grid-table-row {
+    grid-template-columns: 40px 80px 120px auto 170px;
+}
+
+/*
+ * Lista de grupos en la vista usuario admin ver
+ */
+
+#usuario-admin-ver-grupo-lista .grid-table-row {
+    grid-template-columns: 70px auto 170px;
+}
+
+/*
+ * Lista de asignaturas
+ */
+
+#asignaturas-admin-lista .grid-table-row {
+    grid-template-columns: 40px 80px 120px auto 170px;
+}
+
+#asignaturas-mi-lista-est .grid-table-row {
+    grid-template-columns: 50px auto 180px 80px;
+}
+
+#asignaturas-mi-lista-pd .grid-table-row {
+    grid-template-columns: 50px auto 80px 80px;
+}
+
+/*
+* Lista de asignaciones
+*/
+
+#asignacion-lista .grid-table-row{
+	grid-template-columns: 120px 80px 120px auto 20px;
+}
+
+/*
+ * Lista de asignaciones en la vista asignatura admin ver
+ */
+
+#asignatura-admin-ver-asignacion-lista .grid-table-row {
+	grid-template-columns: 70px auto 300px 200px;
+}
+
+/*
+ * Lista de asignaciones en la vista grupo admin ver
+ */
+
+#grupo-admin-ver-asignacion-lista .grid-table-row {
+	grid-template-columns: 70px auto 300px 200px;
 }
 
 /*

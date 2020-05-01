@@ -25,15 +25,6 @@
  */
 
 declare(strict_types = 1);
-
-/**
- * Habilitar errores para depuración.
- */
-
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
 /**
  * Definición de constantes.
  * 
@@ -54,6 +45,18 @@ define("GESI_URL", "http://localhost:60001");
 define("GESI_BASE_CONTROLADOR", "");
 
 define("GESI_DEFAULT_PASSWORD", "cambiame");
+
+define("GESI_DESARROLLO", true);
+
+/**
+ * Habilitar errores para depuración.
+ */
+
+if (GESI_DESARROLLO) {
+	ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
+	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+}
 
 /**
  * Configuración de codificación y zona horaria.
@@ -121,5 +124,7 @@ $app->init(
 	GESI_URL,
 	GESI_BASE_CONTROLADOR,
 
-	GESI_DEFAULT_PASSWORD
+	GESI_DEFAULT_PASSWORD,
+
+	GESI_DESARROLLO
 );

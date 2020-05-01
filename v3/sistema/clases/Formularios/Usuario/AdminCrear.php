@@ -52,8 +52,8 @@ class AdminCrear extends Formulario
 
         $this->html .= <<< HTML
 <div class="form-group">
-    <label>NIF</label>
-    <input class="form-control" type="text" name="nif" value="$nif" placeholder="NIF" required="required" />
+    <label for="nif">NIF</label>
+    <input class="form-control" type="text" name="nif" id="nif" value="$nif" placeholder="NIF" required="required" />
 </div>
 <div class="form-group">
     <label for="nombre">Nombre</label>
@@ -79,9 +79,9 @@ class AdminCrear extends Formulario
     <label for="tipo">Tipo</label>
     <select class="form-control" name="tipo" id="tipo" required="required">
         <option value="" selected disabled>Selecciona...</option>
-        <option value="est">Estudiante</option>
-        <option value="pd">Personal docente</option>
-        <option value="ps">Personal de Secretaría</option>
+        <option value="1">Estudiante</option>
+        <option value="2">Personal docente</option>
+        <option value="3">Personal de Secretaría</option>
     </select>
 </div>
 
@@ -92,71 +92,54 @@ class AdminCrear extends Formulario
 HTML;
 
     }
-    
 
     protected function procesa(array & $datos) : void
     {
 
-        $nif = isset($datos['nif']) ? $datos['nif'] : null;
+        $nif = $datos['nif'] ?? null;
+        $nombre = $datos['nombre'] ?? null;
+        $apellidos = $datos['apellidos'] ?? null;
+        $fecha_nacimiento = $datos['fecha_nacimiento'] ?? null;
+        $numero_telefono = $datos['numero_telefono'] ?? null;
+        $email = $datos['email'] ?? null;
+        $tipo = $datos['tipo'] ?? null;
 
         if (empty($nif)) {
             Vista::encolaMensajeError('El campo NIF no puede estar vacío.');
         }
 
-        $nombre = isset($datos['nombre']) ? $datos['nombre'] : null;
-
         if (empty($nombre)) {
             Vista::encolaMensajeError('El campo nombre no puede estar vacío.');
-        } else {
-            if (! Valido::testStdString($nombre)) {
-                Vista::encolaMensajeError('El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
-            }
+        } elseif (! Valido::testStdString($nombre)) {
+            Vista::encolaMensajeError('El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
         }
-
-        $apellidos = isset($datos['apellidos']) ? $datos['apellidos'] : null;
 
         if (empty($apellidos)) {
             Vista::encolaMensajeError('El campo apellidos no puede estar vacío.');
-        } else {
-            if (! Valido::testStdString($apellidos)) {
-                Vista::encolaMensajeError('El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
-            }
+        } elseif (! Valido::testStdString($apellidos)) {
+            Vista::encolaMensajeError('El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.');
         }
-
-        $fecha_nacimiento = isset($datos['fecha_nacimiento']) ?
-            $datos['fecha_nacimiento'] : null;
 
         if (empty($fecha_nacimiento)) {
             Vista::encolaMensajeError('El campo fecha de nacimiento no puede estar vacío.');
+        } elseif (! Valido::testDate($fecha_nacimiento)) {
+            Vista::encolaMensajeError('El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.');
         } else {
-            if (! Valido::testDate($fecha_nacimiento)) {
-                Vista::encolaMensajeError('El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.');
-            } else {
-                $format = 'd/m/Y';
-                $d = \DateTime::createFromFormat($format, $fecha_nacimiento);
-                $fecha_nacimiento = $d->getTimestamp();
-            }
+            $format = 'd/m/Y';
+            $d = \DateTime::createFromFormat($format, $fecha_nacimiento);
+            $fecha_nacimiento = $d->getTimestamp();
         }
-
-        $numero_telefono = isset($datos['numero_telefono']) ?
-            $datos['numero_telefono'] : null;
 
         if (empty($numero_telefono)) {
             Vista::encolaMensajeError('El campo número de teléfono no puede estar vacío.');
-        } else {
-            if (! Valido::testNumeroTelefono($numero_telefono)) {
-                Vista::encolaMensajeError('El campo número de teléfono no es válido.');
-            }
+        } elseif (! Valido::testNumeroTelefono($numero_telefono)) {
+            Vista::encolaMensajeError('El campo número de teléfono no es válido.');
         }
-
-        $email = isset($datos['email']) ? $datos['email'] : null;
 
         if (empty($email)) {
             Vista::encolaMensajeError('El campo dirección de correo electrónico no puede estar vacío.');
-        } else {
-            if (! Valido::testEmail($email)) {
-                Vista::encolaMensajeError('El campo dirección de correo electrónico no es válid.');
-            }
+        } elseif (! Valido::testEmail($email)) {
+            Vista::encolaMensajeError('El campo dirección de correo electrónico no es válido.');
         }
 
         /*
@@ -165,16 +148,8 @@ HTML;
          * TODO: log si pasa algo que no nos gusta
          */
 
-        $tipo = isset($datos['tipo']) ? $datos['tipo'] : null;
-
-        if (empty($tipo) || ! in_array($tipo, array('est', 'pd', 'ps'))) {
-            Vista::encolaMensajeError('El campo dirección de correo electrónico no puede estar vacío.');
-        } else {
-            switch ($tipo) {
-                case 'est': $rol = 1; break;
-                case 'pd':  $rol = 2; break;
-                case 'ps':  $rol = 3; break;
-            }
+        if (empty($tipo) || ! Valido::testTipoRaw($tipo)) {
+            Vista::encolaMensajeError('El campo tipo no es válido.');
         }
 
         // Si no hay ningún error, continuar.
@@ -185,7 +160,7 @@ HTML;
             $usuario = new Usuario(
                 null,
                 $nif,
-                $rol,
+                $tipo,
                 $nombre,
                 $apellidos,
                 $fecha_nacimiento,
@@ -210,3 +185,5 @@ HTML;
 
     }
 }
+
+?>

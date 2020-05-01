@@ -1,4 +1,4 @@
- <?php
+<?php 
 
 /**
  * Métodos relacionados con los usuarios.
@@ -28,11 +28,10 @@ class Usuario
 	private $rol;
 	private $nombre;
 	private $apellidos;
-	private $password;
 	private $fecha_nacimiento;
 	private $numero_telefono;
 	private $email;
-	private $fecha_ultimo_acceso; // Al principio se inicializa como fecha de registro
+	private $fecha_ultimo_acceso;
 	private $fecha_registro;
 	private $grupo;
 
@@ -61,9 +60,26 @@ class Usuario
 		$this->fecha_nacimiento = $fecha_nacimiento;
 		$this->numero_telefono = $numero_telefono;
 		$this->email = $email;
-		$this->fecha_ultimo_acceso = $fecha_registro;
+		$this->fecha_ultimo_acceso = $fecha_ultimo_acceso;
 		$this->fecha_registro = $fecha_registro;
 		$this->grupo = $grupo;
+	}
+
+	public static function fromDbFetch(Object $o) : Usuario
+	{
+		return new self(
+			$o->id,
+			$o->nif,
+			$o->rol,
+			$o->nombre,
+			$o->apellidos,
+			$o->fecha_nacimiento,
+			$o->numero_telefono,
+			$o->email,
+			$o->fecha_ultimo_acceso,
+			$o->fecha_registro,
+			$o->grupo
+		);
 	}
 
 	/*
@@ -189,7 +205,6 @@ class Usuario
 					fecha_nacimiento,
 					numero_telefono,
 					email,
-					fecha_ultimo_acceso,
 					fecha_registro,
 					grupo
 				)
@@ -205,12 +220,11 @@ class Usuario
 		$fecha_nacimiento = $this->getFechaNacimiento();
 		$numero_telefono = $this->getNumeroTelefono();
 		$email = $this->getEmail();
-		$fecha_ultimo_acceso = $this->getFechaUltimoAcceso();
 		$fecha_registro = $this->getFechaRegistro();
 		$grupo = $this->getGrupo();
 		
 		$sentencia->bind_param(
-			"sisssissiii", 
+			"sisssissii", 
 			$nif,
 			$rol,
 			$nombre,
@@ -219,7 +233,6 @@ class Usuario
 			$fecha_nacimiento,
 			$numero_telefono,
 			$email,
-			$fecha_ultimo_acceso,
 			$fecha_registro,
 			$grupo
 		);
@@ -280,25 +293,57 @@ class Usuario
 		
 		$sentencia->execute();
 
-		$resultado = $sentencia->get_result()->fetch_object();
+		$resultado = $sentencia->get_result();
 
-		$usuario = new Usuario(
-			$resultado->id,
-			$resultado->nif,
-			$resultado->rol,
-			$resultado->nombre,
-			$resultado->apellidos,
-			$resultado->fecha_nacimiento,
-			$resultado->numero_telefono,
-			$resultado->email,
-			$resultado->fecha_ultimo_acceso,
-			$resultado->fecha_registro,
-			$resultado->grupo
-		);
+		$usuario = Usuario::fromDbFetch($resultado->fetch_object());
 
 		$sentencia->close();
 		
 		return $usuario;
+	}
+
+	/**
+	 * Trae todos los usuarios de la base de datos.
+	 *
+	 * @requires Existe un usuario con el id especificado.
+	 *
+	 * @return array<Usuario>
+	 */
+	public static function dbGetAll() : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				nif,
+				rol,
+				nombre,
+				apellidos,
+				fecha_nacimiento,
+				numero_telefono,
+				email,
+				fecha_ultimo_acceso,
+				fecha_registro,
+				grupo
+			FROM
+				gesi_usuarios
+			
+		");
+	
+		$sentencia->execute();
+		$resultado = $sentencia->get_result();
+
+		$usuarios = array();
+
+		while ($a = $resultado->fetch_object()) {
+			$usuarios[] = Usuario::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+
+		return $usuarios;	
 	}
 
 	/**
@@ -389,7 +434,6 @@ class Usuario
 	 *
 	 * @return bool
 	 */
-
 	public static function dbExisteId(int $id) : bool
 	{		
 		$bbdd = App::getSingleton()->bbddCon();
@@ -428,7 +472,6 @@ class Usuario
 	 *
 	 * @return bool
 	 */
-
 	public static function dbExisteNif(string $nif) : bool
 	{		
 		$bbdd = App::getSingleton()->bbddCon();
@@ -460,6 +503,106 @@ class Usuario
 		return $existe;
 	}
 
+	/**
+	 * Trae todos los usuarios de la base de datos de un rol específico.
+	 *
+	 * @param int $tipo
+	 *
+	 * @return array<Usuario>
+	 */
+	public static function dbGetByRol(int $rol) : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				nif,
+				rol,
+				nombre,
+				apellidos,
+				fecha_nacimiento,
+				numero_telefono,
+				email,
+				fecha_ultimo_acceso,
+				fecha_registro,
+				grupo
+			FROM
+				gesi_usuarios
+			WHERE
+				rol = ?
+		");
+
+		$sentencia->bind_param(
+			'i',
+			$rol
+		);
+	
+		$sentencia->execute();
+		$resultado = $sentencia->get_result();
+
+		$usuarios = array();
+
+		while ($a = $resultado->fetch_object()) {
+			$usuarios[] = Usuario::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+
+		return $usuarios;	
+	}
+
+	/**
+	 * Trae todos los usuarios de la base de datos de un grupo específico.
+	 *
+	 * @param int $grupo_id
+	 *
+	 * @return array<Usuario>
+	 */
+	public static function dbGetEstudiantesByGrupo(int $grupo_id) : array
+	{
+
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT 
+				id,
+				nif,
+				rol,
+				nombre,
+				apellidos,
+				fecha_nacimiento,
+				numero_telefono,
+				email,
+				fecha_ultimo_acceso,
+				fecha_registro,
+				grupo
+			FROM
+				gesi_usuarios
+			WHERE
+				grupo = ?
+		");
+
+		$sentencia->bind_param(
+			'i',
+			$grupo_id
+		);
+	
+		$sentencia->execute();
+		$resultado = $sentencia->get_result();
+
+		$usuarios = array();
+
+		while ($a = $resultado->fetch_object()) {
+			$usuarios[] = Usuario::fromDbFetch($a);
+		}
+
+		$sentencia->close();
+
+		return $usuarios;	
+	}
+
 	/*
 	 *
 	 * Operaciones UPDATE.
@@ -485,7 +628,6 @@ class Usuario
 				rol = ?,
 				nombre = ?,
 				apellidos = ?,
-				password = ?,
 				fecha_nacimiento = ?,
 				numero_telefono = ?,
 				email = ?,
@@ -509,12 +651,11 @@ class Usuario
 		$grupo = $this->getGrupo();
 
 		$sentencia->bind_param(
-			"sisssiisiiii", 
+			"sissiisiiii", 
 			$nif,
 			$rol,
 			$nombre,
 			$apellidos,
-			$password,
 			$fecha_nacimiento,
 			$numero_telefono,
 			$email,
@@ -567,66 +708,48 @@ class Usuario
 		return $resultado;
 	}
 
+	/*
+	 *
+	 * Operaciones DELETE.
+	 *  
+	 */
 
-
-	public static function dbGetAll(): array {
-
+	/**
+	 * Eliminar un usuario de la base de datos.
+	 * 
+	 * @param int $id
+	 * 
+	 * @require $id existe en la abse de datos
+	 * 
+	 * @return bool Resultado de la ejecución de la sentencia.
+	 */
+	public static function dbEliminar(int $id) : bool
+	{
 		$bbdd = App::getSingleton()->bbddCon();
 
 		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				nif,
-				rol,
-				nombre,
-				apellidos,
-				fecha_nacimiento,
-				numero_telefono,
-				email,
-				fecha_ultimo_acceso,
-				fecha_registro,
-				grupo
+			DELETE
 			FROM
 				gesi_usuarios
-			
+			WHERE
+				id = ?
 		");
-	
-		$sentencia->execute();
-		$sentencia->store_result();
 
-		$sentencia->bind_result(
-			$result_id,
-			$result_nif,
-			$result_rol,
-			$result_nombre,	
-		    $result_apellidos,			
-			$result_fecha_nacimiento,
-			$result_numero_telefono,			
-			$result_email,
-			$result_fecha_ultimo_acceso,			
-			$result_fecha_registro,
-			$result_grupo	
+		$sentencia->bind_param(
+			"i",
+			$id
 		);
 
-		$usuarios = array();
-		while($sentencia->fetch()) {
-			$usuarios[] = new Usuario(
-				$result_id,
-				$result_nif,
-				$result_rol,
-				$result_nombre,	
-				$result_apellidos,
-				$result_fecha_nacimiento,
-				$result_numero_telefono,			
-				$result_email,
-				$result_fecha_ultimo_acceso,			
-				$result_fecha_registro,
-				$result_grupo);		
-		}
+		$resultado = $sentencia->execute();
 
-		
 		$sentencia->close();
-		return $usuarios;	
+
+		return $resultado;
 	}
 
+	
+
+
 }
+
+?>

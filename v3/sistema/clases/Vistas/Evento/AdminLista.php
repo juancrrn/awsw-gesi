@@ -1,10 +1,12 @@
 <?php 
 
 /**
- * Vistas de foros.
+ * Vistas de calendario.
  *
- * - PDI: puede ver y gestionar todos los foros.
- * - Resto: pueden ver los foros a los que tienen acceso.
+ * - PDI: puede editar todos los calendarios.
+ * - PD: puede editar los calendarios de sus asignaturas.
+ * - Estudiantes: pueden ver el calendario de sus asignaturas.
+ * - Resto: pueden ver el calendario público.
  *
  * @package awsw-gesi
  * Gesi
@@ -19,14 +21,14 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Foro;
+namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class Lista extends Modelo
+class AdminLista extends Modelo
 {
-	private const VISTA_NOMBRE = "Foros";
-	private const VISTA_ID = "foro-lista";
+	private const VISTA_NOMBRE = "Eventos";
+	private const VISTA_ID = "evento-lista";
 
 	private $listado;
 
@@ -38,25 +40,21 @@ class Lista extends Modelo
 		$this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
 	}
 
-	public function procesa() : void
+	public function procesaContent() : void
 	{
 
 		?>
-		<div class="wrapper">
-			<div class="container">
-				<header class="page-header">
-					<h1>Foros</h1>
-				</header>
-		
-				<section class="page-content">
-					<?php
+		<header class="page-header">
+			<h1>Eventos</h1>
+		</header>
 
-var_dump($this->listado);
+		<section class="page-content">
+			Esta vista aún no está implementada.
+					<?php
+// var_dump($this->listado);
 
 					?>
-				</section>
-			</div>
-		</div>
+		</section>
 		<?php
 
 	}
