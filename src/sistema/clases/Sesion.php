@@ -34,6 +34,8 @@ class Sesion
      */
     public static function init() : void
     {
+        session_start();
+        
         if (
             isset($_SESSION[self::SESSION_SESION]) &&
             is_object($_SESSION[self::SESSION_SESION]) &&

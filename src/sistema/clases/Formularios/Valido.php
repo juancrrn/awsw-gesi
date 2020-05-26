@@ -18,6 +18,8 @@
 
 namespace Awsw\Gesi\Formularios;
 
+use stdClass;
+
 class Valido
 {
 	/**
@@ -255,6 +257,28 @@ class Valido
 		return $roles;
 	}
 
+	/**
+	 * Devuelve los roles para una formalización HATEOAS.
+	 */
+	public static function getRolesHateoas() : array
+	{
+		$rolEst = new stdClass;
+		$rolEst->id = 1;
+		$rolEst->selectName = 'Estudiante';
+		$rolEst->name = 'Estudiante';
+		
+		$rolPd = new stdClass;
+		$rolPd->id = 1;
+		$rolPd->selectName = 'Personal docente';
+		$rolPd->name = 'Personal docente';
+		
+		$rolPs = new stdClass;
+		$rolPs->id = 1;
+		$rolPs->selectName = 'Personal de Secretaría';
+		$rolPs->name = 'Personal de Secretaría';
+
+		return array($rolEst, $rolPd, $rolPs);
+	}
 
 	/**
 	 * Valida un nivel 'raw' (1 - 6).

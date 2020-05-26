@@ -19,8 +19,10 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use JsonSerializable;
 
 class Usuario
+	implements JsonSerializable
 {
 	
 	private $id;
@@ -747,9 +749,26 @@ class Usuario
 		return $resultado;
 	}
 
-	
-
-
+	/**
+	 * Implementa la interfaz JsonSerializable.
+	 */
+	public function jsonSerialize()
+	{
+		return [
+			'id' => $this->getId(),
+			'selectName' => $this->getNombreCompleto(),
+			'nif' => $this->getNif(),
+			'rol' => $this->getRol(),
+			'nombre' => $this->getNombre(),
+			'apellidos' => $this->getApellidos(),
+			'fechaNacimiento' => $this->getFechaNacimiento(),
+			'numeroTelefono' => $this->getNumeroTelefono(),
+			'email' => $this->getEmail(),
+			'fechaUltimoAcceso' => $this->getFechaUltimoAcceso(),
+			'fechaEegistro' => $this->getFechaRegistro(),
+			'grupo' => $this->getGrupo()
+		];
+	}
 }
 
 ?>

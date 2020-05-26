@@ -76,7 +76,9 @@ abstract class Controlador
 		 * anclas de inicio y fin, respectivamente.
 		 */
 
-		if (preg_match('#^' . self::$base . $route . '$#', $_SERVER['REQUEST_URI'], $matches) == 1) {
+		$getParamsRegEx = '(\?.*)?';
+
+		if (preg_match('#^' . self::$base . $route . $getParamsRegEx . '$#', $_SERVER['REQUEST_URI'], $matches) == 1) {
 			array_shift($matches);
 			echo call_user_func_array($handler, $matches);
 

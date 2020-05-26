@@ -29,14 +29,6 @@ abstract class Modelo
 	 */
 	abstract public function procesaContent() : void;
 
-	/**
-	 * Procesa la lógica de la vista en el elemento <aside>, que deberá 
-	 * imprimir HTML y realizar lo que sea conveniente.
-	 */
-	public function procesaSide() : void
-	{
-	}
-
 	public function getNombre() : string
 	{
 		return $this->nombre;

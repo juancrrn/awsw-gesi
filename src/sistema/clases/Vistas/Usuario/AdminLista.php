@@ -24,6 +24,7 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Sesion;
+use Awsw\Gesi\FormulariosAjax\Usuario\EstudianteAdminCreate;
 
 class AdminLista extends Modelo
 {
@@ -44,8 +45,11 @@ class AdminLista extends Modelo
 
 	public function procesaContent() : void
 	{
-
 		$app = App::getSingleton();
+
+		$formularioEstudianteAdminCreate = new EstudianteAdminCreate();
+		$formularioEstudianteAdminCreateHtml = 
+			$formularioEstudianteAdminCreate->generateModal();
 
 		$html = <<< HTML
 		<header class="page-header">
@@ -53,6 +57,8 @@ class AdminLista extends Modelo
 		</header>
 	
 		<section class="page-content">
+			<button class="btn-ajax-modal-fire btn btn-primary mb-1" data-ajax-form-id="estudiante-create">Crear estudiante</button>
+
 			<div id="usuarios-lista" class="grid-table">
 				<div class="grid-table-header">
 					<div class="grid-table-row">
@@ -110,7 +116,7 @@ HTML;
 				</div>
 			</div>
 		</section>
-
+		$formularioEstudianteAdminCreateHtml
 HTML;
 
 		echo $html;

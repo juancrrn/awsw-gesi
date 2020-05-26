@@ -13,181 +13,150 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
-use \Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Sesion\Cerrar;
-use \Awsw\Gesi\Vistas\Vista;
-use \Awsw\Gesi\Sesion;
+use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Sesion\Cerrar as FormularioSesionCerrar;
+use Awsw\Gesi\Vistas\Vista;
+use Awsw\Gesi\Sesion;
 
 $app = App::getSingleton();
 
-$formulario_logout = new Cerrar('');
+$v = (! $app->isDesarrollo()) ? '' : '?v=0.0.0' . time();
+
+$formulario_logout = new FormularioSesionCerrar('');
 $formulario_logout->gestiona();
 
-?>
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+$paginaActualNombre = Vista::getPaginaActualNombre();
+$urlInicio = $app->getUrl();
+$paginaActualId = Vista::getPaginaActualId();
 
-        <title><?php echo Vista::getPaginaActualNombre(); ?> - Gesi</title>
+$sideMenuBuffer = '';
 
-        <link rel="stylesheet" href="<?php echo $app->getUrl(); ?>/css/estilos.css<?php if ($app->isDesarrollo()) { echo "?v=" . time(); } ?>">
-    </head>
-    <body class="actual-<?php echo Vista::getPaginaActualId(); ?>">
-        <div id="master-grid-wrapper">
-            <header id="master-grid-header">
-                <div id="app-logo">
-                    <a href="<?php echo $app->getUrl(); ?>"><img src="<?php echo $app->getUrl(); ?>/img/logo.svg" height="24" width="24" alt="Gesi"></a>
-                </div>
+// Generar elementos de navegación del menú lateral.
 
-                <div id="app-name">
-                    <h1><a href="<?php echo $app->getUrl(); ?>">Gesi</a></h1>
-                </div>
-            </header>
-
-            <nav id="master-grid-user">
-                <ul>
-                    <?php
+$sideMenuBuffer .= Vista::generarSideMenuLink('', 'Inicio', 'inicio');
 
 if (Sesion::isSesionIniciada()) {
+    $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones personales');
 
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/secretaria/', 'Mensajes de Secretaría', 'mensaje-secretaria-lista');
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/eventos/', 'Eventos', 'evento-lista');
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/foros/', 'Foros', 'foro-lista');
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/biblioteca/', 'Biblioteca', 'mi-biblioteca');
+
+    if (Sesion::getUsuarioEnSesion()->isEst()) {
+        $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones de estudiantes');
+
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/asignaturas/', 'Asignaturas', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/asignaciones/horario/', 'Horarios', '');
+    } elseif (Sesion::getUsuarioEnSesion()->isPd()) {
+        $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones de personal docente');
+
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/asignaturas/', 'Asignaturas', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/asignaciones/horario/', 'Horarios', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/grupos/', 'Grupos', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/mi/asignaciones/', 'Asignaciones', '');
+    } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
+        $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones de administración');
+
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/secretaria/', 'Mensajes de Secretaría', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/asignaturas/', 'Asignaturas', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/grupos/', 'Grupos', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/usuarios/', 'Usuarios', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/asignaciones/', 'Asignaciones', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/eventos/', 'Eventos', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/foros/', 'Foros', '');
+        $sideMenuBuffer .= Vista::generarSideMenuLink('/admin/biblioteca/', 'Biblioteca', '');
+    }
+} else {
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/secretaria/crear/', 'Contactar con Secretaría', '');
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/eventos/', 'Eventos públicos', '');
+    $sideMenuBuffer .= Vista::generarSideMenuLink('/foros/', 'Foros públicos', '');
+}
+
+// Generar elementos de la navegación del menú de sesión de usuario.
+
+$userMenuBuffer = '';
+
+if (Sesion::isSesionIniciada()) {
     $u = Sesion::getUsuarioEnSesion();
 
     $nombre = $u->getNombreCompleto();
 
-    $url_editar = $app->getUrl() . '/sesion/perfil/';
+    $url_editar = $urlInicio . '/sesion/perfil/';
     
     $badges = '';
     $badges .= $u->isEst() ? '<span class="badge">Estudiante</span>' : '';
     $badges .= $u->isPd() ? '<span class="badge">Personal docente</span>' : '';
     $badges .= $u->isPs() ? '<span class="badge">Personal de Secretaría</span>' : '';
 
+    $formularioLogoutHtml = $formulario_logout->getHtml();
 
-    
-        
-    echo <<< HTML
-    <li>$badges</li>
-    <li><a href="$url_editar">$nombre</a></li>
-    <li>
-
-    HTML;
-
-    $formulario_logout->imprime();
-
-    echo <<< HTML
-    </li>
-
-    HTML;
-
+    $userMenuBuffer .= Vista::generarUserMenuItem("<a class=\"nav-link\" href=\"$url_editar\">$nombre $badges</a>", 'mi-perfil');
+    $userMenuBuffer .= Vista::generarUserMenuItem($formularioLogoutHtml);
 } else {
+    $url = $urlInicio . '/sesion/iniciar/';
 
-    $url = $app->getUrl() . '/sesion/iniciar/';
-
-    echo <<< HTML
-    <li><a href="$url">Iniciar sesión</a></li>
-
-    HTML;
-
+    $userMenuBuffer .= Vista::generarUserMenuItem("<a class=\"nav-link\" href=\"$url\">Iniciar sesión</a>", 'sesion-iniciar');
 }
 
-                    ?>
+// Generar HTML final de la cabecera.
+
+$headerFinalHtmlBuffer = '';
+
+$headerFinalHtmlBuffer .= <<< HTML
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#7b1fa2">
+
+        <title>$paginaActualNombre - Gesi</title>
+
+        <!-- Fuentes -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700&display=swap">
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Estilos de Gesi -->
+        <link rel="stylesheet" href="$urlInicio/css/app.css$v">
+    </head>
+    <body class="actual-$paginaActualId">
+
+        <div id="loading-progress-bar"><div></div></div>
+
+        <div id="side-menu-wrapper">
+            <div class="m-3">
+                <button type="button" id="btn-side-menu-hide" class="btn btn-sm btn-outline-secondary mr-4">Cerrar</button>
+            </div>
+
+            <nav>
+                <ul class="list-group list-group-flush">
+                    $sideMenuBuffer
                 </ul>
             </nav>
+        </div>
+            
+        <nav id="main-header" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button type="button" id="btn-side-menu-show" class="btn btn-sm btn-outline-secondary mr-4">Menu</button>
 
-            <nav id="master-grid-nav">
-                <ul>
-                    <?php
+            <a class=" navbar-brand" href="#">
+                <img src="$urlInicio/img/logo.svg" height="30" alt="" class="d-block mr-3">
+            </a>
 
-$url_inicio = $app->getUrl();
-
-    echo <<< HTML
-    <li class="link"><a href="$url_inicio">Inicio</a></li>
-
-    HTML;
-
-if (Sesion::isSesionIniciada()) {
-
-    $url_mensajes = $app->getUrl() . '/mi/secretaria/';
-    $url_asignaturas = $app->getUrl() . '/mi/asignaturas/';
-    $url_horarios = $app->getUrl() . '/mi/asignaciones/horario/';
-    $url_eventos = $app->getUrl() . '/mi/eventos/';
-    $url_foros = $app->getUrl() . '/mi/foros/';
-    $url_biblioteca = $app->getUrl() . '/mi/biblioteca/';
-
-    echo <<< HTML
-    <li class="divider">Acciones personales</li>
-    <li class="link"><a href="$url_mensajes">Mensajes de Secretaría</a></li>
-    <li class="link"><a href="$url_eventos">Eventos</a></li>
-    <li class="link"><a href="$url_foros">Foros</a></li>
-    <li class="link"><a href="$url_biblioteca">Biblioteca</a></li>
-
-    HTML;
-
-    if (Sesion::getUsuarioEnSesion()->isEst()) {
-
-        echo <<< HTML
-        <li class="divider">Acciones de estudiante</li>
-        <li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
-        <li class="link"><a href="$url_horarios">Horarios</a></li>
-
-        HTML;
-
-    } elseif (Sesion::getUsuarioEnSesion()->isPd()) {
-        
-        $url_grupos = $app->getUrl() . '/mi/grupos/';
-        $url_asignaciones = $app->getUrl() . '/mi/asignaciones/';
-
-        echo <<< HTML
-        <li class="divider">Acciones de personal docente</li>
-        <li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
-        <li class="link"><a href="$url_horarios">Horarios</a></li>
-        <li class="link"><a href="$url_grupos">Grupos</a></li>
-        <li class="link"><a href="$url_asignaciones">Asignaciones</a></li>
-
-        HTML;
-    
-    } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
-
-        $url_mensajes = $app->getUrl() . '/admin/secretaria/';
-        $url_asignaturas = $app->getUrl() . '/admin/asignaturas/';
-        $url_grupos = $app->getUrl() . '/admin/grupos/';
-        $url_usuarios = $app->getUrl() . '/admin/usuarios/';
-        $url_asignaciones = $app->getUrl() . '/admin/asignaciones/';
-        $url_eventos = $app->getUrl() . '/admin/eventos/';
-        $url_foros = $app->getUrl() . '/admin/foros/';
-        $url_biblioteca = $app->getUrl() . '/admin/biblioteca/';
-
-        echo <<< HTML
-        <li class="divider">Acciones de administración</li>
-        <li class="link"><a href="$url_mensajes">Mensajes de Secretaría</a></li>
-        <li class="link"><a href="$url_asignaturas">Asignaturas</a></li>
-        <li class="link"><a href="$url_grupos">Grupos</a></li>
-        <li class="link"><a href="$url_usuarios">Usuarios</a></li>
-        <li class="link"><a href="$url_asignaciones">Asignaciones</a></li>
-        <li class="link"><a href="$url_eventos">Eventos</a></li>
-        <li class="link"><a href="$url_foros">Foros</a></li>
-        <li class="link"><a href="$url_biblioteca">Biblioteca</a></li>
-
-        HTML;
-
-    }
-} else {
-    $url_secretaria = $app->getUrl() . '/secretaria/crear/';
-    $url_eventos = $app->getUrl() . '/eventos/';
-    $url_foros = $app->getUrl() . '/foros/';
-
-    echo <<< HTML
-    <li class="link"><a href="$url_secretaria">Contactar con Secretaría</a></li>
-    <li class="link"><a href="$url_eventos">Eventos públicos</a></li>
-    <li class="link"><a href="$url_foros">Foros públicos</a></li>
-
-    HTML;
-}
-
-                    ?>
+            <div class="ml-auto">
+                <ul class="navbar-nav">
+                    $userMenuBuffer
                 </ul>
-            </nav>
+            </div>
+        </nav>
+HTML;
+
+echo $headerFinalHtmlBuffer;
+
+?>

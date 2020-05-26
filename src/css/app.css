@@ -1,0 +1,156 @@
+/**
+ * Estilos principales.
+ *
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Cintia María Herrera Arenas
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.4
+ */
+
+/**
+ * Inicialización.
+ */
+
+*, html, body, header,footer, section, aside, div, ul, li, a, p, h1, h2, h3, h4, span, table, tr, td {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Ubuntu", "Helvetica", Arial, sans-serif;
+    border-collapse: collapse;
+}
+
+.material-icons {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: inherit;
+    line-height: inherit;
+    font-size: inherit;
+}
+
+/**
+ * Side menu (menú lateral principal).
+ */
+ 
+#side-menu-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    transform: translateX(-280px);
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: 0 0 16px rgba(0,0,0,.28);
+    transition: all 0.4s ease 0s;
+}
+
+#side-menu-wrapper.active {
+    left: 280px;
+    width: 280px;
+    transition: all 0.4s ease 0s;
+}
+
+/**
+ * Barra indicadora de carga.
+ */
+
+#loading-progress-bar {
+    display: none;
+    z-index: 9999999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    overflow: hidden;
+    background-color: rgb(0, 0, 0);
+    margin:auto;
+}
+
+#loading-progress-bar > div{
+    background-color: rgb(255, 255, 255);
+    margin-top: 0;
+    margin-left: -100%;
+    animation-name: loading_progress_bar_animation;
+    animation-duration: 1.3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    width: 100%;
+    height: 2px;
+}
+
+@keyframes loading_progress_bar_animation {
+    0% {
+        margin-left:-100%;
+    }
+
+    100% {
+        margin-left:100%;
+    }
+}
+
+/**
+ * Toasts.
+ */
+
+#toasts-container {
+    min-width: 350px;
+    z-index: 1051;
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+}
+
+.type-indicator {
+    border-radius: 50%;
+    background-color: #999;
+    width: 12px;
+    height: 12px;
+    margin-right: 1rem;
+    display: inline-block;
+}
+
+.type-indicator.exito {
+    background-color: #44c05d;
+}
+
+.type-indicator.error {
+    background-color: #c45060;
+}
+
+/**
+ * Formulario de cierre de sesión (menú de sesión de usuario).
+ */
+
+/*
+ * Formulario de cierre de sesión.
+ */
+
+#form-logout {
+    background: transparent;
+    padding: 0;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+}
+
+#form-logout button {
+	cursor: pointer;
+    color: rgb(123, 31, 162);
+    font-family: inherit;
+    line-height: 20px;
+    background: none;
+    border: none;
+    font-size: inherit;
+    display: block;
+    padding: .5rem 1rem;
+}

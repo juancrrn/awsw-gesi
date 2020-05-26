@@ -36,6 +36,9 @@ class App
 	// URL pública de la instalación.
 	private $url;
 
+	// Nombre de la aplicación.
+	private $nombre;
+
 	// Base del front controller.
 	private $base_controlador;
 
@@ -92,17 +95,16 @@ class App
 	/**
 	 * Inicializar la instancia.
 	 */
-	public function init($bbdd_datos, $raiz, $url, $base_controlador, $default_password, $es_desarrollo)
+	public function init($bbdd_datos, $raiz, $url, $nombre, $base_controlador, $default_password, $es_desarrollo)
 	{
 		$this->bbdd_datos = $bbdd_datos;
 		$this->raiz = $raiz;
 		$this->url = $url;
+		$this->nombre = $nombre;
 		$this->base_controlador = $base_controlador;
 		$this->default_password = $default_password;
 		$this->es_desarrollo = $es_desarrollo;
 		$this->bbdd_con = null;
-
-		session_start();
 
 		// Inicializar gestión de la sesión de usuario.
 		Sesion::init();
@@ -151,6 +153,14 @@ class App
 	public function getUrl() : string
 	{
 		return $this->url;
+	}
+
+	/**
+	 * Nombre de la aplicación.
+	 */
+	public function getNombre() : string
+	{
+		return $this->nombre;
 	}
 
 	/**

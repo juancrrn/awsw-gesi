@@ -25,6 +25,7 @@
  */
 
 declare(strict_types = 1);
+
 /**
  * Definición de constantes.
  * 
@@ -35,13 +36,14 @@ declare(strict_types = 1);
  */
 
 define("GESI_DB_HOST", "localhost");
-define("GESI_DB_USER", "root");
-define("GESI_DB_PASSWORD", "");
+define("GESI_DB_USER", "gesi");
+define("GESI_DB_PASSWORD", "gesigesi");
 define("GESI_DB_NAME", "gesi");
 define("GESI_DB_TABLE_PREFIX", "gesi_");
 
 define("GESI_ROOT", "__DIR__");
 define("GESI_URL", "http://localhost:60001");
+define("GESI_NOMBRE", "Gesi");
 define("GESI_BASE_CONTROLADOR", "");
 
 define("GESI_DEFAULT_PASSWORD", "cambiame");
@@ -122,6 +124,7 @@ $app->init(
 
 	GESI_ROOT,
 	GESI_URL,
+	GESI_NOMBRE,
 	GESI_BASE_CONTROLADOR,
 
 	GESI_DEFAULT_PASSWORD,

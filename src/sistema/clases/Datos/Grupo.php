@@ -20,8 +20,10 @@ namespace Awsw\Gesi\Datos;
 
 use \Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Valido;
+use JsonSerializable;
 
 class Grupo
+	implements JsonSerializable
 {
 	
 	// Identificador único de grupo
@@ -426,6 +428,22 @@ class Grupo
 		$sentencia->close();
 
 		return $resultado;
+	}
+
+	/**
+	 * Implementa la interfaz JsonSerializable.
+	 */
+	public function jsonSerialize()
+	{
+		return [
+			'id' => $this->getId(),
+			'selectName' => $this->getNombreCompleto(),
+			'nivel' => $this->getNivel(),
+			'cursoEscolar' => $this->getCursoEscolar(),
+			'nombreCorto' => $this->getNombreCorto(),
+			'nombreCompleto' => $this->getNombreCompleto(),
+			'tutor' => $this->getTutor()
+		];
 	}
 }
 

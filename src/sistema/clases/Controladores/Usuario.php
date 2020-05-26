@@ -18,6 +18,7 @@
 
 namespace Awsw\Gesi\Controladores;
 
+use Awsw\Gesi\FormulariosAjax\Usuario\EstudianteAdminCreate as EstudianteAdminCreate;
 use Awsw\Gesi\Vistas\Vista as V;
 
 class Usuario extends Controlador
@@ -43,6 +44,14 @@ class Usuario extends Controlador
 
 		parent::go('/admin/usuarios/([0-9]+)/eliminar/', function ($usuario_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Usuario\AdminEliminar($usuario_id));
+		});
+
+		// Formularios AJAX.
+
+		parent::go('/admin/estudiantes/create/', function () {
+			$formulario = new EstudianteAdminCreate();
+
+			$formulario->manage();
 		});
 
 	}
