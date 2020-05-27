@@ -25,9 +25,6 @@ class Usuario extends Controlador
 
     public static function controla() : void
     {
-        // Permitir que se ejecuten varios puntos de entrada. Los de los formularios solo se ejecutarán si el método y el id coincide con los esperados.
-        parent::disableLast();
-
         // Vista de lista de usuarios.
 
         parent::get('/admin/usuarios/', function () {
@@ -51,12 +48,6 @@ class Usuario extends Controlador
         });
 
         parent::get('/admin/usuarios/est/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminRead();
-
-            $formulario->manage();
-        });
-
-        parent::post('/admin/usuarios/est/read/', function () {
             $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminRead();
 
             $formulario->manage();
@@ -112,6 +103,24 @@ class Usuario extends Controlador
             $formulario->manage();
         });
         
+        parent::get('/admin/usuarios/pd/read/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminRead();
+
+            $formulario->manage();
+        });
+
+        parent::get('/admin/usuarios/pd/update/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminUpdate();
+
+            $formulario->manage();
+        });
+
+        parent::patch('/admin/usuarios/pd/update/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminUpdate();
+
+            $formulario->manage();
+        });
+        
         parent::get('/admin/usuarios/pd/delete/', function () {
             $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminDelete();
 
@@ -137,6 +146,35 @@ class Usuario extends Controlador
 
             $formulario->manage();
         });
+        
+        parent::get('/admin/usuarios/ps/read/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminRead();
 
+            $formulario->manage();
+        });
+    
+        parent::get('/admin/usuarios/ps/update/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminUpdate();
+
+            $formulario->manage();
+        });
+
+        parent::patch('/admin/usuarios/ps/update/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminUpdate();
+
+            $formulario->manage();
+        });
+
+        parent::get('/admin/usuarios/ps/delete/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminDelete();
+
+            $formulario->manage();
+        });
+
+        parent::delete('/admin/usuarios/ps/delete/', function () {
+            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminDelete();
+
+            $formulario->manage();
+        });
     }
 }

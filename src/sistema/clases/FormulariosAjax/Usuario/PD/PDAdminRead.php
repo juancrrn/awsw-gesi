@@ -4,7 +4,6 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario\PD;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 /**
@@ -28,17 +27,17 @@ class PDAdminRead extends FormularioAjax
 {
 
     /**
-     * Initialize specific form constants
+     * Initialize specific form constants.
      *
      * @var string FORM_ID
      * @var string FORM_NAME
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'personaldocente-read';
+    private const FORM_ID = 'usuario-pd-read';
     private const FORM_NAME = 'Ver personal docente';
     private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/pd//';
+    private const SUBMIT_URL = '/admin/usuarios/pd/read/';
 
     /**
      * Constructs the form object
@@ -81,7 +80,7 @@ class PDAdminRead extends FormularioAjax
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario Personal docente solicitado no existe.'
+                    'El usuario de personal docente solicitado no existe.'
                 )
             );
 
@@ -104,28 +103,32 @@ class PDAdminRead extends FormularioAjax
     {
         $html = <<< HTML
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
+            <label>NIF</label>
+            <input class="form-control" type="text" name="nif" placeholder="NIF" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />
+            <label>Nombre</label>
+            <input class="form-control" type="text" name="nombre" placeholder="Nombre" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required" />
+            <label>Apellidos</label>
+            <input class="form-control" type="text" name="apellidos" placeholder="Apellidos" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label>Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fechaNacimiento" placeholder="Fecha de nacimiento" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="numero_telefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numero_telefono" id="numero_telefono" placeholder="Número de teléfono" required="required" />
+            <label>Fecha de último acceso</label>
+            <input class="form-control" type="text" name="fechaUltimoAcceso" placeholder="Fecha de último acceso" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
+            <label>Número de teléfono</label>
+            <input class="form-control" type="text" name="numeroTelefono" placeholder="Número de teléfono" disabled="disabled" />
+        </div>
+        <div class="form-group">
+            <label>Dirección de correo electrónico</label>
+            <input class="form-control" type="text" name="email" placeholder="Dirección de correo electrónico" disabled="disabled" />
         </div>
         HTML;
 

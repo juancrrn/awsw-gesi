@@ -302,4 +302,44 @@ class MensajeSecretaria
 
 		return $id_insertado;
 	 }
+
+	 /**
+	 * Comprueba si el Usuario id tiene algun mensaje de secretaria
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public static function dbAnyByUsuario(int $id) : bool
+	{		
+		$bbdd = App::getSingleton()->bbddCon();
+
+		$sentencia = $bbdd->prepare("
+			SELECT
+				id
+			FROM
+				gesi_mensajes_secretaria
+			WHERE
+				usuario = ?
+			LIMIT 1
+		");
+		$sentencia->bind_param(
+			"i",
+			$id
+		);
+		
+		$sentencia->execute();
+		
+		$sentencia->store_result();
+
+		if ($sentencia->num_rows > 0) {
+			$existe = true;
+		} else {
+			$existe = false;
+		}
+
+		$sentencia->close();
+
+		return $existe;
+	}
 }

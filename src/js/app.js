@@ -56,7 +56,9 @@ toast.error = (text) =>
 }
 
 /**
+ * 
  * Aux functions
+ * 
  */
 
 /**
@@ -349,124 +351,39 @@ $(() => {
     });
 
     /**
-     * Gestionar el evento on-success del formulario de creación de usuario 
-     * estudiante.
+     * 
+     * Gestión de CRUD on-success de usuario estudiante.
+     * 
      */
-    $('#usuario-est-lista').on('created.usuario.est', (e, params) => {
-        console.log(params);
-        const $modalData = params.modalData;
-        const result = params.result;
 
-        const targetObjectName = $modalData.data('ajax-target-object-name');
-        
-        const uniqueId = result[targetObjectName].uniqueId;
-        const nif = result[targetObjectName].nif;
-        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
-
-        const $list = $(e.currentTarget).find('tbody');
-        // TODO: añadir botones
-        $rowHtml = '\
-        <tr data-unique-id="' + uniqueId + '">\
-            <td scope="row" data-col-name="nif">' + nif + '</td>\
-            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-            <td>\
-                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-            </td>\
-        </tr>';
-
-        $list.append($rowHtml);
-    });
+    $('#usuario-est-lista').on('created.usuario.est',
+        onSuccessFn.listaUsuariosEstCreated);
+    $('#usuario-est-lista').on('updated.usuario.est',
+        onSuccessFn.listaUsuariosUpdated);
+    $('#usuario-est-lista').on('deleted.usuario.est',
+        onSuccessFn.listaUsuariosDeleted);
 
     /**
-     * Gestionar el evento on-success del formulario de edición de usuario 
-     * estudiante.
+     * 
+     * Gestión de CRUD on-success de usuario de personal docente.
+     * 
      */
-    $('#usuario-est-lista').on('updated.usuario.est', (e, params) => {
-        const $modalData = params.modalData;
-        const result = params.result;
-
-        const targetObjectName = $modalData.data('ajax-target-object-name');
-        
-        const uniqueId = result[targetObjectName].uniqueId;
-        const nif = result[targetObjectName].nif;
-        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
-
-        const $list = $(e.currentTarget).find('tbody');
-        const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-        console.log($row);
-
-        $row.find('td[data-col-name="nif"]').text(nif);
-        $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
-    });
-
-    /**
-     * Gestionar el evento on-success del formulario de eliminación de usuario 
-     * estudiante.
-     */
-    $('#usuario-est-lista').on('deleted.usuario.est', (e, params) => {
-        const $modalData = params.modalData;
-
-        const uniqueId = $modalData.find('input[name="uniqueId"]').val();
-
-        const $list = $(e.currentTarget).find('tbody');
-        const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-
-        $row.remove();
-    });
-
-    /**
-     * Gestionar el evento on-success del formulario de creación de usuario 
-     * de personal docente.
-     */
-    $('#usuario-pd-lista').on('created.usuario.pd', (e, params) => {
-        console.log(params);
-        const $modalData = params.modalData;
-        const result = params.result;
-
-        const targetObjectName = $modalData.data('ajax-target-object-name');
-        
-        const uniqueId = result[targetObjectName].uniqueId;
-        const nif = result[targetObjectName].nif;
-        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
-
-        const $list = $(e.currentTarget).find('tbody');
-        // TODO: añadir botones
-        $rowHtml = '\
-        <tr data-unique-id="' + uniqueId + '">\
-            <td scope="row" data-col-name="nif">' + nif + '</td>\
-            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-            <td>...</td>\
-        </tr>';
-
-        $list.append($rowHtml);
-    });
+    
+    $('#usuario-pd-lista').on('created.usuario.pd',
+        onSuccessFn.listaUsuariosPdCreated);
+    $('#usuario-pd-lista').on('updated.usuario.pd',
+        onSuccessFn.listaUsuariosUpdated);
+    $('#usuario-pd-lista').on('deleted.usuario.pd',
+        onSuccessFn.listaUsuariosDeleted);
 
     /**
      * Gestionar el evento on-success del formulario de creación de usuario 
      * de personal de Secretaría.
      */
-    $('#usuario-ps-lista').on('created.usuario.ps', (e, params) => {
-        console.log(params);
-        const $modalData = params.modalData;
-        const result = params.result;
-
-        const targetObjectName = $modalData.data('ajax-target-object-name');
-        
-        const uniqueId = result[targetObjectName].uniqueId;
-        const nif = result[targetObjectName].nif;
-        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
-
-        const $list = $(e.currentTarget).find('tbody');
-        // TODO: añadir botones
-        $rowHtml = '\
-        <tr data-unique-id="' + uniqueId + '">\
-            <td scope="row" data-col-name="nif">' + nif + '</td>\
-            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-            <td>...</td>\
-        </tr>';
-
-        $list.append($rowHtml);
-    });
+    $('#usuario-ps-lista').on('created.usuario.ps',
+        onSuccessFn.listaUsuariosPsCreated);
+    $('#usuario-ps-lista').on('updated.usuario.ps',
+        onSuccessFn.listaUsuariosUpdated);
+    $('#usuario-ps-lista').on('deleted.usuario.ps',
+        onSuccessFn.listaUsuariosDeleted);
 });

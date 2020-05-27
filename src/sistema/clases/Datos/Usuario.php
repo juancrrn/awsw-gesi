@@ -732,10 +732,10 @@ class Usuario
         ");
 
         $id = $this->getId();
-        $fecha_ultimo_acceso = time();
+        $fecha_ultimo_acceso = date('Y-m-d H:i:s');
 
         $sentencia->bind_param(
-            "ii",
+            "si",
             $fecha_ultimo_acceso,
             $id
         );

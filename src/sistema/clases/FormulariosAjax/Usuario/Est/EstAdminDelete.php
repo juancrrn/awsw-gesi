@@ -118,8 +118,8 @@ use Awsw\Gesi\Datos\Usuario;
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="record-delete-checkbox" required="required">
-                <label class="custom-control-label" for="record-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-est-delete-checkbox" required="required">
+                <label class="custom-control-label" for="usuario-est-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;

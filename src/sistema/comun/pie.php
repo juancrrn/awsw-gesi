@@ -50,6 +50,7 @@ $footerFinalHtmlBuffer .= <<< HTML
 
         <!-- Scripts de la aplicación -->
         <script src="$appUrl/js/app.js$v"></script>
+        <script src="$appUrl/js/funcionesOnSuccess.js$v"></script>
     </body>
 </html>
 HTML;

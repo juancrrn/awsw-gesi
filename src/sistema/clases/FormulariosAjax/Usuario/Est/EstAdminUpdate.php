@@ -45,7 +45,7 @@ class EstAdminUpdate extends FormularioAjax
     private const SUBMIT_URL = '/admin/usuarios/est/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
     /**
      * Constructs the form object
@@ -157,13 +157,20 @@ class EstAdminUpdate extends FormularioAjax
     public function processSubmit(array $data = array()) : void
     {
         $uniqueId = $data['uniqueId'] ?? null;
+        
+        // Check Record's uniqueId is valid
+        if (! Usuario::dbExisteId($uniqueId)) {
+            $errors[] = 'El usuario estudiante solicitado no existe.';
+
+            $this->respondJsonError(404, $errors); // Not found.
+        }
+
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $apellidos = $data['apellidos'] ?? null;
         $fechaNacimiento = $data['fechaNacimiento'] ?? null;
         $numeroTelefono = $data['numeroTelefono'] ?? null;
         $email = $data['email'] ?? null;
-        $rol = $data['rol'] ?? null;
 
         if (empty($nif)) {
             $errors[] = 'El campo NIF no puede estar vacío.';
@@ -246,13 +253,13 @@ class EstAdminUpdate extends FormularioAjax
             if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('El usuario estudiante fue actualizado correctamente.'),
+                    'messages' => array('Usuario estudiante actualizado correctamente.'),
                     self::TARGET_OBJECT_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Hubo un error al actualizar el usuario estudiante.';
+                $errors[] = 'Error al actualizar usuario estudiante.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }

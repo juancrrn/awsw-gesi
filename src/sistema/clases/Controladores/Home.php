@@ -24,7 +24,6 @@ class Home extends Controlador
 {
 	public static function controla() : void
 	{
-
 		parent::get('/?', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Home\Home());
 		});

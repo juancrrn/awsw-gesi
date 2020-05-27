@@ -90,6 +90,8 @@ class EstAdminCreate extends FormularioAjax
 
     public function generateFormInputs() : string
     {
+        $defaultUserPassword = GESI_DEFAULT_PASSWORD;
+
         $html = <<< HTML
         <div class="form-group">
             <label for="nif">NIF</label>
@@ -119,6 +121,9 @@ class EstAdminCreate extends FormularioAjax
             <label for="grupo">Grupo</label>
             <select class="form-control" name="grupo" id="grupo" required="required">
             </select>
+        </div>
+        <div class="mt-4">
+            La contraseña por defecto es <code>$defaultUserPassword</code>.
         </div>
         HTML;
 

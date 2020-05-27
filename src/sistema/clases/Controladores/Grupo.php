@@ -46,7 +46,7 @@ class Grupo extends Controlador
 		*/
 
 		parent::get('/admin/grupos/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminLista());
+			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\GrupoAdminList());
 		});
 
 		parent::get('/mi/grupos/', function () {
@@ -56,6 +56,32 @@ class Grupo extends Controlador
 		parent::get('/mi/grupos/([0-9]+)/ver/', function($grupo_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\MiVer($grupo_id));
 		});
+
+
+
+
+		//Formularios AJAX de grupos
+
+		{
+
+			parent::get('/admin/grupo/create/', function(){
+				$formulario = new \Awsw\Gesi\FormulariosAjax\Grupo\GrupoAdminCreate();
+
+				$formulario->manage();
+			});
+
+
+			
+
+			parent::post('/admin/grupo/create/', function(){
+				$formulario = new \Awsw\Gesi\FormulariosAjax\Grupo\GrupoAdminCreate();
+
+				$formulario->manage();
+			});
+
+		}
+
+
 
 	}
 }

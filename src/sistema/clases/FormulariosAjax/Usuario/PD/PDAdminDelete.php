@@ -5,6 +5,8 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario\PD;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Datos\MensajeSecretaria;
 
 /**
  * Formulario AJAX para eliminar un usuario de personal docente por parte de 
@@ -36,13 +38,13 @@ use Awsw\Gesi\Datos\Usuario;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'personaldocente-delete';
+    private const FORM_ID = 'usuario-pd-delete';
     private const FORM_NAME = 'Eliminar personal docente';
     private const TARGET_OBJECT_NAME = 'Usuario';
     private const SUBMIT_URL = '/admin/usuarios/pd/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.personaldocente';
-    private const ON_SUCCESS_EVENT_TARGET = '#personaldocente-lista'; // TODO
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.pd';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista'; // TODO
 
     public function __construct()
     {
@@ -61,195 +63,128 @@ use Awsw\Gesi\Datos\Usuario;
             self::ON_SUCCESS_EVENT_TARGET
         );
     }
-    /*
+
     protected function getDefaultData(array $requestData) : array
-    {  
-        // Mapear los datos para que coincidan con los nombres de los inputs.
+    {
+        // Check that uniqueId was provided
+        if (! isset($requestData['uniqueId'])) {
+            $responseData = array(
+                'status' => 'error',
+                'error' => 400, // Bad request
+                'messages' => array(
+                    'Falta el parámetro "uniqueId".'
+                )
+            );
+
+            return $responseData;
+        }
+
+        $uniqueId = $requestData['uniqueId'];
+
+        // Check that uniqueId is valid
+        if (! Usuario::dbExisteId($uniqueId)) {
+            $responseData = array(
+                'status' => 'error',
+                'error' => 404, // Not found
+                'messages' => array(
+                    'El usuario Personal docente solicitado no existe.'
+                )
+            );
+
+            return $responseData;
+        }
+
+        $record = Usuario::dbGet($uniqueId);
+
+        // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
+            self::TARGET_OBJECT_NAME => $record
         );
 
         return $responseData;
-
     }
-    */
 
-    /*
     public function generateFormInputs() : string
     {
         $html = <<< HTML
+        <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
+            <label>Nombre</label>
+            <input name="nombre" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />
+            <label>Apellidos</label>
+            <input name="apellidos" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required" />
-        </div>
-        <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
-        </div>
-        <div class="form-group">
-            <label for="numero_telefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numero_telefono" id="numero_telefono" placeholder="Número de teléfono" required="required" />
-        </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-pd-delete-checkbox" required="required">
+                <label class="custom-control-label" for="usuario-pd-delete-checkbox">Confirmar la eliminación.</label>
+            </div>
         </div>
         HTML;
 
         return $html;
     }
-    */
-    /*
+
     public function processSubmit(array $data = array()) : void
     {
-        $nif = $data['nif'] ?? null;
-        $nombre = $data['nombre'] ?? null;
-        $apellidos = $data['apellidos'] ?? null;
-        $fecha_nacimiento = $data['fecha_nacimiento'] ?? null;
-        $numero_telefono = $data['numero_telefono'] ?? null;
-        $email = $data['email'] ?? null;
-        $rol = $data['rol'] ?? null;
-
-        if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
-        }
-
-        if (empty($nombre)) {
-            $errors[] = 'El campo nombre no puede estar vacío.';
-        } elseif (! Valido::testStdString($nombre)) {
-            $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($apellidos)) {
-            $errors[] = 'El campo apellidos no puede estar vacío.';
-        } elseif (! Valido::testStdString($apellidos)) {
-            $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($fecha_nacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
-        } elseif (! Valido::testDate($fecha_nacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
-        } else {
-            $format = 'd/m/Y';
-            $d = \DateTime::createFromFormat($format, $fecha_nacimiento);
-            $fecha_nacimiento = $d->getTimestamp();
-        }
-
-        if (empty($numero_telefono)) {
-            $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numero_telefono)) {
-            $errors[] = 'El campo número de teléfono no es válido.';
-        }
-
-        if (empty($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no puede estar vacío.';
-        } elseif (! Valido::testEmail($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no es válido.';
-        }
-
-        // Data create
-
-        // Si no hay mensajes de error
-        if (empty($errors)) {
-            
-            $now = time();
-
-            $usuario = new Usuario(
-                null,
-                $nif,
-                $rol,
-                $nombre,
-                $apellidos,
-                $fecha_nacimiento,
-                $numero_telefono,
-                $email,
-                null,
-                $now,
-                null
-            );
-
-            $usuario_id = $usuario->dbInsertar();
-
-            if ($usuario_id) {
-                $responseData = array(
-                    'status' => 'ok',
-                    self::TARGET_OBJECT_NAME => $usuario
-                );
-                
-                $this->respondJsonOk($responseData);
-            } else {
-                $errors[] = 'Hubo un error al crear el usuario.';
-
-                $this->respondJsonError(400, $errors); // Bad request
+        $uniqueId = $data['uniqueId'] ?? null;
+        $checkbox = $data['checkbox'] ?? null;
+        
+        // Check all required fields were sent
+        if (empty($uniqueId) || empty($checkbox)) {
+            if (empty($uniqueId)) {
+                $errors[] = 'Falta el parámetro "uniqueId".';
             }
 
-        } else {
+            if (empty($checkbox)) {
+                $errors[] = 'El campo "checkbox" es obligatorio.';
+            }
+
             $this->respondJsonError(400, $errors); // Bad request
         }
-    }
-    */
-    
- /*     COPIA DE ADMIN ELIMINAR (FORMULARIO EN VEZ DE FORMULARIOAJAX)
 
+        // Check if confirmation checkbox is valid
+        if ($uniqueId !== $checkbox) {
+            $this->respondJsonError(400, array('El campo "checkbox" no es válido.')); // Bad request.
+        }
+        
+        // Check Record's uniqueId is valid
+        if (! Usuario::dbExisteId($uniqueId)) {
+            $errors[] = 'El usuario Personal docente solicitado no existe.';
 
-class AdminEliminar extends Formulario
-{   
-    private $nombre;
-    private $id;
-
-    public function __construct(string $action, string $nombre, int $id) {
-        parent::__construct('form-usuario-eliminar', array('action' => $action));
-        $this->nombre = $nombre;
-        $this->id = $id;
-    }
-    
-    protected function generaCampos(array & $datos_iniciales = array()) : void
-    {
-        $this->html .= <<< HTML
-<div class="form-group">
-    <input type="checkbox" name="eliminar" id="eliminar" value="$this->id" required="required">
-    <label for="eliminar">Eliminar al usuario $this->nombre y todos sus datos de Gesi.</label>
-</div>
-<div class="form-actions">
-    <button type="submit" class="btn">Eliminar</button>
-</div>
-
-HTML;
-    }
-    
-
-    protected function procesa(array & $datos) : void
-    {
-        $eliminar = isset($datos['eliminar']) ? $datos['eliminar'] : null;
-
-        if (empty($eliminar) || $eliminar != $this->id) {
-            Vista::encolaMensajeError('Debes marcar la casilla de verificación para eliminar el usuario.');
+            $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (! Vista::hayMensajesError()) {
-            $resultado = Usuario::dbEliminar($this->id);
-            
-            if (! $resultado) {
-                Vista::encolaMensajeError("No se ha podido eliminar el Usuario correctamente.", "/admin/usuarios/");
+        // Si no tiene ningun mensaje de secretaria y no tiene ningun grupo asignado lo eliminamos
+
+        if (! Grupo::dbAnyByTutor($uniqueId) && ! MensajeSecretaria::dbAnyByUsuario($uniqueId)) {
+
+            if (Usuario::dbEliminar($uniqueId)) {
+                $responseData = array(
+                    'status' => 'ok',
+                    'messages' => array(
+                        'Usuario de personal docente eliminado correctamente.'
+                    )
+                );
+    
+                $this->respondJsonOk($responseData);
             } else {
-                Vista::encolaMensajeExito("Se ha eliminado el usuario correctamente.", "/admin/usuarios/");
+                $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
+    
+                $this->respondJsonError(400, $errors); // Bad request.
             }
+        } else {
+            $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
+
+            $this->respondJsonError(400, $errors); // Bad request.
         }
 
-        $this->genera();
-    }
-}
 
-?>
- */
+        
+    }
  }
+
  ?>

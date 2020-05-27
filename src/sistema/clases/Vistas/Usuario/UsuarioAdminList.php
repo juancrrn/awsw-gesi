@@ -29,7 +29,12 @@ use Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminUpdate as FormEstAdminUpdate;
 use Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminDelete as FormEstAdminDelete;
 use Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminCreate as FormPDAdminCreate;
 use Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminRead as FormPDAdminRead;
-use Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminCreate as FormPSAdminCreate; 
+use Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminUpdate as FormPDAdminUpdate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminDelete as FormPDAdminDelete;
+use Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminCreate as FormPSAdminCreate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminRead as FormPSAdminRead;
+use Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminDelete as FormPSAdminDelete;
+use Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminUpdate as FormPSAdminUpdate;
 
 use Awsw\Gesi\Sesion;
 
@@ -67,11 +72,14 @@ class UsuarioAdminList extends Modelo
         echo $html;
 
     }
-    
+
+    /**
+     * Genera el listado de estudiantes.
+     * 
+     * @return string Listado de estudiantes.
+     */
     public function generaListaEst() : string
     {
-        // Listado de estudiantes.
-        
         // Formulario de creación de un estudiante.
         $formEstAdminCreate = new FormEstAdminCreate();
         $formEstAdminCreateModal = $formEstAdminCreate->generateModal();
@@ -106,7 +114,7 @@ class UsuarioAdminList extends Modelo
                 <tr data-unique-id="$uniqueId">
                     <td scope="row" data-col-name="nif">$nif</td>
                     <td data-col-name="nombre-completo">$nombreCompleto</td>
-                    <td>$formEstAdminReadButton $formEstAdminUpdateButton $formEstAdminDeleteButton</td>
+                    <td class="text-right">$formEstAdminReadButton $formEstAdminUpdateButton $formEstAdminDeleteButton</td>
                 </tr>
                 HTML;
 
@@ -128,7 +136,7 @@ class UsuarioAdminList extends Modelo
                 <tr>
                     <th scope="col">NIF o NIE</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,22 +152,29 @@ class UsuarioAdminList extends Modelo
         return $html;
     }
 
+    /**
+     * Genera el listado de personal docente.
+     * 
+     * @return string Listado de personal docente.
+     */
     public function generaListaPd() : string
     {
-        // Listado de personal docente.
-
         // Formulario de creación de personal docente.
         $formPDAdminCreate = new FormPDAdminCreate();
         $formPDAdminCreateModal = $formPDAdminCreate->generateModal();
         $formPDAdminCreateButton = $formPDAdminCreate->generateButton('Crear', null, true);
 
-        // Formulario de visualización de un estudiante.
+        // Formulario de visualización de personal docente.
         $formPDAdminRead = new FormPDAdminRead();
         $formPDAdminReadModal = $formPDAdminRead->generateModal();
 
-        //Formulario de modificación de un estudiante
-        //$formPDAdminUpdate = new FormPDAdminUpdate();
-        //$formPDAdminUpdateModal = $formPdAdminUpdate->generateModal();
+        // Formulario de modificación de personal docente.
+        $formPDAdminUpdate = new FormPDAdminUpdate();
+        $formPDAdminUpdateModal = $formPDAdminUpdate->generateModal();
+
+        // Formulario de eliminación de personal docente.
+        $formPDAdminDelete = new FormPDAdminDelete();
+        $formPDAdminDeleteModal = $formPDAdminDelete->generateModal();
 
         $listaPdBuffer = '';
 
@@ -171,15 +186,16 @@ class UsuarioAdminList extends Modelo
 
                 // TODO botón ver en el nombre
                 // TODO botones ver, editar y eliminar
-                //$viewButton = $formEstAdminView->generateButton(null, $u->getId(), true);
                 
                 $formPDAdminReadButton = $formPDAdminRead->generateButton('Ver', $uniqueId, true);
+                $formPDAdminUpdateButton = $formPDAdminUpdate->generateButton('Editar', $uniqueId, true);
+                $formPDAdminDeleteButton = $formPDAdminDelete->generateButton('Eliminar', $uniqueId, true);
 
                 $listaPdBuffer .= <<< HTML
                 <tr data-unique-id="$uniqueId">
                     <td scope="row"  data-col-name="nif">$nif</td>
                     <td data-col-name="nombre-completo">$nombre</td>
-                    <td>$formPDAdminReadButton</td>
+                    <td class="text-right">$formPDAdminReadButton $formPDAdminUpdateButton $formPDAdminDeleteButton</td>
                 </tr>
                 HTML;
             }
@@ -200,7 +216,7 @@ class UsuarioAdminList extends Modelo
                 <tr>
                     <th scope="col">NIF o NIE</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -209,36 +225,57 @@ class UsuarioAdminList extends Modelo
         </table>
         $formPDAdminCreateModal
         $formPDAdminReadModal
+        $formPDAdminUpdateModal
+        $formPDAdminDeleteModal
         HTML;
 
         return $html;
     }
 
+    /**
+     * Genera el listado de personal de secretaria.
+     * 
+     * @return string Listado de personal de secretaria.
+     */
     public function generaListaPs() : string
     {
-        // Listado de personal docente.
-
-        // Formulario de creación de personal docente.
+        // Formulario de creación de personal de secretaria.
         $formPSAdminCreate = new FormPSAdminCreate();
         $formPSAdminCreateModal = $formPSAdminCreate->generateModal();
         $formPSAdminCreateButton = $formPSAdminCreate->generateButton('Crear', null, true);
+
+        // Formulario de visualización de personal de secretaria.
+        $formPSAdminRead = new FormPSAdminRead();
+        $formPSAdminReadModal = $formPSAdminRead->generateModal();
+
+        // Formulario de modificación de personal de secretaria.
+        $formPSAdminUpdate = new FormPSAdminUpdate();
+        $formPSAdminUpdateModal = $formPSAdminUpdate->generateModal();
+
+         // Formulario de eliminación de personal de secretaria.
+        $formPSAdminDelete = new FormPSAdminDelete();
+        $formPSAdminDeleteModal = $formPSAdminDelete->generateModal();
 
         $listaPsBuffer = '';
 
         if (! empty($this->listadoPs)) {
             foreach ($this->listadoPs as $u) {
+                $uniqueId = $u->getId();
                 $nif = $u->getNif();
                 $nombre = $u->getNombreCompleto();
 
                 // TODO botón ver en el nombre
                 // TODO botones ver, editar y eliminar
-                //$viewButton = $formEstAdminView->generateButton(null, $u->getId(), true);
+                
+                $formPSAdminReadButton = $formPSAdminRead->generateButton('Ver', $uniqueId, true);
+                $formPSAdminUpdateButton = $formPSAdminUpdate->generateButton('Editar', $uniqueId, true);
+                $formPSAdminDeleteButton = $formPSAdminDelete->generateButton('Eliminar', $uniqueId, true);
 
                 $listaPsBuffer .= <<< HTML
-                <tr>
+                <tr data-unique-id="$uniqueId">
                     <td scope="row">$nif</td>
                     <td>$nombre</td>
-                    <td>...</td>
+                    <td class="text-right">$formPSAdminReadButton $formPSAdminUpdateButton $formPSAdminDeleteButton</td>
                 </tr>
                 HTML;
             }
@@ -259,7 +296,7 @@ class UsuarioAdminList extends Modelo
                 <tr>
                     <th scope="col">NIF o NIE</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -267,6 +304,9 @@ class UsuarioAdminList extends Modelo
             </tbody>
         </table>
         $formPSAdminCreateModal
+        $formPSAdminReadModal
+        $formPSAdminUpdateModal
+        $formPSAdminDeleteModal
         HTML;
 
         return $html;

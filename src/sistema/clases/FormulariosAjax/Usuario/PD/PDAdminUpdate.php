@@ -8,7 +8,7 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
 
 /**
- * Formulario AJAX de creación de un usuario de personal docente por parte de 
+ * Formulario AJAX de edición de un usuario de personal docente por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -24,7 +24,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class PDAdminCreate extends FormularioAjax
+class PDAdminUpdate extends FormularioAjax
 {
 
     /**
@@ -38,13 +38,13 @@ class PDAdminCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'personaldocente-edit';
+    private const FORM_ID = 'usuario-pd-update';
     private const FORM_NAME = 'Editar personal docente';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/personaldocente/update/';
-    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.personaldocente';
-    private const ON_SUCCESS_EVENT_TARGET = '#personaldocente-lista'; // TODO
+    private const SUBMIT_URL = '/admin/usuarios/pd/update/';
+    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
+    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.pd';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista';
 
     /**
      * Constructs the form object
@@ -80,7 +80,7 @@ class PDAdminCreate extends FormularioAjax
             );
         }
 
-        $uniqueId = $responseData['uniqueId'];
+        $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
         if (! Usuario::dbExisteId($uniqueId)) {
@@ -88,7 +88,7 @@ class PDAdminCreate extends FormularioAjax
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario Personal docente solicitado no existe.'
+                    'El usuario de personal docente solicitado no existe.'
                 )
             );
 
@@ -108,6 +108,7 @@ class PDAdminCreate extends FormularioAjax
     public function generateFormInputs() : string
     {
         $html = <<< HTML
+        <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label for="nif">NIF</label>
             <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
@@ -121,12 +122,12 @@ class PDAdminCreate extends FormularioAjax
             <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required" />
         </div>
         <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required" />
         </div>
         <div class="form-group">
-            <label for="numero_telefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numero_telefono" id="numero_telefono" placeholder="Número de teléfono" required="required" />
+            <label for="numeroTelefono">Número de teléfono</label>
+            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required" />
         </div>
         <div class="form-group">
             <label for="email">Dirección de correo electrónico</label>
@@ -143,13 +144,9 @@ class PDAdminCreate extends FormularioAjax
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $apellidos = $data['apellidos'] ?? null;
-        $fecha_nacimiento = $data['fechaNacimiento'] ?? null;
-        $numero_telefono = $data['numeroTelefono'] ?? null;
+        $fechaNacimiento = $data['fechaNacimiento'] ?? null;
+        $numeroTelefono = $data['numeroTelefono'] ?? null;
         $email = $data['email'] ?? null;
-        //$rol = $data['rol'] ?? null;
-        //$grupo = $data['grupo'] ?? null;
-        //$fecha_ultimo_acceso = $data['fechaUltimoAcceso'] ?? null;
-        //$fecha_registro = $data['fechaRegistro'] ?? null;
 
         if (empty($nif)) {
             $errors[] = 'El campo NIF no puede estar vacío.';
@@ -167,19 +164,19 @@ class PDAdminCreate extends FormularioAjax
             $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
 
-        if (empty($fecha_nacimiento)) {
+        if (empty($fechaNacimiento)) {
             $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
-        } elseif (! Valido::testDate($fecha_nacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
         } else {
-            $format = 'd/m/Y';
-            $d = \DateTime::createFromFormat($format, $fecha_nacimiento);
-            $fecha_nacimiento = $d->getTimestamp();
+            $fechaNacimiento = Valido::testDate($fechaNacimiento);
+            
+            if (! $fechaNacimiento) {
+                $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
+            }
         }
 
-        if (empty($numero_telefono)) {
+        if (empty($numeroTelefono)) {
             $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numero_telefono)) {
+        } elseif (! Valido::testNumeroTelefono($numeroTelefono)) {
             $errors[] = 'El campo número de teléfono no es válido.';
         }
 
@@ -195,16 +192,15 @@ class PDAdminCreate extends FormularioAjax
         if (!empty($errors)) {
             $this->respondJsonError(400, $errors); //Bad Request
         } else{
-            
+            // Obtener datos que no se habían modificado.
             $anteriores = Usuario::dbGet($uniqueId);
 
-            $fecha_registro = $anteriores->getFechaRegistro();
-            $fecha_registro = ($fecha_registro && $fecha_registro !== '') ?Valido::testDateTime($fecha_registro) : null;
+            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
+            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
 
-            $fecha_ultimo_acceso = $anteriores->getFechaUltimoAcceso();
-            $fecha_ultimo_acceso = ($fecha_ultimo_acceso && $fecha_ultimo_acceso !== '') ?Valido::testDateTime($fecha_ultimo_acceso) : null;
-
-            $grupo = $anteriores->getGrupo();
+            $fechaRegistro = $anteriores->getFechaRegistro();
+            
+            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
 
             $usuario = new Usuario(
                 $uniqueId,
@@ -212,12 +208,12 @@ class PDAdminCreate extends FormularioAjax
                 2,
                 $nombre,
                 $apellidos,
-                $fecha_nacimiento,
-                $numero_telefono,
+                $fechaNacimiento,
+                $numeroTelefono,
                 $email,
-                $fecha_ultimo_acceso,
-                $fecha_registro,
-                $grupo
+                $fechaUltimoAcceso,
+                $fechaRegistro,
+                null
             );
 
             
@@ -226,13 +222,13 @@ class PDAdminCreate extends FormularioAjax
             if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('El usuario personal docente fue actualizado correctamente.'),
+                    'messages' => array('Usuario de personal docente actualizado correctamente.'),
                     self::TARGET_OBJECT_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Hubo un error al actualizar el usuario Personal docente.';
+                $errors[] = 'Error al actualizar usuario de personal docente.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }

@@ -80,6 +80,8 @@ class PDAdminCreate extends FormularioAjax
 
     public function generateFormInputs() : string
     {
+        $defaultUserPassword = GESI_DEFAULT_PASSWORD;
+
         $html = <<< HTML
         <div class="form-group">
             <label for="nif">NIF</label>
@@ -104,6 +106,9 @@ class PDAdminCreate extends FormularioAjax
         <div class="form-group">
             <label for="email">Dirección de correo electrónico</label>
             <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
+        </div>
+        <div class="mt-4">
+            La contraseña por defecto es <code>$defaultUserPassword</code>.
         </div>
         HTML;
 

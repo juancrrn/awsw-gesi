@@ -91,42 +91,40 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
     }
 
 
-    public function generateFormInputs() : string {
-
-
+    public function generateFormInputs() : string 
+    {
         $html = <<< HTML
-    <div class="form-group">
-        <label for="nivel">Nivel</label>
-        <select class="form-constrol" name="nivel" id="nivel" required="required">
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="nivel">Nivel</label>
+            <select class="form-control" name="nivel" id="nivel" required="required">
+            </select>
+        </div>
+        <div class="form-group">
+        <label for="curso_escolar">Curso escolar</label>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+        </div>
+        <div class="form-group">
+        <label for="nombre_completo">Nombre completo</label>
+            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+        </div>
+        <div class="form-group">
+            <label for="fecha_nacimiento">Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+        </div>
+        <div class="form-group">
+        <label for="tutor">Tutor</label>
+            <select class="form-control" name="tutor" id="tutor" required="required">
+            </select>
+        </div>
+        
+            
+            
+        
+        HTML;
 
-<div class="form-group">
-    <label for="curso_escolar">Curso escolar</label>
-    <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" value="$curso_escolar" placeholder="Curso escolar" required="required">
-</div>
 
-<div class="form-group">
-	<label for="nombre_corto">Nombre corto</label>
-	<input class="form-control" type="text" name="nombre_corto" id="nombre_corto" value="$nombre_corto" placeholder="Nombre" required="required" />
-</div>
-
-<div class="form-group">
-	<label for="nombre_completo">Nombre completo</label>
-	<input class="form-control" type="text" name="nombre_completo" id="nombre_completo" value="$nombre_completo" placeholder="Nombre" required="required" />
-</div>
-
-<div class="form-group">
-    <label for="tutor">Tutor</label>
-    <select class="form-control" name="tutor" id="tutor" required="required">
-    </select>
-</div>
-
-    HTML;
-
-
-    return $html;
-}
+        return $html;
+    }
 
 
 
@@ -142,7 +140,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 
         
-        if (empty($nivel)  {
+        if (empty($nivel))  {
             $errors[] = 'El campo nivel no puede estar vacío'
         }
 
@@ -181,7 +179,38 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
         if( !empty($errors)){
             $this->respondJsonError(400,$errors);
         }else{
-            $
+            $now = date('Y-m-d H:i:s');
+
+
+            $grupo = new Grupo(
+                null,
+                $nivel,
+                $curso_escolar,
+                $nombre_corto,
+                $nombre_completo,
+                $tutor
+
+            );
+
+            $grupo_id = $grupo->dbInsertar();
+
+
+            if($grupo_id){
+
+                $responseData = array(
+                    'status' => 'ok',
+                    'messages' => array('El grupo fue creado correctamente'),
+                    self::TARGET_OBJECT_NAME => $grupo
+                );
+
+                $this->respondJsonOk($responseData);
+
+            }else{
+
+                $errors[] ='Hubo un error al crear el grupo';
+
+                $this->respondJsonError(400,$errors);
+            }
         }
 
 
