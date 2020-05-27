@@ -29,7 +29,7 @@ class MensajeSecretaria extends Controlador
          * Admin
          */
 
-        parent::go('/admin/secretaria/', function () {
+        parent::get('/admin/secretaria/', function () {
             V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\AdminLista());
         });
 
@@ -37,22 +37,26 @@ class MensajeSecretaria extends Controlador
          * Sesión iniciada
          */
         
-        parent::go('/mi/secretaria/', function () {
+        parent::get('/mi/secretaria/', function () {
             V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiLista());
         });
+
+        /*
+        
 
         parent::go('/mi/secretaria/crear/', function () {
             V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiCrear());
         });
+        */
 
         /**
          * Públicos
          */
-
+/*
         parent::go('/secretaria/crear/', function () {
             V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\InvCrear());
         });
-
+*/
     }
 }
 

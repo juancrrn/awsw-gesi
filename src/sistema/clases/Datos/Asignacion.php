@@ -20,8 +20,10 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use JsonSerializable;
 
 class Asignacion
+	implements JsonSerializable
 {
 
 	// Identificador único de la relación.
@@ -537,6 +539,21 @@ class Asignacion
 		$sentencia->close();
 
 		return $resultado;
+	}
+
+	/**
+	 * Implementa la interfaz JsonSerializable
+	 */
+	public function jsonSerialize()
+	{
+		return [
+			'id' => $this->getId(),
+			'asignatura' => $this->getAsignatura(),
+			'grupo' => $this->getGrupo(),
+			'profesor' => $this->getProfesor(),
+			'horario' => $this->getHorario(),
+			'foro_principal' => $this->getForoPrincipal()
+		];
 	}
 }
 

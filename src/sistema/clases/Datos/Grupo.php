@@ -436,8 +436,9 @@ class Grupo
 	public function jsonSerialize()
 	{
 		return [
-			'id' => $this->getId(),
+			'uniqueId' => $this->getId(),
 			'selectName' => $this->getNombreCompleto(),
+			'id' => $this->getId(),
 			'nivel' => $this->getNivel(),
 			'cursoEscolar' => $this->getCursoEscolar(),
 			'nombreCorto' => $this->getNombreCorto(),

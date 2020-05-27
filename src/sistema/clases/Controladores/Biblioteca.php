@@ -26,7 +26,7 @@ class Biblioteca extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/mi/biblioteca/', function () {
+		parent::get('/mi/biblioteca/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Biblioteca\MiGeneral());
 		});
 

@@ -46,7 +46,7 @@ abstract class FormularioAjax
      * @var string READ_ONLY_FIELD Form field name.
      */
     private $readOnly = false;
-    private const READ_ONLY_FIELD = 'read-only';
+    private const READ_ONLY_FIELD = 'ajax-read-only';
 
     /**
      * @var string $submitUrl       Form submit URL.
@@ -109,9 +109,9 @@ abstract class FormularioAjax
     public function __construct(
         string $formId,
         string $formName,
-        string $targetObjectName,
-        string $submitUrl,
-        string $expectedSubmitMethod
+        $targetObjectName,
+        $submitUrl,
+        $expectedSubmitMethod
     )
     {
         $this->formId = $formId;
@@ -120,7 +120,7 @@ abstract class FormularioAjax
         $this->submitUrl = $submitUrl;
         
         // Check submit method is valid
-        if (! in_array($expectedSubmitMethod, self::SUPPORTED_HTTP_METHODS)) {
+        if ($expectedSubmitMethod && ! in_array($expectedSubmitMethod, self::SUPPORTED_HTTP_METHODS)) {
             throw new \Exception("Unsupported submit method \"$expectedSubmitMethod\".");
         }
 
@@ -166,11 +166,15 @@ abstract class FormularioAjax
 
         // Check request method
         $httpMethod = $_SERVER['REQUEST_METHOD'];
-
+        
         if ($httpMethod === 'GET') {
+            // Check form submit is valid
+            $submittedFormId = $_GET[self::FORM_ID_FIELD] ?? null;
 
-            // If method is GET, generate default form data
-            $this->processInitialData($_GET);
+            if ($submittedFormId == $this->formId) {
+                // Generate default form data.
+                $this->processInitialData($_GET);
+            }
 
         // Check form is not read-only and method is the one expected
         } elseif (! $this->isReadOnly()
@@ -182,23 +186,26 @@ abstract class FormularioAjax
 
             // Check form submit is valid
             $submittedFormId = $data[self::FORM_ID_FIELD] ?? null;
-            $submittedCsrfToken = $data[self::CSRF_TOKEN_FIELD] ?? null;
 
-            if ($submittedFormId == $this->formId
-                && $this->CsrfValidateToken($submittedCsrfToken)) {
-                
-                $this->processSubmit($data);
+            if ($submittedFormId == $this->formId) {
+                $submittedCsrfToken = $data[self::CSRF_TOKEN_FIELD] ?? null;
 
-            } else {
-                $errorMessages = array('Param "' . self::FORM_ID_FIELD . '" and/or "' . self::CSRF_TOKEN_FIELD . '" are not valid.');
+                if ($this->CsrfValidateToken($submittedCsrfToken)) {
+                    $this->processSubmit($data);
+                } else {
+                    $errorMessages = array('La validación CSRF ha fallado. Por favor, vuelve a cargar el formulario.');
 
-                $this->respondJsonError(400, $errorMessages);
+                    $this->respondJsonError(400, $errorMessages);
+                }
             }
         } else {
             $this->respondJsonError(400, // Bad request
                 array('Method not supported')
             );
         }
+
+        // End script execution.
+        die();
     }
 
     /**
@@ -222,15 +229,20 @@ abstract class FormularioAjax
     }
 
     /**
-     * Responds with an HTTP 4XX error and message
+     * Responds with an HTTP 4XX error and message and sends a new CSRF token.
      * 
      * @param int   $httpCode HTTP error code
      * @param array $messages Error messages
      */
     public function respondJsonError(int $httpErrorCode, array $messages) : void
     {
+        // Generate a new CSRF token.
+        $newCsrfToken = $this->CsrfGenerateToken();
+
         $errorData = array(
             'status' => 'error',
+            self::FORM_ID_FIELD => $this->formId,
+            self::CSRF_TOKEN_FIELD => $newCsrfToken,
             'error' => $httpErrorCode,
             'messages' => $messages
         );
@@ -308,9 +320,7 @@ abstract class FormularioAjax
      * 
      * @param array $data Data sent in form submission
      */
-    public function processSubmit(array $data = array()) : void
-    {
-    }
+    abstract public function processSubmit(array $data = array()) : void;
 
     /**
      * Generates specific form inputs as placeholders for AJAX preloading
@@ -336,6 +346,9 @@ abstract class FormularioAjax
         $targetObjectNameData = 
             'data-' . self::TARGET_OBJECT_NAME_FIELD .
             '="' . $this->targetObjectName . '"';
+
+        $readOnlyData = 'data-' . self::READ_ONLY_FIELD .
+        '="' . ($this->isReadOnly() ? 'true' : 'false') . '"';
 
         // Optional on success event name
         $onSuccessEventNameData = $this->onSuccessEventName ?
@@ -367,7 +380,7 @@ abstract class FormularioAjax
         }
 
         $html = <<< HTML
-        <div class="modal fade ajax-modal" data-ajax-form-id="$formId" $onSuccessEventNameData $onSuccessEventTargetData $submitUrlData $expectedSubmitMethodData $targetObjectNameData tabindex="-1" role="dialog" aria-labelledby="register-update-modal-label" aria-hidden="true">
+        <div class="modal fade ajax-modal" data-ajax-form-id="$formId" $readOnlyData $onSuccessEventNameData $onSuccessEventTargetData $submitUrlData $expectedSubmitMethodData $targetObjectNameData tabindex="-1" role="dialog" aria-labelledby="register-update-modal-label" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <form class="modal-content" id="$formId">
                     <input type="hidden" name="$formIdField">
@@ -447,6 +460,29 @@ abstract class FormularioAjax
         $link->data = array_values($data); // Ensure array is unkeyed
 
         return $link;
+    }
+
+    /**
+     * Generates an Bootstrap button to fire the modal.
+     * 
+     * @param string|null $content Content of the button.
+     * @param int|null $uniqueId
+     * @param bool $small
+     */
+    public function generateButton($content = null, $uniqueId = null, $small = false) : string
+    {
+        $formId = $this->formId;
+        $buttonContent = $content ? $content : $this->formName;
+
+        $uniqueIdData = $uniqueId ? 'data-ajax-unique-id="' . $uniqueId . '"' : '';
+
+        $smallClass = $small ? 'btn-sm' : '';
+
+        $button = <<< HTML
+        <button class="btn-ajax-modal-fire btn $smallClass btn-primary mb-1" data-ajax-form-id="$formId" $uniqueIdData>$buttonContent</button>
+        HTML;
+
+        return $button;
     }
 }
 

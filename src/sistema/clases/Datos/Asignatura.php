@@ -20,8 +20,10 @@ namespace Awsw\Gesi\Datos;
 
 use \Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Valido;
+use JsonSerializable;
 
 class Asignatura
+	implements JsonSerializable
 {
 
 	private $id;
@@ -410,6 +412,19 @@ class Asignatura
 		$sentencia->close();
 
 		return $resultado;
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'uniqueId' => $this->getId(),
+			'selectName' => $this->getNombreCompleto(),
+			'id' => $this->getId(),
+			'nivel' => $this->getNivel(),
+			'curso_escolar' => $this->getCursoEscolar(),
+			'nombre_corto' => $this->getNombreCorto(),
+			'nombre_completo' => $this->getNombreCompleto()
+		];
 	}
 }
 

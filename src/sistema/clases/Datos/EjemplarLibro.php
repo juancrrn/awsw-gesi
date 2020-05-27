@@ -19,8 +19,10 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use JsonSerializable;
 
 class EjemplarLibro
+	implements JsonSerializable
 {
 
 	//Identificador del ejemplar en la base de datos
@@ -294,7 +296,10 @@ class EjemplarLibro
 
 		return $ejemplares;	
 	}
-
+	
+	public function getId(): int{
+		return $this->id;
+	}
 	public function getLibro_id(): int{
 		return $this->libro_id;
 	}
@@ -324,6 +329,21 @@ class EjemplarLibro
 
 	public function getFecha_expiracion_reserva(): int{
 		return $this->fecha_expiracion_reserva;
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'id' => $this->getId(),
+			'numero' => $this->getNumero(),
+			'libro' => $this->getLibro_id(),
+			'prestado' => $this->getPrestado(),
+			'fecha_alta_prestamo' => $this->getFecha_alta_prestado(),
+			'fecha_expiracion_prestamo' => $this->getFecha_expiracion_prestado(),
+			'reserva' => $this->getReserva(),
+			'fecha_alta_reserva' => $this->getFecha_alta_reserva(),
+			'fecha_expiracion_reserva' => $this->getFecha_expiracion_reserva()
+		];
 	}
 
 }

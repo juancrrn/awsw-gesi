@@ -40,7 +40,7 @@ toast.create = (type, text) =>
  */
 toast.success = (text) =>
 {
-    var $toast = toast.create('success', text);
+    var $toast = toast.create('exito', text);
     $('#toasts-container').prepend($toast);
     $toast.toast('show');
 }
@@ -127,6 +127,11 @@ aux.doEmptyForm = ($form) =>
     $form.find('input, select, textarea').val('');
     $form.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
     $form.find('select, textarea').empty();
+
+    const $formElement = $form.find('form');
+
+    for (var i = 0; i < $formElement.length; i++)
+        $formElement[i].reset();
 }
 
 /**
@@ -164,15 +169,9 @@ $(() => {
     var $loadingProgressBar = $('#loading-progress-bar');
 
     /**
-     * AJAX list initialization
-     */
-
-    // TODO
-
-    /**
      * AJAX form initialization
      */
-    $('.btn-ajax-modal-fire').on('click', (e) => {
+    $(document).on('click', '.btn-ajax-modal-fire', (e) => {
         var $btn = $(e.currentTarget);
 
         // Get formId
@@ -187,7 +186,7 @@ $(() => {
 
             // Get formId
             var data = {
-                formId: formId,
+                "form-id": formId,
             };
 
             /**
@@ -320,10 +319,18 @@ $(() => {
             },
             error: (result) => {
                 $loadingProgressBar.fadeOut();
-                toast.error('There was an error processing the form.');
+                toast.error('Hubo un error al procesar el formulario.');
  
-                if (result.responseJSON && result.responseJSON.messages) {
-                    result.responseJSON.messages.forEach(m => toast.error(m));
+                if (result.responseJSON) {
+                    // Refill form id and CSRF token.
+                    if (result.responseJSON['csrf-token']) {
+                        $modal.find('input[name="csrf-token"]').val(result.responseJSON['csrf-token']);
+                    }
+
+                    // Show error messages.
+                    if (result.responseJSON.messages) {
+                        result.responseJSON.messages.forEach(m => toast.error(m));
+                    }
                 }
 
                 if (! autoconf.APP_PRODUCTION) {
@@ -341,5 +348,125 @@ $(() => {
         aux.doEmptyForm($(e.currentTarget));
     });
 
-    // TODO: handle success events
+    /**
+     * Gestionar el evento on-success del formulario de creación de usuario 
+     * estudiante.
+     */
+    $('#usuario-est-lista').on('created.usuario.est', (e, params) => {
+        console.log(params);
+        const $modalData = params.modalData;
+        const result = params.result;
+
+        const targetObjectName = $modalData.data('ajax-target-object-name');
+        
+        const uniqueId = result[targetObjectName].uniqueId;
+        const nif = result[targetObjectName].nif;
+        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
+
+        const $list = $(e.currentTarget).find('tbody');
+        // TODO: añadir botones
+        $rowHtml = '\
+        <tr data-unique-id="' + uniqueId + '">\
+            <td scope="row" data-col-name="nif">' + nif + '</td>\
+            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
+            <td>\
+                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
+                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
+                <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
+            </td>\
+        </tr>';
+
+        $list.append($rowHtml);
+    });
+
+    /**
+     * Gestionar el evento on-success del formulario de edición de usuario 
+     * estudiante.
+     */
+    $('#usuario-est-lista').on('updated.usuario.est', (e, params) => {
+        const $modalData = params.modalData;
+        const result = params.result;
+
+        const targetObjectName = $modalData.data('ajax-target-object-name');
+        
+        const uniqueId = result[targetObjectName].uniqueId;
+        const nif = result[targetObjectName].nif;
+        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
+
+        const $list = $(e.currentTarget).find('tbody');
+        const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+        console.log($row);
+
+        $row.find('td[data-col-name="nif"]').text(nif);
+        $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
+    });
+
+    /**
+     * Gestionar el evento on-success del formulario de eliminación de usuario 
+     * estudiante.
+     */
+    $('#usuario-est-lista').on('deleted.usuario.est', (e, params) => {
+        const $modalData = params.modalData;
+
+        const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+
+        const $list = $(e.currentTarget).find('tbody');
+        const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+        $row.remove();
+    });
+
+    /**
+     * Gestionar el evento on-success del formulario de creación de usuario 
+     * de personal docente.
+     */
+    $('#usuario-pd-lista').on('created.usuario.pd', (e, params) => {
+        console.log(params);
+        const $modalData = params.modalData;
+        const result = params.result;
+
+        const targetObjectName = $modalData.data('ajax-target-object-name');
+        
+        const uniqueId = result[targetObjectName].uniqueId;
+        const nif = result[targetObjectName].nif;
+        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
+
+        const $list = $(e.currentTarget).find('tbody');
+        // TODO: añadir botones
+        $rowHtml = '\
+        <tr data-unique-id="' + uniqueId + '">\
+            <td scope="row" data-col-name="nif">' + nif + '</td>\
+            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
+            <td>...</td>\
+        </tr>';
+
+        $list.append($rowHtml);
+    });
+
+    /**
+     * Gestionar el evento on-success del formulario de creación de usuario 
+     * de personal de Secretaría.
+     */
+    $('#usuario-ps-lista').on('created.usuario.ps', (e, params) => {
+        console.log(params);
+        const $modalData = params.modalData;
+        const result = params.result;
+
+        const targetObjectName = $modalData.data('ajax-target-object-name');
+        
+        const uniqueId = result[targetObjectName].uniqueId;
+        const nif = result[targetObjectName].nif;
+        const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
+
+        const $list = $(e.currentTarget).find('tbody');
+        // TODO: añadir botones
+        $rowHtml = '\
+        <tr data-unique-id="' + uniqueId + '">\
+            <td scope="row" data-col-name="nif">' + nif + '</td>\
+            <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
+            <td>...</td>\
+        </tr>';
+
+        $list.append($rowHtml);
+    });
 });

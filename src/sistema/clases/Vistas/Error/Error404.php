@@ -45,7 +45,6 @@ class Error404 extends Modelo
 					</section>
 
 HTML;
-
 		echo $html;
 
 	}

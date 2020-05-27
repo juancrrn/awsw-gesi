@@ -25,31 +25,35 @@ class Grupo extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/admin/grupos/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminLista());
-		});
+		/*
 		
-		parent::go('/admin/grupos/crear/', function () {
+		
+		parent::get('/admin/grupos/crear/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminCrear());
 		});
 		
-		parent::go('/admin/grupos/([0-9]+)/ver/', function ($grupo_id) {
+		parent::get('/admin/grupos/([0-9]+)/ver/', function ($grupo_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminVer($grupo_id));
 		});
 		
-		parent::go('/admin/grupos/([0-9]+)/editar/', function ($grupo_id) {
+		parent::get('/admin/grupos/([0-9]+)/editar/', function ($grupo_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminEditar($grupo_id));
 		});
 		
-		parent::go('/admin/grupos/([0-9]+)/eliminar/', function ($grupo_id) {
+		parent::get('/admin/grupos/([0-9]+)/eliminar/', function ($grupo_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminEliminar($grupo_id));
 		});
+		*/
 
-		parent::go('/mi/grupos/', function () {
+		parent::get('/admin/grupos/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\AdminLista());
+		});
+
+		parent::get('/mi/grupos/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\MiLista());
 		});
 
-		parent::go('/mi/grupos/([0-9]+)/ver/', function($grupo_id) {
+		parent::get('/mi/grupos/([0-9]+)/ver/', function($grupo_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Grupo\MiVer($grupo_id));
 		});
 

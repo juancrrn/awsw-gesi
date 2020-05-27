@@ -25,17 +25,23 @@ class Sesion extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/sesion/iniciar/', function () {
+		parent::get('/sesion/iniciar/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Iniciar());
+		});
+// TODO
+		parent::post('/sesion/iniciar/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Iniciar());
 		});
 		
-		parent::go('/sesion/reset/', function () {
+		parent::get('/sesion/reset/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\RestablecerContrasena());
 		});
 		
-		parent::go('/sesion/perfil/', function () {
+		parent::get('/sesion/perfil/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Perfil());
 		});
 
 	}
 }
+
+?>

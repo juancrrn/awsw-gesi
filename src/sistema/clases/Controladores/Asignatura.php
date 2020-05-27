@@ -25,9 +25,8 @@ class Asignatura extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/admin/asignaturas/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminLista());
-		});
+		/*
+		
 
 		parent::go('/admin/asignaturas/crear/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminCrear());
@@ -44,12 +43,17 @@ class Asignatura extends Controlador
 		parent::go('/admin/asignaturas/([0-9]+)/eliminar/', function ($asignatura_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminEliminar($asignatura_id));
 		});
+		*/
 
-		parent::go('/mi/asignaturas/', function () {
+		parent::get('/admin/asignaturas/', function () {
+			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminLista());
+		});
+
+		parent::get('/mi/asignaturas/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiLista());
 		});
 		
-		parent::go('/mi/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
+		parent::get('/mi/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiVer($asignatura_id));
 		});
 

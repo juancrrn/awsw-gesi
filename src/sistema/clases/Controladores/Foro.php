@@ -25,15 +25,15 @@ class Foro extends Controlador
 	public static function controla() : void
 	{
 
-		parent::go('/foros/', function () {
+		parent::get('/foros/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Foro\InvLista());
 		});
 
-		parent::go('/mi/foros/', function () {
+		parent::get('/mi/foros/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Foro\MiLista());
 		});
 
-		parent::go('/admin/foros/', function () {
+		parent::get('/admin/foros/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Foro\AdminLista());
 		});
 
