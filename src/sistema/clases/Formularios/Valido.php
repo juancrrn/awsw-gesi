@@ -264,6 +264,81 @@ class Valido
     }
 
     /**
+     * Devuelve los niveles para una formalización HATEOAS.
+     * 
+     * @param int|null $nivel Unique nivel.
+     * 
+     * @return array|stdClass
+     */
+    public static function getNivelesHateoas($nivel = null)
+    {
+        $nivel1 = new stdClass;
+        $nivel1->id = 1;
+        $nivel1->corto = 'ESO 1';
+        $nivel1->completo = 'Primer curso de Educación Secundaria Obligatoria';
+        $nivel1->uniqueId = $nivel1->id;
+        $nivel1->selectName = $nivel1->completo;
+        
+        $nivel2 = new stdClass;
+        $nivel2->id = 2;
+        $nivel2->corto = 'ESO 2';
+        $nivel2->completo = 'Segundo curso de Educación Secundaria Obligatoria';
+        $nivel2->uniqueId = $nivel2->id;
+        $nivel2->selectName = $nivel2->completo;
+        
+        $nivel3 = new stdClass;
+        $nivel3->id = 3;
+        $nivel3->corto = 'ESO 3';
+        $nivel3->completo = 'Tercer curso de Educación Secundaria Obligatoria';
+        $nivel3->uniqueId = $nivel3->id;
+        $nivel3->selectName = $nivel3->completo;
+        
+        $nivel4 = new stdClass;
+        $nivel4->id = 4;
+        $nivel4->corto = 'ESO 4';
+        $nivel4->completo = 'Cuarto curso de Educación Secundaria Obligatoria';
+        $nivel4->uniqueId = $nivel4->id;
+        $nivel4->selectName = $nivel4->completo;
+        
+        $nivel5 = new stdClass;
+        $nivel5->id = 5;
+        $nivel5->corto = 'Bach. 1';
+        $nivel5->completo = 'Primer curso de Bachillerato';
+        $nivel5->uniqueId = $nivel5->id;
+        $nivel5->selectName = $nivel5->completo;
+        
+        $nivel6 = new stdClass;
+        $nivel6->id = 6;
+        $nivel6->corto = 'Bach. 2';
+        $nivel6->completo = 'Segundo curso de Bachillerato';
+        $nivel6->uniqueId = $nivel6->id;
+        $nivel6->selectName = $nivel6->completo;
+
+        switch ($nivel) {
+            case 1:
+                return $nivel1;
+            break;
+            case 2:
+                return $nivel2;
+            break;
+            case 3:
+                return $nivel3;
+            break;
+            case 4:
+                return $nivel4;
+            break;
+            case 5:
+                return $nivel5;
+            break;
+            case 6:
+                return $nivel6;
+            break;
+            default:
+                return array($nivel1, $nivel2, $nivel3, $nivel4, $nivel5, $nivel6);
+        }
+    }
+
+    /**
      * Devuelve los niveles válidos
      */
     public static function getRoles() : array

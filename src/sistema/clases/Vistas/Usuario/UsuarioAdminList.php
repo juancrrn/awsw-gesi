@@ -65,9 +65,9 @@ class UsuarioAdminList extends Modelo
         <h2 class="mb-4">$this->nombre</h2>
         HTML;
 
-        $html .= $this->generaListaEst();
-        $html .= $this->generaListaPd();
         $html .= $this->generaListaPs();
+        $html .= $this->generaListaPd();
+        $html .= $this->generaListaEst();
 
         echo $html;
 

@@ -39,51 +39,93 @@ class GrupoAdminList extends Modelo{
         private const VISTA_NOMBRE = "Gestionar grupos";
         private const VISTA_ID = "grupo-admin-lista";
 
-
         private $listado;
 
-        public function __construct(){
-
+        public function __construct()
+        {
             Sesion::requerirSesionPs();
 
             $this->nombre = self::VISTA_NOMBRE;
             $this->id = self::VISTA_ID;
 
-
-            $this->listadoGp = Grupo::dbGetAll();
-
+            $this->listado = Grupo::dbGetAll();
         }
 
-
-        public function procesaContect() : void{
-
-            $app = App::getSingleton();
-
+        public function procesaContent() : void
+        {
             $html = <<< HTML
-            <h2 class="mb-4"> $this->nombre</h2>
+            <h2 class="mb-4">$this->nombre</h2>
             HTML;
-            $html .= $this->generarListaGp();
+
+            $html .= $this->generarListaGrupos();
 
             echo $html;
         }
 
-
-        //Generar lista de grupos
-
-        public function generarListaGp(): string {
+        /**
+         * Genera el listado de grupos.
+         * 
+         * @return string Listado de grupos.
+         */
+        public function generarListaGrupos(): string
+        {
             //Formulario de creacion de Grupo
-
             $formGrupoAdminCreate = new FormGrupoAdminCreate();
-
             $formGrupoAdminCreateModal = $formGrupoAdminCreate->generateModal();
-            $formGrupoAdminCreateButton = $formGrupoAdminCreate->generateButton();
+            $formGrupoAdminCreateButton = $formGrupoAdminCreate->generateButton('Crear', null, true);
 
+            $listaGruposBuffer = '';
 
-            $listGpBuffer = '';
+            if (! empty($this->listado)) {
+                foreach ($this->listado as $g) {
 
+                    $uniqueId = $g->getId();
+                    $nombreCorto = $g->getNombreCorto();
+                    $nivel = $g->getNivel();
+                    $curso = $g->getCursoEscolar();
+                    $nombreCompleto = $g->getNombreCompleto();
+
+                    // Botones de editar, etc
+
+                    $listaGruposBuffer .= <<< HTML
+                    <tr data-unique-id="$uniqueId">
+                        <td scope="row" data-col-name="nombre-corto">$nombreCorto</td>
+                        <td data-col-name="nivel">$nivel</td>
+                        <td data-col-name="curso">$curso</td>
+                        <td data-col-name="nombre-completo">$nombreCompleto</td>
+                        <td class="text-right"></td>
+                    </tr>
+                    HTML;
+
+                }
+            } else {
+                $listaGruposBuffer .= <<< HTML
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>No se han encontrado grupos.</td>
+                    <td></td>
+                </tr>
+                HTML;
+            }
 
             $html = <<< HTML
-            <h3 class="mb-4">$formGrupoAdminCreateButton Grupos </h3>
+            <h3 class="mb-4">$formGrupoAdminCreateButton Grupos</h3>
+            <table id="usuario-est-lista" class="table table-borderless table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre corto</th>
+                        <th scope="col">Nivel</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col" class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $listaGruposBuffer
+                </tbody>
+            </table>
             $formGrupoAdminCreateModal
             HTML;
 

@@ -69,12 +69,18 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
     protected function getDefaultData(array $requestData) : array {
 
-        //Formalizacion HATEOAS de grupos.
-
-        $grupoLink = FormularioAjax::generateHateoasSelectLink(
-            'grupo',
+        // Formalizacion HATEOAS de niveles.
+        $nivelesLink = FormularioAjax::generateHateoasSelectLink(
+            'nivel',
             'single',
-            Grupo::dbGetAll()
+            Valido::getNivelesHateoas()
+        );
+
+        // Formalización HATEOAS de tutores.
+        $tutoresLink = FormularioAjax::generateHateoasSelectLink(
+            'tutor',
+            'single',
+            Usuario::dbGetByRol(2)
         );
 
 
@@ -82,8 +88,9 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
         $responseData = array(
             'status' => 'ok',
-            'link' => array(
-                $grupoLink
+            'links' => array(
+                $nivelesLink,
+                $tutoresLink
             )
         );
 
@@ -141,7 +148,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
         
         if (empty($nivel))  {
-            $errors[] = 'El campo nivel no puede estar vacío'
+            $errors[] = 'El campo nivel no puede estar vacío';
         }
 
         if (empty($curso_escolar)) {
