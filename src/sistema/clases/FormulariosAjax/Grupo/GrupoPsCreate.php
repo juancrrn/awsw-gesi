@@ -8,17 +8,15 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
-
 /**
- * Formulario AJAX de creación de un grupo por parte de un 
- * administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un grupo por parte de un administrador 
+ * (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -26,9 +24,9 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @version 0.0.4
  */
 
-
- class GrupoAdminCreate extends FormularioAjax{
- /**
+class GrupoPsCreate extends FormularioAjax
+{
+    /**
      * Initialize specific form constants
      *
      * @var string FORM_ID

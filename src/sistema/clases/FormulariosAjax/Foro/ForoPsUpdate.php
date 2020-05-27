@@ -1,6 +1,6 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\Est;
+namespace Awsw\Gesi\FormulariosAjax\Foro;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
@@ -17,7 +17,6 @@ use Awsw\Gesi\Formularios\Valido;
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -25,7 +24,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class EstAdminUpdate extends FormularioAjax
+class ForoPsUpdate extends FormularioAjax
 {
 
     /**

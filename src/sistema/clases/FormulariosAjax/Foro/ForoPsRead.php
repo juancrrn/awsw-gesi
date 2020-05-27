@@ -1,21 +1,20 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\PD;
+namespace Awsw\Gesi\FormulariosAjax\Foro;
 
-use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
+use Awsw\Gesi\Datos\Usuario;
 
 /**
- * Formulario AJAX de visualizacion de un usuario de peronal 
- * docente por parte de un administrador (Personal de secretaria)
- * 
+ * Formulario AJAX de visualización de un usuario de personal docente por parte 
+ * de un administrador (personal de Secretaría).
+ *
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -23,7 +22,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @version 0.0.4
  */
 
-class PDAdminRead extends FormularioAjax
+class ForoPsRead extends FormularioAjax
 {
 
     /**
@@ -34,18 +33,16 @@ class PDAdminRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'usuario-pd-read';
-    private const FORM_NAME = 'Ver personal docente';
+    private const FORM_ID = 'usuario-est-read';
+    private const FORM_NAME = 'Ver estudiante';
     private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/pd/read/';
+    private const SUBMIT_URL = '/admin/usuarios/est/read/';
 
     /**
      * Constructs the form object
      */
     public function __construct()
     {
-        $app = App::getSingleton();
-
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
@@ -58,7 +55,7 @@ class PDAdminRead extends FormularioAjax
     }
 
     protected function getDefaultData(array $requestData) : array
-    {  
+    {
         // Check that uniqueId was provided
         if (! isset($requestData['uniqueId'])) {
             $responseData = array(
@@ -68,7 +65,7 @@ class PDAdminRead extends FormularioAjax
                     'Falta el parámetro "uniqueId".'
                 )
             );
-    
+
             return $responseData;
         }
 
@@ -80,55 +77,69 @@ class PDAdminRead extends FormularioAjax
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario de personal docente solicitado no existe.'
+                    'El usuario estudiante solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
+        
+        // Formalización HATEOAS de grupos.
+        $grupoLink = FormularioAjax::generateHateoasSelectLink(
+            'grupo',
+            'single',
+            Grupo::dbGetAll()
+        );
 
         $usuario = Usuario::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
+            'links' => array(
+                $grupoLink
+            ),
             self::TARGET_CLASS_NAME => $usuario
         );
 
         return $responseData;
-
     }
 
     public function generateFormInputs() : string
     {
         $html = <<< HTML
         <div class="form-group">
-            <label>NIF</label>
-            <input class="form-control" type="text" name="nif" placeholder="NIF" disabled="disabled" />
+            <label for="nif">NIF</label>
+            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Nombre</label>
-            <input class="form-control" type="text" name="nombre" placeholder="Nombre" disabled="disabled" />
+            <label for="nombre">Nombre</label>
+            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" placeholder="Apellidos" disabled="disabled" />
+            <label for="apellidos">Apellidos</label>
+            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" placeholder="Fecha de nacimiento" disabled="disabled" />
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Fecha de último acceso</label>
-            <input class="form-control" type="text" name="fechaUltimoAcceso" placeholder="Fecha de último acceso" disabled="disabled" />
+            <label for="fechaUltimoAcceso">Fecha de último acceso</label>
+            <input class="form-control" type="text" name="fechaUltimoAcceso" id="fechaNacimiento" placeholder="Fecha de último acceso" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" placeholder="Número de teléfono" disabled="disabled" />
+            <label for="numeroTelefono">Número de teléfono</label>
+            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" placeholder="Dirección de correo electrónico" disabled="disabled" />
+            <label for="email">Dirección de correo electrónico</label>
+            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label for="grupo">Grupo</label>
+            <select class="form-control" name="grupo" id="grupo" disabled="disabled">
+            </select>
         </div>
         HTML;
 

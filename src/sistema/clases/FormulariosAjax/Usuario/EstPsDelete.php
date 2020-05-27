@@ -1,13 +1,13 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\PS;
+namespace Awsw\Gesi\FormulariosAjax\Usuario;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal de secretaria por parte de 
+ * Formulario AJAX para eliminar un usuario de personal docente por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -15,7 +15,6 @@ use Awsw\Gesi\Datos\Usuario;
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -23,7 +22,7 @@ use Awsw\Gesi\Datos\Usuario;
  * @version 0.0.4
  */
 
- class PSAdminDelete extends FormularioAjax
+ class EstPdDelete extends FormularioAjax
  {
      /**
      * Initialize specific form constants
@@ -36,13 +35,13 @@ use Awsw\Gesi\Datos\Usuario;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-ps-delete';
-    private const FORM_NAME = 'Eliminar personal de secretaria';
+    private const FORM_ID = 'usuario-est-delete';
+    private const FORM_NAME = 'Eliminar estudiante';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/ps/delete/';
+    private const SUBMIT_URL = '/admin/usuarios/est/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-ps-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
     public function __construct()
     {
@@ -85,7 +84,7 @@ use Awsw\Gesi\Datos\Usuario;
                 'status' => 'error',
                 'error' => 404, // Not found
                 'messages' => array(
-                    'El usuario personal docente solicitado no existe.'
+                    'El usuario estudiante solicitado no existe.'
                 )
             );
 
@@ -118,8 +117,8 @@ use Awsw\Gesi\Datos\Usuario;
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-ps-delete-checkbox" required="required">
-                <label class="custom-control-label" for="usuario-ps-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-est-delete-checkbox" required="required">
+                <label class="custom-control-label" for="usuario-est-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;
@@ -152,7 +151,7 @@ use Awsw\Gesi\Datos\Usuario;
         
         // Check Record's uniqueId is valid
         if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario personal docente solicitado no existe.';
+            $errors[] = 'El usuario estudiante solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
@@ -161,13 +160,13 @@ use Awsw\Gesi\Datos\Usuario;
             $responseData = array(
                 'status' => 'ok',
                 'messages' => array(
-                    'Usuario personal docente eliminado correctamente.'
+                    'Usuario estudiante eliminado correctamente.'
                 )
             );
 
             $this->respondJsonOk($responseData);
         } else {
-            $errors[] = 'Hubo un problema al eliminar el usuario personal docente.';
+            $errors[] = 'Hubo un problema al eliminar el usuario estudiante.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }

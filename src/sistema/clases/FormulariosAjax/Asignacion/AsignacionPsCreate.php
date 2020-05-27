@@ -1,22 +1,22 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\PS;
+namespace Awsw\Gesi\FormulariosAjax\Asignacion;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\FormulariosAjax\FormularioAjax;
+use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 /**
- * Formulario AJAX de edición de un usuario de personal de Secretaría por parte 
- * de un administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un usuario estudiante por parte de un 
+ * administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -24,7 +24,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class PSAdminUpdate extends FormularioAjax
+class AsignacionPsCreate extends FormularioAjax
 {
 
     /**
@@ -38,13 +38,13 @@ class PSAdminUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-ps-update';
-    private const FORM_NAME = 'Editar personal de Secretaría';
+    private const FORM_ID = 'usuario-est-create';
+    private const FORM_NAME = 'Crear estudiante';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/ps/update/';
-    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-ps-lista';
+    private const SUBMIT_URL = '/admin/usuarios/est/create/';
+    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
+    private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
 
     /**
      * Constructs the form object
@@ -68,47 +68,30 @@ class PSAdminUpdate extends FormularioAjax
     }
 
     protected function getDefaultData(array $requestData) : array
-    {  
-        // Mapear los datos para que coincidan con los nombres de los inputs.
-        if(! isset($requestData['uniqueId'])){
-            $responseData = array(
-                'status' => 'error',
-                'error' => 400, // Bad request
-                'messages' => array(
-                    'Falta el parámetro "uniqueId".'
-                )
-            );
-        }
+    {
+        // Formalización HATEOAS de grupos.
+        $grupoLink = FormularioAjax::generateHateoasSelectLink(
+            'grupo',
+            'single',
+            Grupo::dbGetAll()
+        );
 
-        $uniqueId = $requestData['uniqueId'];
-
-        // Comprobar que el uniqueId es válido.
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $responseData = array(
-                'status' => 'error',
-                'error' => 404, // Not found.
-                'messages' => array(
-                    'El usuario de personal de Secretaría solicitado no existe.'
-                )
-            );
-
-            return $responseData;
-        }
-
-        $usuario = Usuario::dbGet($uniqueId);
-
+        // Mapear datos para que coincidan con los nombres de los inputs.
         $responseData = array(
             'status' => 'ok',
-            self::TARGET_OBJECT_NAME => $usuario
+            'links' => array(
+                $grupoLink
+            )
         );
-            
+
         return $responseData;
     }
 
     public function generateFormInputs() : string
     {
+        $defaultUserPassword = GESI_DEFAULT_PASSWORD;
+
         $html = <<< HTML
-        <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label for="nif">NIF</label>
             <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
@@ -133,22 +116,21 @@ class PSAdminUpdate extends FormularioAjax
             <label for="email">Dirección de correo electrónico</label>
             <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
         </div>
+        <div class="form-group">
+            <label for="grupo">Grupo</label>
+            <select class="form-control" name="grupo" id="grupo" required="required">
+            </select>
+        </div>
+        <div class="mt-4">
+            La contraseña por defecto es <code>$defaultUserPassword</code>.
+        </div>
         HTML;
 
         return $html;
     }
 
     public function processSubmit(array $data = array()) : void
-    {   
-        $uniqueId = $data['uniqueId'] ?? null;
-
-        // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario de peronal de Secretaría solicitado no existe.';
-
-            $this->respondJsonError(404, $errors); // Not found.
-        }
-
+    {
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $apellidos = $data['apellidos'] ?? null;
@@ -194,53 +176,58 @@ class PSAdminUpdate extends FormularioAjax
             $errors[] = 'El campo dirección de correo electrónico no es válido.';
         }
 
-        // Data update
+        // Comprobar grupo.
+        
+        $grupo = $data['grupo'] ?? null;
 
-        // Si no hay mensajes de error
-        if (!empty($errors)) {
-            $this->respondJsonError(400, $errors); //Bad Request
-        } else{
-            // Obtener datos que no se habían modificado.
-            $anteriores = Usuario::dbGet($uniqueId);
+        if (empty($grupo)) {
+            $errors[] = 'El campo grupo no puede estar vacío.';
+        } elseif (! Grupo::dbExisteId($grupo)) {
+            $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
+        }
 
-            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
-            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
-
-            $fechaRegistro = $anteriores->getFechaRegistro();
-            
-            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
+        // Comprobar si hay errores.
+        if (! empty($errors)) {
+            $this->respondJsonError(400, $errors); // Bad request.
+        } else {
+            $now = date('Y-m-d H:i:s');
 
             $usuario = new Usuario(
-                $uniqueId,
+                null,
                 $nif,
-                2,
+                1,
                 $nombre,
                 $apellidos,
                 $fechaNacimiento,
                 $numeroTelefono,
                 $email,
-                $fechaUltimoAcceso,
-                $fechaRegistro,
-                null
+                null,
+                $now,
+                $grupo
             );
 
-            
-            $actualizar = $usuario->dbActualizar();
+            $usuario_id = $usuario->dbInsertar();
 
-            if ($actualizar) {
+            if ($usuario_id) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Usuario de personal de Secretaría actualizado correctamente.'),
+                    'messages' => array('El usuario estudiante fue creado correctamente.'),
                     self::TARGET_OBJECT_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Error al actualizar usuario de personal de Secretaría.';
+                $errors[] = 'Hubo un error al crear el usuario estudiante.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
         }
+    }
+
+    public static function autoHandle() : void
+    {
+        $form = new self();
+        $form->manage();
     }
 }
 

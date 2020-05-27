@@ -1,15 +1,13 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\PD;
+namespace Awsw\Gesi\FormulariosAjax\Usuario;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Datos\MensajeSecretaria;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal docente por parte de 
+ * Formulario AJAX para eliminar un usuario de personal de secretaria por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -25,7 +23,7 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
  * @version 0.0.4
  */
 
- class PDAdminDelete extends FormularioAjax
+ class PsPsDelete extends FormularioAjax
  {
      /**
      * Initialize specific form constants
@@ -38,13 +36,13 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-pd-delete';
-    private const FORM_NAME = 'Eliminar personal docente';
+    private const FORM_ID = 'usuario-ps-delete';
+    private const FORM_NAME = 'Eliminar personal de secretaria';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/pd/delete/';
+    private const SUBMIT_URL = '/admin/usuarios/ps/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.pd';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista'; // TODO
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-ps-lista';
 
     public function __construct()
     {
@@ -87,7 +85,7 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
                 'status' => 'error',
                 'error' => 404, // Not found
                 'messages' => array(
-                    'El usuario Personal docente solicitado no existe.'
+                    'El usuario personal docente solicitado no existe.'
                 )
             );
 
@@ -99,12 +97,13 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
+            // Link are not necessary in this case
             self::TARGET_OBJECT_NAME => $record
         );
 
         return $responseData;
     }
-
+    
     public function generateFormInputs() : string
     {
         $html = <<< HTML
@@ -119,15 +118,15 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-pd-delete-checkbox" required="required">
-                <label class="custom-control-label" for="usuario-pd-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-ps-delete-checkbox" required="required">
+                <label class="custom-control-label" for="usuario-ps-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;
 
         return $html;
     }
-
+    
     public function processSubmit(array $data = array()) : void
     {
         $uniqueId = $data['uniqueId'] ?? null;
@@ -153,38 +152,27 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
         
         // Check Record's uniqueId is valid
         if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario Personal docente solicitado no existe.';
+            $errors[] = 'El usuario personal docente solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        // Si no tiene ningun mensaje de secretaria y no tiene ningun grupo asignado lo eliminamos
+        if (Usuario::dbEliminar($uniqueId)) {
+            $responseData = array(
+                'status' => 'ok',
+                'messages' => array(
+                    'Usuario personal docente eliminado correctamente.'
+                )
+            );
 
-        if (! Grupo::dbAnyByTutor($uniqueId) && ! MensajeSecretaria::dbAnyByUsuario($uniqueId)) {
-
-            if (Usuario::dbEliminar($uniqueId)) {
-                $responseData = array(
-                    'status' => 'ok',
-                    'messages' => array(
-                        'Usuario de personal docente eliminado correctamente.'
-                    )
-                );
-    
-                $this->respondJsonOk($responseData);
-            } else {
-                $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
-    
-                $this->respondJsonError(400, $errors); // Bad request.
-            }
+            $this->respondJsonOk($responseData);
         } else {
-            $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
+            $errors[] = 'Hubo un problema al eliminar el usuario personal docente.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }
 
-
-        
     }
- }
+}
 
- ?>
+?>

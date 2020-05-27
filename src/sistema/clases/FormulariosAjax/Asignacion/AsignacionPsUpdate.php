@@ -1,23 +1,22 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\Est;
+namespace Awsw\Gesi\FormulariosAjax\Asignacion;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
-use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 /**
- * Formulario AJAX de creación de un usuario estudiante por parte de un 
- * administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un usuario de personal docente por parte de 
+ * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -25,11 +24,11 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @version 0.0.4
  */
 
-class EstAdminCreate extends FormularioAjax
+class AsignacionPsUpdate extends FormularioAjax
 {
 
     /**
-     * Initialize specific form constants
+     * Initialize specific form constants.
      *
      * @var string FORM_ID
      * @var string FORM_NAME
@@ -39,13 +38,13 @@ class EstAdminCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-create';
-    private const FORM_NAME = 'Crear estudiante';
+    private const FORM_ID = 'usuario-est-update';
+    private const FORM_NAME = 'Editar estudiante';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/create/';
-    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
+    private const SUBMIT_URL = '/admin/usuarios/est/update/';
+    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
+    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
     /**
      * Constructs the form object
@@ -69,7 +68,33 @@ class EstAdminCreate extends FormularioAjax
     }
 
     protected function getDefaultData(array $requestData) : array
-    {
+    {  
+        // Mapear los datos para que coincidan con los nombres de los inputs.
+        if(! isset($requestData['uniqueId'])){
+            $responseData = array(
+                'status' => 'error',
+                'error' => 400, // Bad request
+                'messages' => array(
+                    'Falta el parámetro "uniqueId".'
+                )
+            );
+        }
+
+        $uniqueId = $requestData['uniqueId'];
+
+        // Comprobar que el uniqueId es válido.
+        if (! Usuario::dbExisteId($uniqueId)) {
+            $responseData = array(
+                'status' => 'error',
+                'error' => 404, // Not found.
+                'messages' => array(
+                    'El usuario estudiante solicitado no existe.'
+                )
+            );
+
+            return $responseData;
+        }
+        
         // Formalización HATEOAS de grupos.
         $grupoLink = FormularioAjax::generateHateoasSelectLink(
             'grupo',
@@ -77,12 +102,14 @@ class EstAdminCreate extends FormularioAjax
             Grupo::dbGetAll()
         );
 
-        // Mapear datos para que coincidan con los nombres de los inputs.
+        $usuario = Usuario::dbGet($uniqueId);
+
         $responseData = array(
             'status' => 'ok',
             'links' => array(
                 $grupoLink
-            )
+            ),
+            self::TARGET_OBJECT_NAME => $usuario
         );
 
         return $responseData;
@@ -90,40 +117,36 @@ class EstAdminCreate extends FormularioAjax
 
     public function generateFormInputs() : string
     {
-        $defaultUserPassword = GESI_DEFAULT_PASSWORD;
-
         $html = <<< HTML
+        <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
+            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required">
         </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />
+            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required">
         </div>
         <div class="form-group">
             <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required" />
+            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required">
         </div>
         <div class="form-group">
             <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required">
         </div>
         <div class="form-group">
             <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required" />
+            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required">
         </div>
         <div class="form-group">
             <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
+            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required">
         </div>
         <div class="form-group">
             <label for="grupo">Grupo</label>
             <select class="form-control" name="grupo" id="grupo" required="required">
             </select>
-        </div>
-        <div class="mt-4">
-            La contraseña por defecto es <code>$defaultUserPassword</code>.
         </div>
         HTML;
 
@@ -132,6 +155,15 @@ class EstAdminCreate extends FormularioAjax
 
     public function processSubmit(array $data = array()) : void
     {
+        $uniqueId = $data['uniqueId'] ?? null;
+        
+        // Check Record's uniqueId is valid
+        if (! Usuario::dbExisteId($uniqueId)) {
+            $errors[] = 'El usuario estudiante solicitado no existe.';
+
+            $this->respondJsonError(404, $errors); // Not found.
+        }
+
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $apellidos = $data['apellidos'] ?? null;
@@ -186,15 +218,23 @@ class EstAdminCreate extends FormularioAjax
         } elseif (! Grupo::dbExisteId($grupo)) {
             $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
         }
-
+        
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            $now = date('Y-m-d H:i:s');
+            // Obtener datos que no se habían modificado.
+            $anteriores = Usuario::dbGet($uniqueId);
+
+            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
+            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
+
+            $fechaRegistro = $anteriores->getFechaRegistro();
+            
+            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
 
             $usuario = new Usuario(
-                null,
+                $uniqueId,
                 $nif,
                 1,
                 $nombre,
@@ -202,33 +242,29 @@ class EstAdminCreate extends FormularioAjax
                 $fechaNacimiento,
                 $numeroTelefono,
                 $email,
-                null,
-                $now,
+                $fechaUltimoAcceso,
+                $fechaRegistro,
                 $grupo
             );
 
-            $usuario_id = $usuario->dbInsertar();
+            $actualizar = $usuario->dbActualizar();
 
-            if ($usuario_id) {
+            if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('El usuario estudiante fue creado correctamente.'),
+                    'messages' => array('Usuario estudiante actualizado correctamente.'),
                     self::TARGET_OBJECT_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Hubo un error al crear el usuario estudiante.';
+                $errors[] = 'Error al actualizar usuario estudiante.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
-        }
-    }
 
-    public static function autoHandle() : void
-    {
-        $form = new self();
-        $form->manage();
+        }
+    
     }
 }
 
