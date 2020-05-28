@@ -1,3 +1,4 @@
 - Comprobar, al insertar usuarios, que NIF y email no existen ya, ya que son UNIQUE.
 - Habilitar verificación formato NIF.
 - Verificación antes de enviar los formularios, en el cliente; campos required y asterisco.
+- Horarios, representación, formularios y formato para guardar en MySQL (CSV, JSON, etc.)

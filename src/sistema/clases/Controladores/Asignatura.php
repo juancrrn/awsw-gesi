@@ -18,6 +18,9 @@
 namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete;
 use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
 
 use Awsw\Gesi\Vistas\Vista;
@@ -28,7 +31,7 @@ class Asignatura extends Controlador
 	public static function controla() : void
 	{
 		/**
-		 * Personal de Secretaría.
+		 * Vista lista de asignaturas.
 		 */
 
 		parent::get('/ps/asignaturas/', function () {
@@ -46,34 +49,24 @@ class Asignatura extends Controlador
 		parent::post('/ps/asignaturas/create/', function () {
 			(new AsignaturaPsCreate())->manage();
 		});
-
-		/*
-		TODO
-
-		parent::go('/admin/asignaturas/crear/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminCrear());
+		parent::get('/ps/asignaturas/read/', function () {
+			(new AsignaturaPsRead())->manage();
 		});
-		
-		parent::go('/admin/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminVer($asignatura_id));
+		parent::post('/ps/asignaturas/read/', function () {
+			(new AsignaturaPsRead())->manage();
 		});
-		
-		parent::go('/admin/asignaturas/([0-9]+)/editar/', function ($asignatura_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminEditar($asignatura_id));
+		parent::get('/ps/asignaturas/update/', function () {
+			(new AsignaturaPsUpdate())->manage();
 		});
-		
-		parent::go('/admin/asignaturas/([0-9]+)/eliminar/', function ($asignatura_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminEliminar($asignatura_id));
+		parent::patch('/ps/asignaturas/update/', function () {
+			(new AsignaturaPsUpdate())->manage();
 		});
-
-		parent::get('/mi/asignaturas/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiLista());
+		parent::get('/ps/asignaturas/delete/', function () {
+			(new AsignaturaPsDelete())->manage();
 		});
-		
-		parent::get('/mi/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiVer($asignatura_id));
+		parent::delete('/ps/asignaturas/delete/', function () {
+			(new AsignaturaPsDelete())->manage();
 		});
-		*/
 
 	}
 }

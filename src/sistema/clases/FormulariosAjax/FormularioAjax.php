@@ -158,7 +158,8 @@ abstract class FormularioAjax
         // Check content type
         $contentType = $_SERVER['CONTENT_TYPE'] ?? null;
 
-        if ($contentType != self::JSON_ADMITTED_CONTENT_TYPE) {
+        if (mb_strtolower($contentType) !=
+            mb_strtolower(self::JSON_ADMITTED_CONTENT_TYPE)) {
             $this->respondJsonError(400, array( // Bad request
                 'Content type not supported'
             ));

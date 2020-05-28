@@ -30,10 +30,10 @@ class Grupo extends Controlador
          * Formularios AJAX de grupos
          */
 
-        parent::get('/admin/grupo/create/', function(){
+        parent::get('/ps/grupo/create/', function(){
             (new GrupoPsCreate())->manage();
         });
-        parent::post('/admin/grupo/create/', function(){
+        parent::post('/ps/grupo/create/', function(){
             (new GrupoPsCreate())->manage();
         });
         

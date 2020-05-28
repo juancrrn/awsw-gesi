@@ -420,10 +420,11 @@ class Asignatura
 			'uniqueId' => $this->getId(),
 			'selectName' => $this->getNombreCompleto(),
 			'id' => $this->getId(),
-			'nivel' => $this->getNivel(),
-			'curso_escolar' => $this->getCursoEscolar(),
+			'nivel' => $this->getNivelRaw(),
+			'curso_escolar' => $this->getCursoEscolarRaw(),
 			'nombre_corto' => $this->getNombreCorto(),
-			'nombre_completo' => $this->getNombreCompleto()
+			'nombre_completo' => $this->getNombreCompleto(),
+			'checkbox' => $this->getId()
 		];
 	}
 }

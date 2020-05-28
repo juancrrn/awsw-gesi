@@ -388,13 +388,51 @@ $(() => {
         onSuccessFn.listaUsuariosDeleted);
 
     /**
+     * Vista de asignaciones (personal de Secretaría).
+     */
+    $('#asignacion-ps-list').on('created.asignacion',
+        onSuccessFn.listaPsAsignacionesCreated);
+
+    /**
      * Gestionar el evneto on-success del formulario de creación de mensaje de 
      * Secretaría con sesión iniciada.
      */
     $('#mensaje-secretaria-ses-list').on('created.ses.mensajesecretaria',
         onSuccessFn.listaSesMensajesSecretariaCreated);
 
+    /**
+     * 
+     * Gestionar el evento on-success de la lista de asignaturas
+     * 
+     */
 
-    $('#grupo-lista').on('created.grupo.ps',
-        onSuccessFn.listaGrupo)
+    $('#asignatura-ps-list').on('created.asignatura',
+        onSuccessFn.listaPsAsignaturasCreated);
+    /*$('#asignatura-ps-list').on('updated.asignatura',
+        onSuccessFn.listaAsignaturasUpdated);*/
+    $('#asignatura-ps-list').on('deleted.asignatura',
+        onSuccessFn.listaPsAsignaturasDeleted);
+
+    /**
+     * Gestiona el evento on-succes del formulario de creacion de grupo con 
+     * sesión iniciada.
+    */
+    $('#grupo-ps-list').on('created.grupo',
+        onSuccessFn.listaGrupoCreated);
+
+    /**
+     * Gestiona el evento on-succes del formulario de edicion de grupo con 
+     * sesion iniciada.
+    */
+    $('#grupo-ps-list').on('updated.grupo',
+        onSuccessFn.listaGrupoUpdated);    
+    
+    /**
+     * Gestiona el evento on-succes del formulario de eliminacion de grupo con 
+     * sesion iniciada.
+    */
+     $('#grupo-ps-list').on('deleted.grupo',
+        onSuccessFn.listaGrupoDeleted);  
+    
+    
 });

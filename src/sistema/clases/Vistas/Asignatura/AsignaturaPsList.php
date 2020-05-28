@@ -26,11 +26,14 @@ use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Sesion;
 
 use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate as FormAsignaturaCreate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead as FormAsignaturaRead;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate as FormAsignaturaUpdate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete as FormAsignaturaDelete;
 
 class AsignaturaPsList extends Modelo
 {
-	private const VISTA_NOMBRE = "Administrar asignaturas";
-	private const VISTA_ID = "asignatura-admin-lista";
+	public const VISTA_NOMBRE = "Gestionar asignaturas";
+	public const VISTA_ID = "asignatura-ps-list";
 
 	private $listado;
 
@@ -51,6 +54,16 @@ class AsignaturaPsList extends Modelo
 		$formAsignaturaCreate = new FormAsignaturaCreate();
 		$formAsignaturaCreateModal = $formAsignaturaCreate->generateModal();
 
+		$formAsignaturaRead = new FormAsignaturaRead();
+		$formAsignaturaReadModal = $formAsignaturaRead->generateModal();
+
+		$formAsignaturaUpdate = new FormAsignaturaUpdate();
+		$formAsignaturaUpdateModal = $formAsignaturaUpdate->generateModal();
+
+		$formAsignaturaDelete = new FormAsignaturaDelete();
+		$formAsignaturaDeleteModal = $formAsignaturaDelete->generateModal();
+
+
 		$html = <<< HTML
 		<h2 class="mb-4">$this->nombre</h2>
 		HTML;
@@ -66,6 +79,9 @@ class AsignaturaPsList extends Modelo
 				$largo = $a->getNombreCompleto();
 
 				//TODO boton ver en el nombre
+				$formAsignaturaReadButton = $formAsignaturaRead->generateButton('Ver', $uniqueId, true);
+				$formAsignaturaUpdateButton = $formAsignaturaUpdate->generateButton('Editar', $uniqueId, true);
+				$formAsignaturaDeleteButton = $formAsignaturaDelete->generateButton('Eliminar', $uniqueId, true);
 
 				$listaAsignaturaBuffer .= <<< HTML
 					<tr data-unique-id="$uniqueId">
@@ -73,6 +89,7 @@ class AsignaturaPsList extends Modelo
 						<td data-col-name="nivel">$nivel</td>
 						<td data-col-name="curso">$curso</td>
 						<td data-col-name="nombre-completo">$largo</td>
+						<td class="text-right">$formAsignaturaReadButton $formAsignaturaUpdateButton $formAsignaturaDeleteButton</td>
 					</tr>
 				HTML;
 			}
@@ -91,7 +108,7 @@ class AsignaturaPsList extends Modelo
 
 		$html = <<< HTML
 			<h3 class="mb-4">$formAsignaturaCreateButton Asignaturas</h3>
-			<table id="asignaturas-lista" class="table table-borderless table-striped">
+			<table id="asignatura-ps-list" class="table table-borderless table-striped">
 				<thead>
 					<tr>
 						<th scope="col"></th>
@@ -106,6 +123,9 @@ class AsignaturaPsList extends Modelo
 				</tbody>
 			</table>
 			$formAsignaturaCreateModal
+			$formAsignaturaReadModal
+			$formAsignaturaUpdateModal
+			$formAsignaturaDeleteModal
 		HTML;
 
 		echo $html;

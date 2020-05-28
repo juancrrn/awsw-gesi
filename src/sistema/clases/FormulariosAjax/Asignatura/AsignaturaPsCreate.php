@@ -44,7 +44,7 @@ class AsignaturaPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/asignaturas/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.asignatura';
-    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list'; // TODO
 
     /**
      * Constructs the form object
@@ -117,7 +117,8 @@ class AsignaturaPsCreate extends FormularioAjax
 
     public function processSubmit(array $data = array()) : void
     {
-        //$nivel = isset($data['nivel']) ? $data['nivel'] : null;
+        //$nivel = isset($data['nivel']) ? $data['nivel'] : null; 
+        //$nivel = $data['nivel'] ?? null;
         $curso_escolar = $data['curso_escolar'] ?? null;
         $nombre_corto = $data['nombre_corto'] ?? null;
         $nombre_completo = $data['nombre_completo'] ?? null;

@@ -168,6 +168,42 @@ onSuccessFn.listaUsuariosDeleted = (e, params) =>
 }
 
 /**
+ * Actualiza la lista de asignaciones (personal de Secretaría) cuando se crea 
+ * una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsAsignacionesCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const profesorNombre = result[targetObjectName].profesorNombre;
+    const asignaturaNombre = result[targetObjectName].asignaturaNombre;
+    const grupoNombre = result[targetObjectName].grupoNombre;
+
+    const $list = $(e.currentTarget).find('tbody');
+    
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+        <td data-col-name="profesorNombre">' + profesorNombre + '</td>\
+        <td data-col-name="asignaturaNombre">' + asignaturaNombre + '</td>\
+        <td data-col-name="grupoNombre">' + grupoNombre + '</td>\
+        <td class="text-right">\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignacion-ps-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignacion-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignacion-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
+        </td>\
+    </tr>';
+
+    $list.append($rowHtml);
+}
+
+/**
  * Actualiza la lista de mensajes de Secretaría cuando se elimina uno.
  * 
  * @param {eventObject} e Evento.
@@ -199,17 +235,95 @@ onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-
-onSuccessFn.listaGruposCreated = (e, params) =>
+/**
+ * Actualiza la lista de Asignaturas cuando se crea una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsAsignaturasCreated = (e, params) =>
 {
     const $modalData = params.modalData;
-    const $result = params.result;
+    const result = params.result;
 
+    const formId = $modalData.data('ajax-form-id');
     const targetObjectName = $modalData.data('ajax-target-object-name');
     
     const uniqueId = result[targetObjectName].uniqueId;
- 
-   
+    const corto = result[targetObjectName].nombre_corto;
+    const nivel = result[targetObjectName].nivel;
+    const curso = result[targetObjectName].curso;
+    const largo = result[targetObjectName].nombre_largo;
+
+    const $list = $(e.currentTarget).find('tbody');
+    // TODO: añadir botones
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+		<td scope="row" data-col-name="nombre-corto">'+ corto + '</td>\
+		<td data-col-name="nivel">'+ nivel +'</td>\
+        <td data-col-name="curso">'+ curso + '</td>\
+        <td data-col-name="nombre-completo">'+ largo + '</td>\
+        <td class="text-right">\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-create" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
+        </td>\
+	</tr>';
+    
+    $list.append($rowHtml);
+
+    
+}
+
+/**
+ * Actualiza la lista de asignaturas cuando se elimina una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsAsignaturasDeleted = (e, params) =>
+{
+    const $modalData = params.modalData;
+
+    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+    Console.log(uniqueId);
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    $row.remove();
+}
 
 
+onSuccessFn.listaGruposCreated = (e, params) =>
+{
+   const $modalData = params.modalData;
+   const result = params.result;
+
+
+   const formId = $modalData.data('ajax-form-id');
+   const targetObjectName = $modalData.data('ajax-target-object-name');
+
+
+   const nivel = result[targetObjectName].nivel;
+   const nombre_completo = result[targetObjectName].nombre_completo; 
+
+   const $list = $(e.currentTarget).find('tbody');
+
+  
+   // TODO: añadir botones
+   $rowHtml = '\
+   <tr data-unique-id="' + uniqueId + '">\
+       <td data-col-name="nivel">'+ nivel +'</td>\
+       <td scope="row" data-col-name="nombre-completo">'+ nombre_completo + '</td>\
+       <td class="text-right">\
+           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-create" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
+           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
+           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
+       </td>\
+   </tr>';
+
+   console.log($rowHtml);
+
+   $list.append($rowHtml);
 }

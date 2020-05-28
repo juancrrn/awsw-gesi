@@ -19,11 +19,11 @@ namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaInvCreate;
-
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaPsRead;
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesCreate;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesRead;
-
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaPsList;
 use Awsw\Gesi\Vistas\Vista;
 
 class MensajeSecretaria extends Controlador
@@ -66,8 +66,18 @@ class MensajeSecretaria extends Controlador
         parent::get('/ses/mensajesecretaria/read/', function () {
             (new MensajeSecretariaSesRead())->manage();
         });
-        parent::post('/ses/mensajesecretaria/read/', function () {
-            (new MensajeSecretariaSesRead())->manage();
+
+        /**
+         * Personal de Secretaría.
+         */
+        
+        parent::get('/ps/secretaria/', function () {
+            Vista::dibuja(new MensajeSecretariaPsList());
+        });
+        
+        // Read.
+        parent::get('/ps/mensajesecretaria/read/', function () {
+            (new MensajeSecretariaPsRead())->manage();
         });
     }
 }

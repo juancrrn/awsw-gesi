@@ -42,8 +42,8 @@ use Awsw\Gesi\FormulariosAjax\Usuario\PsPsDelete;
 
 class UsuarioPsList extends Modelo
 {
-    private const VISTA_NOMBRE = 'Gestionar usuarios';
-    private const VISTA_ID = 'usuario-ps-list';
+    public const VISTA_NOMBRE = 'Gestionar usuarios';
+    public const VISTA_ID = 'usuario-ps-list';
 
     private $listadoEst;
     private $listadoPd;

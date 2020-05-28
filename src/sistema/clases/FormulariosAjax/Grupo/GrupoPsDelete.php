@@ -5,6 +5,8 @@ namespace Awsw\Gesi\FormulariosAjax\Grupo;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX para eliminar un grupo parte de un administrador (personal 
@@ -35,13 +37,13 @@ class GrupoPsDelete extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-delete';
-    private const FORM_NAME = 'Eliminar estudiante';
+    private const FORM_ID = 'grupo-delete';
+    private const FORM_NAME = 'Eliminar grupo';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/delete/';
+    private const SUBMIT_URL = '/admin/grupo/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.grupo';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista';
 
     public function __construct()
     {
@@ -79,19 +81,19 @@ class GrupoPsDelete extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Check that uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Grupo::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'El grupo solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
 
-        $record = Usuario::dbGet($uniqueId);
+        $record = Grupo::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
@@ -108,12 +110,8 @@ class GrupoPsDelete extends FormularioAjax
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label>Nombre</label>
+            <label>Nombre del grupo</label>
             <input name="nombre" type="text" class="form-control"  disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label>Apellidos</label>
-            <input name="apellidos" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
@@ -151,12 +149,12 @@ class GrupoPsDelete extends FormularioAjax
         
         // Check Record's uniqueId is valid
         if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+            $errors[] = 'El grupo solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (Usuario::dbEliminar($uniqueId)) {
+        if (Grupo::dbEliminar($uniqueId)) {
             $responseData = array(
                 'status' => 'ok',
                 'messages' => array(
@@ -166,7 +164,7 @@ class GrupoPsDelete extends FormularioAjax
 
             $this->respondJsonOk($responseData);
         } else {
-            $errors[] = 'Hubo un problema al eliminar el usuario estudiante.';
+            $errors[] = 'Hubo un problema al eliminar el grupo.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }

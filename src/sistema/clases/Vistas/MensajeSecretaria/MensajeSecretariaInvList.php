@@ -23,8 +23,8 @@ use Awsw\Gesi\Sesion;
 
 class MensajeSecretariaInvList extends Modelo
 {
-    private const VISTA_NOMBRE = "Contactar con Secretaría";
-    private const VISTA_ID = "mensaje-secretaria-inv-list";
+    public const VISTA_NOMBRE = "Contactar con Secretaría";
+    public const VISTA_ID = "mensaje-secretaria-inv-list";
 
     public function __construct()
     {

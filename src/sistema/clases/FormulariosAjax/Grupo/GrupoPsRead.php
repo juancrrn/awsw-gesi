@@ -1,10 +1,11 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario;
+namespace Awsw\Gesi\FormulariosAjax\Grupo;
 
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Formularios\Valido;
 
 /**
  * Formulario AJAX de visualización de un grupo por parte de un administrador 
@@ -33,10 +34,10 @@ class GrupoPsRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'usuario-est-read';
-    private const FORM_NAME = 'Ver estudiante';
-    private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/read/';
+    private const FORM_ID = 'grupo-read';
+    private const FORM_NAME = 'Ver Grupo';
+    private const TARGET_CLASS_NAME = 'Grupo';
+    private const SUBMIT_URL = '/admin/grupo/read/';
 
     /**
      * Constructs the form object
@@ -77,29 +78,36 @@ class GrupoPsRead extends FormularioAjax
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'El Grupo solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
         
-        // Formalización HATEOAS de grupos.
-        $grupoLink = FormularioAjax::generateHateoasSelectLink(
-            'grupo',
-            'single',
-            Grupo::dbGetAll()
-        );
+       // Formalizacion HATEOAS de niveles.
+       $nivelesLink = FormularioAjax::generateHateoasSelectLink(
+        'nivel',
+        'single',
+        Valido::getNivelesHateoas()
+    );
 
-        $usuario = Usuario::dbGet($uniqueId);
+    // Formalización HATEOAS de tutores.
+    $tutoresLink = FormularioAjax::generateHateoasSelectLink(
+        'tutor',
+        'single',
+        Usuario::dbGetByRol(2)
+    );
+
+       
 
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
             'links' => array(
-                $grupoLink
-            ),
-            self::TARGET_CLASS_NAME => $usuario
+                $nivelesLink,
+                $tutoresLink
+            )
         );
 
         return $responseData;
@@ -109,39 +117,33 @@ class GrupoPsRead extends FormularioAjax
     {
         $html = <<< HTML
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="fechaUltimoAcceso">Fecha de último acceso</label>
-            <input class="form-control" type="text" name="fechaUltimoAcceso" id="fechaNacimiento" placeholder="Fecha de último acceso" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label for="grupo">Grupo</label>
-            <select class="form-control" name="grupo" id="grupo" disabled="disabled">
+            <label for="nivel">Nivel</label>
+            <select class="form-control" name="nivel" id="nivel" required="required">
             </select>
         </div>
+        <div class="form-group">
+        <label for="curso_escolar">Curso escolar</label>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+        </div>
+        <div class="form-group">
+        <label for="nombre_completo">Nombre completo</label>
+            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+        </div>
+        <div class="form-group">
+            <label for="fecha_nacimiento">Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+        </div>
+        <div class="form-group">
+        <label for="tutor">Tutor</label>
+            <select class="form-control" name="tutor" id="tutor" required="required">
+            </select>
+        </div>
+        
+            
+            
+        
         HTML;
+
 
         return $html;
     }

@@ -26,8 +26,8 @@ use Awsw\Gesi\Sesion;
 
 class MensajeSecretariaSesList extends Modelo
 {
-    private const VISTA_NOMBRE = "Contactar con Secretaría";
-    private const VISTA_ID = "mensaje-secretaria-ses-list";
+    public const VISTA_NOMBRE = "Contactar con Secretaría";
+    public const VISTA_ID = "mensaje-secretaria-ses-list";
 
     private $listado;
 

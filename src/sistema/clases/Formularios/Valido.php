@@ -18,6 +18,7 @@
 
 namespace Awsw\Gesi\Formularios;
 
+use Awsw\Gesi\Validacion\GesiScheduleSlot;
 use stdClass;
 
 class Valido
@@ -160,7 +161,7 @@ class Valido
      * @return true if valid phone number format is found, else false
      */
     public static function testNumeroTelefono($phone_number) : bool {
-        return preg_match("/^(\+[0-9]{1,4})?([\s0-9]*){4,15}$/", $phone_number) ? true : false;;
+        return preg_match("/^(\+[0-9]{1,4})?([\s0-9]*){4,15}$/", $phone_number) ? true : false;
     }
 
     /**
@@ -171,7 +172,7 @@ class Valido
      * @return true if valid URL format is found, else false
      */
     public static function testURL($url) : bool {
-        return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED) !== false;
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
     }
 
     /**
@@ -445,7 +446,6 @@ class Valido
     {
         return $raw . ' - ' . ($raw + 1);
     }
-
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Vista de gestión de usuarios.
+ * Vista de  de usuarios.
  *
  * - PAS: único permitido.
  *
@@ -20,129 +20,113 @@
 
 namespace Awsw\Gesi\Vistas\Asignacion;
 
-use Awsw\Gesi\App;
+use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 
-class AdminLista extends Modelo
+class AsignacionPsList extends Modelo
 {
-	private const VISTA_NOMBRE = "Gestionar Asignaciones";
-	private const VISTA_ID = "usuario-admin-lista";
+    public const VISTA_NOMBRE = "Gestionar asignaciones";
+    public const VISTA_ID = "asignacion-ps-list";
 
-	private $listado;
+    private $listado;
 
-	public function __construct()
-	{
-		Sesion::requerirSesionPs();
+    public function __construct()
+    {
+        Sesion::requerirSesionPs();
 
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
 
-		$this->listado = Asignacion::dbGetAll();
-	}
+        $this->listado = Asignacion::dbGetAll();
+    }
 
-	public function procesaContent() : void
-	{
+    public function procesaContent() : void
+    {
+        // Create asignación.
+        $formCreate = new AsignacionPsCreate();
+        $formCreateModal = $formCreate->generateModal();
 
-		$app = App::getSingleton();
-		
+        // Read asignación.
+        $formRead = new AsignacionPsRead();
+        $formReadModal = $formRead->generateModal();
 
-		$html = <<< HTML
-		<header class="page-header">
-			<h1>$this->nombre</h1>
-		</header>
-	
-		<section class="page-content">
-			<div id="asignacion-lista" class="grid-table">
-				<div class="grid-table-header">
-					<div class="grid-table-row">
-						<div>Profesor</div>
-						<div>Asignatura</div>
-						<div></div>
-						<div>Grupo</div>
-					</div>
-				</div>
-				<div class="grid-table-body">
+        $listaAsignaciones = $this->generaListaAsignaciones($formRead);
 
-HTML;
-					
-					
-					if (! empty($this->listado)) {
-						foreach ($this->listado as $u) {
-							
-							
-                            $profesor_id = $u->getProfesor();
-						//	$profesor = Usuario::dbGet($profesor_id);
-						//	$pr_nombre =$profesor->getNombreCompleto();
+        $formCreateBtn = $formCreate->generateButton('Crear', null, true);
+        
+        $html = <<< HTML
+        <h2 class="mb-4">$formCreateBtn $this->nombre</h2>
+        <p>A continuación se muestra una lista con las asignaciones profesor-asignatura-grupo existentes.</p>
+        <table id="asignacion-ps-list" class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Profesor</th>
+                    <th scope="col">Asignatura</th>
+                    <th scope="col">Grupo</th>
+                    <th scope="col" class="text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                $listaAsignaciones
+            </tbody>
+        </table>
+        $formCreateModal
+        $formReadModal
+        HTML;
 
-							$asignatura_id = $u->getAsignatura();
-						//	$asignatura =Asignatura::dbGet($asignatura_id);
-						//	$asignatura_nombre = $asignatura->getNombreCompleto();
-							
-							$url_ver = $app->getUrl() . '/admin/asignaciones/' . $u->getId() . '/ver/';
-							$url_editar = $app->getUrl() . '/admin/asignaciones/' . $u->getId() . '/editar/';
-							$url_eliminar = $app->getUrl() . '/admin/asignaciones/' . $u->getId() . '/eliminar/';
-                            $asignatura = $u->getAsignatura();
-							$grupo = Grupo::dbGet($u->getGrupo())->getNombreCompleto();
+        echo $html;
 
-							$html .= <<< HTML
-							<div class="grid-table-row">
-								<div>$asignatura_id</div>
-								<div>$profesor_id</div>
-								<div>
-									<a href="$url_ver">Ver</a>
-									<a href="$url_editar">Editar</a>
-									<a href="$url_eliminar">Eliminar</a>
-								</div>
-								<div>$grupo</div>
-							</div>
+    }
 
-HTML;
+    public function generaListaAsignaciones(AsignacionPsRead $formRead) : string
+    {
+        $buffer = '';
 
-						
-					}
-					} else {
-							
-							$html .= <<< HTML
-							<div class="grid-table-row-empty">
-								No se han encontrado asignaciones.
-							</div>
+        if (! empty($this->listado)) {
+            foreach ($this->listado as $asignacion) {
+                $uniqueId = $asignacion->getId();
 
-HTML;
+                $profesor = Usuario::dbGet($asignacion->getProfesor());
+                $profesorNombre = $profesor->getNombreCompleto();
 
-					}
+                $asignatura = Asignatura::dbGet($asignacion->getAsignatura());
+                $asignaturaNombre = $asignatura->getNombreCompleto();
+                
+                $grupo = Grupo::dbGet($asignacion->getGrupo());
+                $grupoNombre = $grupo->getNombreCompleto();
 
-		$html .= <<< HTML
-				</div>
-			</div>
-		</section>
+                $formReadBtn = $formRead
+                    ->generateButton('Ver', $asignacion->getId(), true);
+                
+                $buffer .= <<< HTML
+                <tr data-unique-id="$uniqueId">
+                    <td data-col-name="profesorNombre">$profesorNombre</td>
+                    <td data-col-name="asignaturaNombre">$asignaturaNombre</td>
+                    <td data-col-name="grupoNombre">$grupoNombre</td>
+                    <td class="text-right">$formReadBtn</td>
+                </tr>
+                HTML;
+            }
+        } else {
+            $buffer .= <<< HTML
+            <tr>
+                <td></td>
+                <td>No se ha encontrado ninguna asignación.</td>
+                <td></td>
+                <td></td>
+            </tr>
+            HTML;
+        }
 
-HTML;
-
-		echo $html;
-
-	}
-
-	public function procesaSide(): void
-	{
-
-		$app = App::getSingleton();
-		$url_crear = $app->getUrl() . '/admin/asignaciones/crear/';
-
-		$html = <<< HTML
-					<ul>
-						<li><a href="$url_crear" class="btn">Nueva Asignación</a></li>
-					</ul>
-
-HTML;
-
-		echo $html;
-
-	}
+        return $buffer;
+    }
 }
 
 ?>

@@ -30,6 +30,9 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 
 use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate as GrupoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate as GrupoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead as GrupoPsRead;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete as GrupoPsDelete;
 
 use Awsw\Gesi\Sesion;
 
@@ -37,8 +40,8 @@ use Awsw\Gesi\Sesion;
 class GrupoPsList extends Modelo
 {
 
-        private const VISTA_NOMBRE = "Gestionar grupos";
-        private const VISTA_ID = "grupo-ps-list";
+    public const VISTA_NOMBRE = "Gestionar grupos";
+        public const VISTA_ID = "grupo-list";
 
         private $listado;
 
@@ -49,7 +52,7 @@ class GrupoPsList extends Modelo
             $this->nombre = self::VISTA_NOMBRE;
             $this->id = self::VISTA_ID;
 
-            $this->listado = Grupo::dbGetAll();
+            $this->listadoGrupo = Grupo::dbGetAll();
         }
 
         public function procesaContent() : void
@@ -72,17 +75,79 @@ class GrupoPsList extends Modelo
         {
             //Create grupo
             $formGrupoPsCreate = new GrupoPsCreate();
-            $formGrupoPsCreateModal = $formGrupoPsCreate ->generateModal();
+            $formGrupoPsCreateModal = $formGrupoPsCreate->generateModal();
+
+            //Editar grupo
+
+            $formGrupoPsUpdate = new GrupoPsUpdate();
+            $formGrupoPsUpdateModal = $formGrupoPsUpdate->generateModal();
+            //Read grupo
+
+            $formGrupoPsRead = new GrupoPsRead();
+            $formGrupoPsReadModal = $formGrupoPsRead->generateModal();
 
 
+            //Delete grupo
+
+            $formGrupoPsDelete = new GrupoPsDelete();
+            $formGrupoPsDeleteModal = $formGrupoPsDelete->generateModal();
+
+            $listaGrupoBuffer = '';
+
+            if(! empty($this->listadoGrupo)){
+                foreach($this->listadoGrupo as $u){
+                    $uniqueId = $u->getId();
+                    $nivel = $u->getNivelRaw();
+                  //  $curso_escolar = $u->getCursoEscolarRaw();
+                   // $nombre_corto = $u->getNombreCorto();
+                    $nombre_completo = $u->getNombreCompleto();
+                  //  $tutor = $u->getTutor();
+
+                    $formGrupoReadButton = $formGrupoPsRead->generateButton('Ver',$uniqueId,true);
+                    $formGrupoUpdateButton = $formGrupoPsUpdate->generateButton('Editar',$uniqueId,true);
+                    $formGrupoDeleteButton = $formGrupoPsDelete->generateButton('Eliminar', $uniqueId,true);
+
+                    $listaGrupoBuffer .= <<< HTML
+                    <tr data-unique-id="$uniqueId">
+                        <td scope="row" data-col-name="nif">$nivel</td>
+                        <td data-col-name="nombre-completo">$nombre_completo</td>
+                        <td class="text-right">$formGrupoReadButton $formGrupoUpdateButton $formGrupoDeleteButton</td>
+                    </tr>
+                    HTML;
+                }
+
+
+            } else{
+                $listaGrupoBuffer .= <<< HTML
+                <tr>
+                    <td></td>
+                    <td>No se han encontrado grupos.</td>
+                    <td></td>
+                </tr>
+                HTML;
+                }
+            
 
             $formGrupoPsCreateButton = $formGrupoPsCreate->generateButton('Crear',null,true);
             $html = <<< HTML
-            <h3 class="mb-4">$formGrupoPsCreateButton Estudiantes</h3>
+            <h3 class="mb-4">$formGrupoPsCreateButton</h3>
             <table id="grupo-lista" class="table table-borderless table-striped">
-              
+            <thead>
+                <tr>
+                    <th scope="col">Nivel</th>
+                    <th scope="col">Nombre Curso</th>
+                    <th scope="col" class="text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                $listaGrupoBuffer
+            </tbody>
             
             </table>
+            $formGrupoPsCreateModal
+            $formGrupoPsUpdateModal
+            $formGrupoPsReadModal
+            $formGrupoPsDeleteModal
             HTML;
 
             return $html;

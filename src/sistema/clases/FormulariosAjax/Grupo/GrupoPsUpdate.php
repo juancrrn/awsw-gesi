@@ -1,6 +1,6 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario;
+namespace Awsw\Gesi\FormulariosAjax\Grupo;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
@@ -24,7 +24,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class EstPdUpdate extends FormularioAjax
+class GrupoPsUpdate extends FormularioAjax
 {
 
     /**
@@ -38,13 +38,13 @@ class EstPdUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-update';
-    private const FORM_NAME = 'Editar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/update/';
+    private const FORM_ID = 'grupo-update';
+    private const FORM_NAME = 'Editar grupo';
+    private const TARGET_OBJECT_NAME = 'Grupo';
+    private const SUBMIT_URL = '/admin/grupo/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'updated.grupo';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista';
 
     /**
      * Constructs the form object
@@ -83,33 +83,40 @@ class EstPdUpdate extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Grupo::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'El grupo solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
         
-        // Formalización HATEOAS de grupos.
-        $grupoLink = FormularioAjax::generateHateoasSelectLink(
-            'grupo',
+         // Formalizacion HATEOAS de niveles.
+         $nivelesLink = FormularioAjax::generateHateoasSelectLink(
+            'nivel',
             'single',
-            Grupo::dbGetAll()
+            Valido::getNivelesHateoas()
         );
 
-        $usuario = Usuario::dbGet($uniqueId);
+        // Formalización HATEOAS de tutores.
+        $tutoresLink = FormularioAjax::generateHateoasSelectLink(
+            'tutor',
+            'single',
+            Usuario::dbGetByRol(2)
+        );
+
+        //Mapear datos para que coincidan con los nombres de los inputs.$app
 
         $responseData = array(
             'status' => 'ok',
             'links' => array(
-                $grupoLink
-            ),
-            self::TARGET_OBJECT_NAME => $usuario
+                $nivelesLink,
+                $tutoresLink
+            )
         );
 
         return $responseData;
@@ -118,39 +125,36 @@ class EstPdUpdate extends FormularioAjax
     public function generateFormInputs() : string
     {
         $html = <<< HTML
-        <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required">
-        </div>
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required">
-        </div>
-        <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required">
-        </div>
-        <div class="form-group">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required">
-        </div>
-        <div class="form-group">
-            <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required">
-        </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required">
-        </div>
-        <div class="form-group">
-            <label for="grupo">Grupo</label>
-            <select class="form-control" name="grupo" id="grupo" required="required">
+            <label for="nivel">Nivel</label>
+            <select class="form-control" name="nivel" id="nivel" required="required">
             </select>
         </div>
+        <div class="form-group">
+        <label for="curso_escolar">Curso escolar</label>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+        </div>
+        <div class="form-group">
+        <label for="nombre_completo">Nombre completo</label>
+            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+        </div>
+        <div class="form-group">
+            <label for="fecha_nacimiento">Fecha de nacimiento</label>
+            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+        </div>
+        <div class="form-group">
+        <label for="tutor">Tutor</label>
+            <select class="form-control" name="tutor" id="tutor" required="required">
+            </select>
+        </div>
+        
+            
+            
+        
         HTML;
 
         return $html;
+      
     }
 
     public function processSubmit(array $data = array()) : void
@@ -158,107 +162,82 @@ class EstPdUpdate extends FormularioAjax
         $uniqueId = $data['uniqueId'] ?? null;
         
         // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+        if (! Grupo::dbExisteId($uniqueId)) {
+            $errors[] = 'El grupo solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
+        $nivel = $data['nivel'] ?? null;
+        $curso_escolar = $data['curso_escolar'] ?? null;
+        $nombre_corto = $data['nombre_corto'] ?? null;
+        $nombre_completo = $data['nombre_completo'] ?? null;
+        $tutor = $data['tutor'] ?? null;
 
-        $nif = $data['nif'] ?? null;
-        $nombre = $data['nombre'] ?? null;
-        $apellidos = $data['apellidos'] ?? null;
-        $fechaNacimiento = $data['fechaNacimiento'] ?? null;
-        $numeroTelefono = $data['numeroTelefono'] ?? null;
-        $email = $data['email'] ?? null;
-
-        if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
+        if (empty($nivel))  {
+            $errors[] = 'El campo nivel no puede estar vacío';
         }
 
-        if (empty($nombre)) {
-            $errors[] = 'El campo nombre no puede estar vacío.';
-        } elseif (! Valido::testStdString($nombre)) {
-            $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
+        if (empty($curso_escolar)) {
+            $errors[] ='El campo curso escolar no puede estar vacío.';
+        } elseif (! Valido::testStdInt($curso_escolar)) {
+            $errors[] ='El campo curso escolar no es válido.';
         }
 
-        if (empty($apellidos)) {
-            $errors[] = 'El campo apellidos no puede estar vacío.';
-        } elseif (! Valido::testStdString($apellidos)) {
-            $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
+        if (empty($nombre_corto)) {
+            $errors[] ='El campo nombre corto es obligatorio.';
+        } elseif(!Valido::testCadenaB($nombre_completo)){
+            $errors[] ='El campo nombre completo no es válido.';
+		}
+			
+		if (empty($nombre_completo)) {
+			$errors[] ='El campo nombre completo es obligatorio.';
+		} elseif (!Valido::testCadenaB($nombre_corto)){
+            $errors[] ='El campo nombre corto no es válido.';
         }
 
-        if (empty($fechaNacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
-        } else {
-            $fechaNacimiento = Valido::testDate($fechaNacimiento);
-            
-            if (! $fechaNacimiento) {
-                $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
-            }
+        /*
+         * Comprobar que el tutor no está vacío y existe.
+         * 
+         * TODO: log si pasa algo que no nos gusta
+         */
+
+        if (empty($tutor) || ! Valido::testStdInt($tutor) || ! Usuario::dbExisteId($tutor)) {
+            $errors[] ='El campo tutor no es válido.';
         }
 
-        if (empty($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no es válido.';
-        }
 
-        if (empty($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no puede estar vacío.';
-        } elseif (! Valido::testEmail($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no es válido.';
-        }
 
-        // Comprobar grupo.
-        
-        $grupo = $data['grupo'] ?? null;
-
-        if (empty($grupo)) {
-            $errors[] = 'El campo grupo no puede estar vacío.';
-        } elseif (! Grupo::dbExisteId($grupo)) {
-            $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
-        }
         
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
             // Obtener datos que no se habían modificado.
-            $anteriores = Usuario::dbGet($uniqueId);
+        
 
-            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
-            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
+           
+            $grupo = new Grupo(
+                null,
+                $nivel,
+                $curso_escolar,
+                $nombre_corto,
+                $nombre_completo,
+                $tutor
 
-            $fechaRegistro = $anteriores->getFechaRegistro();
-            
-            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
-
-            $usuario = new Usuario(
-                $uniqueId,
-                $nif,
-                1,
-                $nombre,
-                $apellidos,
-                $fechaNacimiento,
-                $numeroTelefono,
-                $email,
-                $fechaUltimoAcceso,
-                $fechaRegistro,
-                $grupo
             );
 
-            $actualizar = $usuario->dbActualizar();
+            $actualizar = $grupo->dbActualizar();
 
             if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Usuario estudiante actualizado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    'messages' => array('Grupo actualizado correctamente.'),
+                    self::TARGET_OBJECT_NAME => $grupo
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Error al actualizar usuario estudiante.';
+                $errors[] = 'Grupo usuario estudiante.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }

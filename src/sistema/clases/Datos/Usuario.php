@@ -469,27 +469,15 @@ class Usuario
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT id
-            FROM gesi_usuarios
-            WHERE id = ?
-            LIMIT 1
-        ");
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $query = <<< SQL
+        SELECT id FROM gesi_usuarios WHERE id = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-        
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;

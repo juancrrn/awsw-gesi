@@ -38,10 +38,10 @@ class GrupoPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_TARGET
      */
 
-    private const FORM_ID = 'grupo-create';
+    private const FORM_ID = 'grupo-ps-create';
     private const FORM_NAME = 'Crear grupo';
     private const TARGET_OBJECT_NAME = 'Grupo';
-    private const SUBMIT_URL = '/admin/grupo/create/';
+    private const SUBMIT_URL = '/ps/grupo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.grupo';
     private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista'; // TODO
@@ -105,26 +105,22 @@ class GrupoPsCreate extends FormularioAjax
             </select>
         </div>
         <div class="form-group">
-        <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+            <label for="curso_escolar">Curso escolar</label>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required" />
         </div>
         <div class="form-group">
-        <label for="nombre_completo">Nombre completo</label>
+            <label for="nombre_completo">Nombre completo</label>
             <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label for="nombre_corto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
         <label for="tutor">Tutor</label>
             <select class="form-control" name="tutor" id="tutor" required="required">
             </select>
         </div>
-        
-            
-            
-        
         HTML;
 
 

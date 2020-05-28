@@ -108,7 +108,7 @@ class Vista
             die();
         }
     }
-
+    
     /**
      * Añade un mensaje de éxito a la cola de mensajes para el usuario.
      * 
@@ -224,8 +224,11 @@ class Vista
      * @param string $paginaId Identificador de la página de destino, para saber
      *                         si es la actual.
      */
-    public static function generarSideMenuLink(string $url, string $titulo, string $paginaId) : string
+    public static function generarSideMenuLink(string $url, $vistaClase) : string
     {
+        $paginaId = $vistaClase::VISTA_ID;
+        $titulo = $vistaClase::VISTA_NOMBRE;
+
         $appUrl = App::getSingleton()->getUrl();
 
         $activeClass = Vista::getPaginaActualId() === $paginaId ? 'active' : '';

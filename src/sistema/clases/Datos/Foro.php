@@ -18,232 +18,243 @@
 
 namespace Awsw\Gesi\Datos;
 
-use \Awsw\Gesi\App;
+use Awsw\Gesi\App;
+use JsonSerializable;
 
 class Foro
+    implements JsonSerializable
 {
-	// Identificador único del foro
-	private $id;
 
-	// Tema a tratar en el foro
-	private $tema;
+    /**
+     * @var int $id Identificador interno del foro.
+     */
+    private $id;
 
-	// Identificador de la relación profesor-grupo-asignatura del foro. Si es NULL, el foro es público
-	private $profesor_grupo_asignatura;
+    /**
+     * @var string $nombre Nombre del foro.
+     */
+    private $nombre;
 
-	/**
-	 * Constructor.
-	 */
-	private function __construct($id, $tema, $profesor_grupo_asignatura){
-		$this->id = $id;
-		$this->tema = $tema;
-		$this->profesor_grupo_asignatura = $profesor_grupo_asignatura;
-	}
+    /**
+     * Constructor.
+     */
+    private function __construct(
+        int $id,
+        string $nombre
+    )
+    {
+        $this->id = $id;
+        $this->nombre = $nombre;
+    }
 
-	public static function dbInsertar(MensajeForo $mensajeF) : int {
-	
-		$bbdd = App::getSingleton()->bbddCon();
+    private static function fromMysqliFetch($o) : self
+    {
+        return new self(
+            $o->id,
+            $o->nombre
+        );
+    }
 
-		$sentencia = $bbdd->prepare("
-			INSERT
-			INTO 
-				gesi_foros
-				(	
-					id,
-					tema,
-					profesor_grupo_asignatura
-				)
-			VALUES
-				(?,?,?)
-		");
+    public function getId() : int
+    {
+        return $this->id;
+    }
 
-		$id = $mensajeF->getId();
-		$tema = $mensajeF->getTema();
-		$profesor_grupo_asignatura = $mensajeF->getProfesor_grupo_asignatura();
+    public function getNombre() : string
+    {
+        return $this->nombre;
+    }
 
-		$sentencia->blind_param(
-			"isi",
-			$id,
-			$tema,
-			$profesor_grupo_asignatura
-		);
+    public function jsonSerialize() 
+    {
+        $selectName = '(' . $this->getId() . ') ' . $this->getNombre();
 
-		$sentencia->execute();
+        return [
+            'uniqueId' => $this->getId(),
+            'selectName' => $selectName,
+            'id' => $this->getId(),
+            'nombre' => $this->getNombre()
+        ];
+    }
 
-		$id_insertado = $bbdd->insert_id;
+    /*
+     *
+     * Operaciones INSERT.
+     *  
+     */
 
-		$sentencia->close();
+    public function dbInsertar() : int
+    {
+        $bbdd = App::getSingleton()->bbddCon();
 
-		return $id_insertado;		
- }
+        $query = <<< SQL
+        INSERT
+        INTO 
+            gesi_foros
+            (    
+                id,
+                tema,
+                profesor_grupo_asignatura
+            )
+        VALUES
+            (?,?,?)
+        SQL;
 
-	/**
-	 * Trae un foro de la base de datos.
-	 *
-	 * @param int $id
-	 *
-	 * @requires Existe un foro con el id especificado.
-	 *
-	 * @return Foro
-	 */
-	public static function dbGet(int $id) {
+        $sentencia = $bbdd->prepare($query);
+        $id = $this->getId();
+        $nombre = $this->getNombre();
+        $sentencia->bind_param('is', $id, $nombre);
+        $sentencia->execute();
+        $id_insertado = $bbdd->insert_id;
+        $sentencia->close();
 
-		$bbdd = App::getSingleton()->bbddCon();
+        return $id_insertado;        
+    }
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				tema,
-				profesor_grupo_asignatura
-			FROM
-				gesiForos
-			WHERE
-				id = ?
-			LIMIT 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
-		$sentencia->execute();
-		$sentencia->store_result();
+    /*
+     *
+     * Operaciones SELECT.
+     *  
+     */
 
-		$sentencia->bind_result(
-			$result_id,
-			$result_tema,
-			$result_profesor_grupo_asignatura,
-		);
-		
-		$foro = null;
+    /**
+     * Trae todos los foros de la base de datos.
+     *
+     * @requires Existe algún foro.
+     *
+     * @return Foro
+     */
+    public static function dbGetAll() : array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
 
-		while($sentencia->fetch()) {
-			$foro = new Foro(
-				$result_id,
-				$result_tema,
-				$result_profesor_grupo_asignatura
-			);
-		}
-		
-		$sentencia->close();
+        $query = <<< SQL
+        SELECT 
+            id,
+            nombre
+        FROM
+            gesi_foros
+        SQL;
 
-		return $foro;
-	}
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $foros = array();
 
-	public static function dbexisteID($id){
-		$bbdd = App::getSingleton()->bbddCon();
+        while ($foro = $resultado->fetch_object()) {
+            $foros[] = self::fromMysqliFetch($foro);
+        }
 
-		$sentencia = $bbdd->prepare("
-			SELECT id
-			FROM gesi_foros
-			WHERE id = ?
-			LIMIT 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
-		$sentencia->execute();
-		
-		$sentencia->store_result();
+        $sentencia->close();
 
-		if ($sentencia->num_rows > 0) {
-			$existe = true;
-		} else {
-			$existe = false;
-		}
+        return $foros;
+    }
 
-		$sentencia->close();
+    /**
+     * Trae un foro de la base de datos.
+     *
+     * @param int $id
+     *
+     * @requires Existe un foro con el id especificado.
+     *
+     * @return Foro
+     */
+    public static function dbGet(int $id) : self
+    {
 
-		return $existe;
-	}
+        $bbdd = App::getSingleton()->bbddCon();
 
-	/**
-	 * Trae todos los mensajes de un foro de la base de datos.
-	 *
-	 * @param int $this->id
-	 *
-	 * @requires Existe algun mensaje en el foro especificado.
-	 *
-	 * @return array<MensajeForo>
-	 */
-	public static function dbGetMessages(){
-		
-		$result = [];
-		$bbdd = App::getSingleton()->bbddCon();
+        $query = <<< SQL
+        SELECT 
+            id,
+            nombre
+        FROM
+            gesi_foros
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-			M.id,
-			M.foro,
-			M.padre,
-			M.usuario,
-			M.contenido
-			FROM
-				gesi_foros F, gesi_mensajes_foros M
-			WHERE
-				F.id = M.foro
-		");
-		
-		$sentencia->execute();
-		$sentencia->store_result();
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $foro = self::fromMysqliFetch($resultado->fetch_object());
+        $sentencia->close();
 
-		$sentencia->bind_result(
-			$this->foro,			
-		);
-		
-		//$foro = null;
+        return $foro;
+    }
 
-		while($sentencia->fetch()) {
-			$result[] = new MensajeForo(
-			$fila[getId()],
-			$fila[getForo()],
-			$fila[getPadre()],
-			$fila[getUsuario()],
-			$fila[getContenido()]
-			);
-		}
-		
-		$sentencia->close();
+    public static function dbExisteId($id) : bool
+    {
+        $bbdd = App::getSingleton()->bbddCon();
 
-		return $result;	
-	}
-	public static function dbActualizar() : bool{
-	
-		$bbdd = App::getSingleton()->bbddCon();
-	
-		$sentencia = $bbdd->prepare("
-			UPDATE
-				gesi_eventos
-			SET
-				tema = ?,
-				profesor_grupo_asignatura = ?
-				FROM
-				gesi_foros
-			WHERE
-				id = ?
-		");
-	
-		$id= $this->getId();
-		$tema = $this->getTema();
-		$profesor_grupo_asignatura= $this->getProfesor_grupo_asignatura();
-	
-		$sentencia->blind_param(
-			"isi", 
-			$id,
-			$tema,
-			$profesor_grupo_asignatura
-			);
-	
-		$resultado = $sentencia->execute();
-	
-		$sentencia->close();
-	
-		return $resultado;
-	  }
+        $sentencia = $bbdd->prepare("
+            SELECT id
+            FROM gesi_foros
+            WHERE id = ?
+            LIMIT 1
+        ");
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+        
+        $sentencia->execute();
+        
+        $sentencia->store_result();
+
+        if ($sentencia->num_rows > 0) {
+            $existe = true;
+        } else {
+            $existe = false;
+        }
+
+        $sentencia->close();
+
+        return $existe;
+    }
+
+    /*
+     *
+     * Operaciones UPDATE.
+     *  
+     */
+
+    public static function dbActualizar() : bool
+    {
+    
+        $bbdd = App::getSingleton()->bbddCon();
+    
+        $sentencia = $bbdd->prepare("
+            UPDATE
+                gesi_eventos
+            SET
+                tema = ?,
+                profesor_grupo_asignatura = ?
+                FROM
+                gesi_foros
+            WHERE
+                id = ?
+        ");
+    
+        $id= $this->getId();
+        $tema = $this->getTema();
+        $profesor_grupo_asignatura= $this->getProfesor_grupo_asignatura();
+    
+        $sentencia->blind_param(
+            "isi", 
+            $id,
+            $tema,
+            $profesor_grupo_asignatura
+            );
+    
+        $resultado = $sentencia->execute();
+    
+        $sentencia->close();
+    
+        return $resultado;
+    }
 }
 
-
-
-
+?>

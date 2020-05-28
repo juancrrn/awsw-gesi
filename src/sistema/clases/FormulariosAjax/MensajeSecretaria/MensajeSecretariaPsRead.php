@@ -1,14 +1,14 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Asignatura;
+namespace Awsw\Gesi\FormulariosAjax\MensajeSecretaria;
 
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\App;
+use Awsw\Gesi\Datos\MensajeSecretaria;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de visualización de una asignatura por parte 
+ * Formulario AJAX de visualización de un usuario de personal docente por parte 
  * de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -23,7 +23,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class AsignaturaPsRead extends FormularioAjax
+class MensajeSecretariaPsRead extends FormularioAjax
 {
 
     /**
@@ -34,21 +34,25 @@ class AsignaturaPsRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'asignatura-ps-read';
-    private const FORM_NAME = 'Ver Asignatura';
-    private const TARGET_CLASS_NAME = 'Asignatura';
-    private const SUBMIT_URL = '/ps/asignaturas/read/';
+    private const FORM_ID = 'mensaje-secretaria-ps-read';
+    private const FORM_NAME = 'Ver mensaje de Secretaría';
+    private const TARGET_CLASS_NAME = 'MensajeSecretaria';
+    private const SUBMIT_URL = '/ps/mensajesecretaria/read/';
 
     /**
      * Constructs the form object
      */
     public function __construct()
     {
+        Sesion::requerirSesionPs(true);
+
+        $app = App::getSingleton();
+
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
             self::TARGET_CLASS_NAME,
-            self::SUBMIT_URL,
+            $app->getUrl() . self::SUBMIT_URL,
             null
         );
 
@@ -73,34 +77,24 @@ class AsignaturaPsRead extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
-        if (! Asignatura::dbExisteId($uniqueId)) {
+        if (! MensajeSecretaria::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'La asignatura solicitada no existe.'
+                    'El mensaje de Secretaría solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
-        
-        // Formalización HATEOAS de grupos.
-        $asignaturaLink = FormularioAjax::generateHateoasSelectLink(
-            'nivel',
-            'single',
-            Valido::getNivelesHateoas()
-        );
 
-        $asignatura = Asignatura::dbGet($uniqueId);
+        $mensaje = MensajeSecretaria::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
-            'links' => array(
-                $asignaturaLink
-            ),
-            self::TARGET_CLASS_NAME => $asignatura
+            self::TARGET_CLASS_NAME => $mensaje
         );
 
         return $responseData;
@@ -110,21 +104,24 @@ class AsignaturaPsRead extends FormularioAjax
     {
         $html = <<< HTML
         <div class="form-group">
-            <label for="nivel">Nivel</label>
-            <select class="form-control" name="nivel" id="nivel" disabled="disabled">
-            </select>
+            <label>De</label>
+            <input class="form-control" type="text" name="fromNombre" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" placeholder="Curso escolar" disabled="disabled">
+            <label>Email</label>
+            <input class="form-control" type="text" name="fromEmail" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto" placeholder="Nombre corto" disabled="disabled">
+            <label>Número de teléfono</label>
+            <input class="form-control" type="text" name="fromTelefono" disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo" placeholder="Nombre completo" disabled="disabled">
+            <label>Fecha</label>
+            <input class="form-control" type="text" name="fecha" disabled="disabled" />
+        </div>
+        <div class="form-group">
+            <label>Contenido del mensaje</label>
+            <textarea class="form-control" name="contenido" rows="3" disabled="disabled"></textarea>
         </div>
         HTML;
 

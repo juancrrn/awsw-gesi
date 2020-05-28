@@ -20,6 +20,15 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Sesion\Cerrar as FormularioSesionCerrar;
 use Awsw\Gesi\Vistas\Vista;
 use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
+use Awsw\Gesi\Vistas\Grupo\GrupoPsList;
+use Awsw\Gesi\Vistas\Home\Home;
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaPsList;
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
+use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
+use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
 
 $app = App::getSingleton();
 
@@ -35,69 +44,69 @@ $paginaActualId = Vista::getPaginaActualId();
 $sideMenuBuffer = '';
 
 // Generar elementos de navegación del menú lateral.
-
-$sideMenuBuffer .= Vista::generarSideMenuLink('', 'Inicio', 'inicio');
+$sideMenuBuffer .= Vista::generarSideMenuLink(
+    '', Home::class);
 
 if (Sesion::isSesionIniciada()) {
     $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones personales');
 
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/secretaria/', 'Mensajes de Secretaría', 'mensaje-secretaria-lista');
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/ses/secretaria/', MensajeSecretariaSesList::class);
+    /* $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/eventos/', 'Eventos', 'evento-lista');
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/foros/', 'Foros', 'foro-lista');
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/biblioteca/', 'Biblioteca', 'mi-biblioteca');
+        '/ses/biblioteca/', 'Biblioteca', 'mi-biblioteca'); */
 
     if (Sesion::getUsuarioEnSesion()->isEst()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de estudiantes');
 
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
+        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/est/asignaturas/', 'Asignaturas', '');
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/est/asignaciones/horario/', 'Horarios', '');
+            '/est/asignaciones/horario/', 'Horarios', ''); */
     } elseif (Sesion::getUsuarioEnSesion()->isPd()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de personal docente');
 
+        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/pd/asignaturas/', );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaturas/', 'Asignaturas', '');
+            '/pd/asignaciones/horario/', );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaciones/horario/', 'Horarios', '');
+            '/pd/grupos/', );*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/grupos/', 'Grupos', '');
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaciones/', 'Asignaciones', '');
+            '/pd/asignaciones/', AsignacionPdList::class); 
     } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de administración');
 
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/secretaria/', 'Mensajes de Secretaría', '');
+            '/ps/secretaria/', MensajeSecretariaPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/asignaturas/', 'Asignaturas', '');
+            '/ps/asignaturas/', AsignaturaPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/grupos/', 'Grupos', '');
+            '/ps/grupos/', GrupoPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/usuarios/', 'Usuarios', 'usuario-ps-list');
+            '/ps/usuarios/', UsuarioPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/asignaciones/', 'Asignaciones', '');
+            '/ps/asignaciones/', AsignacionPsList::class);
+        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/ps/eventos/', );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/eventos/', 'Eventos', '');
+            '/ps/foros/', );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/foros/', 'Foros', '');
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/biblioteca/', 'Biblioteca', '');
+            '/ps/biblioteca/', ); */
     }
 } else {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/secretaria/', 'Contactar con Secretaría', 'mensaje-secretaria-inv-list');
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/inv/secretaria/', MensajeSecretariaInvList::class);
+    /* $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/inv/eventos/', 'Eventos públicos', '');
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/foros/', 'Foros públicos', '');
+        '/inv/foros/', 'Foros públicos', ''); */
 }
 
 // Generar elementos de la navegación del menú de sesión de usuario.
@@ -112,9 +121,9 @@ if (Sesion::isSesionIniciada()) {
     $url_editar = $urlInicio . '/sesion/perfil/';
     
     $badges = '';
-    $badges .= $u->isEst() ? '<span class="badge">Estudiante</span>' : '';
-    $badges .= $u->isPd() ? '<span class="badge">Personal docente</span>' : '';
-    $badges .= $u->isPs() ? '<span class="badge">Personal de Secretaría</span>' : '';
+    $badges .= $u->isEst() ? '<span class="badge badge-secondary">Estudiante</span>' : '';
+    $badges .= $u->isPd() ? '<span class="badge badge-secondary">Personal docente</span>' : '';
+    $badges .= $u->isPs() ? '<span class="badge badge-secondary">Personal de Secretaría</span>' : '';
 
     $formularioLogoutHtml = $formulario_logout->getHtml();
 

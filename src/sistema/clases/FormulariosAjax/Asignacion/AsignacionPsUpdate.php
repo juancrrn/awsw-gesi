@@ -9,8 +9,8 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
 
 /**
- * Formulario AJAX de creación de un usuario de personal docente por parte de 
- * un administrador (personal de Secretaría).
+ * Formulario AJAX de actualización una asignación profesor-asignatura-grupo 
+ * por parte de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi

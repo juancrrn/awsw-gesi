@@ -3,10 +3,7 @@
 namespace Awsw\Gesi\FormulariosAjax\MensajeSecretaria;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\MensajeSecretaria;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 

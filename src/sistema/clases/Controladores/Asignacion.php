@@ -17,6 +17,11 @@
 
 namespace Awsw\Gesi\Controladores;
 
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
+
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
 use Awsw\Gesi\Vistas\Vista;
 
 class Asignacion extends Controlador
@@ -25,9 +30,36 @@ class Asignacion extends Controlador
 	public static function controla() : void
 	{
 
+		/**
+		 * Personal de Secretaría.
+		 */
+
+		parent::get('/ps/asignaciones/', function () {
+			Vista::dibuja(new AsignacionPsList());
+		});
+
+		// Create.
+		parent::get('/ps/asignacion/create/', function () {
+			(new AsignacionPsCreate)->manage();
+		});
+		parent::post('/ps/asignacion/create/', function () {
+			(new AsignacionPsCreate)->manage();
+		});
+
+		// Read.
+		parent::get('/ps/asignacion/read/', function () {
+			(new AsignacionPsRead)->manage();
+		});
+
+		/**
+		 * Personal Docente
+		 */
+		parent::get('/pd/asignaciones/', function() {
+			Vista::dibuja(new AsignacionPdList());
+		});
+
+
 		/*
-		
-		
 		parent::get('/admin/asignaciones/crear/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminCrear());
 		});

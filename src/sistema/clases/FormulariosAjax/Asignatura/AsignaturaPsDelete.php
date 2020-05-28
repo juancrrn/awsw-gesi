@@ -3,6 +3,7 @@
 namespace Awsw\Gesi\FormulariosAjax\Asignatura;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Asignatura;
 
@@ -35,13 +36,13 @@ use Awsw\Gesi\Datos\Asignatura;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'asignatura-delete';
+    private const FORM_ID = 'asignatura-ps-delete';
     private const FORM_NAME = 'Eliminar asignatura';
     private const TARGET_OBJECT_NAME = 'Asignatura';
-    private const SUBMIT_URL = '/admin/asignaturas/delete/';
+    private const SUBMIT_URL = '/ps/asignaturas/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.asignatura';
-    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-lista';
+    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list';
 
     public function __construct()
     {
@@ -109,15 +110,11 @@ use Awsw\Gesi\Datos\Asignatura;
         <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label>Nombre</label>
-            <input name="nombre" type="text" class="form-control"  disabled="disabled">
-        </div>
-        <div class="form-group">
-            <label>Nivel</label>
-            <input name="nivel" type="text" class="form-control"  disabled="disabled">
+            <input name="nombre_completo" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <label>Curso</label>
-            <input name="curso" type="text" class="form-control"  disabled="disabled">
+            <input name="curso_escolar" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
@@ -160,21 +157,27 @@ use Awsw\Gesi\Datos\Asignatura;
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (Asignatura::dbEliminar($uniqueId)) {
-            $responseData = array(
-                'status' => 'ok',
-                'messages' => array(
-                    'Asignatura eliminada correctamente.'
-                )
-            );
-
-            $this->respondJsonOk($responseData);
-        } else {
+        //Comprobamos si la asignatura esta asignada
+        if(!Asignacion::dbAnyByAsignatura($uniqueId)){
+            if (Asignatura::dbEliminar($uniqueId)) {
+                $responseData = array(
+                    'status' => 'ok',
+                    'messages' => array(
+                        'Asignatura eliminada correctamente.'
+                    )
+                );
+    
+                $this->respondJsonOk($responseData);
+            } else {
+                $errors[] = 'Hubo un problema al eliminar la asignatura.';
+    
+                $this->respondJsonError(400, $errors); // Bad request.
+            }
+        }else{
             $errors[] = 'Hubo un problema al eliminar la asignatura.';
-
+    
             $this->respondJsonError(400, $errors); // Bad request.
         }
-
     }
 }
 

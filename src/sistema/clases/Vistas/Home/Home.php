@@ -11,12 +11,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Vistas\Home;
@@ -27,66 +26,75 @@ use Awsw\Gesi\Vistas\Modelo;
 
 class Home extends Modelo
 {
-	private const VISTA_NOMBRE = "Inicio";
-	private const VISTA_ID = "inicio";
+    public const VISTA_NOMBRE = 'Inicio';
+    public const VISTA_ID = 'inicio';
 
-	public function __construct()
-	{
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
-	}
+    public function __construct()
+    {
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
+    }
 
-	public function procesaContent() : void
-	{
+    public function procesaContent() : void
+    {
 
-		$app = App::getSingleton();
+        $saludo = '';
 
-		$saludo = '';
+        if (Sesion::isSesionIniciada()) {
+            $saludo = $this->generaConSesion();
+        } else {
+            $saludo = $this->generaSinSesion();
+        }
 
-		if (Sesion::isSesionIniciada()) {
+        $html = <<< HTML
+        <h2 class="mb-4">$this->nombre</h2>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-5 text-center">
+                $saludo
+            </div>
+            <div class="col"></div>
+        </div>
+        HTML;
 
-			$nombre = Sesion::getUsuarioEnSesion()->getNombre();
+        echo $html;
 
-			$saludo .= <<< HTML
-						<p>¡Te damos la bienvenida, $nombre!</p>
+    }
 
-HTML;
-		
-		} else {
+    private function generaConSesion() : string
+    {
+        $app = App::getSingleton();
+        $nombre = Sesion::getUsuarioEnSesion()->getNombre();
 
-			$url_imagen = $app->getUrl() . '/img/landing.svg';
-			$url_iniciar = $app->getUrl() . '/sesion/iniciar/';
+        $urlImagen = $app->getUrl() . '/img/landing.svg';
 
-			$saludo .= <<< HTML
-						<div id="landing-welcome">
-			
-							<img src="$url_imagen" alt="">
-			
-							<h1>¡Hola!</h1>
-			
-							<p>Te damos la bienvenida. Gesi es la aplicación web que gestiona tu instituto de educación secundaria. Accede a los contenidos iniciando sesión.</p>
-			
-							<p id="landing-login"><a class="btn" href="$url_iniciar">Iniciar sesión</a></p>
-						
-						</div>
+        $html = <<< HTML
+        <h3 class="mb-5">¡Hola, $nombre!</h3>
+        <img src="$urlImagen" alt="Gesi" class="mb-4">
+        <p class="mb-3">Te damos la bienvenida a Gesi.</p>
+        <p class="mb-3">Mira todo lo que puedes hacer abriendo el menú lateral.</p>
+        HTML;
 
-HTML;
-		
-		}
+        return $html;
+    }
 
-		$html = <<< HTML
-					<header class="page-header">
-						<h1>Inicio</h1>
-					</header>
-					<section class="page-content">
-						$saludo
-					</section>
+    private function generaSinSesion() : string
+    {
+        $app = App::getSingleton();
 
-HTML;
+        $urlImagen = $app->getUrl() . '/img/landing.svg';
+        $urlIniciar = $app->getUrl() . '/sesion/iniciar/';
+        
+        $html = <<< HTML
+        <h3 class="mb-5">¡Hola!</h3>
+        <img src="$urlImagen" alt="Gesi" class="mb-4">
+        <p class="mb-3">Te damos la bienvenida. Gesi es la aplicación web que gestiona tu instituto de educación secundaria.</p>
+        <p class="mb-3">Accede a tus contenidos iniciando sesión.</p>
+        <p><a class="btn btn-primary" href="$urlIniciar">Iniciar sesión</a></p>
+        HTML;
 
-		echo $html;
-
-	}
+        return $html;
+    }
 }
 
 ?>

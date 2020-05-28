@@ -439,14 +439,25 @@ class MensajeSecretaria
 
     public function jsonSerialize()
     {
+        if ($this->getUsuario()) {
+            $usuario = Usuario::dbGet($this->getUsuario());
+            $nombre = $usuario->getNombreCompleto();
+            $email = $usuario->getEmail();
+            $telefono = $usuario->getNumeroTelefono();
+        } else {
+            $nombre = $this->getFromNombre();
+            $email = $this->getFromEmail();
+            $telefono = $this->getFromTelefono();
+        }
+
         return [
             'uniqueId' => $this->getId(),
             'checkbox' => $this->getId(),
             'id' => $this->getId(),
             'usuario' => $this->getUsuario(),
-            'from_nombre' => $this->getFromNombre(),
-            'from_email' => $this->getFromEmail(),
-            'from_telefono' => $this->getFromTelefono(),
+            'fromNombre' => $nombre,
+            'fromEmail' => $email,
+            'fromTelefono' => $telefono,
             'fecha' => $this->getFecha(Valido::ESP_DATETIME_SHORT_FORMAT),
             'contenido' => $this->getContenido(),
             'extractoContenido' => $this->getContenido(32)

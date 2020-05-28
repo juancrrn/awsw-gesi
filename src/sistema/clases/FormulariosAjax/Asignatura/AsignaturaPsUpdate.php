@@ -3,13 +3,12 @@
 namespace Awsw\Gesi\FormulariosAjax\Asignatura;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
 
 /**
- * Formulario AJAX de creación de un usuario de personal docente por parte de 
+ * Formulario AJAX de actualizacion de una asignatura por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -38,13 +37,13 @@ class AsignaturaPsUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-update';
-    private const FORM_NAME = 'Editar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/update/';
+    private const FORM_ID = 'asignatura-ps-update';
+    private const FORM_NAME = 'Editar asignatura';
+    private const TARGET_OBJECT_NAME = 'Asignatura';
+    private const SUBMIT_URL = '/ps/asignaturas/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'updated.asignatura';
+    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list';
 
     /**
      * Constructs the form object
@@ -83,33 +82,33 @@ class AsignaturaPsUpdate extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Asignatura::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'La asignatura solicitada no existe.'
                 )
             );
 
             return $responseData;
         }
         
-        // Formalización HATEOAS de grupos.
-        $grupoLink = FormularioAjax::generateHateoasSelectLink(
-            'grupo',
+        // Formalización HATEOAS de niveles.
+        $nivelLink = FormularioAjax::generateHateoasSelectLink(
+            'nivel',
             'single',
-            Grupo::dbGetAll()
+            Valido::getNivelesHateoas()
         );
 
-        $usuario = Usuario::dbGet($uniqueId);
+        $asignatura = Asignatura::dbGet($uniqueId);
 
         $responseData = array(
             'status' => 'ok',
             'links' => array(
-                $grupoLink
+                $nivelLink
             ),
-            self::TARGET_OBJECT_NAME => $usuario
+            self::TARGET_OBJECT_NAME => $asignatura
         );
 
         return $responseData;
@@ -120,35 +119,25 @@ class AsignaturaPsUpdate extends FormularioAjax
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required">
-        </div>
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required">
-        </div>
-        <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required">
-        </div>
-        <div class="form-group">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required">
-        </div>
-        <div class="form-group">
-            <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required">
-        </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required">
-        </div>
-        <div class="form-group">
-            <label for="grupo">Grupo</label>
-            <select class="form-control" name="grupo" id="grupo" required="required">
+            <label for="nivel">Nivel</label>
+            <select class="form-control" name="nivel" id="nivel" required="required">
             </select>
         </div>
+        <div class="form-group">
+            <label for="curso_escolar">Curso escolar</label>
+            <p class="form-help">Introduce el año de inicio del curso escolar. Por ejemplo, para el curso 2018 - 2019, introduce 2018.</p>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" placeholder="Curso escolar" required="required">
+        </div>
+        <div class="form-group">
+            <label for="nombre_corto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto" placeholder="Nombre corto" required="required">
+        </div>
+        <div class="form-group">
+            <label for="nombre_completo">Nombre completo</label>
+            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo" placeholder="Nombre completo" required="required">
+        </div>
         HTML;
+
 
         return $html;
     }
@@ -156,115 +145,72 @@ class AsignaturaPsUpdate extends FormularioAjax
     public function processSubmit(array $data = array()) : void
     {
         $uniqueId = $data['uniqueId'] ?? null;
-        
-        // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+
+        $curso_escolar = $data['curso_escolar'] ?? null;
+        $nombre_corto = $data['nombre_corto'] ?? null;
+        $nombre_completo = $data['nombre_completo'] ?? null;
+
+        // Comprobar nivel.
+        if(! Asignatura::dbExisteId($uniqueId)){
+            $errors[] = 'La asignatura solicitada no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
-
-        $nif = $data['nif'] ?? null;
-        $nombre = $data['nombre'] ?? null;
-        $apellidos = $data['apellidos'] ?? null;
-        $fechaNacimiento = $data['fechaNacimiento'] ?? null;
-        $numeroTelefono = $data['numeroTelefono'] ?? null;
-        $email = $data['email'] ?? null;
-
-        if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
-        }
-
-        if (empty($nombre)) {
-            $errors[] = 'El campo nombre no puede estar vacío.';
-        } elseif (! Valido::testStdString($nombre)) {
-            $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($apellidos)) {
-            $errors[] = 'El campo apellidos no puede estar vacío.';
-        } elseif (! Valido::testStdString($apellidos)) {
-            $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($fechaNacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
-        } else {
-            $fechaNacimiento = Valido::testDate($fechaNacimiento);
-            
-            if (! $fechaNacimiento) {
-                $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
-            }
-        }
-
-        if (empty($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no es válido.';
-        }
-
-        if (empty($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no puede estar vacío.';
-        } elseif (! Valido::testEmail($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no es válido.';
-        }
-
-        // Comprobar grupo.
         
-        $grupo = $data['grupo'] ?? null;
+        $nivel = $data['nivel'] ?? null;
 
-        if (empty($grupo)) {
-            $errors[] = 'El campo grupo no puede estar vacío.';
-        } elseif (! Grupo::dbExisteId($grupo)) {
-            $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
+        if (empty($nivel)) {
+            $errors[] = 'El campo nivel no puede estar vacío.';
+        }
+
+        if(empty($curso_escolar)){
+            $errors[] = 'El campo curso escolar no puede estar vacío.';
+        }elseif(!Valido::testStdInt($curso_escolar)){
+            $errors[] = 'El campo curso escolar no es válido.';
+        }
+
+        if (empty($nombre_corto)) {
+            $errors[] = 'El campo nombre corto es obligatorio.';
+        } elseif (!Valido::testCadenaB($nombre_corto)){
+            $errors[] = 'El campo nombre corto no es válido.';
+        }
+
+        if (empty($nombre_completo)) {
+            $errors[] = 'El campo nombre completo es obligatorio.';
+        } elseif (!Valido::testCadenaB($nombre_completo)){
+            $errors[] = 'El campo nombre completo no es válido.';
         }
         
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            // Obtener datos que no se habían modificado.
-            $anteriores = Usuario::dbGet($uniqueId);
 
-            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
-            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
-
-            $fechaRegistro = $anteriores->getFechaRegistro();
-            
-            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
-
-            $usuario = new Usuario(
+            $asignatura = new Asignatura(
                 $uniqueId,
-                $nif,
-                1,
-                $nombre,
-                $apellidos,
-                $fechaNacimiento,
-                $numeroTelefono,
-                $email,
-                $fechaUltimoAcceso,
-                $fechaRegistro,
-                $grupo
-            );
-
-            $actualizar = $usuario->dbActualizar();
+                $nivel,
+                $curso_escolar,
+                $nombre_corto,
+                $nombre_completo
+              );
+  
+            $actualizar = $asignatura->dbActualizar();
 
             if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Usuario estudiante actualizado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    'messages' => array('Asignatura actualizada correctamente.'),
+                    self::TARGET_OBJECT_NAME => $asignatura
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Error al actualizar usuario estudiante.';
+                $errors[] = 'Error al actualizar la asignatura.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
 
         }
-    
     }
 }
 
