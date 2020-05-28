@@ -1,6 +1,6 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Usuario\PS;
+namespace Awsw\Gesi\FormulariosAjax\Usuario;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Usuario;

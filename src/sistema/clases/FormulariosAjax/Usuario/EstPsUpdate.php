@@ -24,7 +24,7 @@ use Awsw\Gesi\Formularios\Valido;
  * @version 0.0.4
  */
 
-class EstPdUpdate extends FormularioAjax
+class EstPsUpdate extends FormularioAjax
 {
 
     /**

@@ -22,7 +22,7 @@ use Awsw\Gesi\Datos\Usuario;
  * @version 0.0.4
  */
 
- class EstPdDelete extends FormularioAjax
+ class EstPsDelete extends FormularioAjax
  {
      /**
      * Initialize specific form constants

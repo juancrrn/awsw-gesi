@@ -1,180 +1,154 @@
 <?php
 
 /**
- * Puntos de entrada de vistas relacionadas con usuarios.
+ * Puntos de entrada de vistas y formularios relacionados con usuarios.
  * 
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\FormulariosAjax\Usuario\EstPsCreate;
+use Awsw\Gesi\FormulariosAjax\Usuario\EstPsRead;
+use Awsw\Gesi\FormulariosAjax\Usuario\EstPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Usuario\EstPsDelete;
+
+use Awsw\Gesi\FormulariosAjax\Usuario\PdPsCreate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PdPsRead;
+use Awsw\Gesi\FormulariosAjax\Usuario\PdPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PdPsDelete;
+
+use Awsw\Gesi\FormulariosAjax\Usuario\PsPsCreate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PsPsRead;
+use Awsw\Gesi\FormulariosAjax\Usuario\PsPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Usuario\PsPsDelete;
+
+use Awsw\Gesi\Vistas\Vista;
+use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
 
 class Usuario extends Controlador
 {
 
     public static function controla() : void
     {
-        // Vista de lista de usuarios.
+        /**
+         * Vista de lista de usuarios.
+         */
 
         parent::get('/admin/usuarios/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Usuario\UsuarioAdminList());
+            Vista::dibuja(new UsuarioPsList());
         });
 
         // TODO comprobar permisos
 
-        // Formularios AJAX de usuarios con rol estudiante.
+        /**
+         * Formularios AJAX de usuarios con rol estudiante.
+         */
 
+        // Create
         parent::get('/admin/usuarios/est/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminCreate();
-
-            $formulario->manage();
+            (new EstPsCreate())->manage();
         });
-
         parent::post('/admin/usuarios/est/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminCreate();
-
-            $formulario->manage();
+            (new EstPsCreate())->manage();
         });
 
+        // Read
         parent::get('/admin/usuarios/est/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminRead();
-
-            $formulario->manage();
+            (new EstPsRead())->manage();
         });
 
-        parent::get('/admin/usuarios/est/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminRead();
-
-            $formulario->manage();
-        });
-
-        parent::post('/admin/usuarios/est/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminRead();
-
-            $formulario->manage();
-        });
-        
+        // Update
         parent::get('/admin/usuarios/est/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminUpdate();
-
-            $formulario->manage();
+            (new EstPsUpdate())->manage();
         });
-
         parent::patch('/admin/usuarios/est/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminUpdate();
-
-            $formulario->manage();
+            (new EstPsUpdate())->manage();
         });
-        
+
+        // Delete
         parent::get('/admin/usuarios/est/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminDelete();
-
-            $formulario->manage();
+            (new EstPsDelete())->manage();
         });
-
         parent::delete('/admin/usuarios/est/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\Est\EstAdminDelete();
-
-            $formulario->manage();
+            (new EstPsDelete())->manage();
         });
 
-        // Formularios AJAX de usuarios con rol personal docente.
+        /**
+         * Formularios AJAX de usuarios con rol personal docente.
+         */
 
+        // Create
         parent::get('/admin/usuarios/pd/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminCreate();
-
-            $formulario->manage();
+            (new PdPsCreate())->manage();
         });
-
         parent::post('/admin/usuarios/pd/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminCreate();
-
-            $formulario->manage();
+            (new PdPsCreate())->manage();
         });
-        
+
+        // Read
         parent::get('/admin/usuarios/pd/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminRead();
-
-            $formulario->manage();
+            (new PdPsRead())->manage();
         });
 
+        // Update
         parent::get('/admin/usuarios/pd/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminUpdate();
-
-            $formulario->manage();
+            (new PdPsUpdate())->manage();
         });
-
         parent::patch('/admin/usuarios/pd/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminUpdate();
-
-            $formulario->manage();
+            (new PdPsUpdate())->manage();
         });
-        
+
+        // Delete
         parent::get('/admin/usuarios/pd/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminDelete();
-
-            $formulario->manage();
+            (new PdPsDelete())->manage();
         });
-
         parent::delete('/admin/usuarios/pd/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PD\PDAdminDelete();
-
-            $formulario->manage();
+            (new PdPsDelete())->manage();
         });
 
-        // Formularios AJAX de usuarios con rol personal de Secretaría.
+        /**
+         * Formularios AJAX de usuarios con rol personal de Secretaría.
+         */
 
+        // Create
         parent::get('/admin/usuarios/ps/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminCreate();
-
-            $formulario->manage();
+            (new PsPsCreate())->manage();
         });
-
         parent::post('/admin/usuarios/ps/create/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminCreate();
-
-            $formulario->manage();
+            (new PsPsCreate())->manage();
         });
         
+        // Read
         parent::get('/admin/usuarios/ps/read/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminRead();
-
-            $formulario->manage();
+            (new PsPsRead())->manage();
         });
     
+        // Update
         parent::get('/admin/usuarios/ps/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminUpdate();
-
-            $formulario->manage();
+            (new PsPsUpdate())->manage();
         });
-
         parent::patch('/admin/usuarios/ps/update/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminUpdate();
-
-            $formulario->manage();
+            (new PsPsUpdate())->manage();
         });
 
+        // Delete
         parent::get('/admin/usuarios/ps/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminDelete();
-
-            $formulario->manage();
+            (new PsPsDelete())->manage();
         });
-
         parent::delete('/admin/usuarios/ps/delete/', function () {
-            $formulario = new \Awsw\Gesi\FormulariosAjax\Usuario\PS\PSAdminDelete();
-
-            $formulario->manage();
+            (new PsPsDelete())->manage();
         });
     }
 }
+
+?>

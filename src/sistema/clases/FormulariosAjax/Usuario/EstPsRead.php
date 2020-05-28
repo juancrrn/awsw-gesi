@@ -22,7 +22,7 @@ use Awsw\Gesi\Datos\Usuario;
  * @version 0.0.4
  */
 
-class EstPdRead extends FormularioAjax
+class EstPsRead extends FormularioAjax
 {
 
     /**
