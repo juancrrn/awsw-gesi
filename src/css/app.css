@@ -59,6 +59,11 @@
     transition: all 0.4s ease 0s;
 }
 
+.side-menu-divider {
+    border-top: 0;
+    font-weight: bold;
+}
+
 /**
  * Barra indicadora de carga.
  */

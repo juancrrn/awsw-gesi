@@ -18,30 +18,46 @@
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\Vistas\Sesion\SesionIniciar;
+use Awsw\Gesi\Vistas\Sesion\SesionPerfil;
+use Awsw\Gesi\Vistas\Sesion\SesionRestablecerContrasena;
+
+use Awsw\Gesi\Vistas\Vista;
 
 class Sesion extends Controlador
 {
-	public static function controla() : void
-	{
+    public static function controla() : void
+    {
+        /**
+         * Iniciar sesión.
+         */
 
-		parent::get('/sesion/iniciar/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Iniciar());
-		});
-// TODO
-		parent::post('/sesion/iniciar/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Iniciar());
-		});
-		
-		parent::get('/sesion/reset/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\RestablecerContrasena());
-		});
-		
-		parent::get('/sesion/perfil/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Sesion\Perfil());
-		});
+        parent::get('/sesion/iniciar/', function () {
+            Vista::dibuja(new SesionIniciar());
+        });
+        parent::post('/sesion/iniciar/', function () {
+            Vista::dibuja(new SesionIniciar());
+        });
 
-	}
+        /**
+         * Restablecer contraseña.
+         */
+        
+        parent::get('/sesion/reset/', function () {
+            Vista::dibuja(new SesionRestablecerContrasena());
+        });
+        parent::post('/sesion/reset/', function () {
+            Vista::dibuja(new SesionRestablecerContrasena());
+        });
+
+        /**
+         * Perfil.
+         */
+        
+        parent::get('/sesion/perfil/', function () {
+            Vista::dibuja(new SesionPerfil());
+        });
+    }
 }
 
 ?>

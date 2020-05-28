@@ -1,0 +1,1 @@
+// Vista pública para que cualquiera vea libros y ejemplares disponibles

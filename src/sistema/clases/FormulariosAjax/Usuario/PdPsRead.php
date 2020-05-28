@@ -5,6 +5,7 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario;
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de visualizacion de un usuario de peronal 
@@ -36,13 +37,15 @@ class PdPsRead extends FormularioAjax
     private const FORM_ID = 'usuario-pd-read';
     private const FORM_NAME = 'Ver personal docente';
     private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/pd/read/';
+    private const SUBMIT_URL = '/ps/usuarios/pd/read/';
 
     /**
      * Constructs the form object
      */
     public function __construct()
     {
+        Sesion::requerirSesionPs(true);
+
         $app = App::getSingleton();
 
         parent::__construct(

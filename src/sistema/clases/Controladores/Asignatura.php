@@ -8,25 +8,47 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
+use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
+
+use Awsw\Gesi\Vistas\Vista;
 
 class Asignatura extends Controlador
 {
+
 	public static function controla() : void
 	{
+		/**
+		 * Personal de Secretaría.
+		 */
+
+		parent::get('/ps/asignaturas/', function () {
+			Vista::dibuja(new AsignaturaPsList());
+		});
+
+		/**
+		 * Formularios AJAX.
+		 */
+
+		// Create.
+		parent::get('/ps/asignaturas/create/', function () {
+			(new AsignaturaPsCreate())->manage();
+		});
+		parent::post('/ps/asignaturas/create/', function () {
+			(new AsignaturaPsCreate())->manage();
+		});
 
 		/*
-		
+		TODO
 
 		parent::go('/admin/asignaturas/crear/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminCrear());
@@ -43,11 +65,6 @@ class Asignatura extends Controlador
 		parent::go('/admin/asignaturas/([0-9]+)/eliminar/', function ($asignatura_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminEliminar($asignatura_id));
 		});
-		*/
-
-		parent::get('/admin/asignaturas/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\AdminLista());
-		});
 
 		parent::get('/mi/asignaturas/', function () {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiLista());
@@ -56,6 +73,9 @@ class Asignatura extends Controlador
 		parent::get('/mi/asignaturas/([0-9]+)/ver/', function ($asignatura_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignatura\MiVer($asignatura_id));
 		});
+		*/
 
 	}
 }
+
+?>

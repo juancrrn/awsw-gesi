@@ -44,7 +44,7 @@ class Usuario extends Controlador
          * Vista de lista de usuarios.
          */
 
-        parent::get('/admin/usuarios/', function () {
+        parent::get('/ps/usuarios/', function () {
             Vista::dibuja(new UsuarioPsList());
         });
 
@@ -55,31 +55,31 @@ class Usuario extends Controlador
          */
 
         // Create
-        parent::get('/admin/usuarios/est/create/', function () {
+        parent::get('/ps/usuarios/est/create/', function () {
             (new EstPsCreate())->manage();
         });
-        parent::post('/admin/usuarios/est/create/', function () {
+        parent::post('/ps/usuarios/est/create/', function () {
             (new EstPsCreate())->manage();
         });
 
         // Read
-        parent::get('/admin/usuarios/est/read/', function () {
+        parent::get('/ps/usuarios/est/read/', function () {
             (new EstPsRead())->manage();
         });
 
         // Update
-        parent::get('/admin/usuarios/est/update/', function () {
+        parent::get('/ps/usuarios/est/update/', function () {
             (new EstPsUpdate())->manage();
         });
-        parent::patch('/admin/usuarios/est/update/', function () {
+        parent::patch('/ps/usuarios/est/update/', function () {
             (new EstPsUpdate())->manage();
         });
 
         // Delete
-        parent::get('/admin/usuarios/est/delete/', function () {
+        parent::get('/ps/usuarios/est/delete/', function () {
             (new EstPsDelete())->manage();
         });
-        parent::delete('/admin/usuarios/est/delete/', function () {
+        parent::delete('/ps/usuarios/est/delete/', function () {
             (new EstPsDelete())->manage();
         });
 
@@ -88,31 +88,31 @@ class Usuario extends Controlador
          */
 
         // Create
-        parent::get('/admin/usuarios/pd/create/', function () {
+        parent::get('/ps/usuarios/pd/create/', function () {
             (new PdPsCreate())->manage();
         });
-        parent::post('/admin/usuarios/pd/create/', function () {
+        parent::post('/ps/usuarios/pd/create/', function () {
             (new PdPsCreate())->manage();
         });
 
         // Read
-        parent::get('/admin/usuarios/pd/read/', function () {
+        parent::get('/ps/usuarios/pd/read/', function () {
             (new PdPsRead())->manage();
         });
 
         // Update
-        parent::get('/admin/usuarios/pd/update/', function () {
+        parent::get('/ps/usuarios/pd/update/', function () {
             (new PdPsUpdate())->manage();
         });
-        parent::patch('/admin/usuarios/pd/update/', function () {
+        parent::patch('/ps/usuarios/pd/update/', function () {
             (new PdPsUpdate())->manage();
         });
 
         // Delete
-        parent::get('/admin/usuarios/pd/delete/', function () {
+        parent::get('/ps/usuarios/pd/delete/', function () {
             (new PdPsDelete())->manage();
         });
-        parent::delete('/admin/usuarios/pd/delete/', function () {
+        parent::delete('/ps/usuarios/pd/delete/', function () {
             (new PdPsDelete())->manage();
         });
 
@@ -121,31 +121,31 @@ class Usuario extends Controlador
          */
 
         // Create
-        parent::get('/admin/usuarios/ps/create/', function () {
+        parent::get('/ps/usuarios/ps/create/', function () {
             (new PsPsCreate())->manage();
         });
-        parent::post('/admin/usuarios/ps/create/', function () {
+        parent::post('/ps/usuarios/ps/create/', function () {
             (new PsPsCreate())->manage();
         });
         
         // Read
-        parent::get('/admin/usuarios/ps/read/', function () {
+        parent::get('/ps/usuarios/ps/read/', function () {
             (new PsPsRead())->manage();
         });
     
         // Update
-        parent::get('/admin/usuarios/ps/update/', function () {
+        parent::get('/ps/usuarios/ps/update/', function () {
             (new PsPsUpdate())->manage();
         });
-        parent::patch('/admin/usuarios/ps/update/', function () {
+        parent::patch('/ps/usuarios/ps/update/', function () {
             (new PsPsUpdate())->manage();
         });
 
         // Delete
-        parent::get('/admin/usuarios/ps/delete/', function () {
+        parent::get('/ps/usuarios/ps/delete/', function () {
             (new PsPsDelete())->manage();
         });
-        parent::delete('/admin/usuarios/ps/delete/', function () {
+        parent::delete('/ps/usuarios/ps/delete/', function () {
             (new PsPsDelete())->manage();
         });
     }

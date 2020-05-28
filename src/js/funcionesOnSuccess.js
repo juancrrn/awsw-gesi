@@ -166,3 +166,50 @@ onSuccessFn.listaUsuariosDeleted = (e, params) =>
 
     $row.remove();
 }
+
+/**
+ * Actualiza la lista de mensajes de Secretaría cuando se elimina uno.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const fecha = result[targetObjectName].fecha;
+    const extractoContenido = result[targetObjectName].extractoContenido;
+
+    const $list = $(e.currentTarget).find('tbody');
+    
+    $rowHtml = '\
+    <tr>\
+        <td>(Yo)</td>\
+        <td>' + fecha + '</td>\
+        <td>' + extractoContenido + '</td>\
+        <td class="text-right">\
+            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="mensaje-secretaria-ses-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
+        </td>\
+    </tr>';
+
+    $list.append($rowHtml);
+}
+
+
+onSuccessFn.listaGruposCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const $result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+ 
+   
+
+
+}

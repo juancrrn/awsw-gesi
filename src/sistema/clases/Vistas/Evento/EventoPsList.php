@@ -1,7 +1,12 @@
 <?php 
 
 /**
- * Horario.
+ * Vistas de calendario.
+ *
+ * - PDI: puede editar todos los calendarios.
+ * - PD: puede editar los calendarios de sus asignaturas.
+ * - Estudiantes: pueden ver el calendario de sus asignaturas.
+ * - Resto: pueden ver el calendario público.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,34 +21,41 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Asignacion;
+namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class MiHorario extends Modelo
+class EventoPsList extends Modelo
 {
-    private const VISTA_NOMBRE = "Horario";
-    private const VISTA_ID = "mi-horario";
+    private const VISTA_NOMBRE = "Eventos";
+    private const VISTA_ID = "evento-lista";
+
+    private $listado;
 
     public function __construct()
     {
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
+
+        $this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
     }
 
     public function procesaContent() : void
     {
 
-        echo <<< HTML
+        ?>
         <header class="page-header">
-            <h1>$this->nombre</h1>
+            <h1>Eventos</h1>
         </header>
-        
+
         <section class="page-content">
             Esta vista aún no está implementada.
+                    <?php
+// var_dump($this->listado);
+
+                    ?>
         </section>
-        
-        HTML;
+        <?php
 
     }
 }

@@ -7,6 +7,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\MensajeSecretaria;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX para eliminar un usuario de personal docente por parte de 
@@ -40,13 +41,15 @@ use Awsw\Gesi\Datos\MensajeSecretaria;
     private const FORM_ID = 'usuario-pd-delete';
     private const FORM_NAME = 'Eliminar personal docente';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/pd/delete/';
+    private const SUBMIT_URL = '/ps/usuarios/pd/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.pd';
     private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista'; // TODO
 
     public function __construct()
     {
+        Sesion::requerirSesionPs(true);
+
         $app = App::getSingleton();
 
         parent::__construct(

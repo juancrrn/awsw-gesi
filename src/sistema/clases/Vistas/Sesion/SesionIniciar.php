@@ -20,10 +20,10 @@
 namespace Awsw\Gesi\Vistas\Sesion;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Sesion\Iniciar as SesionIniciar;
+use Awsw\Gesi\Formularios\Sesion\Iniciar as FormularioSesionIniciar;
 use Awsw\Gesi\Vistas\Modelo;
 
-class Iniciar extends Modelo
+class SesionIniciar extends Modelo
 {
     private const VISTA_NOMBRE = "Iniciar sesión";
     private const VISTA_ID = "sesion-iniciar";
@@ -35,7 +35,7 @@ class Iniciar extends Modelo
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
 
-        $this->form = new SesionIniciar('/sesion/iniciar/'); 
+        $this->form = new FormularioSesionIniciar('/sesion/iniciar/'); 
 
         $this->form->gestiona();
     }

@@ -86,10 +86,6 @@ class Sesion
      */
     public static function isSesionIniciada() : bool
     {
-        /*return Usuario::dbExiste(array(
-            "id" => $_SESSION[self::SESSION_SESION]
-        ));*/
-
         return self::$usuario_en_sesion !== null;
     }
 
@@ -104,16 +100,46 @@ class Sesion
     }
 
     /**
+     * Genera una respuesta HTTP con datos JSON y un código estado HTTP, y para 
+     * la ejecución del script
+     * 
+     * @param int   $httpCode HTTP status code
+     * @param array $messages Messages to send in the response
+     */
+    public static function apiRespondError(int $httpCode, array $messages) : void
+    {
+        $errorData = array(
+            'status' => 'error',
+            'error' => $httpCode,
+            'messages' => $messages
+        );
+
+        http_response_code($httpCode);
+
+        header('Content-Type: application/json; charset=utf-8');
+        
+        echo json_encode($errorData);
+        
+        die();
+    }
+
+    /**
      * Requiere que haya una sesión iniciada para acceder al contenido.
      * En caso de que no haya ninguna sesión iniciada, redirige al inicio de
      * sesión.
      * 
-     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
      */
-    public static function requerirSesionIniciada() : void
+    public static function requerirSesionIniciada($api = false) : void
     {
         if (! self::isSesionIniciada()) {
-            Vista::encolaMensajeError('Necesitas haber iniciado sesión para acceder a este contenido.', '/sesion/iniciar/');
+            if (! $api) {
+                Vista::encolaMensajeError('Necesitas haber iniciado sesión para acceder a este contenido.', '/sesion/iniciar/');
+            } else {
+                self::apiRespondError(401, array('No autenticado.')); // HTTP 401 Unauthorized (unauthenticated).
+            }
         }
     }
 
@@ -121,12 +147,18 @@ class Sesion
      * Requiere que NO haya una sesión iniciada para acceder al contenido.
      * En caso de que haya alguna sesión iniciada, redirige a inicio.
      * 
-     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
      */
-    public static function requerirSesionNoIniciada() : void
+    public static function requerirSesionNoIniciada($api = false) : void
     {
         if (self::isSesionIniciada()) {
-            Vista::encolaMensajeError('No puedes acceder a esta página habiendo iniciado sesión.', '');
+            if (! $api) {
+                Vista::encolaMensajeError('No puedes acceder a esta página habiendo iniciado sesión.', '');
+            } else {
+                self::apiRespondError(409, array('No debería estar autenticado.')); // HTTP 409 Conflict.
+            }
         }
     }
     
@@ -135,14 +167,20 @@ class Sesion
      * para acceder al contenido. En caso negativo, redirige al inicio de 
      * sesión.
      * 
-     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
      */
-    public static function requerirSesionPd() : void
+    public static function requerirSesionPd($api = false) : void
     {
-        self::requerirSesionIniciada();
+        self::requerirSesionIniciada($api);
 
         if (! self::$usuario_en_sesion->isPd()) {
-            Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+            if (! $api) {
+                Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+            } else {
+                self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
+            }
         }
     }
     
@@ -151,14 +189,20 @@ class Sesion
      * secretaría para acceder al contenido. En caso negativo, redirige al 
      * inicio de sesión.
      * 
-     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
      */
-    public static function requerirSesionPs() : void
+    public static function requerirSesionPs($api = false) : void
     {
-        self::requerirSesionIniciada();
+        self::requerirSesionIniciada($api);
 
         if (! self::$usuario_en_sesion->isPs()) {
-            Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+            if (! $api) {
+                Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+            } else {
+                self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
+            }
         }
     }
     
@@ -167,14 +211,20 @@ class Sesion
      * secretaría para acceder al contenido. En caso negativo, redirige al 
      * inicio de sesión.
      * 
-     * TODO: Informar al usuario sobre por qué se le ha redirigido.
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
      */
-    public static function requerirSesionNoPs() : void
+    public static function requerirSesionNoPs($api = false) : void
     {
-        self::requerirSesionIniciada();
+        self::requerirSesionIniciada($api);
 
         if (self::$usuario_en_sesion->isPs()) {
-            Vista::encolaMensajeError('Esta vista solo permite el acceso de personal docente y estudiantes.', '');
+            if (! $api) {
+                Vista::encolaMensajeError('Esta vista solo permite el acceso de personal docente y estudiantes.', '');
+            } else {
+                self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
+            }
         }
     }
 }

@@ -8,20 +8,20 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\Vistas\Vista;
 
 class Asignacion extends Controlador
 {
+
 	public static function controla() : void
 	{
 
@@ -43,19 +43,19 @@ class Asignacion extends Controlador
 		parent::get('/admin/asignaciones/([0-9]+)/eliminar/', function ($asignacion_id) {
 			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminEliminar($asignacion_id));
 		});
-		*/
 
 		parent::get('/admin/asignaciones/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
+			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
 		});
 
 		parent::get('/mi/asignaciones/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
+			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
 		});
 
 		parent::get('/mi/asignaciones/horario/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\MiHorario());
+			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\MiHorario());
 		});
+		*/
 
 	}
 }

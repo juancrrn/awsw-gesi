@@ -19,6 +19,7 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
 
 class Usuario
@@ -32,7 +33,7 @@ class Usuario
      * @var string $nombre
      * @var string $apellidos
      * @var string $fecha_nacimiento (DATE)
-     * @var int $numero_telefono
+     * @var string $numero_telefono
      * @var string $email
      * @var string|null $fecha_ultimo_acceso (DATETIME)
      * @var string $fecha_registro (DATETIME)
@@ -60,7 +61,7 @@ class Usuario
         string $nombre,
         string $apellidos,
         string $fecha_nacimiento,
-        int $numero_telefono,
+        string $numero_telefono,
         string $email,
         $fecha_ultimo_acceso,
         string $fecha_registro,
@@ -83,19 +84,19 @@ class Usuario
     public static function fromDbFetch(Object $o) : Usuario
     {
         // Convertir fechas al formato correcto.
-        
-        $mysqlDateFormat = 'Y-m-d';
-        $espDateFormat = 'd/m/Y';
 
-        $fechaNacimiento = \DateTime::createFromFormat($mysqlDateFormat, $o->fecha_nacimiento)->format($espDateFormat);
-        
-        $mysqlDateTimeFormat = 'Y-m-d H:i:s';
-        $espDateTimeFormat = 'd/m/Y H:i:s';
+        $fechaNacimiento = \DateTime::createFromFormat(
+            Valido::MYSQL_DATE_FORMAT, $o->fecha_nacimiento)
+                ->format(Valido::ESP_DATE_FORMAT);
 
-        $fechaUltimoAcceso = \DateTime::createFromFormat($mysqlDateTimeFormat, $o->fecha_ultimo_acceso);
-        $fechaUltimoAcceso = $fechaUltimoAcceso ? $fechaUltimoAcceso->format($espDateTimeFormat) : null;
+        $fechaUltimoAcceso = \DateTime::createFromFormat(
+            Valido::MYSQL_DATETIME_FORMAT, $o->fecha_ultimo_acceso);
+        $fechaUltimoAcceso = $fechaUltimoAcceso ?
+            $fechaUltimoAcceso->format(Valido::ESP_DATETIME_FORMAT) : null;
 
-        $fechaRegistro = \DateTime::createFromFormat($mysqlDateTimeFormat, $o->fecha_registro)->format($espDateTimeFormat);
+        $fechaRegistro = \DateTime::createFromFormat(
+            Valido::MYSQL_DATETIME_FORMAT, $o->fecha_registro)
+                ->format(Valido::ESP_DATETIME_FORMAT);
 
         return new self(
             $o->id,
@@ -168,7 +169,7 @@ class Usuario
         return $this->fecha_nacimiento;
     }
     
-    public function getNumeroTelefono() : int
+    public function getNumeroTelefono() : string
     {
         return $this->numero_telefono;
     }
@@ -300,36 +301,31 @@ class Usuario
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                nif,
-                rol,
-                nombre,
-                apellidos,
-                fecha_nacimiento,
-                numero_telefono,
-                email,
-                fecha_ultimo_acceso,
-                fecha_registro,
-                grupo
-            FROM
-                gesi_usuarios
-            WHERE
-                id = ?
-            LIMIT 1
-        ");
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $query = <<< SQL
+        SELECT 
+            id,
+            nif,
+            rol,
+            nombre,
+            apellidos,
+            fecha_nacimiento,
+            numero_telefono,
+            email,
+            fecha_ultimo_acceso,
+            fecha_registro,
+            grupo
+        FROM
+            gesi_usuarios
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-
         $resultado = $sentencia->get_result();
-
         $usuario = Usuario::fromDbFetch($resultado->fetch_object());
-
         $sentencia->close();
         
         return $usuario;
@@ -365,10 +361,8 @@ class Usuario
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-    
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
@@ -690,7 +684,7 @@ class Usuario
         $grupo = $this->getGrupo();
 
         $sentencia->bind_param(
-            "sisssisssii", 
+            "sisssssssii", 
             $nif,
             $rol,
             $nombre,

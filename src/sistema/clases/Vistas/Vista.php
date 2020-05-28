@@ -209,6 +209,8 @@ class Vista
         HTML;
 
         self::incluirPie();
+
+        die();
     }
 
     /**
@@ -231,11 +233,11 @@ class Vista
         $classAttr = 'class="list-group-item list-group-item-action ' . $activeClass . '"';
         $hrefAttr = 'href="' . $appUrl . $url . '"';
 
-        $li = <<< HTML
-        <li $classAttr><a $hrefAttr>$titulo</a></li>
+        $a = <<< HTML
+        <a $classAttr $hrefAttr>$titulo</a>
         HTML;
 
-        return $li;
+        return $a;
     }
 
     /**
@@ -254,11 +256,11 @@ class Vista
 
         $classAttr = 'class="nav-item ' . $activeClass . '"';
 
-        $li = <<< HTML
-        <li $classAttr>$content</li>
+        $span = <<< HTML
+        <span $classAttr>$content</span>
         HTML;
 
-        return $li;
+        return $span;
     }
 
     /**
@@ -272,7 +274,7 @@ class Vista
      */
     public static function generarSideMenuDivider(string $titulo) : string
     {
-        $classAttr = 'class="list-group-item mt-3"';
+        $classAttr = 'class="list-group-item mt-3 side-menu-divider"';
 
         $li = <<< HTML
         <li $classAttr>$titulo</li>

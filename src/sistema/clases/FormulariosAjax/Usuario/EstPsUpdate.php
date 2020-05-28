@@ -7,6 +7,7 @@ use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de creación de un usuario de personal docente por parte de 
@@ -41,7 +42,7 @@ class EstPsUpdate extends FormularioAjax
     private const FORM_ID = 'usuario-est-update';
     private const FORM_NAME = 'Editar estudiante';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/update/';
+    private const SUBMIT_URL = '/ps/usuarios/est/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
     private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
@@ -51,6 +52,8 @@ class EstPsUpdate extends FormularioAjax
      */
     public function __construct()
     {
+        Sesion::requerirSesionPs(true);
+
         $app = App::getSingleton();
 
         parent::__construct(
@@ -172,7 +175,9 @@ class EstPsUpdate extends FormularioAjax
         $email = $data['email'] ?? null;
 
         if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
+            $errors[] = 'El campo NIF o NIE no puede estar vacío.';
+        } elseif (! Valido::testNif($nif)) {
+            $errors[] = 'El campo NIF o NIE no es válido.';
         }
 
         if (empty($nombre)) {

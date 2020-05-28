@@ -4,10 +4,10 @@ namespace Awsw\Gesi\FormulariosAjax\Asignatura;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Asignatura;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal docente por parte de 
+ * Formulario AJAX para eliminar una asignatura por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -35,13 +35,13 @@ use Awsw\Gesi\Datos\Usuario;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-delete';
-    private const FORM_NAME = 'Eliminar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/delete/';
+    private const FORM_ID = 'asignatura-delete';
+    private const FORM_NAME = 'Eliminar asignatura';
+    private const TARGET_OBJECT_NAME = 'Asignatura';
+    private const SUBMIT_URL = '/admin/asignaturas/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.asignatura';
+    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-lista';
 
     public function __construct()
     {
@@ -79,19 +79,19 @@ use Awsw\Gesi\Datos\Usuario;
         $uniqueId = $requestData['uniqueId'];
 
         // Check that uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Asignatura::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'La asignatura solicitada no existe.'
                 )
             );
 
             return $responseData;
         }
 
-        $record = Usuario::dbGet($uniqueId);
+        $record = Asignatura::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
@@ -112,13 +112,17 @@ use Awsw\Gesi\Datos\Usuario;
             <input name="nombre" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Apellidos</label>
-            <input name="apellidos" type="text" class="form-control"  disabled="disabled">
+            <label>Nivel</label>
+            <input name="nivel" type="text" class="form-control"  disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label>Curso</label>
+            <input name="curso" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-est-delete-checkbox" required="required">
-                <label class="custom-control-label" for="usuario-est-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="asignatura-delete-checkbox" required="required">
+                <label class="custom-control-label" for="asignatura-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;
@@ -150,23 +154,23 @@ use Awsw\Gesi\Datos\Usuario;
         }
         
         // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+        if (! Asignatura::dbExisteId($uniqueId)) {
+            $errors[] = 'La asignatura solicitada no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (Usuario::dbEliminar($uniqueId)) {
+        if (Asignatura::dbEliminar($uniqueId)) {
             $responseData = array(
                 'status' => 'ok',
                 'messages' => array(
-                    'Usuario estudiante eliminado correctamente.'
+                    'Asignatura eliminada correctamente.'
                 )
             );
 
             $this->respondJsonOk($responseData);
         } else {
-            $errors[] = 'Hubo un problema al eliminar el usuario estudiante.';
+            $errors[] = 'Hubo un problema al eliminar la asignatura.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }

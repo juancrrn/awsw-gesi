@@ -8,55 +8,67 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Vista as V;
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaInvCreate;
+
+use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesCreate;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesRead;
+
+use Awsw\Gesi\Vistas\Vista;
 
 class MensajeSecretaria extends Controlador
 {
     public static function controla() : void
     {
-
         /**
-         * Admin
-         */
-
-        parent::get('/admin/secretaria/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\AdminLista());
-        });
-
-        /**
-         * Sesión iniciada
+         * Invitado.
          */
         
-        parent::get('/mi/secretaria/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiLista());
+        parent::get('/inv/mensajesecretaria/', function () {
+            Vista::dibuja(new MensajeSecretariaInvList());
         });
-
-        /*
         
-
-        parent::go('/mi/secretaria/crear/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\MiCrear());
+        // Create.
+        parent::get('/inv/mensajesecretaria/create/', function () {
+            (new MensajeSecretariaInvCreate())->manage();
         });
-        */
+        parent::post('/inv/mensajesecretaria/create/', function () {
+            (new MensajeSecretariaInvCreate())->manage();
+        });
 
         /**
-         * Públicos
+         * Sesión iniciada.
          */
-/*
-        parent::go('/secretaria/crear/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\MensajeSecretaria\InvCrear());
+        
+        parent::get('/ses/secretaria/', function () {
+            Vista::dibuja(new MensajeSecretariaSesList());
         });
-*/
+        
+        // Create.
+        parent::get('/ses/mensajesecretaria/create/', function () {
+            (new MensajeSecretariaSesCreate())->manage();
+        });
+        parent::post('/ses/mensajesecretaria/create/', function () {
+            (new MensajeSecretariaSesCreate())->manage();
+        });
+        
+        // Read.
+        parent::get('/ses/mensajesecretaria/read/', function () {
+            (new MensajeSecretariaSesRead())->manage();
+        });
+        parent::post('/ses/mensajesecretaria/read/', function () {
+            (new MensajeSecretariaSesRead())->manage();
+        });
     }
 }
 

@@ -1,7 +1,12 @@
 <?php 
 
 /**
- * Vistas de restablecer contraseña.
+ * Vistas de calendario.
+ *
+ * - PDI: puede editar todos los calendarios.
+ * - PD: puede editar los calendarios de sus asignaturas.
+ * - Estudiantes: pueden ver el calendario de sus asignaturas.
+ * - Resto: pueden ver el calendario público.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,14 +21,14 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Sesion;
+namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class RestablecerContrasena extends Modelo
+class EventoInvList extends Modelo
 {
-    private const VISTA_NOMBRE = "Restablecer contraseña";
-    private const VISTA_ID = "sesion-restablecer-contrasena";
+    private const VISTA_NOMBRE = "Eventos públicos";
+    private const VISTA_ID = "evento-lista";
 
     public function __construct()
     {

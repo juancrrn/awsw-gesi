@@ -1,10 +1,7 @@
 <?php 
 
 /**
- * Vistas de foros.
- *
- * - PDI: puede ver y gestionar todos los foros.
- * - Resto: pueden ver los foros a los que tienen acceso.
+ * Vistas de restablecer contraseña.
  *
  * @package awsw-gesi
  * Gesi
@@ -19,29 +16,24 @@
  * @version 0.0.2
  */
 
-namespace Awsw\Gesi\Vistas\Biblioteca;
+namespace Awsw\Gesi\Vistas\Sesion;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class MiGeneral extends Modelo
+class SesionRestablecerContrasena extends Modelo
 {
-    private const VISTA_NOMBRE = "Mi biblioteca";
-    private const VISTA_ID = "mi-biblioteca";
-
-    private $listado;
+    private const VISTA_NOMBRE = "Restablecer contraseña";
+    private const VISTA_ID = "sesion-restablecer-contrasena";
 
     public function __construct()
     {
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
-
-        $this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
     }
 
     public function procesaContent() : void
     {
-        // var_dump($this->listado);
-        
+
         echo <<< HTML
         <header class="page-header">
             <h1>$this->nombre</h1>

@@ -5,6 +5,7 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX para eliminar un usuario de personal de secretaria por parte de 
@@ -15,7 +16,6 @@ use Awsw\Gesi\Datos\Usuario;
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
@@ -39,13 +39,15 @@ use Awsw\Gesi\Datos\Usuario;
     private const FORM_ID = 'usuario-ps-delete';
     private const FORM_NAME = 'Eliminar personal de secretaria';
     private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/ps/delete/';
+    private const SUBMIT_URL = '/ps/usuarios/ps/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.ps';
     private const ON_SUCCESS_EVENT_TARGET = '#usuario-ps-lista';
 
     public function __construct()
     {
+        Sesion::requerirSesionPs(true);
+
         $app = App::getSingleton();
 
         parent::__construct(

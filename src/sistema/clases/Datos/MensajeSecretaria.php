@@ -19,327 +19,439 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Valido;
+use JsonSerializable;
 
 class MensajeSecretaria
+    implements JsonSerializable
 {
-	// Identificador único del mensaje
-	private $id;
+    /**
+     * @var int $id Identificador único del mensaje
+     */
+    private $id;
 
-	//  Si lo ha enviado un usuario registrado, su identificador
-	private $usuario;
+    /**
+     * @var int $usuario Si lo ha enviado un usuario registrado, su 
+     *                      identificador
+     */
+    private $usuario;
 
-	//  Si lo ha enviado un usuario invitado, su nombre
-	private $from_nombre;
+    /**
+     * @var string $from_nombre Si lo ha enviado un usuario invitado, su nombre
+     */
+    private $from_nombre;
 
-	// Si lo ha enviado un usuario invitado, su email
-	private $from_email;
+    /**
+     * @var string $from_email Si lo ha enviado un usuario invitado, su email
+     */
+    private $from_email;
 
-	//  Si lo ha enviado un usuario invitado, su teléfono
-	private $from_telefono;
+    /**
+     * @var string $from_telefono Si lo ha enviado un usuario invitado, su 
+     *                            teléfono
+     */
+    private $from_telefono;
 
-	// Contenido del mensaje
-	private $contenido;
+    /**
+     * @var string $contenido Contenido del mensaje
+     */
+    private $contenido;
 
-	// Fecha de envio del mensaje
-	private $fecha;
+    /**
+     * @var string $fecha Fecha de envio del mensaje
+     */
+    private $fecha;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct(
-		$id,
-		$usuario,
-		$from_nombre,
-		$from_email,
-		$from_telefono,
-		$fecha,
-		$contenido
-	)
-	{
-		$this->id = $id;
-		$this->usuario = $usuario;
-		$this->from_nombre = $from_nombre;
-		$this->from_email = $from_email;
-		$this->from_telefono = $from_telefono;
-		$this->fecha = $fecha;
-		$this->contenido = $contenido;
-	}
+    /**
+     * Constructor.
+     */
+    public function __construct(
+        $id,
+        $usuario,
+        $from_nombre,
+        $from_email,
+        $from_telefono,
+        $fecha,
+        $contenido
+    )
+    {
+        $this->id = $id;
+        $this->usuario = $usuario;
+        $this->from_nombre = $from_nombre;
+        $this->from_email = $from_email;
+        $this->from_telefono = $from_telefono;
+        $this->fecha = $fecha;
+        $this->contenido = $contenido;
+    }
 
-	/*
-	*
-	* Getters.
-	*
-	*/
+    public static function fromDbFetch(Object $o) : self
+    {
+        return new self(
+            $o->id,
+            $o->usuario,
+            $o->from_nombre,
+            $o->from_email,
+            $o->from_telefono,
+            $o->fecha,
+            $o->contenido
+        );
+    }
 
-	public function getUsuario(){
-		return $this->usuario;
-	}
+    /*
+    *
+    * Getters.
+    *
+    */
 
-	public function getFromNombre(){
-		return $this->from_nombre;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	public function getFromEmail(){
-		return $this->from_email;
-	}
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
 
-	public function getFromTelefono(){
-		return $this->from_telefono;
-	}
+    public function getFromNombre()
+    {
+        return $this->from_nombre;
+    }
 
-	public function getFecha(){
-		return $this->fecha;
-	}
+    public function getFromEmail()
+    {
+        return $this->from_email;
+    }
 
-	public function getContenido(){
-		return $this->contenido;
-	}
+    public function getFromTelefono()
+    {
+        return $this->from_telefono;
+    }
 
-	/**
-	 * Trae todos los mensajes de Secretaría de la base de datos.
-	 *
-	 * @requires Existe al menos un mensaje en la base de datos.
-	 *
-	 * @return array<MensajeSecretaria>
-	 */
-	public static function dbAny() : bool
-	{	
-		$bbdd = App::getSingleton()->bbddCon();
+    public function getFecha($format = null) : string
+    {
+        if (! $format) {
+            return $this->fecha;
+        } else {
+            return \DateTime::createFromFormat(
+                Valido::MYSQL_DATETIME_FORMAT, $this->fecha)
+                ->format($format);
+        }
+    }
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id
-			FROM
-				gesi_mensajes_secretaria
-		");
-		
-		$sentencia->execute();
-		
-		$sentencia->store_result();
+    public function getContenido($length = null) : string
+    {
+        if (! $length) {
+            return $this->contenido;
+        } else {
+            return substr($this->contenido, 0, $length) .
+                (strlen($this->contenido) > $length ? '...' : '');
+        }
+    }
 
-		if ($sentencia->num_rows > 0) {
-			$existe = true;
-		} else {
-			$existe = false;
-		}
+    /**
+     * Trae todos los mensajes de Secretaría de la base de datos.
+     *
+     * @requires Existe al menos un mensaje en la base de datos.
+     *
+     * @return array<MensajeSecretaria>
+     */
+    public static function dbAny() : bool
+    {    
+        $bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia->close();
+        $sentencia = $bbdd->prepare("
+            SELECT 
+                id
+            FROM
+                gesi_mensajes_secretaria
+        ");
+        
+        $sentencia->execute();
+        
+        $sentencia->store_result();
 
-		return $existe;
-	}
+        if ($sentencia->num_rows > 0) {
+            $existe = true;
+        } else {
+            $existe = false;
+        }
 
-	/**
-	 * Trae todos los mensajes de Secretaría de la base de datos.
-	 *
-	 * @requires Existe al menos un mensaje en la base de datos.
-	 *
-	 * @return array<MensajeSecretaria>
-	 */
-	public static function dbGetAll() : array
-	{	
-		$bbdd = App::getSingleton()->bbddCon();
+        $sentencia->close();
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				usuario,
-				from_nombre,
-				from_email,
-				from_telefono,
-				fecha,
-				contenido
-			FROM
-				gesi_mensajes_secretaria
-		");
+        return $existe;
+    }
 
-		$sentencia->execute();
-		$sentencia->store_result();
+    /**
+     * Trae todos los mensajes de Secretaría de la base de datos.
+     *
+     * @requires Existe al menos un mensaje en la base de datos.
+     *
+     * @return array<MensajeSecretaria>
+     */
+    public static function dbGetAll() : array
+    {    
+        $bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia->bind_result(
-			$result_id,
-			$result_usuario,
-			$result_from_nombre,
-			$result_from_email,
-			$result_from_telefono,
-			$result_fecha,
-			$result_contenido
-		);
-		
-		$mensajes = array();
+        $query = <<< SQL
+        SELECT 
+            id,
+            usuario,
+            from_nombre,
+            from_email,
+            from_telefono,
+            fecha,
+            contenido
+        FROM
+            gesi_mensajes_secretaria
+        SQL;
 
-		while($sentencia->fetch()) {
-			$mensajes[] = new MensajeSecretaria(
-				$result_id,
-				$result_usuario,
-				$result_from_nombre,
-				$result_from_email,
-				$result_from_telefono,
-				$result_fecha,
-				$result_contenido
-			);
-		}
-		
-		$sentencia->close();
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->execute();
+        $result = $sentencia->get_result();
+        $mensajes = array();
 
-		return $mensajes;
-	}
+        while ($m = $result->fetch_object()) {
+            $mensajes[] = self::fromDbFetch($m);
+        }
+        
+        $sentencia->close();
 
-	/**
-	 * Trae todos los mensajes de Secretaría de la base de datos que 
-	 * pertenezcan a un Usuario.
-	 *
-	 * @return array<MensajeSecretaria>
-	 */
-	public static function dbGetByUsuario(int $usuario_id) : array
-	{	
-		$bbdd = App::getSingleton()->bbddCon();
+        return $mensajes;
+    }
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				usuario,
-				from_nombre,
-				from_email,
-				from_telefono,
-				fecha,
-				contenido
-			FROM
-				gesi_mensajes_secretaria
-			WHERE
-				usuario = ?
-		");
+    /**
+     * Trae todos los mensajes de Secretaría de la base de datos que 
+     * pertenezcan a un Usuario.
+     *
+     * @return array<MensajeSecretaria>
+     */
+    public static function dbGetByUsuario(int $usuario_id) : array
+    {    
+        $bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia->bind_param(
-			"i",
-			$usuario_id
-		);
+        $query = <<< SQL
+        SELECT 
+            id,
+            usuario,
+            from_nombre,
+            from_email,
+            from_telefono,
+            fecha,
+            contenido
+        FROM
+            gesi_mensajes_secretaria
+        WHERE
+            usuario = ?
+        SQL;
 
-		$sentencia->execute();
-		$sentencia->store_result();
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $usuario_id);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $mensajes = array();
 
-		$sentencia->bind_result(
-			$id,
-			$usuario,
-			$from_nombre,
-			$from_email,
-			$from_telefono,
-			$fecha,
-			$contenido
-		);
-		
-		$mensajes = array();
+        while ($m = $resultado->fetch_object()) {
+            $mensajes[] = self::fromDbFetch($m);
+        }
 
-		while($sentencia->fetch()) {
-			$mensajes[] = new MensajeSecretaria(
-				$id,
-				$usuario,
-				$from_nombre,
-				$from_email,
-				$from_telefono,
-				$fecha,
-				$contenido
-			);
-		}
-		
-		$sentencia->close();
+        $sentencia->close();
 
-		return $mensajes;
-	}
+        return $mensajes;
+    }
+    
 
-	/**
-	 * Inserta un mensaje de Secretaria en la base de datos.
-	 *
-	 * @param MensajeSecretaria $this MensajeSecretaria a insertar.
-	 * 
-	 * @requires Restricciones de la Base de Datos.
-	 * 
-	 * @return int Identificador del MensajeSecretaria insertado.
-	 */
+    /**
+     * Trae un mensaje de Secretaría de la base de datos.
+     *
+     * @param int $id
+     *
+     * @requires Existe un mensaje de Secretaría con el id especificado.
+     *
+     * @return MensajeSecretaria
+     */
+    public static function dbGet(int $id) : self
+    {
+        $bbdd = App::getSingleton()->bbddCon();
 
-	 public function dbInsertar() : bool  {
-		$bbdd = App::getSingleton()->bbddCon();
-		
-		$sentencia = $bbdd->prepare("
-			INSERT
-			INTO
-				gesi_mensajes_secretaria
-				(
-					usuario,
-					from_nombre,
-					from_email,
-					from_telefono,
-					fecha,
-					contenido
-				)
-			VALUES
-				(?, ?, ?, ?, ?, ?)
-		");
+        $query = <<< SQL
+        SELECT 
+            id,
+            usuario,
+            from_nombre,
+            from_email,
+            from_telefono,
+            fecha,
+            contenido
+        FROM
+            gesi_mensajes_secretaria
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
 
-		$usuario = $this->getUsuario();
-		$from_nombre = $this->getFromNombre();
-		$from_email = $this->getFromEmail();
-		$from_telefono = $this->getFromTelefono();
-		$fecha = $this->getFecha();
-		$contenido = $this->getContenido();
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $mensaje = self::fromDbFetch($resultado->fetch_object());
+        $sentencia->close();
+        
+        return $mensaje;
+    }
 
-		$sentencia->bind_param(
-			"issiis",
-			$usuario,
-			$from_nombre,
-			$from_email,
-			$from_telefono,
-			$fecha,
-			$contenido
-		);
+    /**
+     * Inserta un mensaje de Secretaria en la base de datos.
+     *
+     * @param MensajeSecretaria $this MensajeSecretaria a insertar.
+     * 
+     * @requires Restricciones de la Base de Datos.
+     * 
+     * @return int Identificador del MensajeSecretaria insertado.
+     */
 
-		$sentencia->execute();
-		
-		$id_insertado = $bbdd->insert_id;
+     public function dbInsertar() : bool  {
+        $bbdd = App::getSingleton()->bbddCon();
+        
+        $sentencia = $bbdd->prepare("
+            INSERT
+            INTO
+                gesi_mensajes_secretaria
+                (
+                    usuario,
+                    from_nombre,
+                    from_email,
+                    from_telefono,
+                    fecha,
+                    contenido
+                )
+            VALUES
+                (?, ?, ?, ?, ?, ?)
+        ");
 
-		$sentencia->close();
+        $usuario = $this->getUsuario();
+        $from_nombre = $this->getFromNombre();
+        $from_email = $this->getFromEmail();
+        $from_telefono = $this->getFromTelefono();
+        $fecha = $this->getFecha();
+        $contenido = $this->getContenido();
 
-		$this->id = $id_insertado;
+        $sentencia->bind_param(
+            "isssss",
+            $usuario,
+            $from_nombre,
+            $from_email,
+            $from_telefono,
+            $fecha,
+            $contenido
+        );
 
-		return $id_insertado;
-	 }
+        $sentencia->execute();
+        
+        $id_insertado = $bbdd->insert_id;
 
-	 /**
-	 * Comprueba si el Usuario id tiene algun mensaje de secretaria
-	 *
-	 * @param int
-	 *
-	 * @return bool
-	 */
-	public static function dbAnyByUsuario(int $id) : bool
-	{		
-		$bbdd = App::getSingleton()->bbddCon();
+        $sentencia->close();
 
-		$sentencia = $bbdd->prepare("
-			SELECT
-				id
-			FROM
-				gesi_mensajes_secretaria
-			WHERE
-				usuario = ?
-			LIMIT 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
-		$sentencia->execute();
-		
-		$sentencia->store_result();
+        $this->id = $id_insertado;
 
-		if ($sentencia->num_rows > 0) {
-			$existe = true;
-		} else {
-			$existe = false;
-		}
+        return $id_insertado;
+     }
 
-		$sentencia->close();
+     /**
+     * Comprueba si el Usuario id tiene algun mensaje de secretaria
+     *
+     * @param int
+     *
+     * @return bool
+     */
+    public static function dbAnyByUsuario(int $id) : bool
+    {        
+        $bbdd = App::getSingleton()->bbddCon();
 
-		return $existe;
-	}
+        $sentencia = $bbdd->prepare("
+            SELECT
+                id
+            FROM
+                gesi_mensajes_secretaria
+            WHERE
+                usuario = ?
+            LIMIT 1
+        ");
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+        
+        $sentencia->execute();
+        
+        $sentencia->store_result();
+
+        if ($sentencia->num_rows > 0) {
+            $existe = true;
+        } else {
+            $existe = false;
+        }
+
+        $sentencia->close();
+
+        return $existe;
+    }
+
+    
+
+    /**
+     * Comprueba si un mensaje de Secretaría existe en la base de datos en base 
+     * a su identificador.
+     *
+     * @param int $id
+     *
+     * @return bool
+     */
+    public static function dbExisteId(int $id) : bool
+    {        
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $sentencia = $bbdd->prepare("
+            SELECT id
+            FROM gesi_mensajes_secretaria
+            WHERE id = ?
+            LIMIT 1
+        ");
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+        
+        $sentencia->execute();
+        
+        $sentencia->store_result();
+
+        if ($sentencia->num_rows > 0) {
+            $existe = true;
+        } else {
+            $existe = false;
+        }
+
+        $sentencia->close();
+
+        return $existe;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'uniqueId' => $this->getId(),
+            'checkbox' => $this->getId(),
+            'id' => $this->getId(),
+            'usuario' => $this->getUsuario(),
+            'from_nombre' => $this->getFromNombre(),
+            'from_email' => $this->getFromEmail(),
+            'from_telefono' => $this->getFromTelefono(),
+            'fecha' => $this->getFecha(Valido::ESP_DATETIME_SHORT_FORMAT),
+            'contenido' => $this->getContenido(),
+            'extractoContenido' => $this->getContenido(32)
+        ];
+    }
 }
+
+?>

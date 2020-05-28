@@ -380,13 +380,13 @@ abstract class FormularioAjax
         }
 
         $html = <<< HTML
-        <div class="modal fade ajax-modal" data-ajax-form-id="$formId" $readOnlyData $onSuccessEventNameData $onSuccessEventTargetData $submitUrlData $expectedSubmitMethodData $targetObjectNameData tabindex="-1" role="dialog" aria-labelledby="register-update-modal-label" aria-hidden="true">
+        <div class="modal fade ajax-modal" data-ajax-form-id="$formId" $readOnlyData $onSuccessEventNameData $onSuccessEventTargetData $submitUrlData $expectedSubmitMethodData $targetObjectNameData tabindex="-1" role="dialog" aria-labelledby="$formId-modal-label" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <form class="modal-content" id="$formId">
                     <input type="hidden" name="$formIdField">
                     <input type="hidden" name="$csrfTokenField">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="register-update-modal-label">$formName</h5>
+                        <h5 class="modal-title" id="$formId-modal-label">$formName</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

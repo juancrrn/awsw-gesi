@@ -25,49 +25,48 @@ use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 
-class Perfil extends Modelo
+class SesionPerfil extends Modelo
 {
 
-	private const VISTA_NOMBRE = "Mi perfil ";
-	private const VISTA_ID = "mi-perfil";
+    private const VISTA_NOMBRE = "Mi perfil ";
+    private const VISTA_ID = "mi-perfil";
 
-	private $usuario;
+    private $usuario;
 
-	public function __construct()
-	{
-		Sesion::requerirSesionIniciada();
+    public function __construct()
+    {
+        Sesion::requerirSesionIniciada();
 
-		$this->usuario = Sesion::getUsuarioEnSesion();
+        $this->usuario = Sesion::getUsuarioEnSesion();
 
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
-	}
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
+    }
 
-	public function procesaContent() : void
-	{
-		$nombre_completo = $this->usuario->getNombreCompleto();
+    public function procesaContent() : void
+    {
+        $nombre_completo = $this->usuario->getNombreCompleto();
 
-		$nif = $this->usuario->getNif();
+        $nif = $this->usuario->getNif();
 
-		switch ($this->usuario->getRol()) {
-			case 1: $rol = 'Estudiante'; break;
-			case 2: $rol = 'Personal docente'; break;
-			case 3: $rol = 'Personal de Secretaría'; break;
-		}
+        switch ($this->usuario->getRol()) {
+            case 1: $rol = 'Estudiante'; break;
+            case 2: $rol = 'Personal docente'; break;
+            case 3: $rol = 'Personal de Secretaría'; break;
+        }
 
-		$fecha_nacimiento = date("d/m/Y", $this->usuario->getFechaNacimiento());
-		$numero_telefono = $this->usuario->getNumeroTelefono();
-		$email = $this->usuario->getEmail();
-		$fecha_ultimo_acceso = date("d/m/Y", $this->usuario->getFechaUltimoAcceso());
-		$fecha_registro = date("d/m/Y", $this->usuario->getFechaRegistro());
-		
-		$lista_grupo = $this->generaGrupo();
+        $fecha_nacimiento = date("d/m/Y", $this->usuario->getFechaNacimiento());
+        $numero_telefono = $this->usuario->getNumeroTelefono();
+        $email = $this->usuario->getEmail();
+        $fecha_ultimo_acceso = date("d/m/Y", $this->usuario->getFechaUltimoAcceso());
+        $fecha_registro = date("d/m/Y", $this->usuario->getFechaRegistro());
+        
+        $lista_grupo = $this->generaGrupo();
 
         $html = <<< HTML
         <header class ="page-header">
             <h1>$nombre_completo</h1>
         </header>
-        
         <section class="page-content">
             <div class="data-field-wrapper">
                 <div class="data-field">
@@ -87,9 +86,7 @@ class Perfil extends Modelo
                     <span class="value">$email</span>
                 </div>
             </div>
-            
             <h2>Grupo</h2>
-            
             <div id="usuario-admin-ver-grupo-lista" class="grid-table">
                 <div class="grid-table-header">
                     <div class="grid-table-row">
@@ -103,44 +100,43 @@ class Perfil extends Modelo
                 </div>
             </div>
         </section>
-
         HTML;
 
-		echo $html;
+        echo $html;
 
-	}
+    }
 
-	public function generaGrupo() : string
-	{
-		$grupo_id = $this->usuario->getGrupo();
+    public function generaGrupo() : string
+    {
+        $grupo_id = $this->usuario->getGrupo();
 
-		$html = '';
+        $html = '';
 
-		if ($grupo_id) {
-			$grupo = Grupo::dbGet($grupo_id);
-			$completo = $grupo->getNombreCompleto();
-			$corto = $grupo->getNombreCorto();
+        if ($grupo_id) {
+            $grupo = Grupo::dbGet($grupo_id);
+            $completo = $grupo->getNombreCompleto();
+            $corto = $grupo->getNombreCorto();
             $nivel = $grupo->getNivel();
 
-			$html .= <<< HTML
-			<div class="grid-table-row">
+            $html .= <<< HTML
+            <div class="grid-table-row">
                 <div>$corto</div>
                 <div>$completo</div>
                 <div>$nivel</div>
             </div>
 
 HTML;
-		} else {
-			$html = <<< HTML
-			<div class="grid-table-row-empty">
+        } else {
+            $html = <<< HTML
+            <div class="grid-table-row-empty">
                 Este usuario no está matriculado en ningún grupo.
             </div>
 
 HTML;
-		}
+        }
 
-		return $html;
-	}
+        return $html;
+    }
 }
 
 ?>

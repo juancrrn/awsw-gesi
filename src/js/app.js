@@ -250,7 +250,7 @@ $(() => {
                     for (const name in resultData) {
                         // Prevent from filling linked inputs (selects)
                         if ($.inArray(name, linkRels) === -1) {
-                            $modal.find('input[name="' + name + '"]').val(resultData[name]);
+                            $modal.find('input[name="' + name + '"], textarea[name="' + name + '"]').val(resultData[name]);
                         }
                     }
                     
@@ -386,4 +386,15 @@ $(() => {
         onSuccessFn.listaUsuariosUpdated);
     $('#usuario-ps-lista').on('deleted.usuario.ps',
         onSuccessFn.listaUsuariosDeleted);
+
+    /**
+     * Gestionar el evneto on-success del formulario de creación de mensaje de 
+     * Secretaría con sesión iniciada.
+     */
+    $('#mensaje-secretaria-ses-list').on('created.ses.mensajesecretaria',
+        onSuccessFn.listaSesMensajesSecretariaCreated);
+
+
+    $('#grupo-lista').on('created.grupo.ps',
+        onSuccessFn.listaGrupo)
 });

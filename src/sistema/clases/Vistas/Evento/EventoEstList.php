@@ -25,7 +25,7 @@ namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 
-class AdminLista extends Modelo
+class EventoEstList extends Modelo
 {
 	private const VISTA_NOMBRE = "Eventos";
 	private const VISTA_ID = "evento-lista";

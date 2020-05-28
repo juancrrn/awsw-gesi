@@ -22,6 +22,22 @@ use stdClass;
 
 class Valido
 {
+
+    /**
+     * Constantes de formatos de fecha y hora.
+     * 
+     * @var string MYSQL_DATE_FORMAT
+     * @var string MYSQL_DATETIME_FORMAT
+     * @var string ESP_DATE_FORMAT
+     * @var string ESP_DATETIME_FORMAT
+     * @var string ESP_DATETIME_SHORT_FORMAT
+     */
+    public const MYSQL_DATE_FORMAT = 'Y-m-d';
+    public const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const ESP_DATE_FORMAT = 'd/m/Y';
+    public const ESP_DATETIME_FORMAT = 'd/m/Y H:i:s';
+    public const ESP_DATETIME_SHORT_FORMAT = 'd/m/Y H:i';
+
     /**
      * Validate NIF or NIE
      *
@@ -194,10 +210,8 @@ class Valido
      */
     public static function testDate($date)
     {
-        $format = 'd/m/Y';
-        $mysqlFormat = 'Y-m-d';
-        $d = \DateTime::createFromFormat($format, $date);
-        return ($d && $d->format($format) == $date) ? $d->format($mysqlFormat) : false;
+        $d = \DateTime::createFromFormat(self::ESP_DATE_FORMAT, $date);
+        return ($d && $d->format(self::ESP_DATE_FORMAT) == $date) ? $d->format(self::MYSQL_DATE_FORMAT) : false;
     }
 
     /**
@@ -214,10 +228,8 @@ class Valido
      */
     public static function testDateTime($dateTime)
     {
-        $format = 'd/m/Y H:i:s';
-        $mysqlFormat = 'Y-m-d H:i:s';
-        $d = \DateTime::createFromFormat($format, $dateTime);
-        return ($d && $d->format($format) == $dateTime) ? $d->format($mysqlFormat) : false;
+        $d = \DateTime::createFromFormat(self::ESP_DATETIME_FORMAT, $dateTime);
+        return ($d && $d->format(self::ESP_DATETIME_FORMAT) == $dateTime) ? $d->format(self::MYSQL_DATETIME_FORMAT) : false;
     }
 
     /**
