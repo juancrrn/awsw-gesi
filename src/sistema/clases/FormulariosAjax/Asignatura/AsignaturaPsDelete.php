@@ -39,7 +39,7 @@ use Awsw\Gesi\Sesion;
      */
     private const FORM_ID = 'asignatura-ps-delete';
     private const FORM_NAME = 'Eliminar asignatura';
-    private const TARGET_OBJECT_NAME = 'Asignatura';
+    private const TARGET_CLASS_NAME = 'Asignatura';
     private const SUBMIT_URL = '/ps/asignaturas/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.asignatura';
@@ -54,7 +54,7 @@ use Awsw\Gesi\Sesion;
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -101,7 +101,7 @@ use Awsw\Gesi\Sesion;
         $responseData = array(
             'status' => 'ok',
             // Link are not necessary in this case
-            self::TARGET_OBJECT_NAME => $record
+            self::TARGET_CLASS_NAME => $record
         );
 
         return $responseData;

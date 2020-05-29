@@ -45,7 +45,7 @@ class AsignacionPsUpdate extends FormularioAjax
      */
     private const FORM_ID = 'asignacion-ps-update';
     private const FORM_NAME = 'Editar asignación profesor-grupo-asignatura';
-    private const TARGET_OBJECT_NAME = 'Asignacion';
+    private const TARGET_CLASS_NAME = 'Asignacion';
     private const SUBMIT_URL = '/ps/asignacion/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.asignacion';
@@ -63,7 +63,7 @@ class AsignacionPsUpdate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -140,7 +140,7 @@ class AsignacionPsUpdate extends FormularioAjax
                 $grupoLink,
                 $foroLink
             ),
-            self::TARGET_OBJECT_NAME => $asignacion
+            self::TARGET_CLASS_NAME => $asignacion
         );
 
         return $responseData;
@@ -295,7 +295,7 @@ class AsignacionPsUpdate extends FormularioAjax
                         $foroLink
                     ),
                     'messages' => array('Asignación actualizada correctamente.'),
-                    self::TARGET_OBJECT_NAME => $asignacion
+                    self::TARGET_CLASS_NAME => $asignacion
                 );
                 
                 $this->respondJsonOk($responseData);

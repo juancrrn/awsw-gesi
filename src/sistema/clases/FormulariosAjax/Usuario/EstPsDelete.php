@@ -38,7 +38,7 @@ use Awsw\Gesi\Sesion;
      */
     private const FORM_ID = 'usuario-est-delete';
     private const FORM_NAME = 'Eliminar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
@@ -53,7 +53,7 @@ use Awsw\Gesi\Sesion;
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -100,7 +100,7 @@ use Awsw\Gesi\Sesion;
         $responseData = array(
             'status' => 'ok',
             // Link are not necessary in this case
-            self::TARGET_OBJECT_NAME => $record
+            self::TARGET_CLASS_NAME => $record
         );
 
         return $responseData;

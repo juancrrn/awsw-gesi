@@ -40,7 +40,7 @@ class AsignaturaPsUpdate extends FormularioAjax
      */
     private const FORM_ID = 'asignatura-ps-update';
     private const FORM_NAME = 'Editar asignatura';
-    private const TARGET_OBJECT_NAME = 'Asignatura';
+    private const TARGET_CLASS_NAME = 'Asignatura';
     private const SUBMIT_URL = '/ps/asignaturas/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.asignatura';
@@ -58,7 +58,7 @@ class AsignaturaPsUpdate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -111,7 +111,7 @@ class AsignaturaPsUpdate extends FormularioAjax
             'links' => array(
                 $nivelLink
             ),
-            self::TARGET_OBJECT_NAME => $asignatura
+            self::TARGET_CLASS_NAME => $asignatura
         );
 
         return $responseData;
@@ -207,7 +207,7 @@ class AsignaturaPsUpdate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('Asignatura actualizada correctamente.'),
-                    self::TARGET_OBJECT_NAME => $asignatura
+                    self::TARGET_CLASS_NAME => $asignatura
                 );
                 
                 $this->respondJsonOk($responseData);

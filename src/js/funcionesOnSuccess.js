@@ -248,6 +248,26 @@ onSuccessFn.listaPsAsignacionesUpdated = (e, params) =>
 }
 
 /**
+ * Actualiza la lista de asignaciones (personal de Secretaría) cuando se 
+ * elimina una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsAsignacionesDeleted = (e, params) =>
+{
+    console.log(params);
+    const $modalData = params.modalData;
+
+    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    $row.remove();
+}
+
+/**
  * Actualiza la lista de mensajes de Secretaría cuando se elimina uno.
  * 
  * @param {eventObject} e Evento.

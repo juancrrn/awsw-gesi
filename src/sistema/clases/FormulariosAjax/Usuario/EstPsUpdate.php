@@ -41,7 +41,7 @@ class EstPsUpdate extends FormularioAjax
      */
     private const FORM_ID = 'usuario-est-update';
     private const FORM_NAME = 'Editar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
@@ -59,7 +59,7 @@ class EstPsUpdate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -112,7 +112,7 @@ class EstPsUpdate extends FormularioAjax
             'links' => array(
                 $grupoLink
             ),
-            self::TARGET_OBJECT_NAME => $usuario
+            self::TARGET_CLASS_NAME => $usuario
         );
 
         return $responseData;
@@ -258,7 +258,7 @@ class EstPsUpdate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('Usuario estudiante actualizado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    self::TARGET_CLASS_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);

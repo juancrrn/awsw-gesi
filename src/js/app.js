@@ -320,6 +320,8 @@ $(() => {
                         modalData: $modalData,
                         result: result
                     });
+                    
+                    if (! autoconf.APP_PRODUCTION) console.log('Triggering event "' + onSuccessEventName + '" on "' + onSuccessEventTarget + '".');
                 }
 
                 $modal.modal('hide');
@@ -392,6 +394,8 @@ $(() => {
         onSuccessFn.listaPsAsignacionesCreated);
     $('#asignacion-ps-list').on('updated.asignacion',
         onSuccessFn.listaPsAsignacionesUpdated);
+    $('#asignacion-ps-list').on('deleted.asignacion',
+        onSuccessFn.listaPsAsignacionesDeleted);
 
     /**
      * Vista de lista de mensajes de Secretaría (usuario en sesión).

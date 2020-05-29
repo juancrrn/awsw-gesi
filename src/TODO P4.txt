@@ -1,4 +1,7 @@
+- Hacer una búsqueda global de TODO
 - Comprobar, al insertar usuarios, que NIF y email no existen ya, ya que son UNIQUE.
 - Habilitar verificación formato NIF.
 - Verificación antes de enviar los formularios, en el cliente; campos required y asterisco.
 - Horarios, representación, formularios y formato para guardar en MySQL (CSV, JSON, etc.)
+- Al eliminar una asignación, si procede, eliminar también el foro y los mensajes.
+- Que un foro solo pueda ser foro principal de una asignatura.

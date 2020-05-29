@@ -40,7 +40,7 @@ class PsPsCreate extends FormularioAjax
      */
     private const FORM_ID = 'usuario-ps-create';
     private const FORM_NAME = 'Crear personal de Secretaría';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/ps/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.usuario.ps';
@@ -58,7 +58,7 @@ class PsPsCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -191,7 +191,7 @@ class PsPsCreate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('El usuario de personal de Secretaría fue creado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    self::TARGET_CLASS_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);

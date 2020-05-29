@@ -137,6 +137,7 @@ class Asignacion
         return [
             'uniqueId' => $this->getId(),
             'id' => $this->getId(),
+            'checkbox' => $this->getId(),
             'asignatura' => $this->getAsignatura(),
             'grupo' => $this->getGrupo(),
             'profesor' => $this->getProfesor(),

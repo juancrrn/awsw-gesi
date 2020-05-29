@@ -40,7 +40,7 @@ class PdPsUpdate extends FormularioAjax
      */
     private const FORM_ID = 'usuario-pd-update';
     private const FORM_NAME = 'Editar personal docente';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/pd/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.pd';
@@ -58,7 +58,7 @@ class PdPsUpdate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -101,7 +101,7 @@ class PdPsUpdate extends FormularioAjax
 
         $responseData = array(
             'status' => 'ok',
-            self::TARGET_OBJECT_NAME => $usuario
+            self::TARGET_CLASS_NAME => $usuario
         );
             
         return $responseData;
@@ -227,7 +227,7 @@ class PdPsUpdate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('Usuario de personal docente actualizado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    self::TARGET_CLASS_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);

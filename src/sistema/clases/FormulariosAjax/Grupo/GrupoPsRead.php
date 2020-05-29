@@ -127,11 +127,6 @@ class GrupoPsRead extends FormularioAjax
        
         $html = <<< HTML
         <div class="form-group">
-            <label >Nivel</label>
-            <input class="form-control" type="text" name="nivel"    disabled="disabled" />
-            </select>
-        </div>
-        <div class="form-group">
             <label >Curso escolar</label>
             <input class="form-control" type="text" name="cursoEscolar"    disabled="disabled" />
         </div>

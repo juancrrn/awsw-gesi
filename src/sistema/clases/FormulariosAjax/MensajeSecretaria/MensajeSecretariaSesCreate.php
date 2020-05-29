@@ -39,7 +39,7 @@ class MensajeSecretariaSesCreate extends FormularioAjax
      */
     private const FORM_ID = 'mensaje-secretaria-ses-create';
     private const FORM_NAME = 'Crear mensaje de Secretaría';
-    private const TARGET_OBJECT_NAME = 'MensajeSecretaria';
+    private const TARGET_CLASS_NAME = 'MensajeSecretaria';
     private const SUBMIT_URL = '/ses/mensajesecretaria/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.ses.mensajesecretaria';
@@ -57,7 +57,7 @@ class MensajeSecretariaSesCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -117,7 +117,7 @@ class MensajeSecretariaSesCreate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('Mensaje de Secretaría enviado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $mensaje
+                    self::TARGET_CLASS_NAME => $mensaje
                 );
                 
                 $this->respondJsonOk($responseData);

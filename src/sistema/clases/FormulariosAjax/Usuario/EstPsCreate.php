@@ -41,7 +41,7 @@ class EstPsCreate extends FormularioAjax
      */
     private const FORM_ID = 'usuario-est-create';
     private const FORM_NAME = 'Crear estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
@@ -59,7 +59,7 @@ class EstPsCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -217,7 +217,7 @@ class EstPsCreate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('El usuario estudiante fue creado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    self::TARGET_CLASS_NAME => $usuario
                 );
                 
                 $this->respondJsonOk($responseData);

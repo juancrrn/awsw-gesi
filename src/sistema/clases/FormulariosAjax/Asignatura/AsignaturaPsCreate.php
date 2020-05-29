@@ -40,7 +40,7 @@ class AsignaturaPsCreate extends FormularioAjax
      */
     private const FORM_ID = 'asignatura-ps-create';
     private const FORM_NAME = 'Crear asignatura';
-    private const TARGET_OBJECT_NAME = 'Asignatura';
+    private const TARGET_CLASS_NAME = 'Asignatura';
     private const SUBMIT_URL = '/ps/asignaturas/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.asignatura';
@@ -58,7 +58,7 @@ class AsignaturaPsCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -168,7 +168,7 @@ class AsignaturaPsCreate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('La asignatura fue creada correctamente.'),
-                    self::TARGET_OBJECT_NAME => $asignatura
+                    self::TARGET_CLASS_NAME => $asignatura
                 );
                 
                 $this->respondJsonOk($responseData);

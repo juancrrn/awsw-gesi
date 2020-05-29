@@ -36,10 +36,10 @@ abstract class FormularioAjax
     /**
      * @var string $targetObjectName        Name of the object which the form is
      *                                      modifying.
-     * @var string TARGET_OBJECT_NAME_FIELD Form field name.
+     * @var string TARGET_CLASS_NAME_FIELD Form field name.
      */
     private $targetObjectName = null;
-    private const TARGET_OBJECT_NAME_FIELD = 'ajax-target-object-name';
+    private const TARGET_CLASS_NAME_FIELD = 'ajax-target-object-name';
 
     /**
      * @var string $readOnly       Locks the form with no submission expected.
@@ -345,7 +345,7 @@ abstract class FormularioAjax
         $csrfTokenField = self::CSRF_TOKEN_FIELD;
 
         $targetObjectNameData = 
-            'data-' . self::TARGET_OBJECT_NAME_FIELD .
+            'data-' . self::TARGET_CLASS_NAME_FIELD .
             '="' . $this->targetObjectName . '"';
 
         $readOnlyData = 'data-' . self::READ_ONLY_FIELD .

@@ -40,7 +40,7 @@ class MensajeSecretariaInvCreate extends FormularioAjax
      */
     private const FORM_ID = 'mensaje-secretaria-inv-create';
     private const FORM_NAME = 'Crear mensaje de Secretaría';
-    private const TARGET_OBJECT_NAME = 'MensajeSecretaria';
+    private const TARGET_CLASS_NAME = 'MensajeSecretaria';
     private const SUBMIT_URL = '/inv/mensajesecretaria/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
 
@@ -56,7 +56,7 @@ class MensajeSecretariaInvCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );

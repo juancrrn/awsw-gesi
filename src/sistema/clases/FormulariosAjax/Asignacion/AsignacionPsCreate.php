@@ -45,7 +45,7 @@ class AsignacionPsCreate extends FormularioAjax
      */
     private const FORM_ID = 'asignacion-ps-create';
     private const FORM_NAME = 'Crear asignación profesor-grupo-asignatura';
-    private const TARGET_OBJECT_NAME = 'Usuario';
+    private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/asignacion/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.asignacion';
@@ -63,7 +63,7 @@ class AsignacionPsCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -255,7 +255,7 @@ class AsignacionPsCreate extends FormularioAjax
                         $foroLink
                     ),
                     'messages' => array('Asignación creada correctamente.'),
-                    self::TARGET_OBJECT_NAME => $asignacion
+                    self::TARGET_CLASS_NAME => $asignacion
                 );
                 
                 $this->respondJsonOk($responseData);

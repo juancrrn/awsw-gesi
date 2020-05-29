@@ -41,7 +41,7 @@ class GrupoPsCreate extends FormularioAjax
 
     private const FORM_ID = 'grupo-ps-create';
     private const FORM_NAME = 'Crear grupo';
-    private const TARGET_OBJECT_NAME = 'Grupo';
+    private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.grupo';
@@ -57,7 +57,7 @@ class GrupoPsCreate extends FormularioAjax
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
-            self::TARGET_OBJECT_NAME,
+            self::TARGET_CLASS_NAME,
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
@@ -205,7 +205,7 @@ class GrupoPsCreate extends FormularioAjax
                 $responseData = array(
                     'status' => 'ok',
                     'messages' => array('El grupo fue creado correctamente'),
-                    self::TARGET_OBJECT_NAME => $grupo
+                    self::TARGET_CLASS_NAME => $grupo
                 );
 
                 $this->respondJsonOk($responseData);
