@@ -24,6 +24,7 @@
 namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
 
 class EventoInvList extends Modelo
 {
@@ -32,14 +33,19 @@ class EventoInvList extends Modelo
 
     public function __construct()
     {
+        Sesion::requerirSesionNoIniciada();
+
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
     }
 
     public function procesaContent() : void
     {
+        $form = new EventoInvCreate();
+        $formModal = $form->generateModal();
+        $formButton = $form_>generateButton('Eventos programados');
 
-        echo <<< HTML
+        $html = <<< HTML
         <header class="page-header">
             <h1>$this->nombre</h1>
         </header>

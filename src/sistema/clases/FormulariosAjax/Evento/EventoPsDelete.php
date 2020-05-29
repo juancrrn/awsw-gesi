@@ -24,7 +24,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @version 0.0.4
  */
 
-class EventoPsCreate extends FormularioAjax
+class EventoPsDelete extends FormularioAjax
 {
 
     /**

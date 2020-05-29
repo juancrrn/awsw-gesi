@@ -385,11 +385,11 @@ class Asignacion
     }
 
     /**
-     * Trae las asignaturas que imparte un profesor
+     * Trae las asignaciones que imparte un profesor
      * 
      * @param int $id del profesor
      * 
-     * @return array<Asignatura>
+     * @return array
      */
     public static function dbGetByProfesor(int $profesor) : array
     {
@@ -404,7 +404,7 @@ class Asignacion
                 horario,
                 foro_principal
             FROM
-                gesi_asignaciones        
+                gesi_asignaciones
             WHERE
                 profesor = ?    
         ");
@@ -428,51 +428,6 @@ class Asignacion
 
         return $as;    
 	}
-	
-	 /**
-     * Trae las asignaciones en las que participa un profesor
-     * 
-     * @param int $id del profesor
-     * 
-     * @return array<Asignacion>
-     */
-    public static function dbGetAsignacionesByProfesor(int $profesor) : array
-    {
-        $bbdd = App::getSingleton()->bbddCon();
-
-        $sentencia = $bbdd->prepare("
-		SELECT 
-			id,
-			profesor,
-			grupo,
-			asignatura,
-			horario,
-			foro_principal
-		FROM
-			gesi_asignaciones
-		WHERE
-			profesor = ?   
-        ");
-
-        $sentencia->bind_param(
-            "i",
-            $profesor
-        );
-
-        $sentencia->execute();
-
-        $r = $sentencia->get_result();
-
-        $as = array();
-
-        while ($a = $r->fetch_object()) {
-            $as[] = self::fromDbFetch($a);
-        }
-
-        $sentencia->close();
-
-        return $as;    
-    }
 
     /**
      * Comprueba si una asignación existe en la base de datos en base a su

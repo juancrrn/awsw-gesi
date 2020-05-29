@@ -4,10 +4,10 @@ namespace Awsw\Gesi\FormulariosAjax\Foro;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Foro;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal docente por parte de 
+ * Formulario AJAX para eliminar un foro por parte de 
  * un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -35,13 +35,13 @@ use Awsw\Gesi\Datos\Usuario;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-delete';
-    private const FORM_NAME = 'Eliminar estudiante';
-    private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/delete/';
+    private const FORM_ID = 'foro-delete';
+    private const FORM_NAME = 'Eliminar foro';
+    private const TARGET_CLASS_NAME = 'Foro';
+    private const SUBMIT_URL = '/ps/foros/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.foro';
+    private const ON_SUCCESS_EVENT_TARGET = '#foro-lista';
 
     public function __construct()
     {
@@ -79,19 +79,19 @@ use Awsw\Gesi\Datos\Usuario;
         $uniqueId = $requestData['uniqueId'];
 
         // Check that uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Foro::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'El foro solicitado no existe.'
                 )
             );
 
             return $responseData;
         }
 
-        $record = Usuario::dbGet($uniqueId);
+        $record = Foro::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
@@ -112,13 +112,9 @@ use Awsw\Gesi\Datos\Usuario;
             <input name="nombre" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
-            <label>Apellidos</label>
-            <input name="apellidos" type="text" class="form-control"  disabled="disabled">
-        </div>
-        <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-est-delete-checkbox" required="required">
-                <label class="custom-control-label" for="usuario-est-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="foro-delete-checkbox" required="required">
+                <label class="custom-control-label" for="foro-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;
@@ -150,23 +146,23 @@ use Awsw\Gesi\Datos\Usuario;
         }
         
         // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+        if (! Foro::dbExisteId($uniqueId)) {
+            $errors[] = 'El foro solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (Usuario::dbEliminar($uniqueId)) {
+        if (Foro::dbEliminar($uniqueId)) {
             $responseData = array(
                 'status' => 'ok',
                 'messages' => array(
-                    'Usuario estudiante eliminado correctamente.'
+                    'Foro eliminado correctamente.'
                 )
             );
 
             $this->respondJsonOk($responseData);
         } else {
-            $errors[] = 'Hubo un problema al eliminar el usuario estudiante.';
+            $errors[] = 'Hubo un problema al eliminar el foro.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }

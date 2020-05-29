@@ -9,7 +9,7 @@ use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 /**
- * Formulario AJAX de creación de un usuario estudiante por parte de un 
+ * Formulario AJAX de creación de un foro por parte de un 
  * administrador (personal de Secretaría).
  *
  * @package awsw-gesi
@@ -38,13 +38,13 @@ class ForoPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-create';
-    private const FORM_NAME = 'Crear estudiante';
-    private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/create/';
+    private const FORM_ID = 'foro-create';
+    private const FORM_NAME = 'Crear foro';
+    private const TARGET_CLASS_NAME = 'Foro';
+    private const SUBMIT_URL = '/ps/foros/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
+    private const ON_SUCCESS_EVENT_NAME = 'created.foro';
+    private const ON_SUCCESS_EVENT_TARGET = '#foro-lista'; // TODO
 
     /**
      * Constructs the form object
@@ -92,10 +92,6 @@ class ForoPsCreate extends FormularioAjax
         $defaultUserPassword = GESI_DEFAULT_PASSWORD;
 
         $html = <<< HTML
-        <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
-        </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
             <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />

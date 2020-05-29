@@ -1,4 +1,4 @@
-<?php 
+'<?php 
 
 /**
  * Vistas de calendario.
@@ -24,6 +24,7 @@
 namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
 
 class EventoEstList extends Modelo
 {

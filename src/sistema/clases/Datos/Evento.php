@@ -57,6 +57,20 @@ class Evento
 		$this->asignacion = $asignacion;
 	}
 
+	private static function fromDbFetch(Object $o) :Evento
+    {
+        return new self(
+			$o->id,
+			$o->fecha,
+			$o->nombree,
+			$o->descripcion,
+			$o->lugar,
+			$o->asigatura,
+			$o->asignacion
+		);
+		
+    }
+
 	public static function dbInsertar() : int {
 		
 		$bbdd = App::getSingleton()->bbddCon();
@@ -237,5 +251,47 @@ class Evento
 		return $eventos;
 	
 		return $eventos;
+	}
+	
+
+
+
+	public static function dbGetByProfesor(int $profesor) : array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $sentencia = $bbdd->prepare("
+            SELECT 
+				id,
+				fecha,
+				nombre,
+				descripcion,
+				lugar,
+				asignatura,
+				asignacion
+            FROM
+				gesi_eventos
+            WHERE
+                profesor = ?    
+        ");
+
+        $sentencia->bind_param(
+            "i",
+            $profesor
+        );
+
+        $sentencia->execute();
+
+        $r = $sentencia->get_result();
+
+        $as = array();
+
+        while ($a = $r->fetch_object()) {
+            $as[] = self::fromDbFetch($a);
+        }
+
+        $sentencia->close();
+
+        return $as;    
 	}
 }

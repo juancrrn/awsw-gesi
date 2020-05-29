@@ -45,7 +45,7 @@ class AsignacionPdList extends Modelo
     
         $idProfesor = Sesion::getUsuarioEnSesion()->getId();
 
-        $this->listado = Asignacion::  dbGetAsignacionesByProfesor($idProfesor);
+        $this->listado = Asignacion::dbGetByProfesor($idProfesor);
     }
 
     public function procesaContent() : void
@@ -61,6 +61,7 @@ class AsignacionPdList extends Modelo
                     <th scope="col">Horario</th>
                     <th scope="col">Asignatura</th>
                     <th scope="col">Grupo</th>
+                    <th scope="col">Foro</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +75,9 @@ class AsignacionPdList extends Modelo
     }
 
     public function generaListaAsignaciones() : string
-    {
+    {   
+        $app = App::getSingleton();
+
         $buffer = '';
 
         if (! empty($this->listado)) {
@@ -86,14 +89,50 @@ class AsignacionPdList extends Modelo
                 
                 $grupo = Grupo::dbGet($asignacion->getGrupo());
                 $grupoNombre = $grupo->getNombreCompleto();
+                $listaEstudaintes = Usuario::dbGetEstudiantesByGrupo($grupo->getId());
+
+                $foro = $app->getUrl() . '/mi/foros/' . $asignacion->getForoPrincipal() . '/ver/';
                 
                 $buffer .= <<< HTML
                 <tr>
                     <td data-col-name="horario">$horarios</td>
                     <td data-col-name="asignaturaNombre">$asignaturaNombre</td>
                     <td data-col-name="grupoNombre">$grupoNombre</td>
+                    <td data-col-name="foro"><a href="$foro">Ir al foro</a></td>
+                </tr>
+                <tr>
+                    <td>Estudiantes del grupo:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 HTML;
+
+                if (! empty($listaEstudaintes)) {
+                    foreach ($listaEstudaintes as $usuario) {
+
+                        $nif = $usuario->getNif();
+                        $nombre = $usuario->getNombreCompleto();
+
+                        $buffer .= <<< HTML
+                        <tr>
+                            <td data-col-name="nif">$nif</td>
+                            <td data-col-name="nombre">$nombre</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        HTML;
+                    }
+                } else{
+                    $buffer .= <<< HTML
+                    <tr>
+                        <td>No se ha encontrado ningun alumno.</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    HTML;
+                }
             }
         } else {
             $buffer .= <<< HTML

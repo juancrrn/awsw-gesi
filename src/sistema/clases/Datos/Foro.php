@@ -224,36 +224,7 @@ class Foro
     public static function dbActualizar() : bool
     {
     
-        $bbdd = App::getSingleton()->bbddCon();
-    
-        $sentencia = $bbdd->prepare("
-            UPDATE
-                gesi_eventos
-            SET
-                tema = ?,
-                profesor_grupo_asignatura = ?
-                FROM
-                gesi_foros
-            WHERE
-                id = ?
-        ");
-    
-        $id= $this->getId();
-        $tema = $this->getTema();
-        $profesor_grupo_asignatura= $this->getProfesor_grupo_asignatura();
-    
-        $sentencia->blind_param(
-            "isi", 
-            $id,
-            $tema,
-            $profesor_grupo_asignatura
-            );
-    
-        $resultado = $sentencia->execute();
-    
-        $sentencia->close();
-    
-        return $resultado;
+        return false;
     }
 }
 

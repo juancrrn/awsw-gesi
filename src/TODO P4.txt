@@ -5,3 +5,6 @@
 - Horarios, representación, formularios y formato para guardar en MySQL (CSV, JSON, etc.)
 - Al eliminar una asignación, si procede, eliminar también el foro y los mensajes.
 - Que un foro solo pueda ser foro principal de una asignatura.
+- Constraints nombres cortos asignatura y grupo
+- Página de recuperar contraseña
+- Que un profesor pueda crear eventos para asignaturas enteras

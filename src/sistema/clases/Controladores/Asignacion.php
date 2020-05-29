@@ -18,6 +18,7 @@
 namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
@@ -76,6 +77,14 @@ class Asignacion extends Controlador
 		
 		parent::get('/pd/asignaciones/', function() {
 			Vista::dibuja(new AsignacionPdList());
+		});
+
+		/**
+		 * Estudiante.
+		 */
+
+		parent::get('/est/asignaciones/horario/', function () {
+			Vista::dibuja(new AsignacionEstList());
 		});
 	}
 }

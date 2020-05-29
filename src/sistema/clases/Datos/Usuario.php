@@ -332,6 +332,44 @@ class Usuario
     }
 
     /**
+     * Selecciona el nombre de un usuario mediante en id
+     * 
+     */
+    public static function dbGetNombreDesdeId(int $id) : string
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT 
+            nombre
+        FROM
+            gesi_usuarios
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+        
+        $sentencia->execute();
+
+        $resultado = $sentencia->get_result()->fetch_object();
+
+        $return = $resultado->nombre;
+
+        $sentencia->close();
+
+        return $return;
+    }
+
+
+
+    /**
      * Trae todos los usuarios de la base de datos.
      *
      * @requires Existe un usuario con el id especificado.
