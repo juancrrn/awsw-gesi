@@ -5,6 +5,7 @@ namespace Awsw\Gesi\FormulariosAjax\Asignacion;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX para eliminar un usuario de personal docente por parte de 
@@ -43,8 +44,10 @@ use Awsw\Gesi\Datos\Usuario;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
     private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(

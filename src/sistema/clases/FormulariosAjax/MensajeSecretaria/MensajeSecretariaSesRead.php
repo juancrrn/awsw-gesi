@@ -42,9 +42,9 @@ class MensajeSecretariaSesRead extends FormularioAjax
     /**
      * Constructs the form object
      */
-    public function __construct()
+    public function __construct($api = false)
     {
-        Sesion::requerirSesionIniciada(true);
+        Sesion::requerirSesionIniciada($api);
 
         $app = App::getSingleton();
 

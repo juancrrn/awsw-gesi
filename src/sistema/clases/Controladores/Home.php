@@ -22,6 +22,7 @@ use Awsw\Gesi\Vistas\Vista;
 
 class Home extends Controlador
 {
+
     public static function controla() : void
     {
         parent::get('/?', function () {

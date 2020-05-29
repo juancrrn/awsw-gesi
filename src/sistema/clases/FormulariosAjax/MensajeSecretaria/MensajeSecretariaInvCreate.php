@@ -47,9 +47,9 @@ class MensajeSecretariaInvCreate extends FormularioAjax
     /**
      * Constructs the form object.
      */
-    public function __construct()
+    public function __construct($api = false)
     {
-        Sesion::requerirSesionNoIniciada(true);
+        Sesion::requerirSesionNoIniciada($api);
 
         $app = App::getSingleton();
 

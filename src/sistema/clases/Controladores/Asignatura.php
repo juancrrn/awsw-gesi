@@ -38,36 +38,37 @@ class Asignatura extends Controlador
 			Vista::dibuja(new AsignaturaPsList());
 		});
 
-		/**
-		 * Formularios AJAX.
-		 */
-
 		// Create.
 		parent::get('/ps/asignaturas/create/', function () {
-			(new AsignaturaPsCreate())->manage();
+			(new AsignaturaPsCreate(true))->manage();
 		});
 		parent::post('/ps/asignaturas/create/', function () {
-			(new AsignaturaPsCreate())->manage();
-		});
-		parent::get('/ps/asignaturas/read/', function () {
-			(new AsignaturaPsRead())->manage();
-		});
-		parent::post('/ps/asignaturas/read/', function () {
-			(new AsignaturaPsRead())->manage();
-		});
-		parent::get('/ps/asignaturas/update/', function () {
-			(new AsignaturaPsUpdate())->manage();
-		});
-		parent::patch('/ps/asignaturas/update/', function () {
-			(new AsignaturaPsUpdate())->manage();
-		});
-		parent::get('/ps/asignaturas/delete/', function () {
-			(new AsignaturaPsDelete())->manage();
-		});
-		parent::delete('/ps/asignaturas/delete/', function () {
-			(new AsignaturaPsDelete())->manage();
+			(new AsignaturaPsCreate(true))->manage();
 		});
 
+		// Read.
+		parent::get('/ps/asignaturas/read/', function () {
+			(new AsignaturaPsRead(true))->manage();
+		});
+		parent::post('/ps/asignaturas/read/', function () {
+			(new AsignaturaPsRead(true))->manage();
+		});
+
+		// Update.
+		parent::get('/ps/asignaturas/update/', function () {
+			(new AsignaturaPsUpdate(true))->manage();
+		});
+		parent::patch('/ps/asignaturas/update/', function () {
+			(new AsignaturaPsUpdate(true))->manage();
+		});
+
+		// Delete.
+		parent::get('/ps/asignaturas/delete/', function () {
+			(new AsignaturaPsDelete(true))->manage();
+		});
+		parent::delete('/ps/asignaturas/delete/', function () {
+			(new AsignaturaPsDelete(true))->manage();
+		});
 	}
 }
 

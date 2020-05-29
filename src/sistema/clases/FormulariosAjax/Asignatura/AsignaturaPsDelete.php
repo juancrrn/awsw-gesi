@@ -6,6 +6,7 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX para eliminar una asignatura por parte de 
@@ -44,8 +45,10 @@ use Awsw\Gesi\Datos\Asignatura;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.asignatura';
     private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list';
 
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(

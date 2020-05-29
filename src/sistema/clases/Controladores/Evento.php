@@ -24,19 +24,6 @@ class Evento extends Controlador
 
     public static function controla() : void
     {
-        // TODO
-        /* parent::get('/eventos/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Evento\InvLista());
-        });
-
-        parent::get('/mi/eventos/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Evento\MiLista());
-        });
-
-        parent::get('/admin/eventos/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Evento\AdminLista());
-        });
- */
     }
 }
 

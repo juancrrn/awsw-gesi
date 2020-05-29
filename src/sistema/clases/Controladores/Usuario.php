@@ -41,112 +41,110 @@ class Usuario extends Controlador
     public static function controla() : void
     {
         /**
-         * Vista de lista de usuarios.
+         * Personal de Secretaría.
          */
 
         parent::get('/ps/usuarios/', function () {
             Vista::dibuja(new UsuarioPsList());
         });
 
-        // TODO comprobar permisos
-
         /**
-         * Formularios AJAX de usuarios con rol estudiante.
+         * Rol estudiante.
          */
 
-        // Create
+        // Create.
         parent::get('/ps/usuarios/est/create/', function () {
-            (new EstPsCreate())->manage();
+            (new EstPsCreate(true))->manage();
         });
         parent::post('/ps/usuarios/est/create/', function () {
-            (new EstPsCreate())->manage();
+            (new EstPsCreate(true))->manage();
         });
 
-        // Read
+        // Read.
         parent::get('/ps/usuarios/est/read/', function () {
-            (new EstPsRead())->manage();
+            (new EstPsRead(true))->manage();
         });
 
-        // Update
+        // Update.
         parent::get('/ps/usuarios/est/update/', function () {
-            (new EstPsUpdate())->manage();
+            (new EstPsUpdate(true))->manage();
         });
         parent::patch('/ps/usuarios/est/update/', function () {
-            (new EstPsUpdate())->manage();
+            (new EstPsUpdate(true))->manage();
         });
 
-        // Delete
+        // Delete.
         parent::get('/ps/usuarios/est/delete/', function () {
-            (new EstPsDelete())->manage();
+            (new EstPsDelete(true))->manage();
         });
         parent::delete('/ps/usuarios/est/delete/', function () {
-            (new EstPsDelete())->manage();
-        });
-
-        /**
-         * Formularios AJAX de usuarios con rol personal docente.
-         */
-
-        // Create
-        parent::get('/ps/usuarios/pd/create/', function () {
-            (new PdPsCreate())->manage();
-        });
-        parent::post('/ps/usuarios/pd/create/', function () {
-            (new PdPsCreate())->manage();
-        });
-
-        // Read
-        parent::get('/ps/usuarios/pd/read/', function () {
-            (new PdPsRead())->manage();
-        });
-
-        // Update
-        parent::get('/ps/usuarios/pd/update/', function () {
-            (new PdPsUpdate())->manage();
-        });
-        parent::patch('/ps/usuarios/pd/update/', function () {
-            (new PdPsUpdate())->manage();
-        });
-
-        // Delete
-        parent::get('/ps/usuarios/pd/delete/', function () {
-            (new PdPsDelete())->manage();
-        });
-        parent::delete('/ps/usuarios/pd/delete/', function () {
-            (new PdPsDelete())->manage();
-        });
-
-        /**
-         * Formularios AJAX de usuarios con rol personal de Secretaría.
-         */
-
-        // Create
-        parent::get('/ps/usuarios/ps/create/', function () {
-            (new PsPsCreate())->manage();
-        });
-        parent::post('/ps/usuarios/ps/create/', function () {
-            (new PsPsCreate())->manage();
+            (new EstPsDelete(true))->manage();
         });
         
-        // Read
-        parent::get('/ps/usuarios/ps/read/', function () {
-            (new PsPsRead())->manage();
+        /**
+         * Rol personal docente.
+         */
+
+        // Create.
+        parent::get('/ps/usuarios/pd/create/', function () {
+            (new PdPsCreate(true))->manage();
         });
-    
-        // Update
-        parent::get('/ps/usuarios/ps/update/', function () {
-            (new PsPsUpdate())->manage();
-        });
-        parent::patch('/ps/usuarios/ps/update/', function () {
-            (new PsPsUpdate())->manage();
+        parent::post('/ps/usuarios/pd/create/', function () {
+            (new PdPsCreate(true))->manage();
         });
 
-        // Delete
+        // Read.
+        parent::get('/ps/usuarios/pd/read/', function () {
+            (new PdPsRead(true))->manage();
+        });
+
+        // Update.
+        parent::get('/ps/usuarios/pd/update/', function () {
+            (new PdPsUpdate(true))->manage();
+        });
+        parent::patch('/ps/usuarios/pd/update/', function () {
+            (new PdPsUpdate(true))->manage();
+        });
+
+        // Delete.
+        parent::get('/ps/usuarios/pd/delete/', function () {
+            (new PdPsDelete(true))->manage();
+        });
+        parent::delete('/ps/usuarios/pd/delete/', function () {
+            (new PdPsDelete(true))->manage();
+        });
+        
+        /**
+         * Rol personal de Secretaría.
+         */
+
+        // Create.
+        parent::get('/ps/usuarios/ps/create/', function () {
+            (new PsPsCreate(true))->manage();
+        });
+        parent::post('/ps/usuarios/ps/create/', function () {
+            (new PsPsCreate(true))->manage();
+        });
+        
+        // Read.
+        parent::get('/ps/usuarios/ps/read/', function () {
+            (new PsPsRead(true))->manage();
+        });
+    
+        // Update.
+        parent::get('/ps/usuarios/ps/update/', function () {
+            (new PsPsUpdate(true))->manage();
+        });
+        parent::patch('/ps/usuarios/ps/update/', function () {
+            (new PsPsUpdate(true))->manage();
+        });
+
+        // Delete.
         parent::get('/ps/usuarios/ps/delete/', function () {
-            (new PsPsDelete())->manage();
+            (new PsPsDelete(true))->manage();
         });
         parent::delete('/ps/usuarios/ps/delete/', function () {
-            (new PsPsDelete())->manage();
+            (new PsPsDelete(true))->manage();
         });
     }
 }

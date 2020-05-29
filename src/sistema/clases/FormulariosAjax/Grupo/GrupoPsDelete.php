@@ -45,8 +45,10 @@ class GrupoPsDelete extends FormularioAjax
     private const ON_SUCCESS_EVENT_NAME = 'deleted.grupo';
     private const ON_SUCCESS_EVENT_TARGET = '#grupo-list';
 
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(

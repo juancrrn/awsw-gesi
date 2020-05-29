@@ -28,6 +28,7 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
 
@@ -62,7 +63,11 @@ class AsignacionPsList extends Modelo
         $formUpdate = new AsignacionPsUpdate();
         $formUpdateModal = $formUpdate->generateModal();
 
-        $listaAsignaciones = $this->generaListaAsignaciones($formRead, $formUpdate);
+        // Delete asignación.
+        $formDelete = new AsignacionPsDelete();
+        $formDeleteModal = $formDelete->generateModal();
+
+        $listaAsignaciones = $this->generaListaAsignaciones($formRead, $formUpdate, $formDelete);
 
         $formCreateBtn = $formCreate->generateButton('Crear', null, true);
         
@@ -85,13 +90,14 @@ class AsignacionPsList extends Modelo
         $formCreateModal
         $formReadModal
         $formUpdateModal
+        $formDeleteModal
         HTML;
 
         echo $html;
 
     }
 
-    public function generaListaAsignaciones(AsignacionPsRead $formRead, AsignacionPsUpdate $formUpdate) : string
+    public function generaListaAsignaciones(AsignacionPsRead $formRead, AsignacionPsUpdate $formUpdate, AsignacionPsDelete $formDelete) : string
     {
         $buffer = '';
 
@@ -112,13 +118,15 @@ class AsignacionPsList extends Modelo
                     ->generateButton('Ver', $asignacion->getId(), true);
                 $formUpdateBtn = $formUpdate
                     ->generateButton('Editar', $asignacion->getId(), true);
+                $formDeleteBtn = $formDelete
+                    ->generateButton('Eliminar', $asignacion->getId(), true);
                 
                 $buffer .= <<< HTML
                 <tr data-unique-id="$uniqueId">
                     <td data-col-name="profesorNombre">$profesorNombre</td>
                     <td data-col-name="asignaturaNombre">$asignaturaNombre</td>
                     <td data-col-name="grupoNombre">$grupoNombre</td>
-                    <td class="text-right">$formReadBtn $formUpdateBtn</td>
+                    <td class="text-right">$formReadBtn $formUpdateBtn $formDeleteBtn</td>
                 </tr>
                 HTML;
             }

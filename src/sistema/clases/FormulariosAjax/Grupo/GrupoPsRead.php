@@ -2,10 +2,12 @@
 
 namespace Awsw\Gesi\FormulariosAjax\Grupo;
 
+use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de visualización de un grupo por parte de un administrador 
@@ -42,13 +44,17 @@ class GrupoPsRead extends FormularioAjax
     /**
      * Constructs the form object
      */
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
+        $app = App::getSingleton();
+
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
             self::TARGET_CLASS_NAME,
-            self::SUBMIT_URL,
+            $app->getUrl() . self::SUBMIT_URL,
             null
         );
 
@@ -99,14 +105,18 @@ class GrupoPsRead extends FormularioAjax
             Usuario::dbGetByRol(2)
         );
 
+        $grupo = Grupo::dbGet($uniqueId);
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
             'links' => array(
                 $nivelesLink,
                 $tutoresLink
-            )
+            ),
+            self::TARGET_CLASS_NAME => $grupo
         );
+
+        
 
         return $responseData;
     }
@@ -118,24 +128,24 @@ class GrupoPsRead extends FormularioAjax
         $html = <<< HTML
         <div class="form-group">
             <label >Nivel</label>
-            <input class="form-control" type="text" name="nivel"   disabled="disabled">
+            <input class="form-control" type="text" name="nivel"    disabled="disabled" />
             </select>
         </div>
         <div class="form-group">
             <label >Curso escolar</label>
-            <input class="form-control" type="text" name="curso"    disabled="disabled" />
+            <input class="form-control" type="text" name="cursoEscolar"    disabled="disabled" />
         </div>
         <div class="form-group">
             <label >Nombre completo</label>
-            <input class="form-control" type="text" name="completo"    disabled="disabled" />
+            <input class="form-control" type="text" name="selectName"    disabled="disabled" />
         </div>
         <div class="form-group">
             <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="corto"   disabled="disabled" />
+            <input class="form-control" type="text" name="nombreCorto"   disabled="disabled" />
         </div>
         <div class="form-group">
         <label >Tutor</label>
-            <select class="form-control" name="tutor" id="tutor" disabled="disabled">
+            <select class="form-control" name="tutor"  disabled="disabled">
             </select>
         </div>
         HTML;

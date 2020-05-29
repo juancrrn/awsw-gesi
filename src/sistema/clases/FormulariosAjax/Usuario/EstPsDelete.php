@@ -44,9 +44,9 @@ use Awsw\Gesi\Sesion;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.est';
     private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
-    public function __construct()
+    public function __construct($api = false)
     {
-        Sesion::requerirSesionPs(true);
+        Sesion::requerirSesionPs($api);
 
         $app = App::getSingleton();
 

@@ -2,12 +2,14 @@
 
 namespace Awsw\Gesi\FormulariosAjax\Asignacion;
 
+use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de visualización de una asignación profesor-asignatura-grupo
@@ -44,13 +46,17 @@ class AsignacionPsRead extends FormularioAjax
     /**
      * Constructs the form object
      */
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
+        $app = App::getSingleton();
+
         parent::__construct(
             self::FORM_ID,
             self::FORM_NAME,
             self::TARGET_CLASS_NAME,
-            self::SUBMIT_URL,
+            $app->getUrl() . self::SUBMIT_URL,
             null
         );
 

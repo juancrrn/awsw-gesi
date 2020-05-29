@@ -19,15 +19,19 @@ namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaInvCreate;
-use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaPsRead;
+
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesCreate;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesRead;
+
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaPsList;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaPsRead;
+
 use Awsw\Gesi\Vistas\Vista;
 
 class MensajeSecretaria extends Controlador
 {
+
     public static function controla() : void
     {
         /**
@@ -40,10 +44,10 @@ class MensajeSecretaria extends Controlador
         
         // Create.
         parent::get('/inv/mensajesecretaria/create/', function () {
-            (new MensajeSecretariaInvCreate())->manage();
+            (new MensajeSecretariaInvCreate(true))->manage();
         });
         parent::post('/inv/mensajesecretaria/create/', function () {
-            (new MensajeSecretariaInvCreate())->manage();
+            (new MensajeSecretariaInvCreate(true))->manage();
         });
 
         /**
@@ -56,15 +60,15 @@ class MensajeSecretaria extends Controlador
         
         // Create.
         parent::get('/ses/mensajesecretaria/create/', function () {
-            (new MensajeSecretariaSesCreate())->manage();
+            (new MensajeSecretariaSesCreate(true))->manage();
         });
         parent::post('/ses/mensajesecretaria/create/', function () {
-            (new MensajeSecretariaSesCreate())->manage();
+            (new MensajeSecretariaSesCreate(true))->manage();
         });
         
         // Read.
         parent::get('/ses/mensajesecretaria/read/', function () {
-            (new MensajeSecretariaSesRead())->manage();
+            (new MensajeSecretariaSesRead(true))->manage();
         });
 
         /**
@@ -77,7 +81,7 @@ class MensajeSecretaria extends Controlador
         
         // Read.
         parent::get('/ps/mensajesecretaria/read/', function () {
-            (new MensajeSecretariaPsRead())->manage();
+            (new MensajeSecretariaPsRead(true))->manage();
         });
     }
 }

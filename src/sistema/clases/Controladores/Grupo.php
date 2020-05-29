@@ -31,47 +31,44 @@ class Grupo extends Controlador
     {   
 
         /**
-         * Ver lista de Grupos 
+         * Personal de Secretaría.
          */
 
         parent::get('/ps/grupos/', function () {
             V::dibuja(new GrupoPsList());
         });
 
-
-        /**
-         * Formularios AJAX de grupos personal de secretar
-         */
-
+        // Create.
         parent::get('/ps/grupo/create/', function(){
-            (new GrupoPsCreate())->manage();
+            (new GrupoPsCreate(true))->manage();
         });
         parent::post('/ps/grupo/create/', function(){
-            (new GrupoPsCreate())->manage();
+            (new GrupoPsCreate(true))->manage();
         });
 
+        // Read.
         parent::get('/ps/grupo/read/', function(){
-            (new GrupoPsRead())->manage();
+            (new GrupoPsRead(true))->manage();
         });
         parent::post('/ps/grupo/read/', function(){
-            (new GrupoPsRead())->manage();
+            (new GrupoPsRead(true))->manage();
         });
 
+        // Update.
         parent::get('/ps/grupo/update/', function(){
-            (new GrupoPsUpdate())->manage();
+            (new GrupoPsUpdate(true))->manage();
         });
         parent::patch('/ps/grupo/update/', function(){
-            (new GrupoPsUpdate())->manage();
+            (new GrupoPsUpdate(true))->manage();
         });
 
+        // Delete.
         parent::get('/ps/grupo/delete/', function(){
-            (new GrupoPsDelete())->manage();
+            (new GrupoPsDelete(true))->manage();
         });
         parent::delete('/ps/grupo/delete/', function(){
-            (new GrupoPsDelete())->manage();
+            (new GrupoPsDelete(true))->manage();
         });
-        
-      
     }
 }
 

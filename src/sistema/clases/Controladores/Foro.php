@@ -24,20 +24,6 @@ class Foro extends Controlador
 
     public static function controla() : void
     {
-        // TODO
-        /*
-        parent::get('/foros/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Foro\InvLista());
-        });
-
-        parent::get('/mi/foros/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Foro\MiLista());
-        });
-
-        parent::get('/admin/foros/', function () {
-            V::dibuja(new \Awsw\Gesi\Vistas\Foro\AdminLista());
-        });
-        */
     }
 }
 

@@ -49,9 +49,9 @@ class PsPsUpdate extends FormularioAjax
     /**
      * Constructs the form object
      */
-    public function __construct()
+    public function __construct($api = false)
     {
-        Sesion::requerirSesionPs(true);
+        Sesion::requerirSesionPs($api);
 
         $app = App::getSingleton();
 

@@ -17,11 +17,14 @@
 
 namespace Awsw\Gesi\Controladores;
 
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
-use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
+
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
+
 use Awsw\Gesi\Vistas\Vista;
 
 class Asignacion extends Controlador
@@ -40,62 +43,41 @@ class Asignacion extends Controlador
 
 		// Create.
 		parent::get('/ps/asignacion/create/', function () {
-			(new AsignacionPsCreate)->manage();
+			(new AsignacionPsCreate(true))->manage();
 		});
 		parent::post('/ps/asignacion/create/', function () {
-			(new AsignacionPsCreate)->manage();
+			(new AsignacionPsCreate(true))->manage();
 		});
 
 		// Read.
 		parent::get('/ps/asignacion/read/', function () {
-			(new AsignacionPsRead)->manage();
+			(new AsignacionPsRead(true))->manage();
 		});
 
 		// Update.
 		parent::get('/ps/asignacion/update/', function () {
-			(new AsignacionPsUpdate)->manage();
+			(new AsignacionPsUpdate(true))->manage();
 		});
 		parent::patch('/ps/asignacion/update/', function () {
-			(new AsignacionPsUpdate)->manage();
+			(new AsignacionPsUpdate(true))->manage();
+		});
+
+		// Delete.
+		parent::get('/ps/asignacion/delete/', function () {
+			(new AsignacionPsDelete(true))->manage();
+		});
+		parent::delete('/ps/asignacion/delete/', function () {
+			(new AsignacionPsDelete(true))->manage();
 		});
 
 		/**
 		 * Personal Docente
 		 */
+		
 		parent::get('/pd/asignaciones/', function() {
 			Vista::dibuja(new AsignacionPdList());
 		});
-
-
-		/*
-		parent::get('/admin/asignaciones/crear/', function () {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminCrear());
-		});
-		
-		parent::get('/admin/asignaciones/([0-9]+)/ver/', function ($asignacion_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminVer($asignacion_id));
-		});
-		
-		parent::get('/admin/asignaciones/([0-9]+)/editar/', function ($asignacion_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminEditar($asignacion_id));
-		});
-		
-		parent::get('/admin/asignaciones/([0-9]+)/eliminar/', function ($asignacion_id) {
-			V::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminEliminar($asignacion_id));
-		});
-
-		parent::get('/admin/asignaciones/', function () {
-			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
-		});
-
-		parent::get('/mi/asignaciones/', function () {
-			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\AdminLista());
-		});
-
-		parent::get('/mi/asignaciones/horario/', function () {
-			Vista::dibuja(new \Awsw\Gesi\Vistas\Asignacion\MiHorario());
-		});
-		*/
-
 	}
 }
+
+?>

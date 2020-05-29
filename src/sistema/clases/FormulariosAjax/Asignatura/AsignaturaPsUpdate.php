@@ -6,6 +6,7 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de actualizacion de una asignatura por parte de 
@@ -48,8 +49,10 @@ class AsignaturaPsUpdate extends FormularioAjax
     /**
      * Constructs the form object
      */
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(
