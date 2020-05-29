@@ -21,7 +21,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class EstPsRead extends FormularioAjax
@@ -35,7 +35,7 @@ class EstPsRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'usuario-est-read';
+    private const FORM_ID = 'usuario-est-ps-read';
     private const FORM_NAME = 'Ver estudiante';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/read/';
@@ -111,7 +111,7 @@ class EstPsRead extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -152,7 +152,7 @@ class EstPsRead extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
     }
 }

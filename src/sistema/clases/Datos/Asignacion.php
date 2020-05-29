@@ -9,12 +9,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -27,34 +26,19 @@ class Asignacion
 {
 
     /**
-     * @var int $id Identificador único de la relación.
-     */
-    private $id;
-
-    /**
-     * @var int $asignatura Asignatura de la asignación.
-     */
-    private $asignatura;
-
-    /**
-     * @var int $grupo Grupo de la asignación.
-     */
-    private $grupo;
-
-    /**
-     * @var int $profesor Profesor de la asignación.
-     */
-    private $profesor;
-
-    /**
-     * @var string $horario Horario en que el profesor imparte la asignatura al 
-     * grupo.
-     */
-    private $horario;
-
-    /**
+     * @var int $id             Identificador único.
+     * @var int $asignatura     Asignatura.
+     * @var int $grupo          Grupo.
+     * @var int $profesor       Profesor.
+     * @var string $horario     Horario en que el profesor imparte la 
+     *                          asignatura al grupo. 
      * @var int $foro_principal Foro de recursos de la asignatura para el grupo.
      */
+    private $id;
+    private $asignatura;
+    private $grupo;
+    private $profesor;
+    private $horario;
     private $foro_principal;
 
     /**
@@ -77,7 +61,7 @@ class Asignacion
         $this->foro_principal = $foro_principal;
     }
 
-    private static function fromDbFetch(Object $o) : Asignacion
+    private static function fromMysqlFetch(Object $o) : Asignacion
     {
         return new self(
             $o->id,
@@ -172,7 +156,7 @@ class Asignacion
      * 
      * @return int Identificador de la Asignacion insertada.
      */
-    public function dbInsertar() : int
+    public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
         
@@ -255,7 +239,7 @@ class Asignacion
         $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-        $asignacion = self::fromDbFetch($resultado->fetch_object());
+        $asignacion = self::fromMysqlFetch($resultado->fetch_object());
         $sentencia->close();
         
         return $asignacion;
@@ -289,7 +273,7 @@ class Asignacion
         $asignaciones = array();
 
         while ($asignacion = $resultado->fetch_object()) {
-            $asignaciones[] = self::fromDbFetch($asignacion);
+            $asignaciones[] = self::fromMysqlFetch($asignacion);
         }
 
         $sentencia->close();
@@ -305,7 +289,7 @@ class Asignacion
      * 
      * @return bool
      */
-    public static function dbAnyByAsignatura(int $id) : bool
+    public static function dbAnyByAsignatura(int $id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -377,7 +361,7 @@ class Asignacion
         $as = array();
 
         while ($a = $r->fetch_object()) {
-            $as[] = self::fromDbFetch($a);
+            $as[] = self::fromMysqlFetch($a);
         }
 
         $sentencia->close();
@@ -421,7 +405,7 @@ class Asignacion
         $as = array();
 
         while ($a = $r->fetch_object()) {
-            $as[] = self::fromDbFetch($a);
+            $as[] = self::fromMysqlFetch($a);
         }
 
         $sentencia->close();
@@ -437,7 +421,7 @@ class Asignacion
      *
      * @return bool
      */
-    public static function dbExisteId(int $id) : bool
+    public static function dbExisteId(int $id): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -466,7 +450,7 @@ class Asignacion
     public static function dbExisteByAsignaturaGrupo(
         int $asignatura,
         int $grupo
-    ) : bool
+    ): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -496,7 +480,7 @@ class Asignacion
      * 
      * @return bool
      */
-    public static function dbAnyByGrupo($id_grupo) : bool
+    public static function dbAnyByGrupo($id_grupo): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -567,12 +551,48 @@ class Asignacion
         $asignaciones = array();
 
         while ($a = $r->fetch_object()) {
-            $asignaciones[] = self::fromDbFetch($a);
+            $asignaciones[] = self::fromMysqlFetch($a);
         }
 
         $sentencia->close();
 
         return $asignaciones;
+    }
+
+    /**
+     * Trae una Asignacion de la base de datos a partir de su foro principal.
+     *
+     * @param int $foroPrincipalId
+     *
+     * @return self
+     */
+    public static function dbGetByForoPrincipal(int $foroPrincipalId): self
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT 
+            id,
+            profesor,
+            grupo,
+            asignatura,
+            horario,
+            foro_principal
+        FROM
+            gesi_asignaciones
+        WHERE
+            foro_principal = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $foroPrincipalId);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $asignacion = self::fromMysqlFetch($resultado->fetch_object());
+        $sentencia->close();
+        
+        return $asignacion;
     }
 
     /*
@@ -588,7 +608,7 @@ class Asignacion
      * 
      * @return bool Resultado de la ejecución de la sentencia.
      */
-    public function dbActualizar() : bool
+    public function dbActualizar(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -643,7 +663,7 @@ class Asignacion
      * 
      * @return bool
      */
-    public static function dbEliminar(int $id) : bool
+    public static function dbEliminar(int $id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 

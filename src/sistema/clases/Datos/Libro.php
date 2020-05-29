@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -58,7 +57,7 @@ class Libro
 	 * 
 	 * @return int Identificador del libro insertado.
 	 */
-	public static function dbInsertar() : int {
+	public static function dbInsertar(): int {
 		
 		$bbdd = App::getSingleton()->bbddCon();
 		
@@ -295,8 +294,7 @@ class Libro
 		return $this->editorial;
 	}
 
-	public static function dbActualizar() : bool{
-		$bbdd = App::getSingleton()->bbddCon();
+	public static function dbActualizar(): bool{
 
 		$sentencia = $bbdd->prepare("
 			UPDATE

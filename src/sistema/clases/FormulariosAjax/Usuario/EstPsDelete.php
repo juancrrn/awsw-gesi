@@ -20,7 +20,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
  class EstPsDelete extends FormularioAjax
@@ -36,7 +36,7 @@ use Awsw\Gesi\Sesion;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-delete';
+    private const FORM_ID = 'usuario-est-ps-delete';
     private const FORM_NAME = 'Eliminar estudiante';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/delete/';
@@ -106,7 +106,7 @@ use Awsw\Gesi\Sesion;
         return $responseData;
     }
     
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
@@ -129,7 +129,7 @@ use Awsw\Gesi\Sesion;
         return $html;
     }
     
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $uniqueId = $data['uniqueId'] ?? null;
         $checkbox = $data['checkbox'] ?? null;

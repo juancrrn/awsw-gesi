@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -27,19 +26,16 @@ class Foro
 
     /**
      * @var int $id Identificador interno del foro.
-     */
-    private $id;
-
-    /**
      * @var string $nombre Nombre del foro.
      */
+    private $id;
     private $nombre;
 
     /**
      * Constructor.
      */
-    private function __construct(
-        int $id,
+    public function __construct(
+        $id,
         string $nombre
     )
     {
@@ -55,12 +51,12 @@ class Foro
         );
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getNombre() : string
+    public function getNombre(): string
     {
         return $this->nombre;
     }
@@ -73,7 +69,8 @@ class Foro
             'uniqueId' => $this->getId(),
             'selectName' => $selectName,
             'id' => $this->getId(),
-            'nombre' => $this->getNombre()
+            'nombre' => $this->getNombre(),
+            'checkbox' => $this->getId()
         ];
     }
 
@@ -83,7 +80,7 @@ class Foro
      *  
      */
 
-    public function dbInsertar() : int
+    public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -91,21 +88,19 @@ class Foro
         INSERT
         INTO 
             gesi_foros
-            (    
-                id,
-                tema,
-                profesor_grupo_asignatura
+            (   
+                nombre
             )
         VALUES
-            (?,?,?)
+            (?)
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-        $id = $this->getId();
         $nombre = $this->getNombre();
-        $sentencia->bind_param('is', $id, $nombre);
+        $sentencia->bind_param('s', $nombre);
         $sentencia->execute();
         $id_insertado = $bbdd->insert_id;
+        $this->id = $id_insertado;
         $sentencia->close();
 
         return $id_insertado;        
@@ -185,34 +180,99 @@ class Foro
         return $foro;
     }
 
-    public static function dbExisteId($id) : bool
+    public static function dbExisteId($id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
+        $query = <<< SQL
+        SELECT id FROM gesi_foros WHERE id = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        $existe = $sentencia->num_rows > 0;
+        $sentencia->close();
+
+        return $existe;
+    }
+
+    /**
+     * Elimina un foro de la base de datos.
+     *
+     * @param int $id
+     *
+     */
+    public static function dbEliminar($id){
+
+        $bbdd = App::getSingleton()->bbddCon();
+
         $sentencia = $bbdd->prepare("
-            SELECT id
-            FROM gesi_foros
-            WHERE id = ?
-            LIMIT 1
+            DELETE
+            FROM 
+                gesi_foros
+            WHERE
+                id = ?
         ");
+
         $sentencia->bind_param(
             "i",
             $id
         );
-        
-        $sentencia->execute();
-        
-        $sentencia->store_result();
 
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
+        $resultado = $sentencia->execute();
 
         $sentencia->close();
 
-        return $existe;
+        return $resultado;
+    }
+
+    /**
+     * Comprueba si un estudiante tiene permiso para acceder a un foro, es 
+     * decir, si pertenece al grupo de la asignación de la que el foro es 
+     * principal.
+     * 
+     * @requires $foroId existe en la base de datos.
+     * 
+     * @param int $usuarioId
+     * @param int $foroId
+     * 
+     * @return bool
+     */
+    public static function dbEstTienePermiso(int $usuarioId, int $foroId): bool
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_usuarios as usuario
+        INNER JOIN (
+                SELECT
+                    grupo
+                FROM
+                    gesi_asignaciones
+                WHERE
+                    foro_principal = ?
+                LIMIT 1
+            ) AS asignacion
+        ON
+            usuario.grupo = asignacion.grupo
+        WHERE
+            id = ?
+        LIMIT 1;
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('ii', $foroId, $usuarioId);
+        $sentencia->execute();
+        $sentencia->store_result();
+        $result = $sentencia->num_rows > 0;
+        $sentencia->close();
+
+        return $result;
     }
 
     /*
@@ -221,10 +281,33 @@ class Foro
      *  
      */
 
-    public static function dbActualizar() : bool
+    public function dbActualizar(): bool
     {
-    
-        return false;
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $sentencia = $bbdd->prepare("
+            UPDATE 
+                gesi_foros
+            SET
+                nombre = ?
+            WHERE
+                id = ?
+        ");
+
+        $id = $this->getId();
+        $nombre = $this->getNombre();
+
+        $sentencia->bind_param(
+            "si",
+            $nombre,
+            $id
+        );
+
+        $resultado = $sentencia->execute();
+
+        $sentencia->close();
+
+        return $resultado;
     }
 }
 

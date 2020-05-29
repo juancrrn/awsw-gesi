@@ -21,7 +21,7 @@ use Awsw\Gesi\Datos\Asignacion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class GrupoPsDelete extends FormularioAjax
@@ -42,8 +42,8 @@ class GrupoPsDelete extends FormularioAjax
     private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
-    private const ON_SUCCESS_EVENT_NAME = 'deleted.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list';
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.grupo.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-ps-list'; 
 
     public function __construct($api = false)
     {
@@ -107,7 +107,7 @@ class GrupoPsDelete extends FormularioAjax
         return $responseData;
     }
     
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
@@ -130,7 +130,7 @@ class GrupoPsDelete extends FormularioAjax
         return $html;
     }
     
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
 
         $uniqueId = $data['uniqueId'] ?? null;

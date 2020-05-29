@@ -8,13 +8,13 @@
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundar
+ * 
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Sesion;
@@ -22,6 +22,7 @@ namespace Awsw\Gesi\Vistas\Sesion;
 use Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Sesion\Iniciar as FormularioSesionIniciar;
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
 
 class SesionIniciar extends Modelo
 {
@@ -32,6 +33,8 @@ class SesionIniciar extends Modelo
 
     public function __construct()
     {
+        Sesion::requerirSesionNoIniciada();
+
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
 
@@ -40,7 +43,7 @@ class SesionIniciar extends Modelo
         $this->form->gestiona();
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
         $app = App::getSingleton();
         $urlRestablecer = $app->getUrl() . '/sesion/reset/';

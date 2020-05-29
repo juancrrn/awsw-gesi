@@ -22,7 +22,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class EstPsCreate extends FormularioAjax
@@ -39,7 +39,7 @@ class EstPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-create';
+    private const FORM_ID = 'usuario-est-ps-create';
     private const FORM_NAME = 'Crear estudiante';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/create/';
@@ -90,7 +90,7 @@ class EstPsCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $defaultUserPassword = GESI_DEFAULT_PASSWORD;
 
@@ -132,7 +132,7 @@ class EstPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
@@ -229,7 +229,7 @@ class EstPsCreate extends FormularioAjax
         }
     }
 
-    public static function autoHandle() : void
+    public static function autoHandle(): void
     {
         $form = new self();
         $form->manage();

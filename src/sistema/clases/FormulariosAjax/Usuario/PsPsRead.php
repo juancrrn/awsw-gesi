@@ -20,7 +20,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class PsPsRead extends FormularioAjax
@@ -34,7 +34,7 @@ class PsPsRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'usuario-ps-read';
+    private const FORM_ID = 'usuario-ps-ps-read';
     private const FORM_NAME = 'Ver personal de Secretaría';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/ps/read/';
@@ -101,7 +101,7 @@ class PsPsRead extends FormularioAjax
 
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -137,7 +137,7 @@ class PsPsRead extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
     }
 }

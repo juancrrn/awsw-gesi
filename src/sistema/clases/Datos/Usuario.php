@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -81,7 +80,7 @@ class Usuario
         $this->grupo = $grupo;
     }
 
-    public static function fromDbFetch(Object $o) : Usuario
+    public static function fromMysqlFetch(Object $o) : Usuario
     {
         // Convertir fechas al formato correcto.
 
@@ -119,62 +118,62 @@ class Usuario
      *  
      */
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
     
-    public function getNif() : string
+    public function getNif(): string
     {
         return $this->nif;
     }    
     
-    public function getRol() : int
+    public function getRol(): int
     {
         return $this->rol;
     }
 
-    public function isPs() : bool
+    public function isPs(): bool
     {
         return $this->rol == 3;
     }
 
-    public function isPd() : bool
+    public function isPd(): bool
     {
         return $this->rol == 2;
     }
 
-    public function isEst() : bool
+    public function isEst(): bool
     {
         return $this->rol == 1;
     }
     
-    public function getNombre() : string
+    public function getNombre(): string
     {
         return $this->nombre;
     }
 
-    public function getApellidos() : string
+    public function getApellidos(): string
     {
         return $this->apellidos;
     }
 
-    public function getNombreCompleto() : string
+    public function getNombreCompleto(): string
     {
         return $this->nombre . " " . $this->apellidos;
     }
 
-    public function getFechaNacimiento() : string
+    public function getFechaNacimiento(): string
     {
         return $this->fecha_nacimiento;
     }
     
-    public function getNumeroTelefono() : string
+    public function getNumeroTelefono(): string
     {
         return $this->numero_telefono;
     }
 
-    public function getEmail() : string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -185,7 +184,7 @@ class Usuario
         return $this->fecha_ultimo_acceso;
     }
 
-    public function getFechaRegistro() : string
+    public function getFechaRegistro(): string
     {
         return $this->fecha_registro;    
     }
@@ -219,7 +218,7 @@ class Usuario
      * 
      * @return int Identificador del usuario insertado.
      */
-    public function dbInsertar() : int
+    public function dbInsertar(): int
     {
         $app = App::getSingleton();
         $bbdd = $app->bbddCon();
@@ -325,7 +324,7 @@ class Usuario
         $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-        $usuario = Usuario::fromDbFetch($resultado->fetch_object());
+        $usuario = Usuario::fromMysqlFetch($resultado->fetch_object());
         $sentencia->close();
         
         return $usuario;
@@ -335,7 +334,7 @@ class Usuario
      * Selecciona el nombre de un usuario mediante en id
      * 
      */
-    public static function dbGetNombreDesdeId(int $id) : string
+    public static function dbGetNombreDesdeId(int $id): string
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -404,7 +403,7 @@ class Usuario
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
-            $usuarios[] = Usuario::fromDbFetch($a);
+            $usuarios[] = Usuario::fromMysqlFetch($a);
         }
 
         $sentencia->close();
@@ -421,7 +420,7 @@ class Usuario
      *
      * @return string
      */
-    public static function dbGetPasswordDesdeId(int $id) : string
+    public static function dbGetPasswordDesdeId(int $id): string
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -462,7 +461,7 @@ class Usuario
      *
      * @return int
      */
-    public static function dbGetIdDesdeNif(string $nif) : int
+    public static function dbGetIdDesdeNif(string $nif): int
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -503,8 +502,8 @@ class Usuario
      *
      * @return bool
      */
-    public static function dbExisteId(int $id) : bool
-    {        
+    public static function dbExisteId(int $id): bool
+    {
         $bbdd = App::getSingleton()->bbddCon();
 
         $query = <<< SQL
@@ -529,7 +528,7 @@ class Usuario
      *
      * @return bool
      */
-    public static function dbExisteNif(string $nif) : bool
+    public static function dbExisteNif(string $nif): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -602,7 +601,7 @@ class Usuario
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
-            $usuarios[] = Usuario::fromDbFetch($a);
+            $usuarios[] = Usuario::fromMysqlFetch($a);
         }
 
         $sentencia->close();
@@ -652,7 +651,7 @@ class Usuario
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
-            $usuarios[] = Usuario::fromDbFetch($a);
+            $usuarios[] = Usuario::fromMysqlFetch($a);
         }
 
         $sentencia->close();
@@ -673,7 +672,7 @@ class Usuario
      * 
      * @return bool Resultado de la ejecución de la sentencia.
      */
-    public function dbActualizar() : bool
+    public function dbActualizar(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -738,7 +737,7 @@ class Usuario
      * 
      * @return bool Resultado de la ejecución de la sentencia.
      */
-    public function dbActualizaUltimaSesion() : bool
+    public function dbActualizaUltimaSesion(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -782,7 +781,7 @@ class Usuario
      * 
      * @return bool Resultado de la ejecución de la sentencia.
      */
-    public static function dbEliminar(int $id) : bool
+    public static function dbEliminar(int $id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 

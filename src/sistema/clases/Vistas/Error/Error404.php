@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Error;
@@ -31,7 +31,7 @@ class Error404 extends Modelo
         $this->id = self::VISTA_ID;
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
         $html = <<< HTML
         <header class="page-header">

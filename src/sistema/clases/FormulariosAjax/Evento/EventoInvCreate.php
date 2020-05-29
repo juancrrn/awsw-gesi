@@ -1,19 +1,16 @@
 <?php
 
-namespace Awsw\Gesi\FormulariosAjax\Evento;
+namespace Awsw\Gesi\FormulariosAjax\EventoInvCreate;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Evento;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de creación de un usuario de personal docente por parte de 
- * un administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un Evento por parte de un 
+ * usuario invitado (sin sesión iniciada).
  *
  * @package awsw-gesi
  * Gesi
@@ -27,11 +24,11 @@ use Awsw\Gesi\Sesion;
  * @version 0.0.4-beta.01
  */
 
-class EventoPsUpdate extends FormularioAjax
+class MensajeSecretariaInvCreate extends FormularioAjax
 {
 
     /**
-     * Initialize specific form constants.
+     * Initialize specific form constants
      *
      * @var string FORM_ID
      * @var string FORM_NAME
@@ -41,20 +38,18 @@ class EventoPsUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'evento-ps-update';
-    private const FORM_NAME = 'Editar evento';
+    private const FORM_ID = 'evento-inv-create';
+    private const FORM_NAME = 'Crear Evento';
     private const TARGET_CLASS_NAME = 'Evento';
-    private const SUBMIT_URL = '/ps/eventos/update/';
-    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.evento';
-    private const ON_SUCCESS_EVENT_TARGET = '#evento-list';
+    private const SUBMIT_URL = '/inv/evento/create/';
+    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
 
     /**
-     * Constructs the form object
+     * Constructs the form object.
      */
-    public function __construct($api = false)
+    public function __construct()
     {
-        Sesion::requerirSesionPs($api);
+        Sesion::requerirSesionNoIniciada();
 
         $app = App::getSingleton();
 
@@ -65,54 +60,12 @@ class EventoPsUpdate extends FormularioAjax
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
-
-        $this->setOnSuccess(
-            self::ON_SUCCESS_EVENT_NAME,
-            self::ON_SUCCESS_EVENT_TARGET
-        );
     }
 
     protected function getDefaultData(array $requestData) : array
-    {  
-        // Mapear los datos para que coincidan con los nombres de los inputs.
-        if(! isset($requestData['uniqueId'])){
-            $responseData = array(
-                'status' => 'error',
-                'error' => 400, // Bad request
-                'messages' => array(
-                    'Falta el parámetro "uniqueId".'
-                )
-            );
-        }
-
-        $uniqueId = $requestData['uniqueId'];
-
-        if (! Evento::dbExisteId($uniqueId)) {
-            $responseData = array(
-                'status' => 'error',
-                'error' => 404, // Not found.
-                'messages' => array(
-                    'El Evento solicitado no existe.'
-                )
-            );
-
-            return $responseData;
-        }
-
-        $asignacionLink = FormularioAjax::generateHateoasSelectLink(
-            'asignacion',
-            'single', 
-            Asignacion::dbGetAll()
-        );
-
-
-        //Mapear datos para que coincidan con los nombres de los inputs.$app
-
+    {
         $responseData = array(
             'status' => 'ok',
-            'links' => array(
-                $asignacionLink
-            )
         );
 
         return $responseData;
@@ -137,35 +90,18 @@ class EventoPsUpdate extends FormularioAjax
             <label for="lugar">Lugar</label>
             <input class="form-control" type="text" name="lugar" id="lugar" placeholder="lugar" required="required" />
         </div>
-        <div class="form-group">
-            <label for="asignacion">Asignacion</label>
-            <input class="form-control" type="text" name="asignacion" id="asignacion" placeholder="asignacion" required="required" />
-        </div>
-        
-        
         
         HTML;
 
         return $html;
-      
     }
 
     public function processSubmit(array $data = array()): void
     {
-        $uniqueId = $data['uniqueId'] ?? null;
-        
-        // Check Record's uniqueId is valid
-        if (! Evento::dbExisteId($uniqueId)) {
-            $errors[] = 'El Evento solicitado no existe.';
-
-            $this->respondJsonError(404, $errors); // Not found.
-        }
         $fecha = $data['fecha'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $descripcion = $data['descripcion'] ?? null;
         $lugar = $data['lugar'] ?? null;
-        $asignacion = $data['asignacion'] ?? null;
-        $tutor = $data['tutor'] ?? null;  
 
         if (empty($nombre)) {
             $errors[] = 'El campo nombre no puede estar vacío.';
@@ -189,50 +125,34 @@ class EventoPsUpdate extends FormularioAjax
             $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
 
-
-
-        if(empty($asignacion) ||Valido::testStdInt($asignacion) || !Asignacion::dbExisteId($asignacion)){
-            $error[] = 'El campo asignacion no es valido.';
-        }
-
-
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            // Obtener datos que no se habían modificado.
-        
-
-           
-            $evento = new Evento(
-                $uniqueId,
-                $fecha,
-                $nombre,
-                $descripcion,
-                $lugar,
-                null,
-                $asignacion
-
+          
+            $mensaje = new Evento(
+              null,
+              $fecha,
+              $nombre,
+              $descripcion,
+              $lugar,
+              null,
+              null
             );
 
-            $actualizar = $evento->dbActualizar();
-
-            if ($actualizar) {
+            if ($mensaje->dbInsertar()) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Evento actualizado correctamente.'),
-                    self::TARGET_CLASS_NAME => $evento
+                    'messages' => array('Mensaje de Secretaría enviado correctamente.')
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Evento usuario estudiante.';
+                $errors[] = 'Hubo un error al enviar el mensaje de Secretaría.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
-
         }
-    
     }
 }
 

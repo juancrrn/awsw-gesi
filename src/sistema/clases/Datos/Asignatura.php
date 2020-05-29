@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -54,7 +53,7 @@ class Asignatura
 		$this->nombre_completo = $nombre_completo;
 	}
 
-	public static function fromDbFetch(Object $o) : Asignatura
+	public static function fromMysqlFetch(Object $o) : Asignatura
 	{
 		return new self(
 			$o->id,
@@ -121,7 +120,7 @@ class Asignatura
 	 * 
 	 * @return int
 	 */
-	public function dbInsertar() : int
+	public function dbInsertar(): int
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -178,7 +177,7 @@ class Asignatura
 	 *
 	 * @return bool
 	 */
-	public static function dbExisteId(int $id) : bool
+	public static function dbExisteId(int $id): bool
 	{		
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -238,7 +237,7 @@ class Asignatura
 		$asignaturas = array();
 
 		while ($a = $resultado->fetch_object()) {
-			$asignaturas[] = Asignatura::fromDbFetch($a);
+			$asignaturas[] = Asignatura::fromMysqlFetch($a);
 		}
 
 		$sentencia->close();
@@ -281,7 +280,7 @@ class Asignatura
 		$asignaturas = array();
 
 		while ($a = $resultado->fetch_object()) {
-			$asignaturas[] = Asignatura::fromDbFetch($a);
+			$asignaturas[] = Asignatura::fromMysqlFetch($a);
 		}
 
 		$sentencia->close();
@@ -324,7 +323,7 @@ class Asignatura
 
 		$resultado = $sentencia->get_result();
 
-		$asignatura = Asignatura::fromDbFetch($resultado->fetch_object());
+		$asignatura = Asignatura::fromMysqlFetch($resultado->fetch_object());
 
 		$sentencia->close();
 		
@@ -344,7 +343,7 @@ class Asignatura
 	 * 
 	 * @return bool Resultado de la ejecución de la sentencia.
 	 */
-	public function dbActualizar() : bool
+	public function dbActualizar(): bool
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -391,7 +390,7 @@ class Asignatura
 
 
 
-	public static function dbEliminar(int $id) : bool
+	public static function dbEliminar(int $id): bool
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -422,11 +421,11 @@ class Asignatura
 			'selectName' => $this->getNombreCompleto(),
 			'id' => $this->getId(),
 			'nivel' => $this->getNivelRaw(),
-			'curso_escolar' => $this->getCursoEscolarRaw(),
+			'cursoEscolar' => $this->getCursoEscolarRaw(),
 			'nivelEscolar' => $this->getNivel(),
 			'curso' => $this->getCursoEscolar(),
-			'nombre_corto' => $this->getNombreCorto(),
-			'nombre_completo' => $this->getNombreCompleto(),
+			'nombreCorto' => $this->getNombreCorto(),
+			'nombreCompleto' => $this->getNombreCompleto(),
 			'checkbox' => $this->getId()
 		];
 	}

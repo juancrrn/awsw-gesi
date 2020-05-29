@@ -15,7 +15,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Home;
@@ -35,7 +35,7 @@ class Home extends Modelo
         $this->id = self::VISTA_ID;
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
 
         $saludo = '';
@@ -61,7 +61,7 @@ class Home extends Modelo
 
     }
 
-    private function generaConSesion() : string
+    private function generaConSesion(): string
     {
         $app = App::getSingleton();
         $nombre = Sesion::getUsuarioEnSesion()->getNombre();
@@ -78,7 +78,7 @@ class Home extends Modelo
         return $html;
     }
 
-    private function generaSinSesion() : string
+    private function generaSinSesion(): string
     {
         $app = App::getSingleton();
 

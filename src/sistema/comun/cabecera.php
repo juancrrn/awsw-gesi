@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 use Awsw\Gesi\App;
@@ -23,6 +22,7 @@ use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
+use Awsw\Gesi\Vistas\Foro\ForoPsList;
 use Awsw\Gesi\Vistas\Grupo\GrupoPsList;
 use Awsw\Gesi\Vistas\Home\Home;
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
@@ -30,7 +30,8 @@ use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaPsList;
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
 use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
 use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
-
+use Awsw\Gesi\Vistas\Evento\EventoPsList;
+use Awsw\Gesi\Vistas\Evento\EventoPdList;
 $app = App::getSingleton();
 
 $v = (! $app->isDesarrollo()) ? '' : '?v=0.0.0' . time();
@@ -80,6 +81,8 @@ if (Sesion::isSesionIniciada()) {
             '/pd/grupos/', );*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/asignaciones/', AsignacionPdList::class); 
+        $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/pd/eventos/', EventoPdList::class );
     } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de administración');
@@ -94,19 +97,19 @@ if (Sesion::isSesionIniciada()) {
             '/ps/usuarios/', UsuarioPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/ps/asignaciones/', AsignacionPsList::class);
-        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/eventos/', );
+         $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/ps/eventos/', EventoPsList::class );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/foros/', );
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/ps/foros/', ForoPsList::class);
+        /*$sideMenuBuffer .= Vista::generarSideMenuLink(
             '/ps/biblioteca/', ); */
     }
 } else {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/secretaria/', MensajeSecretariaInvList::class);
-    /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/eventos/', 'Eventos públicos', '');
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/inv/mensajesecretaria/', MensajeSecretariaInvList::class);
+    /*$sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/inv/eventos/', 'Eventos públicos', '');*/
+    /*  $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/inv/foros/', 'Foros públicos', ''); */
 }
 

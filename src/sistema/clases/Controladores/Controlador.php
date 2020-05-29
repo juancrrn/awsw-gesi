@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Controladores;
@@ -29,7 +29,7 @@ abstract class Controlador
      * @param callable $handler
      * @param bool|null $last
      */
-    public static function any(string $route, callable $handler) : void
+    public static function any(string $route, callable $handler): void
     {
         self::processRequest($route, $handler);
     }
@@ -40,7 +40,7 @@ abstract class Controlador
      * @param string $route
      * @param callable $handler
      */
-    public static function get(string $route, callable $handler) : void
+    public static function get(string $route, callable $handler): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             self::processRequest($route, $handler);
@@ -53,7 +53,7 @@ abstract class Controlador
      * @param string $route
      * @param callable $handler
      */
-    public static function post(string $route, callable $handler) : void
+    public static function post(string $route, callable $handler): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             self::processRequest($route, $handler);
@@ -66,7 +66,7 @@ abstract class Controlador
      * @param string $route
      * @param callable $handler
      */
-    public static function patch(string $route, callable $handler) : void
+    public static function patch(string $route, callable $handler): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
             self::processRequest($route, $handler);
@@ -79,7 +79,7 @@ abstract class Controlador
      * @param string $route
      * @param callable $handler
      */
-    public static function delete(string $route, callable $handler) : void
+    public static function delete(string $route, callable $handler): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
             self::processRequest($route, $handler);
@@ -92,7 +92,7 @@ abstract class Controlador
      * @param string $route
      * @param callable $handler
      */
-    public static function processRequest(string $route, callable $handler) : void
+    public static function processRequest(string $route, callable $handler): void
     {
         /**
          * # al principio y al final son delimitadores de la expresión regular.
@@ -114,7 +114,7 @@ abstract class Controlador
     /**
      * Establece la base de la URL.
      */
-    public static function setGetBase(string $base) : void
+    public static function setGetBase(string $base): void
     {
         self::$base = $base;
     }
@@ -122,7 +122,7 @@ abstract class Controlador
     /**
      * Se ejecuta cuando no se ha ejecutado ningún controlador anteriormente.
      */
-    public static function default(callable $handler) : void
+    public static function default(callable $handler): void
     {
         http_response_code(404);
         
@@ -132,7 +132,7 @@ abstract class Controlador
     /**
      * Lanza varios controladores de puntos de entrada.
      */
-    abstract public static function controla() : void;
+    abstract public static function controla(): void;
 }
 
 ?>

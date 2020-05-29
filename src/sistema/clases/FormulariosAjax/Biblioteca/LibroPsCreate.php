@@ -21,7 +21,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class LibroPsCreate extends FormularioAjax
@@ -87,7 +87,7 @@ class LibroPsCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $defaultUserPassword = GESI_DEFAULT_PASSWORD;
 
@@ -129,7 +129,7 @@ class LibroPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;
@@ -224,7 +224,7 @@ class LibroPsCreate extends FormularioAjax
         }
     }
 
-    public static function autoHandle() : void
+    public static function autoHandle(): void
     {
         $form = new self();
         $form->manage();

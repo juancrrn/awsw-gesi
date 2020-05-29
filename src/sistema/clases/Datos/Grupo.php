@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -65,7 +64,7 @@ class Grupo
         $this->tutor = $tutor; 
     }
 
-    public static function fromDbFetch(Object $o) : Grupo
+    public static function fromMysqlFetch(Object $o) : Grupo
     {
         return new self(
             $o->id,
@@ -138,7 +137,7 @@ class Grupo
      * 
      * @return int Identificador del grupo insertado
      */
-    public function dbInsertar() : int
+    public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -223,7 +222,7 @@ class Grupo
 
         $resultado = $sentencia->get_result();
 
-        $grupo = self::fromDbFetch($resultado->fetch_object());
+        $grupo = self::fromMysqlFetch($resultado->fetch_object());
 
         $sentencia->close();
 
@@ -258,7 +257,7 @@ class Grupo
         $grupos = array();
 
         while ($g = $resultado->fetch_object()) {
-            $grupos[] = self::fromDbFetch($g);
+            $grupos[] = self::fromMysqlFetch($g);
         }
 
         $sentencia->close();
@@ -301,7 +300,7 @@ class Grupo
         $grupos = array();
 
         while ($g = $resultado->fetch_object()) {
-            $grupos[] = self::fromDbFetch($g);
+            $grupos[] = self::fromMysqlFetch($g);
         }
 
         $sentencia->close();
@@ -317,7 +316,7 @@ class Grupo
      *
      * @return bool
      */
-    public static function dbExisteId(int $id) : bool
+    public static function dbExisteId(int $id): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -358,7 +357,7 @@ class Grupo
      *
      * @return bool
      */
-    public static function dbAnyByTutor(int $id) : bool
+    public static function dbAnyByTutor(int $id): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -397,7 +396,7 @@ class Grupo
      *  
      */
 
-    public function dbActualizar() : bool
+    public function dbActualizar(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -445,7 +444,7 @@ class Grupo
     /**
      * Eliminar un grupo
      */
-    public static function dbEliminar(int $id) : bool
+    public static function dbEliminar(int $id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 

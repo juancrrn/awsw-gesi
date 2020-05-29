@@ -22,7 +22,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class GrupoPsUpdate extends FormularioAjax
@@ -44,8 +44,8 @@ class GrupoPsUpdate extends FormularioAjax
     private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list';
+    private const ON_SUCCESS_EVENT_NAME = 'updated.grupo.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-ps-list';
 
     /**
      * Constructs the form object
@@ -125,7 +125,7 @@ class GrupoPsUpdate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -157,7 +157,7 @@ class GrupoPsUpdate extends FormularioAjax
       
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $uniqueId = $data['uniqueId'] ?? null;
         

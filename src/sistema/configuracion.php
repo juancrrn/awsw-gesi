@@ -12,12 +12,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 /**
@@ -38,7 +37,7 @@ declare(strict_types = 1);
 define("GESI_DB_HOST", "localhost");
 define("GESI_DB_USER", "gesi");
 define("GESI_DB_PASSWORD", "gesigesi");
-define("GESI_DB_NAME", "gesi");
+define("GESI_DB_NAME", "gesidemo");
 define("GESI_DB_TABLE_PREFIX", "gesi_");
 
 define("GESI_ROOT", "__DIR__");

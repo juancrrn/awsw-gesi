@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
@@ -69,6 +69,10 @@ Controlador::setGetBase(App::getSingleton()->getBaseControlador());
 
 \Awsw\Gesi\Controladores\MensajeSecretaria::controla();
 
+/**
+ * Puntos de entrada de vistas relacionadas con eventos.
+ */
+\Awsw\Gesi\Controladores\Evento::controla();
 /**
  * Puntos de entrada de vistas relacionadas con la sesión.
  */

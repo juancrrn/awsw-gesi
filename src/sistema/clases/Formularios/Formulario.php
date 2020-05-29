@@ -95,7 +95,7 @@ abstract class Formulario
      * 
      * @return string HTML asociado a los campos del formulario.
      */
-    protected function generaCampos(array & $datos_iniciales = array()) : void
+    protected function generaCampos(array & $datos_iniciales = array()): void
     {
         return;
     }
@@ -112,7 +112,7 @@ abstract class Formulario
      *
      * @param array<string> $datos Datos enviado por el usuario (normalmente $_POST).
      */
-    protected function procesa(array & $datos) : void
+    protected function procesa(array & $datos): void
     {
         return;
     }
@@ -126,7 +126,7 @@ abstract class Formulario
      *
      * @return string HTML asociado al formulario.
      */
-    protected function genera(array & $datos = array()) : void
+    protected function genera(array & $datos = array()): void
     {
 
         $this->html .= <<< HTML
@@ -147,7 +147,7 @@ HTML;
     /**
      * Imprime el HTML del formulario.
      */
-    public function imprime() : void
+    public function imprime(): void
     {
         echo $this->html;
     }
@@ -155,7 +155,7 @@ HTML;
     /**
      * Devuelve el HTML del formulario.
      */
-    public function getHtml() : string
+    public function getHtml(): string
     {
         return $this->html;
     }

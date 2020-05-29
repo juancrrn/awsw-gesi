@@ -24,10 +24,10 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
-class FormEventoPdCreate extends FormularioAjax
+class EventoPdCreate extends FormularioAjax
 {
 
     /**
@@ -44,7 +44,7 @@ class FormEventoPdCreate extends FormularioAjax
     private const FORM_ID = 'evento-pd-create';
     private const FORM_NAME = 'Crear Evento';
     private const TARGET_CLASS_NAME = 'Evento';
-    private const SUBMIT_URL = '/pd/Evento/create/';
+    private const SUBMIT_URL = '/pd/evento/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.evento.pd';
     private const ON_SUCCESS_EVENT_TARGET = '#evento-pd-lista'; // TODO
@@ -106,7 +106,7 @@ class FormEventoPdCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -137,7 +137,7 @@ class FormEventoPdCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $fecha = $data['fecha'] ?? null;
         $nombre = $data['nombre'] ?? null;

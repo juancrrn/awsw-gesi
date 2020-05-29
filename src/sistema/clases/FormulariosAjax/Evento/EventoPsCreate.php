@@ -3,14 +3,17 @@
 namespace Awsw\Gesi\FormulariosAjax\Evento;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Evento;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
+use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de creación de un usuario estudiante por parte de un 
- * administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un Evento por parte de un 
+ * usuario invitado (sin sesión iniciada).
  *
  * @package awsw-gesi
  * Gesi
@@ -21,7 +24,7 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class EventoPsCreate extends FormularioAjax
@@ -38,19 +41,21 @@ class EventoPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-create';
-    private const FORM_NAME = 'Crear estudiante';
-    private const TARGET_CLASS_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/create/';
+    private const FORM_ID = 'evento-ps-create';
+    private const FORM_NAME = 'Crear Evento';
+    private const TARGET_CLASS_NAME = 'Evento';
+    private const SUBMIT_URL = '/ps/eventos/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
+    private const ON_SUCCESS_EVENT_NAME = 'created.evento.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista'; // TODO
 
     /**
-     * Constructs the form object
+     * Constructs the form object.
      */
-    public function __construct()
+    public function __construct($api = false)
     {
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(
@@ -69,78 +74,61 @@ class EventoPsCreate extends FormularioAjax
 
     protected function getDefaultData(array $requestData) : array
     {
-        // Formalización HATEOAS de grupos.
-        $grupoLink = FormularioAjax::generateHateoasSelectLink(
-            'grupo',
-            'single',
-            Grupo::dbGetAll()
+        // Formalizacion HATEOAS de asignaciones.
+        $asignacionLink = FormularioAjax::generateHateoasSelectLink(
+            'asignacion',
+            'single', 
+            Asignacion::dbGetAll()
         );
 
-        // Mapear datos para que coincidan con los nombres de los inputs.
         $responseData = array(
             'status' => 'ok',
             'links' => array(
-                $grupoLink
+                $asignacionLink,
+                //$asignaturasLink,
             )
         );
 
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
-        $defaultUserPassword = GESI_DEFAULT_PASSWORD;
-
         $html = <<< HTML
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required" />
+            <label for="fecha">Fecha</label>
+            <input class="form-control" type="text" name="fecha" id="fecha" placeholder="fecha" required="required" />
         </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />
+            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="nombre" required="required" />
         </div>
         <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required" />
+            <label for="descripcion">Descripcion</label>
+            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="descripcion" required="required" />
         </div>
         <div class="form-group">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label for="lugar">Lugar</label>
+            <input class="form-control" type="text" name="lugar" id="lugar" placeholder="lugar" required="required" />
         </div>
         <div class="form-group">
-            <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required" />
+            <label for="asignacion">Asignacion</label>
+            <input class="form-control" type="text" name="asignacion" id="asignacion" placeholder="asignacion" required="required" />
         </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required" />
-        </div>
-        <div class="form-group">
-            <label for="grupo">Grupo</label>
-            <select class="form-control" name="grupo" id="grupo" required="required">
-            </select>
-        </div>
-        <div class="mt-4">
-            La contraseña por defecto es <code>$defaultUserPassword</code>.
-        </div>
+        
         HTML;
 
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
-        $nif = $data['nif'] ?? null;
+        $fecha = $data['fecha'] ?? null;
         $nombre = $data['nombre'] ?? null;
-        $apellidos = $data['apellidos'] ?? null;
-        $fechaNacimiento = $data['fechaNacimiento'] ?? null;
-        $numeroTelefono = $data['numeroTelefono'] ?? null;
-        $email = $data['email'] ?? null;
-
-        if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
-        }
+        $descripcion = $data['descripcion'] ?? null;
+        $lugar = $data['lugar'] ?? null;
+        $asignacion = $data['asignacion'] ?? null;
+        $tutor = $data['tutor'] ?? null;   
 
         if (empty($nombre)) {
             $errors[] = 'El campo nombre no puede estar vacío.';
@@ -148,87 +136,61 @@ class EventoPsCreate extends FormularioAjax
             $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
 
-        if (empty($apellidos)) {
-            $errors[] = 'El campo apellidos no puede estar vacío.';
-        } elseif (! Valido::testStdString($apellidos)) {
-            $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
+        if (empty($fecha)) {
+            $errors[] = 'El fecha no puede estar vacío.';
+        } elseif (! Valido::testDate($fecha)) {
+            $errors[] = 'El campo fecha no es válido.';
         }
 
-        if (empty($fechaNacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
-        } else {
-            $fechaNacimiento = Valido::testDate($fechaNacimiento);
-            
-            if (! $fechaNacimiento) {
-                $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
-            }
+        if (empty($descripcion)) {
+            $errors[] = 'El campo contenido no puede estar vacío.';
         }
 
-        if (empty($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no es válido.';
+        if (empty($lugar)) {
+            $errors[] = 'El campo nombre no puede estar vacío.';
+        } elseif (! Valido::testStdString($lugar)) {
+            $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
 
-        if (empty($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no puede estar vacío.';
-        } elseif (! Valido::testEmail($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no es válido.';
+
+
+        if(empty($asignacion) ||Valido::testStdInt($asignacion) || !Asignacion::dbExisteId($asignacion)){
+            $error[] = 'El campo asignacion no es valido.';
         }
 
-        // Comprobar grupo.
-        
-        $grupo = $data['grupo'] ?? null;
+        //El creador del evento tiene que estar vinculado con asignatura y la asignacion
 
-        if (empty($grupo)) {
-            $errors[] = 'El campo grupo no puede estar vacío.';
-        } elseif (! Grupo::dbExisteId($grupo)) {
-            $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
-        }
+
+
+
 
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            $now = date('Y-m-d H:i:s');
-
-            $usuario = new Usuario(
-                null,
-                $nif,
-                1,
-                $nombre,
-                $apellidos,
-                $fechaNacimiento,
-                $numeroTelefono,
-                $email,
-                null,
-                $now,
-                $grupo
+          
+            $mensaje = new Evento(
+              null,
+              $fecha,
+              $nombre,
+              $descripcion,
+              $lugar,
+              null,
+              $asignacion
             );
 
-            $usuario_id = $usuario->dbInsertar();
-
-            if ($usuario_id) {
+            if ($mensaje->dbInsertar()) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('El usuario estudiante fue creado correctamente.'),
-                    self::TARGET_CLASS_NAME => $usuario
+                    'messages' => array('Evento creado correctamente.')
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Hubo un error al crear el usuario estudiante.';
+                $errors[] = 'Hubo un error al crear el Evento.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
         }
     }
-
-    public static function autoHandle() : void
-    {
-        $form = new self();
-        $form->manage();
-    }
 }
-
-?>

@@ -10,12 +10,11 @@ namespace Awsw\Gesi\Validacion;
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 class GesiScheduleSlot
@@ -42,17 +41,17 @@ class GesiScheduleSlot
         $this->minutosFinal = $minutosFinal;
     }
 
-    public function getInicioEnMinutos() : int
+    public function getInicioEnMinutos(): int
     {
         return $this->horaInicio * 60 + $this->minutosInicio;
     }
 
-    public function getFinalEnMinutos() : int
+    public function getFinalEnMinutos(): int
     {
         return $this->horaFinal * 60 + $this->minutosFinal;
     }
 
-    public function getDuracionEnMinutos() : int
+    public function getDuracionEnMinutos(): int
     {
         return $this->getFinalEnMinutos() - $this->getInicioEnMinutos();
     }
@@ -60,7 +59,7 @@ class GesiScheduleSlot
     /**
      * Valida un formato de horario Gesi.
      */
-    public static function validaGesiSchedule(string $schedule) : bool
+    public static function validaGesiSchedule(string $schedule): bool
     {
         $day = '[LMXJVSD]{1}';
         $number = '(?:[0-9]{1,2})';

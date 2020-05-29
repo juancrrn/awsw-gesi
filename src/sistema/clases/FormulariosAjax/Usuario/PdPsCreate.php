@@ -21,7 +21,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class PdPsCreate extends FormularioAjax
@@ -38,7 +38,7 @@ class PdPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'personaldocente-create';
+    private const FORM_ID = 'usuario-pd-ps-create';
     private const FORM_NAME = 'Crear personal docente';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/pd/create/';
@@ -80,7 +80,7 @@ class PdPsCreate extends FormularioAjax
 
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $defaultUserPassword = GESI_DEFAULT_PASSWORD;
 
@@ -117,7 +117,7 @@ class PdPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;

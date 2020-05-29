@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Asignacion;
@@ -48,7 +47,7 @@ class AsignacionPdList extends Modelo
         $this->listado = Asignacion::dbGetByProfesor($idProfesor);
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
         $listaAsignaciones = $this->generaListaAsignaciones();
        
@@ -58,10 +57,10 @@ class AsignacionPdList extends Modelo
         <table id="asignacion-pd-list" class="table table-borderless table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Horario</th>
                     <th scope="col">Asignatura</th>
                     <th scope="col">Grupo</th>
-                    <th scope="col">Foro</th>
+                    <th scope="col">Horario</th>
+                    <th scope="col">Participantes</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +73,7 @@ class AsignacionPdList extends Modelo
 
     }
 
-    public function generaListaAsignaciones() : string
+    public function generaListaAsignaciones(): string
     {   
         $app = App::getSingleton();
 
@@ -89,50 +88,40 @@ class AsignacionPdList extends Modelo
                 
                 $grupo = Grupo::dbGet($asignacion->getGrupo());
                 $grupoNombre = $grupo->getNombreCompleto();
-                $listaEstudaintes = Usuario::dbGetEstudiantesByGrupo($grupo->getId());
 
                 $foro = $app->getUrl() . '/mi/foros/' . $asignacion->getForoPrincipal() . '/ver/';
+
+                $estudiantes = Usuario::dbGetEstudiantesByGrupo($grupo->getId());
+                $stringEstudiantes = '';
+
+                if (! empty($estudiantes)) {
+                    for ($i = 0; $i < sizeof($estudiantes); $i++) {
+                        $stringEstudiantes .= $estudiantes[$i]
+                            ->getNombreCompleto();
+
+                        if ($i == sizeof($estudiantes) - 1) {
+                            $stringEstudiantes .= '.';
+                        } elseif ($i == sizeof($estudiantes) - 2) {
+                            $stringEstudiantes .= ' y ';
+                        } else {
+                            $stringEstudiantes .= ', ';
+                        }
+                    }
+                } else{
+                    $stringEstudiantes = 'No se ha encontrado ningun estudiante.';
+                }
                 
                 $buffer .= <<< HTML
                 <tr>
-                    <td data-col-name="horario">$horarios</td>
-                    <td data-col-name="asignaturaNombre">$asignaturaNombre</td>
-                    <td data-col-name="grupoNombre">$grupoNombre</td>
-                    <td data-col-name="foro"><a href="$foro">Ir al foro</a></td>
-                </tr>
-                <tr>
-                    <td>Estudiantes del grupo:</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <a class="btn btn-primary btn-sm mx-1" href="$foro">Foro</a>
+                        $asignaturaNombre
+                    </td>
+                    <td>$grupoNombre</td>
+                    <td>$horarios</td>
+                    <td><small>$stringEstudiantes</small></td>
                 </tr>
                 HTML;
-
-                if (! empty($listaEstudaintes)) {
-                    foreach ($listaEstudaintes as $usuario) {
-
-                        $nif = $usuario->getNif();
-                        $nombre = $usuario->getNombreCompleto();
-
-                        $buffer .= <<< HTML
-                        <tr>
-                            <td data-col-name="nif">$nif</td>
-                            <td data-col-name="nombre">$nombre</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        HTML;
-                    }
-                } else{
-                    $buffer .= <<< HTML
-                    <tr>
-                        <td>No se ha encontrado ningun alumno.</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    HTML;
-                }
             }
         } else {
             $buffer .= <<< HTML

@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -57,7 +56,7 @@ class Evento
 		$this->asignacion = $asignacion;
 	}
 
-	private static function fromDbFetch(Object $o) :Evento
+	private static function fromMysqlFetch(Object $o) :Evento
     {
         return new self(
 			$o->id,
@@ -71,7 +70,7 @@ class Evento
 		
     }
 
-	public static function dbInsertar() : int {
+	public static function dbInsertar(): int {
 		
 		$bbdd = App::getSingleton()->bbddCon();
 		
@@ -147,7 +146,7 @@ class Evento
 		return $this->descripcion;
 	}
 
-	public static function dbActualizar() : bool{
+	public static function dbActualizar(): bool{
 	
 		$bbdd = App::getSingleton()->bbddCon();
 
@@ -246,18 +245,18 @@ class Evento
 	
 		return $eventos;
 	
-		return $eventos;
-	
-		return $eventos;
-	
-		return $eventos;
+
 	}
 	
 
 
 
-	public static function dbGetByProfesor(int $profesor) : array
+
+
+
+	 public static function dbGet(int $id) : self
     {
+
         $bbdd = App::getSingleton()->bbddCon();
 
         $sentencia = $bbdd->prepare("
@@ -270,28 +269,83 @@ class Evento
 				asignatura,
 				asignacion
             FROM
-				gesi_eventos
+                gesi_eventos
             WHERE
-                profesor = ?    
+                id = ?
+            LIMIT 1
         ");
 
         $sentencia->bind_param(
             "i",
-            $profesor
+            $id
         );
 
         $sentencia->execute();
 
-        $r = $sentencia->get_result();
+        $resultado = $sentencia->get_result();
 
-        $as = array();
+        $evento = self::fromMysqlFetch($resultado->fetch_object());
 
-        while ($a = $r->fetch_object()) {
-            $as[] = self::fromDbFetch($a);
+        $sentencia->close();
+
+        return $evento;
+	}
+	
+	public static function dbExisteId(int $id): bool
+    {        
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $sentencia = $bbdd->prepare("
+            SELECT
+                id
+            FROM
+                gesi_eventos
+            WHERE
+                id = ?
+            LIMIT 1
+        ");
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+        
+        $sentencia->execute();
+        
+        $sentencia->store_result();
+
+        if ($sentencia->num_rows > 0) {
+            $existe = true;
+        } else {
+            $existe = false;
         }
 
         $sentencia->close();
 
-        return $as;    
+        return $existe;
 	}
+	
+
+	public static function dbEliminar(int $id): bool
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $sentencia = $bbdd->prepare("
+            DELETE
+            FROM
+                gesi_eventos
+            WHERE
+                id = ?
+        ");
+
+        $sentencia->bind_param(
+            "i",
+            $id
+        );
+
+        $resultado = $sentencia->execute();
+
+        $sentencia->close();
+
+        return $resultado;
+    }
 }

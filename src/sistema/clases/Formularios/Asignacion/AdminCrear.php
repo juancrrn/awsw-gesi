@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Formularios\Asignacion;
@@ -32,7 +31,7 @@ class AdminCrear extends Formulario
         parent::__construct('form-asignatura-crear', array('action' => $action));
     }
 
-    protected function generaCampos(array & $datos_iniciales = array()) : void
+    protected function generaCampos(array & $datos_iniciales = array()): void
     {
 
         $profesor = isset($datos_iniciales['profesor']) ?
@@ -50,7 +49,6 @@ class AdminCrear extends Formulario
 
             $profesor_options .= <<< HTML
             <option value="$id" $selected>$nombre</option>
-
             HTML;
         }
 
@@ -134,7 +132,7 @@ HTML;
 
     }
 
-    protected function procesa(array & $datos) : void
+    protected function procesa(array & $datos): void
     {
 
         $profesor = isset($datos['profesor']) ?

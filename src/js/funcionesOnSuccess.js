@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 /**
@@ -29,7 +29,7 @@ var x = {};
  */
 x.genBtn = (formId, uniqueId, content) =>
 {
-    return '<button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="' + formId + '" data-ajax-unique-id="' + uniqueId + '">' + content + '</button>';
+    return '<button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1 mx-1" data-ajax-form-id="' + formId + '" data-ajax-unique-id="' + uniqueId + '">' + content + '</button>';
 }
 
 /**
@@ -48,24 +48,23 @@ onSuccessFn.listaUsuariosEstCreated = (e, params) =>
     const $modalData = params.modalData;
     const result = params.result;
 
-    const formId = $modalData.data('ajax-form-id');
     const targetObjectName = $modalData.data('ajax-target-object-name');
     
     const uniqueId = result[targetObjectName].uniqueId;
     const nif = result[targetObjectName].nif;
     const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
 
+    const buttons =
+        x.genBtn('usuario-est-ps-read', uniqueId, 'Ver') +
+        x.genBtn('usuario-est-ps-update', uniqueId, 'Editar') +
+        x.genBtn('usuario-est-ps-delete', uniqueId, 'Eliminar');
+
     const $list = $(e.currentTarget).find('tbody');
-    // TODO: añadir botones
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
         <td scope="row" data-col-name="nif">' + nif + '</td>\
         <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-        <td class="text-right">\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-est-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-        </td>\
+        <td class="text-right">' + buttons + '</td>\
     </tr>';
 
     $list.append($rowHtml);
@@ -89,17 +88,18 @@ onSuccessFn.listaUsuariosPdCreated = (e, params) =>
     const nif = result[targetObjectName].nif;
     const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
 
+    const buttons =
+        x.genBtn('usuario-pd-ps-read', uniqueId, 'Ver') +
+        x.genBtn('usuario-pd-ps-update', uniqueId, 'Editar') +
+        x.genBtn('usuario-pd-ps-delete', uniqueId, 'Eliminar');
+
     const $list = $(e.currentTarget).find('tbody');
-    // TODO: añadir botones
+    
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
         <td scope="row" data-col-name="nif">' + nif + '</td>\
         <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-        <td class="text-right">\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-pd-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-pd-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-pd-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-        </td>\
+        <td class="text-right">' + buttons + '</td>\
     </tr>';
 
     $list.append($rowHtml);
@@ -117,24 +117,24 @@ onSuccessFn.listaUsuariosPsCreated = (e, params) =>
     const $modalData = params.modalData;
     const result = params.result;
 
-    const formId = $modalData.data('ajax-form-id');
     const targetObjectName = $modalData.data('ajax-target-object-name');
     
     const uniqueId = result[targetObjectName].uniqueId;
     const nif = result[targetObjectName].nif;
     const nombreCompleto = result[targetObjectName].nombre + ' ' + result[targetObjectName].apellidos;
 
+    const buttons =
+        x.genBtn('usuario-ps-ps-read', uniqueId, 'Ver') +
+        x.genBtn('usuario-ps-ps-update', uniqueId, 'Editar') +
+        x.genBtn('usuario-ps-ps-delete', uniqueId, 'Eliminar');
+
     const $list = $(e.currentTarget).find('tbody');
-    // TODO: añadir botones
+
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
         <td scope="row" data-col-name="nif">' + nif + '</td>\
         <td data-col-name="nombre-completo">' + nombreCompleto + '</td>\
-        <td class="text-right">\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-ps-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="usuario-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-        </td>\
+        <td class="text-right">' + buttons + '</td>\
     </tr>';
 
     $list.append($rowHtml);
@@ -284,6 +284,8 @@ onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
     const fecha = result[targetObjectName].fecha;
     const extractoContenido = result[targetObjectName].extractoContenido;
 
+    const buttons = x.genBtn('mensaje-secretaria-ses-read', uniqueId, 'Ver');
+
     const $list = $(e.currentTarget).find('tbody');
     
     $rowHtml = '\
@@ -291,9 +293,7 @@ onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
         <td>(Yo)</td>\
         <td>' + fecha + '</td>\
         <td>' + extractoContenido + '</td>\
-        <td class="text-right">\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="mensaje-secretaria-ses-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-        </td>\
+        <td class="text-right">' + buttons + '</td>\
     </tr>';
 
     $list.append($rowHtml);
@@ -310,33 +310,31 @@ onSuccessFn.listaPsAsignaturasCreated = (e, params) =>
     const $modalData = params.modalData;
     const result = params.result;
 
-    const formId = $modalData.data('ajax-form-id');
     const targetObjectName = $modalData.data('ajax-target-object-name');
     
     const uniqueId = result[targetObjectName].uniqueId;
-    const corto = result[targetObjectName].nombre_corto;
+    const corto = result[targetObjectName].nombreCorto;
     const nivel = result[targetObjectName].nivelEscolar;
     const curso = result[targetObjectName].curso;
-    const largo = result[targetObjectName].nombre_completo;
+    const largo = result[targetObjectName].nombreCompleto;
+
+    const buttons =
+        x.genBtn('asignatura-ps-read', uniqueId, 'Ver') +
+        x.genBtn('asignatura-ps-update', uniqueId, 'Editar') +
+        x.genBtn('asignatura-ps-delete', uniqueId, 'Eliminar');
 
     const $list = $(e.currentTarget).find('tbody');
-    // TODO: añadir botones
+    
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-		<td scope="row" data-col-name="nombre-corto">'+ corto + '</td>\
+		<td scope="row" data-col-name="nombreCorto">'+ corto + '</td>\
 		<td data-col-name="nivel">'+ nivel +'</td>\
         <td data-col-name="curso">'+ curso + '</td>\
-        <td data-col-name="nombre-completo">'+ largo + '</td>\
-        <td class="text-right">\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-read" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-            <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="asignatura-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-        </td>\
+        <td data-col-name="nombreCompleto">'+ largo + '</td>\
+        <td class="text-right">' + buttons + '</td>\
 	</tr>';
     
     $list.append($rowHtml);
-
-    
 }
 
 /**
@@ -353,19 +351,19 @@ onSuccessFn.listaPsAsignaturasUpdated = (e, params) =>
     const targetObjectName = $modalData.data('ajax-target-object-name');
     
     const uniqueId = result[targetObjectName].uniqueId;
-    const corto = result[targetObjectName].nombre_corto;
+    const corto = result[targetObjectName].nombreCorto;
     const nivel = result[targetObjectName].nivelEscolar;
     const curso = result[targetObjectName].curso;
-    const largo = result[targetObjectName].nombre_completo;
+    const largo = result[targetObjectName].nombreCompleto;
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
     console.log($row);
 
-    $row.find('td[data-col-name="nombre-corto"]').text(corto);
+    $row.find('td[data-col-name="nombreCorto"]').text(corto);
     $row.find('td[data-col-name="nivel"]').text(nivel);
     $row.find('td[data-col-name="curso"]').text(curso);
-    $row.find('td[data-col-name="nombre-completo"]').text(largo);
+    $row.find('td[data-col-name="nombreCompleto"]').text(largo);
 }
 
 /**
@@ -387,51 +385,45 @@ onSuccessFn.listaPsAsignaturasDeleted = (e, params) =>
 }
 
 
-onSuccessFn.listaGruposCreated = (e, params) =>
+onSuccessFn.listaGruposPsCreated = (e, params) =>
 {
-   const $modalData = params.modalData;
-   const result = params.result;
+    const $modalData = params.modalData;
+    const result = params.result;
 
+    const targetObjectName = $modalData.data('ajax-target-object-name');
 
-   const formId = $modalData.data('ajax-form-id');
-   const targetObjectName = $modalData.data('ajax-target-object-name');
+    const nivel = result[targetObjectName].nivel;
+    const nombre_completo = result[targetObjectName].nombre_completo; 
 
+    const buttons =
+        x.genBtn('grupo-ps-read', uniqueId, 'Ver') +
+        x.genBtn('grupo-ps-update', uniqueId, 'Editar') +
+        x.genBtn('grupo-ps-delete', uniqueId, 'Eliminar');
+    
+    const $list = $(e.currentTarget).find('tbody');
+    
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+        <td data-col-name="nivel">'+ nivel +'</td>\
+        <td scope="row" data-col-name="nombre-completo">'+ nombre_completo + '</td>\
+        <td class="text-right">' + buttons + '</td>\
+    </tr>';
 
-   const nivel = result[targetObjectName].nivel;
-   const nombre_completo = result[targetObjectName].nombre_completo; 
-
-   const $list = $(e.currentTarget).find('tbody');
-
-  
-   // TODO: añadir botones
-   $rowHtml = '\
-   <tr data-unique-id="' + uniqueId + '">\
-       <td data-col-name="nivel">'+ nivel +'</td>\
-       <td scope="row" data-col-name="nombre-completo">'+ nombre_completo + '</td>\
-       <td class="text-right">\
-           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-create" data-ajax-unique-id="' + uniqueId + '">Ver</button>\
-           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-update" data-ajax-unique-id="' + uniqueId + '">Editar</button>\
-           <button class="btn-ajax-modal-fire btn btn-sm btn-primary mb-1" data-ajax-form-id="grupo-ps-delete" data-ajax-unique-id="' + uniqueId + '">Eliminar</button>\
-       </td>\
-   </tr>';
-   $list.append($rowHtml);
+    $list.append($rowHtml);
 }
 
 
-onSuccessFn.listaGruposUpdated = (e, params) =>
+onSuccessFn.listaGruposPsUpdated = (e, params) =>
 {
-     const $modalData = params.modalData;
-   const result = params.result;
+    const $modalData = params.modalData;
+    const result = params.result;
 
+    const targetObjectName = $modalData.data('ajax-target-object-name');
 
-   const formId = $modalData.data('ajax-form-id');
-   const targetObjectName = $modalData.data('ajax-target-object-name');
+    const nivel = result[targetObjectName].nivel;
+    const nombre_completo = result[targetObjectName].nombre_completo; 
 
-
-   const nivel = result[targetObjectName].nivel;
-   const nombre_completo = result[targetObjectName].nombre_completo; 
-
-   const $list = $(e.currentTarget).find('tbody');
+    const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
     console.log($row);
 
@@ -439,7 +431,7 @@ onSuccessFn.listaGruposUpdated = (e, params) =>
     $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
 }
 
-onSuccessFn.listaGruposDeleted = (e, params) =>
+onSuccessFn.listaGruposPsDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
 
@@ -447,6 +439,248 @@ onSuccessFn.listaGruposDeleted = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    $row.remove();
+}
+
+
+/**aqui nuevo */
+
+onSuccessFn.listaPsEventoCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const fecha = result[targetObjectName].fecha;
+    const nombre = result[targetObjectName].nombre;
+    const descripcion = result[targetObjectName].descripcion;
+    const lugar = result[targetObjectName].lugar;
+
+    const buttons =
+        x.genBtn('evento-ps-read', uniqueId, 'Ver') +
+        x.genBtn('evento-ps-update', uniqueId, 'Editar') +
+        x.genBtn('evento-ps-delete', uniqueId, 'Eliminar');
+
+    const $list = $(e.currentTarget).find('tbody');
+
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+		<td scope="row" data-col-name="fecha">'+ fecha + '</td>\
+		<td data-col-name="nombre">'+ nombre +'</td>\
+        <td data-col-name="descripcion">'+ descripcion + '</td>\
+        <td data-col-name="lugar">'+ lugar + '</td>\
+        <td class="text-right">' + buttons + '</td>\
+	</tr>';
+    
+    $list.append($rowHtml);
+}
+
+/**
+ * Actualiza la lista de Asignaturas cuando se actualiza una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsEventoUpdated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+
+    const fecha = result[targetObjectName].fecha;
+    const nombre = result[targetObjectName].nombre;
+    const descripcion = result[targetObjectName].descripcion;
+    const lugar = result[targetObjectName].lugar;
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+    console.log($row);
+
+    $row.find('td[data-col-name="fecha"]').text(fecha);
+    $row.find('td[data-col-name="nombre"]').text(nombre);
+    $row.find('td[data-col-name="descripcion"]').text(descripcion);
+    $row.find('td[data-col-name="lugar"]').text(lugar);
+}
+
+/**
+ * Actualiza la lista de asignaturas cuando se elimina una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsEventoDeleted = (e, params) =>
+{
+    const $modalData = params.modalData;
+
+    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    $row.remove();
+}
+
+
+/**
+ * aqui pd
+ */
+
+
+onSuccessFn.listaPdEventoCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const fecha = result[targetObjectName].fecha;
+    const nombre = result[targetObjectName].nombre;
+    const descripcion = result[targetObjectName].descripcion;
+    const lugar = result[targetObjectName].lugar;
+
+    const buttons =
+        x.genBtn('evento-pd-read', uniqueId, 'Ver') +
+        x.genBtn('evento-pd-update', uniqueId, 'Editar') +
+        x.genBtn('evento-pd-delete', uniqueId, 'Eliminar');
+
+    const $list = $(e.currentTarget).find('tbody');
+    
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+		<td scope="row" data-col-name="fecha">'+ fecha + '</td>\
+		<td data-col-name="nombre">'+ nombre +'</td>\
+        <td data-col-name="descripcion">'+ descripcion + '</td>\
+        <td data-col-name="lugar">'+ lugar + '</td>\
+        <td class="text-right">' + buttons + '</td>\
+	</tr>';
+    
+    $list.append($rowHtml);
+}
+
+/**
+ * Actualiza la lista de Asignaturas cuando se actualiza una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPdEventoUpdated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+
+    const fecha = result[targetObjectName].fecha;
+    const nombre = result[targetObjectName].nombre;
+    const descripcion = result[targetObjectName].descripcion;
+    const lugar = result[targetObjectName].lugar;
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+    console.log($row);
+
+    $row.find('td[data-col-name="fecha"]').text(fecha);
+    $row.find('td[data-col-name="nombre"]').text(nombre);
+    $row.find('td[data-col-name="descripcion"]').text(descripcion);
+    $row.find('td[data-col-name="lugar"]').text(lugar);
+}
+
+/**
+ * Actualiza la lista de asignaturas cuando se elimina una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPdEventoDeleted = (e, params) =>
+{
+    const $modalData = params.modalData;
+
+    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    $row.remove();
+}
+
+/**
+ * Actualiza la lista de Foros cuando se crea uno.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsForosCreated = (e, params) =>
+{
+    console.log(params);
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const nombre = result[targetObjectName].nombre;
+
+    const buttons =
+        x.genBtn('foro-ps-read', uniqueId, 'Ver') +
+        x.genBtn('foro-ps-update', uniqueId, 'Editar') +
+        x.genBtn('foro-ps-delete', uniqueId, 'Eliminar');
+
+    const $list = $(e.currentTarget).find('tbody');
+    
+    $rowHtml = '\
+    <tr data-unique-id="' + uniqueId + '">\
+		<td scope="row" data-col-name="foroNombre">'+ nombre + '</td>\
+        <td class="text-right">' + buttons + '</td>\
+	</tr>';
+    
+    $list.append($rowHtml);
+
+}
+
+/**
+ * Actualiza la lista de foros cuando se actualiza uno.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsForosUpdated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const targetObjectName = $modalData.data('ajax-target-object-name');
+    
+    const uniqueId = result[targetObjectName].uniqueId;
+    const nombre = result[targetObjectName].nombre;
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+    console.log($row);
+
+    $row.find('td[data-col-name="foroNombre"]').text(nombre);
+}
+
+/**
+ * Actualiza la lista de foros cuando se elimina una.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaPsForosDeleted = (e, params) =>
+{
+    const $modalData = params.modalData;
+
+    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
+
+    const $list = $(e.currentTarget).find('tbody');
+    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
+
+    console.log(params);
 
     $row.remove();
 }

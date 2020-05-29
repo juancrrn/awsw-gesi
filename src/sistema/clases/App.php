@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi;
@@ -142,7 +141,7 @@ class App
 	/**
 	 * Directorio raíz de la instalación.
 	 */
-	public function getRaiz() : string
+	public function getRaiz(): string
 	{
 		return $this->raiz;
 	}
@@ -150,7 +149,7 @@ class App
 	/**
 	 * URL pública de la instalación.
 	 */
-	public function getUrl() : string
+	public function getUrl(): string
 	{
 		return $this->url;
 	}
@@ -158,7 +157,7 @@ class App
 	/**
 	 * Nombre de la aplicación.
 	 */
-	public function getNombre() : string
+	public function getNombre(): string
 	{
 		return $this->nombre;
 	}
@@ -166,7 +165,7 @@ class App
 	/**
 	 * Base del front controller.
 	 */
-	public function getBaseControlador() : string
+	public function getBaseControlador(): string
 	{
 		return $this->base_controlador;
 	}
@@ -174,7 +173,7 @@ class App
 	/**
 	 * Contraseña por defecto.
 	 */
-	public function getDefaultPassword() : string
+	public function getDefaultPassword(): string
 	{
 		return $this->default_password;
 	}
@@ -184,7 +183,7 @@ class App
 	 * 
 	 * Esto sirve para cachés de CSS, etc.
 	 */
-	public function isDesarrollo() : bool
+	public function isDesarrollo(): bool
 	{
 		return $this->es_desarrollo;
 	}

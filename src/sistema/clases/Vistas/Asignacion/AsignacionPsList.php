@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Asignacion;
@@ -49,7 +48,7 @@ class AsignacionPsList extends Modelo
         $this->listado = Asignacion::dbGetAll();
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
         // Create asignación.
         $formCreate = new AsignacionPsCreate();
@@ -97,7 +96,7 @@ class AsignacionPsList extends Modelo
 
     }
 
-    public function generaListaAsignaciones(AsignacionPsRead $formRead, AsignacionPsUpdate $formUpdate, AsignacionPsDelete $formDelete) : string
+    public function generaListaAsignaciones(AsignacionPsRead $formRead, AsignacionPsUpdate $formUpdate, AsignacionPsDelete $formDelete): string
     {
         $buffer = '';
 

@@ -22,7 +22,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class GrupoPsCreate extends FormularioAjax
@@ -44,8 +44,8 @@ class GrupoPsCreate extends FormularioAjax
     private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'created.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list'; // TODO
+    private const ON_SUCCESS_EVENT_NAME = 'created.grupo.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-ps-list'; // TODO
 
 
     public function __construct($api = false)
@@ -100,7 +100,7 @@ class GrupoPsCreate extends FormularioAjax
     }
 
 
-    public function generateFormInputs() : string 
+    public function generateFormInputs(): string 
     {
         $html = <<< HTML
         <div class="form-group">
@@ -133,7 +133,7 @@ class GrupoPsCreate extends FormularioAjax
 
 
 
-    public function processSubmit(array $data = array()) : void{
+    public function processSubmit(array $data = array()): void{
         
         $nivel = $data['nivel'] ?? null;
        

@@ -1,63 +1,179 @@
 <?php 
 
 /**
- * Vistas de calendario.
+ * Vista de gestión de usuarios.
  *
- * - PDI: puede editar todos los calendarios.
- * - PD: puede editar los calendarios de sus asignaturas.
- * - Estudiantes: pueden ver el calendario de sus asignaturas.
- * - Resto: pueden ver el calendario público.
+ * - PAS: único permitido.
  *
  * @package awsw-gesi
  * Gesi
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Evento;
+
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsCreate as FormEventoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsUpdate as FormEventoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsRead as FormEventoPsRead;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsDelete as FormEventoPsDelete;
+
+use Awsw\Gesi\Sesion;
 
 class EventoPsList extends Modelo
 {
-    private const VISTA_NOMBRE = "Eventos";
-    private const VISTA_ID = "evento-lista";
 
-    private $listado;
+    public const VISTA_NOMBRE = "Gestionar eventos";
+        public const VISTA_ID = "eventos-ps-list";
 
-    public function __construct()
-    {
-        $this->nombre = self::VISTA_NOMBRE;
-        $this->id = self::VISTA_ID;
+        private $listadoEvento;
 
-        $this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
-    }
+        public function __construct($api = false)
+        {
+            Sesion::requerirSesionPs($api);
 
-    public function procesaContent() : void
-    {
+            $this->nombre = self::VISTA_NOMBRE;
+            $this->id = self::VISTA_ID;
 
-        ?>
-        <header class="page-header">
-            <h1>Eventos</h1>
-        </header>
+           
+             
+            $this->listadoEvento= Evento::dbGetAll();
+        }
 
-        <section class="page-content">
-            Esta vista aún no está implementada.
-                    <?php
-// var_dump($this->listado);
+        public function procesaContent(): void
+        {
+            $html = <<< HTML
+            <h2 class="mb-4">$this->nombre</h2>
+            HTML;
 
-                    ?>
-        </section>
-        <?php
+            $html .= $this->generarListaEventos();
 
-    }
+            echo $html;
+        }
+
+        /**
+         * Genera el listado de Eventos.
+         * 
+         * @return string Listado de Eventos.
+         */
+        public function generarListaEventos(): string
+        {
+            //Create Evento
+            $formEventoPsCreate = new FormEventoPsCreate();
+            $formEventoPsCreateModal = $formEventoPsCreate->generateModal();
+
+            //Editar Evento
+
+            $formEventoPsUpdate = new FormEventoPsUpdate();
+            $formEventoPsUpdateModal = $formEventoPsUpdate->generateModal();
+            //Read Evento
+
+            $formEventoPsRead = new FormEventoPsRead();
+            $formEventoPsReadModal = $formEventoPsRead->generateModal();
+
+
+            //Delete Evento
+
+            $formEventoPsDelete = new FormEventoPsDelete();
+            $formEventoPsDeleteModal = $formEventoPsDelete->generateModal();
+
+            $listaEventoBuffer = '';
+
+            if(! empty($this->listadoEvento)){
+                $eventos = array();
+             
+                foreach($this->listadoEvento as $u){
+                    
+                    $uniqueId = $u->getId();
+                    $fecha = $u->getfecha();
+                  //  $curso_escolar = $u->getCursoEscolarRaw();
+                   // $nombre_corto = $u->getNombreCorto();
+                    $nombre = $u->getNombre();
+                  //  $tutor = $u->getTutor();
+                    $lugar = $u->getLugar();
+
+                    $asignatura = $u->getAsignatura();
+                    $asignacion = $u->getAsignacion();
+
+                    $formEventoReadButton = $formEventoPsRead->generateButton('Ver',$uniqueId,true);
+                    $formEventoUpdateButton = $formEventoPsUpdate->generateButton('Editar',$uniqueId,true);
+                    $formEventoDeleteButton = $formEventoPsDelete->generateButton('Eliminar', $uniqueId,true);
+
+                    $listaEventoBuffer .= <<< HTML
+                    <tr data-unique-id="$uniqueId">
+                        <td scope="row" data-col-name="nif">$fecha</td>
+                        <td data-col-name="nombre-completo">$nombre</td>
+                        <td data-col-name="lugar">$lugar</td>
+                        <td data-col-name="asignatura">$asignatura</td>
+                        <td data-col-name="asignacion">$asignacion</td>
+                        <td class="text-right">$formEventoReadButton $formEventoUpdateButton $formEventoDeleteButton</td>
+                    </tr>
+                    HTML;
+                }
+
+
+            } else{
+                $listaEventoBuffer .= <<< HTML
+                <tr>
+                    <td></td>
+                    <td>No se han encontrado Eventos.</td>
+                    <td></td>
+                </tr>
+                HTML;
+                }
+            
+
+            $formEventoPsCreateButton = $formEventoPsCreate->generateButton('Crear',null,true);
+            $html = <<< HTML
+            <h3 class="mb-4">$formEventoPsCreateButton</h3>
+            <table id="evento-lista" class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Lugar</th>
+                    <th scope="col">Asignatura</th>
+                    <th scope="col">Asignacion</th>
+                    <th scope="col" class="text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                $listaEventoBuffer
+            </tbody>
+            
+            </table>
+            $formEventoPsCreateModal
+            $formEventoPsReadModal
+            $formEventoPsUpdateModal
+            $formEventoPsDeleteModal
+            HTML;
+
+            return $html;
+        }
 }
+    
 
-?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ?>

@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Controladores;
@@ -28,10 +28,10 @@ use Awsw\Gesi\Vistas\Vista;
 class Asignatura extends Controlador
 {
 
-	public static function controla() : void
+	public static function controla(): void
 	{
 		/**
-		 * Vista lista de asignaturas.
+		 * Personal de Secretaría.
 		 */
 
 		parent::get('/ps/asignaturas/', function () {

@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Asignatura;
@@ -25,111 +24,119 @@ use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Sesion;
 
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate as FormAsignaturaCreate;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead as FormAsignaturaRead;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate as FormAsignaturaUpdate;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete as FormAsignaturaDelete;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete;
 
 class AsignaturaPsList extends Modelo
 {
-	public const VISTA_NOMBRE = "Gestionar asignaturas";
-	public const VISTA_ID = "asignatura-ps-list";
+    public const VISTA_NOMBRE = "Gestionar asignaturas";
+    public const VISTA_ID = "asignatura-ps-list";
 
-	private $listado;
+    private $listado;
 
-	public function __construct()
-	{	
-		Sesion::requerirSesionPs();
+    public function __construct()
+    {    
+        Sesion::requerirSesionPs();
 
-		$this->nombre = self::VISTA_NOMBRE;
-		$this->id = self::VISTA_ID;
+        $this->nombre = self::VISTA_NOMBRE;
+        $this->id = self::VISTA_ID;
 
-		$this->listado = Asignatura::dbGetAll();
-	}
+        $this->listado = Asignatura::dbGetAll();
+    }
 
-	public function procesaContent() : void 
-	{
-		$app = App::getSingleton();
+    public function procesaContent(): void 
+    {
+        $app = App::getSingleton();
 
-		$formAsignaturaCreate = new FormAsignaturaCreate();
-		$formAsignaturaCreateModal = $formAsignaturaCreate->generateModal();
+        $createForm = new AsignaturaPsCreate();
+        $createModal = $createForm->generateModal();
 
-		$formAsignaturaRead = new FormAsignaturaRead();
-		$formAsignaturaReadModal = $formAsignaturaRead->generateModal();
+        $readForm = new AsignaturaPsRead();
+        $readModal = $readForm->generateModal();
 
-		$formAsignaturaUpdate = new FormAsignaturaUpdate();
-		$formAsignaturaUpdateModal = $formAsignaturaUpdate->generateModal();
+        $updateForm = new AsignaturaPsUpdate();
+        $updateModal = $updateForm->generateModal();
 
-		$formAsignaturaDelete = new FormAsignaturaDelete();
-		$formAsignaturaDeleteModal = $formAsignaturaDelete->generateModal();
+        $deleteForm = new AsignaturaPsDelete();
+        $deleteModal = $deleteForm->generateModal();
 
+        $formCreateButton = $createForm->generateButton('Crear', null, true);
 
-		$html = <<< HTML
-		<h2 class="mb-4">$this->nombre</h2>
-		HTML;
+        $lista = $this->generaLista($readForm, $updateForm, $deleteForm);
 
-		$listaAsignaturaBuffer = '';
+        $html = <<< HTML
+            <h3 class="mb-4">$formCreateButton Asignaturas</h3>
+            <table id="asignatura-ps-list" class="table table-borderless table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Nivel</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col" class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $lista
+                </tbody>
+            </table>
+            $createModal
+            $readModal
+            $updateModal
+            $deleteModal
+        HTML;
 
-		if (! empty($this->listado)) {
-			foreach ($this->listado as $a) {
-				$uniqueId= $a->getId();
-				$corto = $a->getNombreCorto();
-				$nivel = $a->getNivel();
-				$curso = $a->getCursoEscolar();
-				$largo = $a->getNombreCompleto();
+        echo $html;
+    }
 
-				//TODO boton ver en el nombre
-				$formAsignaturaReadButton = $formAsignaturaRead->generateButton('Ver', $uniqueId, true);
-				$formAsignaturaUpdateButton = $formAsignaturaUpdate->generateButton('Editar', $uniqueId, true);
-				$formAsignaturaDeleteButton = $formAsignaturaDelete->generateButton('Eliminar', $uniqueId, true);
+    private function generaLista(
+        AsignaturaPsRead $readForm,
+        AsignaturaPsUpdate $updateForm,
+        AsignaturaPsDelete $deleteForm
+    ): string
+    {
+        $buffer = '';
 
-				$listaAsignaturaBuffer .= <<< HTML
-					<tr data-unique-id="$uniqueId">
-						<td scope="row" data-col-name="nombre-corto">$corto</td>
-						<td data-col-name="nivel">$nivel</td>
-						<td data-col-name="curso">$curso</td>
-						<td data-col-name="nombre-completo">$largo</td>
-						<td class="text-right">$formAsignaturaReadButton $formAsignaturaUpdateButton $formAsignaturaDeleteButton</td>
-					</tr>
-				HTML;
-			}
+        if (! empty($this->listado)) {
+            foreach ($this->listado as $a) {
+                $uniqueId= $a->getId();
+                $corto = $a->getNombreCorto();
+                $nivel = $a->getNivel();
+                $curso = $a->getCursoEscolar();
+                $largo = $a->getNombreCompleto();
 
-		}else{
-			$listaAsignaturaBuffer .= <<< HTML
+                $buttons =
+                    $readForm->generateButton('Ver', $uniqueId, true) .
+                    $updateForm->generateButton('Editar', $uniqueId, true) .
+                    $deleteForm->generateButton('Eliminar', $uniqueId, true);
+
+                $buffer .= <<< HTML
+                    <tr data-unique-id="$uniqueId">
+                        <td scope="row" data-col-name="nombreCorto">$corto</td>
+                        <td data-col-name="nivel">$nivel</td>
+                        <td data-col-name="curso">$curso</td>
+                        <td data-col-name="nombreCompleto">$largo</td>
+                        <td class="text-right">$buttons</td>
+                    </tr>
+                HTML;
+            }
+
+        }else{
+            $buffer .= <<< HTML
             <tr>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td>No se han encontrado Asignaturas.</td>
                 <td></td>
             </tr>
             HTML;
-		}
+        }
 
-		$formAsignaturaCreateButton = $formAsignaturaCreate->generateButton('Crear', null, true);
-
-		$html = <<< HTML
-			<h3 class="mb-4">$formAsignaturaCreateButton Asignaturas</h3>
-			<table id="asignatura-ps-list" class="table table-borderless table-striped">
-				<thead>
-					<tr>
-						<th scope="col"></th>
-						<th scope="col">Nivel</th>
-						<th scope="col">Curso</th>
-						<th scope="col">Nombre</th>
-						<th scope="col" class="text-right">Acciones</th>
-					</tr>
-				</thead>
-				<tbody>
-					$listaAsignaturaBuffer
-				</tbody>
-			</table>
-			$formAsignaturaCreateModal
-			$formAsignaturaReadModal
-			$formAsignaturaUpdateModal
-			$formAsignaturaDeleteModal
-		HTML;
-
-		echo $html;
-	}
+        return $buffer;
+    }
 }
 
 ?>

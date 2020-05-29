@@ -21,7 +21,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class PsPsUpdate extends FormularioAjax
@@ -38,7 +38,7 @@ class PsPsUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-ps-update';
+    private const FORM_ID = 'usuario-ps-ps-update';
     private const FORM_NAME = 'Editar personal de Secretaría';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/ps/update/';
@@ -107,7 +107,7 @@ class PsPsUpdate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
@@ -140,7 +140,7 @@ class PsPsUpdate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {   
         $uniqueId = $data['uniqueId'] ?? null;
 

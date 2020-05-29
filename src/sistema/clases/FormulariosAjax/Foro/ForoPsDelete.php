@@ -19,7 +19,7 @@ use Awsw\Gesi\Datos\Foro;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
  class ForoPsDelete extends FormularioAjax
@@ -35,13 +35,13 @@ use Awsw\Gesi\Datos\Foro;
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'foro-delete';
+    private const FORM_ID = 'foro-ps-delete';
     private const FORM_NAME = 'Eliminar foro';
     private const TARGET_CLASS_NAME = 'Foro';
     private const SUBMIT_URL = '/ps/foros/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.foro';
-    private const ON_SUCCESS_EVENT_TARGET = '#foro-lista';
+    private const ON_SUCCESS_EVENT_TARGET = '#foro-ps-list';
 
     public function __construct()
     {
@@ -103,7 +103,7 @@ use Awsw\Gesi\Datos\Foro;
         return $responseData;
     }
     
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
@@ -122,7 +122,7 @@ use Awsw\Gesi\Datos\Foro;
         return $html;
     }
     
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $uniqueId = $data['uniqueId'] ?? null;
         $checkbox = $data['checkbox'] ?? null;

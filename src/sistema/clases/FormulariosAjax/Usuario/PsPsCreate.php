@@ -21,7 +21,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class PsPsCreate extends FormularioAjax
@@ -38,7 +38,7 @@ class PsPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-ps-create';
+    private const FORM_ID = 'usuario-ps-ps-create';
     private const FORM_NAME = 'Crear personal de Secretaría';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/ps/create/';
@@ -79,7 +79,7 @@ class PsPsCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $defaultUserPassword = GESI_DEFAULT_PASSWORD;
 
@@ -116,7 +116,7 @@ class PsPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $nif = $data['nif'] ?? null;
         $nombre = $data['nombre'] ?? null;

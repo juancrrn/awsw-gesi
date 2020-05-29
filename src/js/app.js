@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 /**
@@ -419,10 +418,47 @@ $(() => {
      * Vista de lista de grupos (personal de Secretaría).
     */
 
-    $('#grupo-list').on('created.grupo',
-        onSuccessFn.listaGrupoCreated);
-    $('#grupo-list').on('updated.grupo',
-        onSuccessFn.listaGrupoUpdated);
-    $('#grupo-list').on('deleted.grupo',
-        onSuccessFn.listaGrupoDeleted);  
+    $('#grupo-ps-list').on('created.grupo.ps',
+        onSuccessFn.listaGrupoPsCreated);
+    $('#grupo-ps-list').on('updated.grupo.ps',
+        onSuccessFn.listaGrupoPsUpdated);
+    $('#grupo-ps-list').on('deleted.grupo.ps',
+        onSuccessFn.listaGrupoPsDeleted);  
+
+    /**
+     * Vista de lista de eventos (personal de Secretaría).
+     */
+
+    $('#evento-ps-lista').on('created.evento.ps',
+    onSuccessFn.listaEventoPsCreated);
+    $('#evento-ps-lista').on('updated.evento.ps',
+    onSuccessFn.listaEventoPsUpdated);
+    $('#evento-ps-lista').on('deleted.evento.ps',
+    onSuccessFn.listaEventoPsDeleted);  
+
+
+
+        /**
+     * Vista de lista de eventos (personal Docente).
+     */
+
+    $('#evento-pd-lista').on('created.evento.pd',
+    onSuccessFn.listaEventoPdCreated);
+    $('#evento-pd-lista').on('updated.evento.pd',
+    onSuccessFn.listaEventoPdUpdated);
+    $('#evento-pd-lista').on('deleted.evento.pd',
+    onSuccessFn.listaEventoPdDeleted);  
+
+    /**
+     * Vista de lista de foros (personal de Secretaría).
+     */
+
+    $('#foro-ps-list').on('created.foro.ps',
+        onSuccessFn.listaPsForosCreated);
+    $('#foro-ps-list').on('updated.foro.ps',
+        onSuccessFn.listaPsForosUpdated);
+    $('#foro-ps-list').on('deleted.foro.ps',
+        onSuccessFn.listaPsForosDeleted);
+
+
 });

@@ -8,16 +8,16 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Sesion;
 
+use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 
 class SesionRestablecerContrasena extends Modelo
@@ -27,11 +27,13 @@ class SesionRestablecerContrasena extends Modelo
 
     public function __construct()
     {
+        Sesion::requerirSesionNoIniciada();
+
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
 
         echo <<< HTML

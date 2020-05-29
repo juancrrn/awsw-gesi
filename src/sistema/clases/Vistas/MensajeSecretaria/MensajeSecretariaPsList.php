@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\MensajeSecretaria;
@@ -41,7 +41,7 @@ class MensajeSecretariaPsList extends Modelo
         $this->listado = MensajeSecretaria::dbGetAll();
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {
         // Read mensaje de Secretaría.
         $formPsRead = new MensajeSecretariaPsRead();
@@ -73,7 +73,7 @@ class MensajeSecretariaPsList extends Modelo
 
     }
 
-    public function generaListaMensajesSecretaria(MensajeSecretariaPsRead $formPsRead) : string
+    public function generaListaMensajesSecretaria(MensajeSecretariaPsRead $formPsRead): string
     {
         $buffer = '';
 

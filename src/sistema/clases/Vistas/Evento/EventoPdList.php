@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 
@@ -29,22 +28,23 @@ use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Evento;
+use Awsw\Gesi\Datos\Asignacion;
 
 
 
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPdCreate as FormEventoPdCreate;
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPdUpdate as FormEventoPdUpdate;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsRead as FormGrupoPsRead;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsDelete as FormGrupoPsDelete;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPdRead as FormEventoPdRead;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPdDelete as FormEventoPdDelete;
 
 use Awsw\Gesi\Sesion;
 
 
-class GrupoPsList extends Modelo
+class EventoPdList extends Modelo
 {
 
     public const VISTA_NOMBRE = "Gestionar eventos";
-        public const VISTA_ID = "eventos-list";
+        public const VISTA_ID = "eventos-pd-list";
 
         private $listado;
 
@@ -55,12 +55,12 @@ class GrupoPsList extends Modelo
             $this->nombre = self::VISTA_NOMBRE;
             $this->id = self::VISTA_ID;
 
-            $IdProfesor = Sesion::getUsuarioEnSesion()->getId();
-             
-            $this->listadoEvento= Evento::dbGetByProfesor($IdProfesor);
+            $idProfesor = Sesion::getUsuarioEnSesion()->getId();
+            $idEventosProfesor = Asignacion::dbGetByProfesor($idProfesor);
+     //       $this->listadoEvento= Evento::dbGetByProfesor($IdProfesor);
         }
 
-        public function procesaContent() : void
+        public function procesaContent(): void
         {
             $html = <<< HTML
             <h2 class="mb-4">$this->nombre</h2>
@@ -72,9 +72,9 @@ class GrupoPsList extends Modelo
         }
 
         /**
-         * Genera el listado de grupos.
+         * Genera el listado de Eventos.
          * 
-         * @return string Listado de grupos.
+         * @return string Listado de Eventos.
          */
         public function generarListaEventos(): string
         {
@@ -115,9 +115,9 @@ class GrupoPsList extends Modelo
                     $asignatura = $u->getAsignatura();
                     $asignacion = $u->getAsignacion();
 
-                    $formGrupoReadButton = $formEventoPdRead->generateButton('Ver',$uniqueId,true);
-                    $formGrupoUpdateButton = $formEventoPdUpdate->generateButton('Editar',$uniqueId,true);
-                    $formGrupoDeleteButton = $formEventoPdDelete->generateButton('Eliminar', $uniqueId,true);
+                    $formEventoReadButton = $formEventoPdRead->generateButton('Ver',$uniqueId,true);
+                    $formEventoUpdateButton = $formEventoPdUpdate->generateButton('Editar',$uniqueId,true);
+                    $formEventoDeleteButton = $formEventoPdDelete->generateButton('Eliminar', $uniqueId,true);
 
                     $listaEventoBuffer .= <<< HTML
                     <tr data-unique-id="$uniqueId">
@@ -126,7 +126,7 @@ class GrupoPsList extends Modelo
                         <td data-col-name="lugar">$lugar</td>
                         <td data-col-name="asignatura">$asignatura</td>
                         <td data-col-name="asignacion">$asignacion</td>
-                        <td class="text-right">$formGrupoReadButton $formGrupoUpdateButton $formGrupoDeleteButton</td>
+                        <td class="text-right">$formEventoReadButton $formEventoUpdateButton $formEventoDeleteButton</td>
                     </tr>
                     HTML;
                 }
@@ -136,7 +136,7 @@ class GrupoPsList extends Modelo
                 $listaEventoBuffer .= <<< HTML
                 <tr>
                     <td></td>
-                    <td>No se han encontrado grupos.</td>
+                    <td>No se han encontrado Eventos.</td>
                     <td></td>
                 </tr>
                 HTML;
@@ -146,7 +146,7 @@ class GrupoPsList extends Modelo
             $formEventoPdCreateButton = $formEventoPdCreate->generateButton('Crear',null,true);
             $html = <<< HTML
             <h3 class="mb-4">$formEventoPdCreateButton</h3>
-            <table id="grupo-lista" class="table table-borderless table-striped">
+            <table id="evento-lista" class="table table-borderless table-striped">
             <thead>
                 <tr>
                     <th scope="col">Fecha</th>

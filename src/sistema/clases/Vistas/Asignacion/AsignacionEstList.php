@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Asignacion;
@@ -50,7 +49,7 @@ class AsignacionEstList extends Modelo
         }
     }
 
-    public function procesaContent() : void
+    public function procesaContent(): void
     {   
         $listaAsignaciones = $this->generaListaAsignaciones();
        
@@ -60,10 +59,9 @@ class AsignacionEstList extends Modelo
         <table id="asignacion-pd-list" class="table table-borderless table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Horario</th>
                     <th scope="col">Asignatura</th>
                     <th scope="col">Grupo</th>
-                    <th scope="col">Foro</th>
+                    <th scope="col">Horario</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,7 +74,7 @@ class AsignacionEstList extends Modelo
 
     }
 
-    public function generaListaAsignaciones() : string
+    public function generaListaAsignaciones(): string
     {   
         $app = App::getSingleton();
         $buffer = '';
@@ -87,17 +85,21 @@ class AsignacionEstList extends Modelo
                 $horarios = $asignacion->getHorario();
                 $asignatura = Asignatura::dbGet($asignacion->getAsignatura());
                 $asignaturaNombre = $asignatura->getNombreCompleto();
-                
+                $profesor = Usuario::dbGet($asignacion->getProfesor());
+                $profesorNombre = $profesor->getNombreCompleto();
                 $grupo = Grupo::dbGet($asignacion->getGrupo());
                 $grupoNombre = $grupo->getNombreCompleto();
-                $foro = $app->getUrl() . '/mi/foros/' . $asignacion->getForoPrincipal() . '/ver/';
-                
+                $foro = $app->getUrl() . '/est/foros/' . $asignacion->getForoPrincipal() . '/';
+            
                 $buffer .= <<< HTML
                 <tr>
-                    <td data-col-name="horario">$horarios</td>
-                    <td data-col-name="asignaturaNombre">$asignaturaNombre</td>
-                    <td data-col-name="grupoNombre">$grupoNombre</td>
-                    <td data-col-name="foroNombre"><a href="$foro">Ir al foro</a></td>
+                    <td>
+                        <a class="btn btn-primary btn-sm mx-1" href="$foro">Foro</a>
+                        $asignaturaNombre
+                    </td>
+                    <td>$profesorNombre</td>
+                    <td>$grupoNombre</td>
+                    <td>$horarios</td>
                 </tr>
                 HTML;
             }

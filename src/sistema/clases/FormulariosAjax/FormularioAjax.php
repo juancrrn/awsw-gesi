@@ -12,12 +12,11 @@ use stdClass;
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 abstract class FormularioAjax
@@ -134,18 +133,18 @@ abstract class FormularioAjax
     public function setOnSuccess(
         string $onSuccessEventName,
         string $onSuccessEventTarget
-    ) : void
+    ): void
     {
         $this->onSuccessEventName = $onSuccessEventName;
         $this->onSuccessEventTarget = $onSuccessEventTarget;
     }
 
-    public function setReadOnlyTrue() : void
+    public function setReadOnlyTrue(): void
     {
         $this->readOnly = true;
     }
 
-    public function isReadOnly() : bool
+    public function isReadOnly(): bool
     {
         return $this->readOnly;
     }
@@ -153,7 +152,7 @@ abstract class FormularioAjax
     /**
      * Handles HTTP requests, called by the controller
      */
-    public function manage() : void
+    public function manage(): void
     {
         // Check content type
         $contentType = $_SERVER['CONTENT_TYPE'] ?? null;
@@ -216,7 +215,7 @@ abstract class FormularioAjax
      * @param array $data     Data to send in the response
      * @param int   $httpCode HTTP status code
      */
-    public function respondJson(int $httpCode, array $data) : void
+    public function respondJson(int $httpCode, array $data): void
     {
         http_response_code($httpCode);
 
@@ -235,7 +234,7 @@ abstract class FormularioAjax
      * @param int   $httpCode HTTP error code
      * @param array $messages Error messages
      */
-    public function respondJsonError(int $httpErrorCode, array $messages) : void
+    public function respondJsonError(int $httpErrorCode, array $messages): void
     {
         // Generate a new CSRF token.
         $newCsrfToken = $this->CsrfGenerateToken();
@@ -256,7 +255,7 @@ abstract class FormularioAjax
      * 
      * @param array $data Data to send
      */
-    public function respondJsonOk(array $data) : void
+    public function respondJsonOk(array $data): void
     {
         $okData = array(
             'status' => 'ok',
@@ -292,7 +291,7 @@ abstract class FormularioAjax
      * @param array $requestData Data sent in the initial request (i. e. 
      * $uniqueId)
      */
-    public function processInitialData(array $requestData) : void
+    public function processInitialData(array $requestData): void
     {
         $defaultData = $this->getDefaultData($requestData);
 
@@ -321,21 +320,21 @@ abstract class FormularioAjax
      * 
      * @param array $data Data sent in form submission
      */
-    abstract public function processSubmit(array $data = array()) : void;
+    abstract public function processSubmit(array $data = array()): void;
 
     /**
      * Generates specific form inputs as placeholders for AJAX preloading
      * 
      * @return string HTML containing the inputs
      */
-    abstract protected function generateFormInputs() : string;
+    abstract protected function generateFormInputs(): string;
 
     /**
      * Generates the default HTML Bootstrap modal
      *
      * @return string HTML containing the modal
      */
-    public function generateModal() : string
+    public function generateModal(): string
     {
         $inputs = $this->generateFormInputs();
 
@@ -409,7 +408,7 @@ abstract class FormularioAjax
      * 
      * @return string Generated token
      */
-    private function CsrfGenerateToken() : string
+    private function CsrfGenerateToken(): string
     {
         $token = hash('sha512', mt_rand(0, mt_getrandmax()));
 
@@ -425,7 +424,7 @@ abstract class FormularioAjax
      * 
      * @return bool True if valid, else false
      */
-    private function CsrfValidateToken(string $token) : bool
+    private function CsrfValidateToken(string $token): bool
     {
         if (isset($_SESSION[self::CSRF_PREFIX . '_' . $this->formId])
             && $_SESSION[self::CSRF_PREFIX . '_' . $this->formId] === $token) {
@@ -470,7 +469,7 @@ abstract class FormularioAjax
      * @param int|null $uniqueId
      * @param bool $small
      */
-    public function generateButton($content = null, $uniqueId = null, $small = false) : string
+    public function generateButton($content = null, $uniqueId = null, $small = false): string
     {
         $formId = $this->formId;
         $buttonContent = $content ? $content : $this->formName;
@@ -480,7 +479,7 @@ abstract class FormularioAjax
         $smallClass = $small ? 'btn-sm' : '';
 
         $button = <<< HTML
-        <button class="btn-ajax-modal-fire btn $smallClass btn-primary mb-1" data-ajax-form-id="$formId" $uniqueIdData>$buttonContent</button>
+        <button class="btn-ajax-modal-fire btn $smallClass btn-primary mb-1 mx-1" data-ajax-form-id="$formId" $uniqueIdData>$buttonContent</button>
         HTML;
 
         return $button;

@@ -21,7 +21,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class AsignaturaPsCreate extends FormularioAjax
@@ -89,7 +89,7 @@ class AsignaturaPsCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -99,8 +99,8 @@ class AsignaturaPsCreate extends FormularioAjax
         </div>
         <div class="form-group">
             <label for="curso_escolar">Curso escolar</label>
-            <p class="form-help">Introduce el año de inicio del curso escolar. Por ejemplo, para el curso 2018 - 2019, introduce 2018.</p>
             <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" placeholder="Curso escolar" required="required">
+            <small class="form-text text-muted">Introduce el año de inicio del curso escolar. Por ejemplo, para el curso 2018 - 2019, introduce 2018.</small>
         </div>
         <div class="form-group">
             <label for="nombre_corto">Nombre corto</label>
@@ -115,7 +115,7 @@ class AsignaturaPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         //$nivel = isset($data['nivel']) ? $data['nivel'] : null; 
         //$nivel = $data['nivel'] ?? null;
@@ -180,7 +180,7 @@ class AsignaturaPsCreate extends FormularioAjax
         }
     }
 
-    public static function autoHandle() : void
+    public static function autoHandle(): void
     {
         $form = new self();
         $form->manage();

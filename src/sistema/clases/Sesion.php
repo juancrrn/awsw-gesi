@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi;
@@ -32,7 +31,7 @@ class Sesion
     /**
      * Inicializa la gestión de la sesión de usuario.
      */
-    public static function init() : void
+    public static function init(): void
     {
         session_start();
         
@@ -50,7 +49,7 @@ class Sesion
 	 *
 	 * @requires No hay ninguna sesión ya iniciada.
 	 */
-	public static function inicia(Usuario $usuario) : void
+	public static function inicia(Usuario $usuario): void
 	{
         // Actualizamos la última vez que el usuario inició sesión a ahora.
         $usuario->dbActualizaUltimaSesion();
@@ -66,7 +65,7 @@ class Sesion
 	/**
 	 * Cierra la sesión de un usuario.
 	 */
-	public static function cierra() : void
+	public static function cierra(): void
 	{
         self::$usuario_en_sesion = null;
 		unset($_SESSION[self::SESSION_SESION]);
@@ -84,7 +83,7 @@ class Sesion
      * TODO: Comprobar que los valores de self::$usuario_en_sesion aún coindicen
      * con los que hay en la base de datos.
      */
-    public static function isSesionIniciada() : bool
+    public static function isSesionIniciada(): bool
     {
         return self::$usuario_en_sesion !== null;
     }
@@ -106,7 +105,7 @@ class Sesion
      * @param int   $httpCode HTTP status code
      * @param array $messages Messages to send in the response
      */
-    public static function apiRespondError(int $httpCode, array $messages) : void
+    public static function apiRespondError(int $httpCode, array $messages): void
     {
         $errorData = array(
             'status' => 'error',
@@ -132,7 +131,7 @@ class Sesion
      *                  que, en lugar de redirigir, debería mostrar un error 
      *                  HTTP.
      */
-    public static function requerirSesionIniciada($api = false) : void
+    public static function requerirSesionIniciada($api = false): void
     {
         if (! self::isSesionIniciada()) {
             if (! $api) {
@@ -151,7 +150,7 @@ class Sesion
      *                  que, en lugar de redirigir, debería mostrar un error 
      *                  HTTP.
      */
-    public static function requerirSesionNoIniciada($api = false) : void
+    public static function requerirSesionNoIniciada($api = false): void
     {
         if (self::isSesionIniciada()) {
             if (! $api) {
@@ -171,7 +170,7 @@ class Sesion
      *                  que, en lugar de redirigir, debería mostrar un error 
      *                  HTTP.
      */
-    public static function requerirSesionPd($api = false) : void
+    public static function requerirSesionPd($api = false): void
     {
         self::requerirSesionIniciada($api);
 
@@ -193,7 +192,7 @@ class Sesion
      *                  que, en lugar de redirigir, debería mostrar un error 
      *                  HTTP.
      */
-    public static function requerirSesionPs($api = false) : void
+    public static function requerirSesionPs($api = false): void
     {
         self::requerirSesionIniciada($api);
 
@@ -215,7 +214,7 @@ class Sesion
      *                  que, en lugar de redirigir, debería mostrar un error 
      *                  HTTP.
      */
-    public static function requerirSesionNoPs($api = false) : void
+    public static function requerirSesionNoPs($api = false): void
     {
         self::requerirSesionIniciada($api);
 

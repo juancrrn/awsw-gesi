@@ -26,7 +26,7 @@ use Awsw\Gesi\Validacion\GesiScheduleSlot;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class AsignacionPsCreate extends FormularioAjax
@@ -118,7 +118,7 @@ class AsignacionPsCreate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
@@ -151,7 +151,7 @@ class AsignacionPsCreate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $profesorId = $data['profesor'] ?? null;
         $asignaturaId = $data['asignatura'] ?? null;
@@ -267,7 +267,7 @@ class AsignacionPsCreate extends FormularioAjax
         }
     }
 
-    public static function autoHandle() : void
+    public static function autoHandle(): void
     {
         $form = new self();
         $form->manage();

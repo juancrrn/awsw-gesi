@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Formularios;
@@ -48,7 +47,7 @@ class Valido
      *
      * @return true if NIF or NIE valid format is found, else false
      */
-    public static function testNif($nif_nie) : bool
+    public static function testNif($nif_nie): bool
     {
         return true;
         $nif_nie = strtoupper($nif_nie);
@@ -89,7 +88,7 @@ class Valido
      *
      * @return true if standard string valid format is found, else false
      */
-    public static function testStdString($string) : bool {
+    public static function testStdString($string): bool {
         return preg_match("/^[A-Za-z\x{00C0}-\x{00D6}\x{00D8}-\x{00f6}\x{00f8}-\x{00ff}\s-]{3,128}$/u", $string) ? true : false;
     }
 
@@ -103,7 +102,7 @@ class Valido
      *
      * @return true if standard string valid format is found, else false
      */
-    public static function testCadenaB($string) : bool {
+    public static function testCadenaB($string): bool {
         return preg_match("/^[A-Za-z0-9º\x{00C0}-\x{00D6}\x{00D8}-\x{00f6}\x{00f8}-\x{00ff}\s-]{3,128}$/u", $string) ? true : false;
     }
 
@@ -121,7 +120,7 @@ class Valido
      *
      * @return true if valid password format is found, else false
      */
-    public static function testPassword($password) : bool {
+    public static function testPassword($password): bool {
         $general = preg_match("/^.{8,64}$/u", $password);
         $uppercase = preg_match("#[A-Z\x{00C0}-\x{00D6}\x{00D8}-\x{00DE}]#", $password);
         $lowercase = preg_match("#[a-z\x{00DF}-\x{00f6}\x{00f8}-\x{00ff}]#", $password);
@@ -138,7 +137,7 @@ class Valido
      *
      * @return true if standard short string valid format is found, else false
      */
-    public static function testStdShortString($string) : bool {
+    public static function testStdShortString($string): bool {
         return preg_match("/^[A-Za-z\x{00C0}-\x{00D6}\x{00D8}-\x{00f6}\x{00f8}-\x{00ff}\s-]{1,16}$/u", $string) ? true : false;
     }
 
@@ -149,7 +148,7 @@ class Valido
      *
      * @return true if email address valid format is found, else false
      */
-    public static function testEmail($email) : bool {
+    public static function testEmail($email): bool {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
@@ -160,7 +159,7 @@ class Valido
      *
      * @return true if valid phone number format is found, else false
      */
-    public static function testNumeroTelefono($phone_number) : bool {
+    public static function testNumeroTelefono($phone_number): bool {
         return preg_match("/^(\+[0-9]{1,4})?([\s0-9]*){4,15}$/", $phone_number) ? true : false;
     }
 
@@ -171,7 +170,7 @@ class Valido
      *
      * @return true if valid URL format is found, else false
      */
-    public static function testURL($url) : bool {
+    public static function testURL($url): bool {
         return filter_var($url, FILTER_VALIDATE_URL) !== false;
     }
 
@@ -182,7 +181,7 @@ class Valido
      *
      * @return true if valid user address street type number format is found, else false
      */
-    public static function testStType($st_type) : bool {
+    public static function testStType($st_type): bool {
         return filter_var($st_type, FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range"=> 32))) !== false;
     }
 
@@ -193,7 +192,7 @@ class Valido
      *
      * @return true if valid standard integer format is found, else false
      */
-    public static function testStdInt($integer) : bool {
+    public static function testStdInt($integer): bool {
         return filter_var($integer, FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range"=> 999999))) !== false;
     }
 

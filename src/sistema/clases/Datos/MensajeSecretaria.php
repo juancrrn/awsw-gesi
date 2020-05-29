@@ -8,12 +8,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Datos;
@@ -84,7 +83,7 @@ class MensajeSecretaria
         $this->contenido = $contenido;
     }
 
-    public static function fromDbFetch(Object $o) : self
+    public static function fromMysqlFetch(Object $o) : self
     {
         return new self(
             $o->id,
@@ -128,7 +127,7 @@ class MensajeSecretaria
         return $this->from_telefono;
     }
 
-    public function getFecha($format = null) : string
+    public function getFecha($format = null): string
     {
         if (! $format) {
             return $this->fecha;
@@ -139,7 +138,7 @@ class MensajeSecretaria
         }
     }
 
-    public function getContenido($length = null) : string
+    public function getContenido($length = null): string
     {
         if (! $length) {
             return $this->contenido;
@@ -156,7 +155,7 @@ class MensajeSecretaria
      *
      * @return array<MensajeSecretaria>
      */
-    public static function dbAny() : bool
+    public static function dbAny(): bool
     {    
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -212,7 +211,7 @@ class MensajeSecretaria
         $mensajes = array();
 
         while ($m = $result->fetch_object()) {
-            $mensajes[] = self::fromDbFetch($m);
+            $mensajes[] = self::fromMysqlFetch($m);
         }
         
         $sentencia->close();
@@ -252,7 +251,7 @@ class MensajeSecretaria
         $mensajes = array();
 
         while ($m = $resultado->fetch_object()) {
-            $mensajes[] = self::fromDbFetch($m);
+            $mensajes[] = self::fromMysqlFetch($m);
         }
 
         $sentencia->close();
@@ -294,7 +293,7 @@ class MensajeSecretaria
         $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-        $mensaje = self::fromDbFetch($resultado->fetch_object());
+        $mensaje = self::fromMysqlFetch($resultado->fetch_object());
         $sentencia->close();
         
         return $mensaje;
@@ -310,7 +309,7 @@ class MensajeSecretaria
      * @return int Identificador del MensajeSecretaria insertado.
      */
 
-     public function dbInsertar() : bool  {
+     public function dbInsertar(): bool  {
         $bbdd = App::getSingleton()->bbddCon();
         
         $sentencia = $bbdd->prepare("
@@ -364,7 +363,7 @@ class MensajeSecretaria
      *
      * @return bool
      */
-    public static function dbAnyByUsuario(int $id) : bool
+    public static function dbAnyByUsuario(int $id): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -407,7 +406,7 @@ class MensajeSecretaria
      *
      * @return bool
      */
-    public static function dbExisteId(int $id) : bool
+    public static function dbExisteId(int $id): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 

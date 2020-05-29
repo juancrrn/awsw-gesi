@@ -22,6 +22,29 @@ SET time_zone = "+00:00";
 -- Database: `gesidemo`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_asignaciones`
+--
+
+DROP TABLE IF EXISTS `gesi_asignaciones`;
+CREATE TABLE IF NOT EXISTS `gesi_asignaciones` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `profesor` int(16) NOT NULL,
+  `grupo` int(16) NOT NULL,
+  `asignatura` int(16) NOT NULL,
+  `horario` varchar(512) NOT NULL,
+  `foro_principal` int(16) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_grupo_asignatura` (`grupo`,`asignatura`),
+  UNIQUE KEY `unique_foro_principal` (`foro_principal`),
+  KEY `profesor` (`profesor`),
+  KEY `grupo` (`grupo`),
+  KEY `asignatura` (`asignatura`),
+  KEY `foro_principal` (`foro_principal`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_asignaciones`
 --
@@ -94,6 +117,22 @@ INSERT INTO `gesi_asignaciones` (`id`, `profesor`, `grupo`, `asignatura`, `horar
 (65, 18, 8, 48, 'L 00:00 00:00; M 00:00 00:00; X 00:00 00:00; J 00:00 00:00; V 00:00 00:00;', 65),
 (66, 19, 8, 54, 'L 00:00 00:00; M 00:00 00:00; X 00:00 00:00; J 00:00 00:00; V 00:00 00:00;', 66);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_asignaturas`
+--
+
+DROP TABLE IF EXISTS `gesi_asignaturas`;
+CREATE TABLE IF NOT EXISTS `gesi_asignaturas` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nivel` int(1) NOT NULL,
+  `curso_escolar` int(16) NOT NULL,
+  `nombre_corto` varchar(256) NOT NULL,
+  `nombre_completo` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_asignaturas`
 --
@@ -153,6 +192,32 @@ INSERT INTO `gesi_asignaturas` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, 
 (52, 4, 2019, 'E4LC', 'Lengua castellana y Literatura ESO 4'),
 (53, 5, 2019, 'B1LC', 'Lengua castellana y Literatura Bach. 1'),
 (54, 6, 2019, 'B2LC', 'Lengua castellana y Literatura Bach. 2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_ejemplar_libro`
+--
+
+DROP TABLE IF EXISTS `gesi_ejemplar_libro`;
+CREATE TABLE IF NOT EXISTS `gesi_ejemplar_libro` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `numero` int(16) NOT NULL,
+  `libro` int(16) NOT NULL,
+  `prestado` tinyint(1) DEFAULT 0,
+  `usuario_prestamo` int(16) DEFAULT NULL,
+  `fecha_alta_prestamo` int(11) DEFAULT NULL,
+  `fecha_expiracion_prestamo` int(11) DEFAULT NULL,
+  `reserva` tinyint(1) DEFAULT 0,
+  `usuario_reserva` int(16) DEFAULT NULL,
+  `fecha_alta_reserva` int(11) DEFAULT NULL,
+  `fecha_expiracion_reserva` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_numero_libro` (`numero`,`libro`) USING BTREE,
+  KEY `libro` (`libro`),
+  KEY `usuario_prestamo` (`usuario_prestamo`),
+  KEY `usuario_reserva` (`usuario_reserva`)
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gesi_ejemplar_libro`
@@ -260,6 +325,26 @@ INSERT INTO `gesi_ejemplar_libro` (`id`, `numero`, `libro`, `prestado`, `usuario
 (99, 1, 99, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL),
 (100, 1, 100, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_eventos`
+--
+
+DROP TABLE IF EXISTS `gesi_eventos`;
+CREATE TABLE IF NOT EXISTS `gesi_eventos` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `fecha` datetime NOT NULL,
+  `nombre` varchar(256) NOT NULL,
+  `descripcion` mediumtext NOT NULL,
+  `lugar` varchar(256) NOT NULL,
+  `asignatura` int(16) DEFAULT NULL,
+  `asignacion` int(16) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `asignatura` (`asignatura`),
+  KEY `asignacion` (`asignacion`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_eventos`
 --
@@ -331,6 +416,19 @@ INSERT INTO `gesi_eventos` (`id`, `fecha`, `nombre`, `descripcion`, `lugar`, `as
 (64, '2019-09-11 20:24:26', 'Bienvenida a la asignatura de Griego y Latín Bach. 2 (Grupo B Bach. 2)', 'Los profesores os damos la bienvenida a la asignatura y os presentamos cómo la desarrollaremos.', 'Aula del grupo', NULL, 64),
 (65, '2019-09-15 14:53:23', 'Bienvenida a la asignatura de Música Bach. 2 (Grupo B Bach. 2)', 'Los profesores os damos la bienvenida a la asignatura y os presentamos cómo la desarrollaremos.', 'Aula del grupo', NULL, 65),
 (66, '2019-09-14 00:53:49', 'Bienvenida a la asignatura de Lengua castellana y Literatura Bach. 2 (Grupo B Bach. 2)', 'Los profesores os damos la bienvenida a la asignatura y os presentamos cómo la desarrollaremos.', 'Aula del grupo', NULL, 66);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_foros`
+--
+
+DROP TABLE IF EXISTS `gesi_foros`;
+CREATE TABLE IF NOT EXISTS `gesi_foros` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gesi_foros`
@@ -404,6 +502,24 @@ INSERT INTO `gesi_foros` (`id`, `nombre`) VALUES
 (65, 'Foro Música Bach. 2 (Grupo B Bach. 2)'),
 (66, 'Foro Lengua castellana y Literatura Bach. 2 (Grupo B Bach. 2)');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_grupos`
+--
+
+DROP TABLE IF EXISTS `gesi_grupos`;
+CREATE TABLE IF NOT EXISTS `gesi_grupos` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nivel` int(1) NOT NULL,
+  `curso_escolar` int(16) NOT NULL,
+  `nombre_corto` varchar(256) NOT NULL,
+  `nombre_completo` varchar(256) NOT NULL,
+  `tutor` int(16) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tutor` (`tutor`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_grupos`
 --
@@ -417,6 +533,25 @@ INSERT INTO `gesi_grupos` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nomb
 (6, 5, 2019, 'B1B', 'Grupo B Bach. 1', 14),
 (7, 6, 2019, 'B1A', 'Grupo A Bach. 2', 16),
 (8, 6, 2019, 'B1B', 'Grupo B Bach. 2', 18);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_libros`
+--
+
+DROP TABLE IF EXISTS `gesi_libros`;
+CREATE TABLE IF NOT EXISTS `gesi_libros` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `autor` varchar(256) NOT NULL,
+  `titulo` varchar(256) NOT NULL,
+  `asignatura` int(16) DEFAULT NULL,
+  `isbn` varchar(13) NOT NULL,
+  `editorial` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `isbn` (`isbn`),
+  KEY `asignatura` (`asignatura`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gesi_libros`
@@ -524,6 +659,26 @@ INSERT INTO `gesi_libros` (`id`, `autor`, `titulo`, `asignatura`, `isbn`, `edito
 (99, 'Roxy McLeary', 'Apollo 13: To the Edge and Back', NULL, '9783311756442', 'Schroeder and Sons'),
 (100, 'Constantia Pease', 'Supporting Characters', NULL, '9783520906098', 'Cummings, McLaughlin and Greenfelder');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_mensajes_foros`
+--
+
+DROP TABLE IF EXISTS `gesi_mensajes_foros`;
+CREATE TABLE IF NOT EXISTS `gesi_mensajes_foros` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `foro` int(16) NOT NULL,
+  `padre` int(16) DEFAULT NULL,
+  `usuario` int(16) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `contenido` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `foro` (`foro`),
+  KEY `padre` (`padre`),
+  KEY `usuario` (`usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_mensajes_foros`
 --
@@ -595,6 +750,25 @@ INSERT INTO `gesi_mensajes_foros` (`id`, `foro`, `padre`, `usuario`, `fecha`, `c
 (64, 64, NULL, 16, '2019-09-11 20:24:26', '¡Hola!\nOs doy la bienvenida al foro de Griego y Latín Bach. 2 (Grupo B Bach. 2).\nAquí pondré los recursos de la asignatura.\n¡Ánimo!'),
 (65, 65, NULL, 18, '2019-09-15 14:53:23', '¡Hola!\nOs doy la bienvenida al foro de Música Bach. 2 (Grupo B Bach. 2).\nAquí pondré los recursos de la asignatura.\n¡Ánimo!'),
 (66, 66, NULL, 19, '2019-09-14 00:53:49', '¡Hola!\nOs doy la bienvenida al foro de Lengua castellana y Literatura Bach. 2 (Grupo B Bach. 2).\nAquí pondré los recursos de la asignatura.\n¡Ánimo!');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_mensajes_secretaria`
+--
+
+DROP TABLE IF EXISTS `gesi_mensajes_secretaria`;
+CREATE TABLE IF NOT EXISTS `gesi_mensajes_secretaria` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `usuario` int(16) DEFAULT NULL,
+  `from_nombre` varchar(256) DEFAULT NULL,
+  `from_email` varchar(256) DEFAULT NULL,
+  `from_telefono` varchar(32) DEFAULT NULL,
+  `fecha` datetime NOT NULL,
+  `contenido` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `usuario` (`usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gesi_mensajes_secretaria`
@@ -742,6 +916,31 @@ INSERT INTO `gesi_mensajes_secretaria` (`id`, `usuario`, `from_nombre`, `from_em
 (139, NULL, 'Alyosha Kobieriecki', 'akobieriecki12@bluehost.com', '859 402 7130', '2020-05-18 18:53:19', 'Innovative cohesive orchestration'),
 (140, NULL, 'Ainslie Chimienti', 'achimienti13@eepurl.com', '388 596 3274', '2019-11-30 12:37:16', 'Synergized scalable hierarchy');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gesi_usuarios`
+--
+
+DROP TABLE IF EXISTS `gesi_usuarios`;
+CREATE TABLE IF NOT EXISTS `gesi_usuarios` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `nif` varchar(256) NOT NULL,
+  `rol` int(1) NOT NULL,
+  `nombre` varchar(256) NOT NULL,
+  `apellidos` varchar(256) NOT NULL,
+  `password` varchar(512) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `numero_telefono` varchar(32) NOT NULL,
+  `email` varchar(256) NOT NULL,
+  `fecha_ultimo_acceso` datetime DEFAULT NULL,
+  `fecha_registro` datetime NOT NULL,
+  `grupo` int(16) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nif_nie` (`nif`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `gesi_usuarios`
 --
@@ -847,6 +1046,60 @@ INSERT INTO `gesi_usuarios` (`id`, `nif`, `rol`, `nombre`, `apellidos`, `passwor
 (98, '54767205L', 1, 'Neil', 'Hurley Perry', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '2004-07-29', '501163074', 'neil.hurleyperry@email.invalid', NULL, '2020-05-27 00:00:00', 8),
 (99, '87501711M', 1, 'Serena', 'Gilbert Potts', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1995-12-30', '230706449', 'serena.gilbertpotts@email.invalid', NULL, '2020-05-27 00:00:00', 8),
 (100, '12672046N', 1, 'Blossom', 'Hutchinson Decker', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1996-06-14', '054144217', 'blossom.hutchinsondecker@email.invalid', NULL, '2020-05-27 00:00:00', 8);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `gesi_asignaciones`
+--
+ALTER TABLE `gesi_asignaciones`
+  ADD CONSTRAINT `gesi_asignaciones_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`),
+  ADD CONSTRAINT `gesi_asignaciones_fk_foro_principal` FOREIGN KEY (`foro_principal`) REFERENCES `gesi_foros` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_asignaciones_fk_grupo` FOREIGN KEY (`grupo`) REFERENCES `gesi_grupos` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_asignaciones_fk_profesor` FOREIGN KEY (`profesor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_ejemplar_libro`
+--
+ALTER TABLE `gesi_ejemplar_libro`
+  ADD CONSTRAINT `gesi_ejemplar_libro_fk_libro` FOREIGN KEY (`libro`) REFERENCES `gesi_libros` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_ejemplar_libro_fk_usuario_prestamo` FOREIGN KEY (`usuario_prestamo`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_ejemplar_libro_fk_usuario_reserva` FOREIGN KEY (`usuario_reserva`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_eventos`
+--
+ALTER TABLE `gesi_eventos`
+  ADD CONSTRAINT `gesi_eventos_fk_asignacion` FOREIGN KEY (`asignacion`) REFERENCES `gesi_asignaciones` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_eventos_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_grupos`
+--
+ALTER TABLE `gesi_grupos`
+  ADD CONSTRAINT `gesi_grupos_fk_tutor` FOREIGN KEY (`tutor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_libros`
+--
+ALTER TABLE `gesi_libros`
+  ADD CONSTRAINT `gesi_libros_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_mensajes_foros`
+--
+ALTER TABLE `gesi_mensajes_foros`
+  ADD CONSTRAINT `gesi_mensajes_foros_fk_foro` FOREIGN KEY (`foro`) REFERENCES `gesi_foros` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_mensajes_foros_fk_padre` FOREIGN KEY (`padre`) REFERENCES `gesi_mensajes_foros` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gesi_mensajes_foros_fk_usuario` FOREIGN KEY (`usuario`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `gesi_mensajes_secretaria`
+--
+ALTER TABLE `gesi_mensajes_secretaria`
+  ADD CONSTRAINT `gesi_mensajes_secretaria_fk_usuario` FOREIGN KEY (`usuario`) REFERENCES `gesi_usuarios` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

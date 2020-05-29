@@ -9,12 +9,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas;
@@ -41,7 +40,7 @@ class Vista
      * @param string $nombre Nombre de la página actual.
      * @param string $id Identificador de la página actual.
      */
-    private static function setPaginaActual(string $nombre, string $id) : void
+    private static function setPaginaActual(string $nombre, string $id): void
     {
         self::$pagina_actual_nombre = $nombre;
         self::$pagina_actual_id = $id;
@@ -52,7 +51,7 @@ class Vista
      * 
      * @return string Nombre de la página actual.
      */
-    public static function getPaginaActualNombre() : string
+    public static function getPaginaActualNombre(): string
     {
         return self::$pagina_actual_nombre;
     }
@@ -62,7 +61,7 @@ class Vista
      * 
      * @return string Id de la página actual.
      */
-    public static function getPaginaActualId() : string
+    public static function getPaginaActualId(): string
     {
         return self::$pagina_actual_id;
     }
@@ -70,7 +69,7 @@ class Vista
     /**
      * Incluye la cabecera HTML.
      */
-    private static function incluirCabecera() : void
+    private static function incluirCabecera(): void
     {
         require_once self::DIRECTORIO_COMUN . "cabecera.php";
     }
@@ -78,7 +77,7 @@ class Vista
     /**
      * Incluye el pie HTML.
      */
-    private static function incluirPie() : void
+    private static function incluirPie(): void
     {
         require_once self::DIRECTORIO_COMUN . "pie.php";
     }
@@ -96,7 +95,7 @@ class Vista
      * @param string $header_location Opcional para redirigir al mismo tiempo 
      * que se encola el mensaje.
      */
-    public static function encolaMensajeError(string $mensaje, string $header_location = null) : void
+    public static function encolaMensajeError(string $mensaje, string $header_location = null): void
     {
         $_SESSION[self::SESSION_MENSAJES][] = array(
             "tipo" => "error",
@@ -116,7 +115,7 @@ class Vista
      * @param string $header_location Opcional para redirigir al mismo tiempo 
      * que se encola el mensaje.
      */
-    public static function encolaMensajeExito(string $mensaje, string $header_location = null) : void
+    public static function encolaMensajeExito(string $mensaje, string $header_location = null): void
     {
         $_SESSION[self::SESSION_MENSAJES][] = array(
             "tipo" => "exito",
@@ -132,7 +131,7 @@ class Vista
     /**
      * Genera un elemento Bootstrap toast para mostrar un mensaje.
      */
-    public static function generaToast(string $tipo, string $contenido) : string
+    public static function generaToast(string $tipo, string $contenido): string
     {
         $app = App::getSingleton();
         $autohide = $app->isDesarrollo() ? 'false' : 'true';
@@ -155,7 +154,7 @@ class Vista
     /**
      * Imprime todos los mensajes de la cola de mensajes.
      */
-    public static function imprimeMensajes() : void
+    public static function imprimeMensajes(): void
     {
         echo '<div id="toasts-container" aria-live="polite" aria-atomic="true">';
 
@@ -174,7 +173,7 @@ class Vista
     /**
      * Comprueba si hay algún mensaje de error en la cola de mensajes.
      */
-    public static function hayMensajesError() : bool
+    public static function hayMensajesError(): bool
     {
         if (! empty($_SESSION[self::SESSION_MENSAJES])) {
             foreach ($_SESSION[self::SESSION_MENSAJES] as $mensaje) {
@@ -190,7 +189,7 @@ class Vista
     /**
      * Dibuja una vista completa.
      */
-    public static function dibuja(Modelo $vista) : void
+    public static function dibuja(Modelo $vista): void
     {
         self::setPaginaActual($vista->getNombre(), $vista->getId());
         
@@ -224,7 +223,7 @@ class Vista
      * @param string $paginaId Identificador de la página de destino, para saber
      *                         si es la actual.
      */
-    public static function generarSideMenuLink(string $url, $vistaClase) : string
+    public static function generarSideMenuLink(string $url, $vistaClase): string
     {
         $paginaId = $vistaClase::VISTA_ID;
         $titulo = $vistaClase::VISTA_NOMBRE;
@@ -253,7 +252,7 @@ class Vista
      * @param string|null $paginaId Identificador de la página de destino, para 
      *                              saber si es la actual.
      */
-    public static function generarUserMenuItem(string $content, $paginaId = null) : string
+    public static function generarUserMenuItem(string $content, $paginaId = null): string
     {
         $activeClass = Vista::getPaginaActualId() === $paginaId ? 'active' : '';
 
@@ -275,7 +274,7 @@ class Vista
      * @param string $paginaId Identificador de la página de destino, para saber
      *                         si es la actual.
      */
-    public static function generarSideMenuDivider(string $titulo) : string
+    public static function generarSideMenuDivider(string $titulo): string
     {
         $classAttr = 'class="list-group-item mt-3 side-menu-divider"';
 

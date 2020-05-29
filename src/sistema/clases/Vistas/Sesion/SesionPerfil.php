@@ -10,12 +10,11 @@
  * Aplicación de gestión de institutos de educación secundaria
  *
  * @author Andrés Ramiro Ramiro
- * @author Cintia María Herrera Arenas
  * @author Nicolás Pardina Popp
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.2
+ * @version 0.0.4-beta.01
  */
 
 namespace Awsw\Gesi\Vistas\Sesion;
@@ -75,6 +74,296 @@ class SesionPerfil extends Modelo
                 <label>NIF o NIE</label>
                 <input type="text" class="form-control" value="$nif" disabled="disabled">
             </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">

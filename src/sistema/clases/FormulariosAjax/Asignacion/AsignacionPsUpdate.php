@@ -26,7 +26,7 @@ use Awsw\Gesi\Validacion\GesiScheduleSlot;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4
+ * @version 0.0.4-beta.01
  */
 
 class AsignacionPsUpdate extends FormularioAjax
@@ -146,7 +146,7 @@ class AsignacionPsUpdate extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs() : string
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
@@ -180,7 +180,7 @@ class AsignacionPsUpdate extends FormularioAjax
         return $html;
     }
 
-    public function processSubmit(array $data = array()) : void
+    public function processSubmit(array $data = array()): void
     {
         $uniqueId = $data['uniqueId'] ?? null;
 
