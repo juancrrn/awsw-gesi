@@ -65,10 +65,9 @@ class GesiScheduleSlot
         $day = '[LMXJVSD]{1}';
         $number = '(?:[0-9]{1,2})';
         $slot = "$day $number:$number $number:$number;";
-
-        $format = "$slot";
+        
         // TODO: comprobar que las horas son válidas.
-        return preg_match_all("#$format#", $schedule) > 1;
+        return preg_match_all("#$slot#", $schedule) > 0;
     }
 
     /**
@@ -80,9 +79,7 @@ class GesiScheduleSlot
         $number = '([0-9]{1,2})';
         $slot = "$day $number:$number $number:$number;";
 
-        $format = "$slot";
-
-        preg_match_all("#$format#", $schedule, $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all("#$slot#", $schedule, $matches, PREG_OFFSET_CAPTURE);
 
         $result = array();
 

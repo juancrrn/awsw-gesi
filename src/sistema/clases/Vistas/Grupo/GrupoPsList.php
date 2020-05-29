@@ -29,10 +29,10 @@ use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate as GrupoPsCreate;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate as GrupoPsUpdate;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead as GrupoPsRead;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete as GrupoPsDelete;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate as FormGrupoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate as FormGrupoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead as FormGrupoPsRead;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete as FormGrupoPsDelete;
 
 use Awsw\Gesi\Sesion;
 
@@ -74,22 +74,22 @@ class GrupoPsList extends Modelo
         public function generarListaGrupos(): string
         {
             //Create grupo
-            $formGrupoPsCreate = new GrupoPsCreate();
+            $formGrupoPsCreate = new FormGrupoPsCreate();
             $formGrupoPsCreateModal = $formGrupoPsCreate->generateModal();
 
             //Editar grupo
 
-            $formGrupoPsUpdate = new GrupoPsUpdate();
+            $formGrupoPsUpdate = new FormGrupoPsUpdate();
             $formGrupoPsUpdateModal = $formGrupoPsUpdate->generateModal();
             //Read grupo
 
-            $formGrupoPsRead = new GrupoPsRead();
+            $formGrupoPsRead = new FormGrupoPsRead();
             $formGrupoPsReadModal = $formGrupoPsRead->generateModal();
 
 
             //Delete grupo
 
-            $formGrupoPsDelete = new GrupoPsDelete();
+            $formGrupoPsDelete = new FormGrupoPsDelete();
             $formGrupoPsDeleteModal = $formGrupoPsDelete->generateModal();
 
             $listaGrupoBuffer = '';
@@ -97,7 +97,7 @@ class GrupoPsList extends Modelo
             if(! empty($this->listadoGrupo)){
                 foreach($this->listadoGrupo as $u){
                     $uniqueId = $u->getId();
-                    $nivel = $u->getNivelRaw();
+                    $nivel = $u->getNivel();
                   //  $curso_escolar = $u->getCursoEscolarRaw();
                    // $nombre_corto = $u->getNombreCorto();
                     $nombre_completo = $u->getNombreCompleto();
@@ -145,8 +145,8 @@ class GrupoPsList extends Modelo
             
             </table>
             $formGrupoPsCreateModal
-            $formGrupoPsUpdateModal
             $formGrupoPsReadModal
+            $formGrupoPsUpdateModal
             $formGrupoPsDeleteModal
             HTML;
 

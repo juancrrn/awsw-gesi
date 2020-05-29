@@ -157,6 +157,7 @@ class Asignatura
 		$sentencia->execute();
 
 		$id_insertado = $bbdd->insert_id;
+		$this->id = $id_insertado;
 
 		$sentencia->close();
 
@@ -422,6 +423,8 @@ class Asignatura
 			'id' => $this->getId(),
 			'nivel' => $this->getNivelRaw(),
 			'curso_escolar' => $this->getCursoEscolarRaw(),
+			'nivelEscolar' => $this->getNivel(),
+			'curso' => $this->getCursoEscolar(),
 			'nombre_corto' => $this->getNombreCorto(),
 			'nombre_completo' => $this->getNombreCompleto(),
 			'checkbox' => $this->getId()

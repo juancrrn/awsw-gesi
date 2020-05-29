@@ -243,22 +243,26 @@ class Libro
 
 		$sentencia->bind_result(
 			$result_id,
-			$result_libro_id,
 			$result_numero,
+			$result_libro_id,
 			$result_prestado,
 			$result_fecha_alta_prestamo,
 			$result_fecha_expiracion_prestamo,
-			$result_fecha_alta_reserva
+			$result_reserva,
+			$result_fecha_alta_reserva,
+			$fecha_expiracion_reserva
 		);
 		while($sentencia->fetch()) {
 			$ejemplares[] = new EjemplarLibro(
 				$result_id,
-				$result_libro_id,
 				$result_numero,
+				$result_libro_id,
 				$result_prestado,
 				$result_fecha_alta_prestamo,
 				$result_fecha_expiracion_prestamo,
-				$result_fecha_alta_reserva
+				$result_reserva,
+				$result_fecha_alta_reserva,
+				$fecha_expiracion_reserva
 			);
 		}
 		

@@ -37,7 +37,7 @@ class GrupoPsRead extends FormularioAjax
     private const FORM_ID = 'grupo-read';
     private const FORM_NAME = 'Ver Grupo';
     private const TARGET_CLASS_NAME = 'Grupo';
-    private const SUBMIT_URL = '/admin/grupo/read/';
+    private const SUBMIT_URL = '/ps/grupo/read/';
 
     /**
      * Constructs the form object
@@ -73,7 +73,7 @@ class GrupoPsRead extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Grupo::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found.
@@ -87,19 +87,17 @@ class GrupoPsRead extends FormularioAjax
         
        // Formalizacion HATEOAS de niveles.
        $nivelesLink = FormularioAjax::generateHateoasSelectLink(
-        'nivel',
-        'single',
-        Valido::getNivelesHateoas()
-    );
+            'nivel',
+            'single',
+            Valido::getNivelesHateoas()
+        );
 
-    // Formalización HATEOAS de tutores.
-    $tutoresLink = FormularioAjax::generateHateoasSelectLink(
-        'tutor',
-        'single',
-        Usuario::dbGetByRol(2)
-    );
-
-       
+        // Formalización HATEOAS de tutores.
+        $tutoresLink = FormularioAjax::generateHateoasSelectLink(
+            'tutor',
+            'single',
+            Usuario::dbGetByRol(2)
+        );
 
         // Map data to match placeholder inputs' names
         $responseData = array(
@@ -115,41 +113,39 @@ class GrupoPsRead extends FormularioAjax
 
     public function generateFormInputs() : string
     {
+
+       
         $html = <<< HTML
         <div class="form-group">
-            <label for="nivel">Nivel</label>
-            <select class="form-control" name="nivel" id="nivel" required="required">
+            <label >Nivel</label>
+            <input class="form-control" type="text" name="nivel"   disabled="disabled">
             </select>
         </div>
         <div class="form-group">
-        <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+            <label >Curso escolar</label>
+            <input class="form-control" type="text" name="curso"    disabled="disabled" />
         </div>
         <div class="form-group">
-        <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+            <label >Nombre completo</label>
+            <input class="form-control" type="text" name="completo"    disabled="disabled" />
         </div>
         <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label for="nombre_corto">Nombre corto</label>
+            <input class="form-control" type="text" name="corto"   disabled="disabled" />
         </div>
         <div class="form-group">
-        <label for="tutor">Tutor</label>
-            <select class="form-control" name="tutor" id="tutor" required="required">
+        <label >Tutor</label>
+            <select class="form-control" name="tutor" id="tutor" disabled="disabled">
             </select>
         </div>
-        
-            
-            
-        
         HTML;
-
-
         return $html;
     }
 
     public function processSubmit(array $data = array()) : void
     {
+
+
     }
 }
 

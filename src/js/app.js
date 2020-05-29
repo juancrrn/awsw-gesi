@@ -26,9 +26,12 @@ toast = {};
  */
 toast.create = (type, text) =>
 {
-    var autohide = autoconf.APP_PRODUCTION;
-    var appName = autoconf.APP_NAME;
-    var toastHtml = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="' + autohide + '" data-delay="3000"><div class="toast-header"><span class="type-indicator ' + type + '"></span><strong class="mr-auto">' + appName + '</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="toast-body">' + text + '</div></div>';
+    const autohide = autoconf.APP_PRODUCTION;
+    const appName = autoconf.APP_NAME;
+
+    const dismisAllButton = '<button type="button" class="toasts-remove-all btn btn-outline-secondary btn-sm">Ocultar todo</button>';
+    
+    const toastHtml = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="' + autohide + '" data-delay="3000"><div class="toast-header"><span class="type-indicator ' + type + '"></span><strong class="mr-auto">' + appName + '</strong>' + dismisAllButton + '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="toast-body">' + text + '</div></div>';
 
     const $toast = $(toastHtml);
 
@@ -147,15 +150,23 @@ $(() => {
     $('#toasts-container .toast').toast('show');
 
     /**
-     * Side menu
+     * Ocultar todos los toast.
+     */
+    $(document).on('click', '.toasts-remove-all', () => {
+        $('#toasts-container .toast').fadeOut(300, function() {
+            $(this).remove();
+        });
+    });
+
+    /**
+     * Side menu.
      */
     $('#btn-side-menu-show').on('click', (e) => {
         e.preventDefault();
         $('#side-menu-wrapper').addClass('active');
     });
 
-    $('#btn-side-menu-hide, #toasts-container, #main-container, #main-footer').on('click', (e) => {
-        // e.preventDefault(); ???
+    $('#btn-side-menu-hide, #toasts-container, #main-container, #main-footer').on('click', () => {
         $('#side-menu-wrapper').removeClass('active');
     });
 
@@ -166,17 +177,17 @@ $(() => {
     });
 
     /**
-     * Loading progress bar
+     * Loading progress bar.
      */
     var $loadingProgressBar = $('#loading-progress-bar');
 
     /**
-     * AJAX form initialization
+     * AJAX form initialization.
      */
     $(document).on('click', '.btn-ajax-modal-fire', (e) => {
         var $btn = $(e.currentTarget);
 
-        // Get formId
+        // Get formId.
         var formId = $btn.data('ajax-form-id');
 
         var $modal = $('.ajax-modal[data-ajax-form-id="' + formId + '"]');
@@ -351,9 +362,7 @@ $(() => {
     });
 
     /**
-     * 
-     * Gestión de CRUD on-success de usuario estudiante.
-     * 
+     * Vista de lista de usuarios (personal de Secretaría).
      */
 
     $('#usuario-est-lista').on('created.usuario.est',
@@ -362,24 +371,12 @@ $(() => {
         onSuccessFn.listaUsuariosUpdated);
     $('#usuario-est-lista').on('deleted.usuario.est',
         onSuccessFn.listaUsuariosDeleted);
-
-    /**
-     * 
-     * Gestión de CRUD on-success de usuario de personal docente.
-     * 
-     */
-    
     $('#usuario-pd-lista').on('created.usuario.pd',
         onSuccessFn.listaUsuariosPdCreated);
     $('#usuario-pd-lista').on('updated.usuario.pd',
         onSuccessFn.listaUsuariosUpdated);
     $('#usuario-pd-lista').on('deleted.usuario.pd',
         onSuccessFn.listaUsuariosDeleted);
-
-    /**
-     * Gestionar el evento on-success del formulario de creación de usuario 
-     * de personal de Secretaría.
-     */
     $('#usuario-ps-lista').on('created.usuario.ps',
         onSuccessFn.listaUsuariosPsCreated);
     $('#usuario-ps-lista').on('updated.usuario.ps',
@@ -390,49 +387,38 @@ $(() => {
     /**
      * Vista de asignaciones (personal de Secretaría).
      */
+
     $('#asignacion-ps-list').on('created.asignacion',
         onSuccessFn.listaPsAsignacionesCreated);
+    $('#asignacion-ps-list').on('updated.asignacion',
+        onSuccessFn.listaPsAsignacionesUpdated);
 
     /**
-     * Gestionar el evneto on-success del formulario de creación de mensaje de 
-     * Secretaría con sesión iniciada.
+     * Vista de lista de mensajes de Secretaría (usuario en sesión).
      */
+
     $('#mensaje-secretaria-ses-list').on('created.ses.mensajesecretaria',
         onSuccessFn.listaSesMensajesSecretariaCreated);
 
     /**
-     * 
-     * Gestionar el evento on-success de la lista de asignaturas
-     * 
+     * Vista de lista de asignaturas (personal de Secretaría).
      */
 
     $('#asignatura-ps-list').on('created.asignatura',
         onSuccessFn.listaPsAsignaturasCreated);
-    /*$('#asignatura-ps-list').on('updated.asignatura',
-        onSuccessFn.listaAsignaturasUpdated);*/
+    $('#asignatura-ps-list').on('updated.asignatura',
+        onSuccessFn.listaPsAsignaturasUpdated);
     $('#asignatura-ps-list').on('deleted.asignatura',
         onSuccessFn.listaPsAsignaturasDeleted);
 
     /**
-     * Gestiona el evento on-succes del formulario de creacion de grupo con 
-     * sesión iniciada.
+     * Vista de lista de grupos (personal de Secretaría).
     */
-    $('#grupo-ps-list').on('created.grupo',
-        onSuccessFn.listaGrupoCreated);
 
-    /**
-     * Gestiona el evento on-succes del formulario de edicion de grupo con 
-     * sesion iniciada.
-    */
-    $('#grupo-ps-list').on('updated.grupo',
-        onSuccessFn.listaGrupoUpdated);    
-    
-    /**
-     * Gestiona el evento on-succes del formulario de eliminacion de grupo con 
-     * sesion iniciada.
-    */
-     $('#grupo-ps-list').on('deleted.grupo',
+    $('#grupo-list').on('created.grupo',
+        onSuccessFn.listaGrupoCreated);
+    $('#grupo-list').on('updated.grupo',
+        onSuccessFn.listaGrupoUpdated);
+    $('#grupo-list').on('deleted.grupo',
         onSuccessFn.listaGrupoDeleted);  
-    
-    
 });

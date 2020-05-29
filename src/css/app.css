@@ -64,6 +64,21 @@
     font-weight: bold;
 }
 
+#user-menu-mobile {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    #user-menu {
+        display: none;
+    }
+
+    #user-menu-mobile {
+        display: block;
+    }
+}
+
+
 /**
  * Barra indicadora de carga.
  */

@@ -77,7 +77,7 @@ class AsignacionPsCreate extends FormularioAjax
         $profesorLink = FormularioAjax::generateHateoasSelectLink(
             'profesor',
             'single',
-            Usuario::dbGetAll()
+            Usuario::dbGetByRol(2)
         );
         
         // Formalización HATEOAS de asignatura.
@@ -150,33 +150,40 @@ class AsignacionPsCreate extends FormularioAjax
 
     public function processSubmit(array $data = array()) : void
     {
-        $profesor = $data['profesor'] ?? null;
-        $asignatura = $data['asignatura'] ?? null;
-        $grupo = $data['grupo'] ?? null;
+        $profesorId = $data['profesor'] ?? null;
+        $asignaturaId = $data['asignatura'] ?? null;
+        $grupoId = $data['grupo'] ?? null;
         $horario = $data['horario'] ?? null;
-        $foroPrincipal = $data['foroPrincipal'] ?? null;
+        $foroPrincipalId = $data['foroPrincipal'] ?? null;
 
-        if (! empty($asignatura) && ! empty($grupo) && Asignacion::dbExisteByAsignaturaGrupo($asignatura, $grupo)) {
+        if (! empty($asignaturaId) && ! empty($grupoId) && 
+            Asignacion::dbExisteByAsignaturaGrupo($asignaturaId, $grupoId)) {
             $errors[] = 'Ya existe una asignación para la asignatura y el grupo indicados.';
 
             $this->respondJsonError(409, $errors); // Conflict.
         }
 
-        if (empty($profesor)) {
+        if (empty($profesorId)) {
             $errors[] = 'El campo profesor no puede estar vacío.';
-        } elseif (! Usuario::dbExisteId($profesor)) {
+        } elseif (! Usuario::dbExisteId($profesorId)) {
             $errors[] = 'El campo profesor no es válido. Comprueba que el profesor existe.';
+        } else {
+            $profesor = Usuario::dbGet($profesorId);
+
+            if (! $profesor->isPd()) {
+                $errors[] = 'El campo profesor no es válido. Comprueba que el usuario seleccionado tiene el rol de personal docente.';
+            }
         }
 
-        if (empty($asignatura)) {
+        if (empty($asignaturaId)) {
             $errors[] = 'El campo asignatura no puede estar vacío.';
-        } elseif (! Asignatura::dbExisteId($asignatura)) {
+        } elseif (! Asignatura::dbExisteId($asignaturaId)) {
             $errors[] = 'El campo asignatura no es válido. Comprueba que la asignatura existe.';
         }
 
-        if (empty($grupo)) {
+        if (empty($grupoId)) {
             $errors[] = 'El campo grupo no puede estar vacío.';
-        } elseif (! Grupo::dbExisteId($grupo)) {
+        } elseif (! Grupo::dbExisteId($grupoId)) {
             $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
         }
 
@@ -186,9 +193,9 @@ class AsignacionPsCreate extends FormularioAjax
             $errors[] = 'El campo horario no es válido. Comprueba que el formato.';
         }
 
-        if (empty($foroPrincipal)) {
+        if (empty($foroPrincipalId)) {
             $errors[] = 'El campo foro principal no puede estar vacío.';
-        } elseif (! Foro::dbExisteId($foroPrincipal)) {
+        } elseif (! Foro::dbExisteId($foroPrincipalId)) {
             $errors[] = 'El campo foro principal no es válido. Comprueba que el foro existe.';
         }
 
@@ -198,11 +205,11 @@ class AsignacionPsCreate extends FormularioAjax
         } else {
             $asignacion = new Asignacion(
                 null,
-                $asignatura,
-                $grupo,
-                $profesor,
+                $asignaturaId,
+                $grupoId,
+                $profesorId,
                 $horario,
-                $foroPrincipal
+                $foroPrincipalId
             );
 
             $asignacion_id = $asignacion->dbInsertar();
@@ -212,7 +219,7 @@ class AsignacionPsCreate extends FormularioAjax
                 $profesorLink = FormularioAjax::generateHateoasSelectLink(
                     'profesor',
                     'single',
-                    Usuario::dbGet($asignacion->getProfesor())
+                    $profesor
                 );
                 
                 // Formalización HATEOAS de asignatura.

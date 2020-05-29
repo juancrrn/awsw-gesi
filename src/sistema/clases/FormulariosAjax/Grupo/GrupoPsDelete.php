@@ -4,9 +4,9 @@ namespace Awsw\Gesi\FormulariosAjax\Grupo;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Datos\Asignacion;
 
 /**
  * Formulario AJAX para eliminar un grupo parte de un administrador (personal 
@@ -39,11 +39,11 @@ class GrupoPsDelete extends FormularioAjax
      */
     private const FORM_ID = 'grupo-delete';
     private const FORM_NAME = 'Eliminar grupo';
-    private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/grupo/delete/';
+    private const TARGET_OBJECT_NAME = 'Grupo';
+    private const SUBMIT_URL = '/ps/grupo/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list';
 
     public function __construct()
     {
@@ -110,13 +110,17 @@ class GrupoPsDelete extends FormularioAjax
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label>Nombre del grupo</label>
-            <input name="nombre" type="text" class="form-control"  disabled="disabled">
+            <label>Nombre</label>
+            <input name="nombreCompleto" type="text" class="form-control" disabled="disabled">
+        </div>
+        <div class="form-group">
+            <label>Nivel</label>
+            <input name="nivel" type="text" class="form-control" disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="usuario-est-delete-checkbox" required="required">
-                <label class="custom-control-label" for="usuario-est-delete-checkbox">Confirmar la eliminación.</label>
+                <input type="checkbox" class="custom-control-input" name="checkbox" id="grupo-delete-checkbox" required="required">
+                <label class="custom-control-label" for="grupo-delete-checkbox">Confirmar la eliminación.</label>
             </div>
         </div>
         HTML;
@@ -126,6 +130,7 @@ class GrupoPsDelete extends FormularioAjax
     
     public function processSubmit(array $data = array()) : void
     {
+
         $uniqueId = $data['uniqueId'] ?? null;
         $checkbox = $data['checkbox'] ?? null;
         
@@ -148,21 +153,35 @@ class GrupoPsDelete extends FormularioAjax
         }
         
         // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Grupo::dbExisteId($uniqueId)) {
             $errors[] = 'El grupo solicitado no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        if (Grupo::dbEliminar($uniqueId)) {
-            $responseData = array(
-                'status' => 'ok',
-                'messages' => array(
-                    'Usuario estudiante eliminado correctamente.'
-                )
-            );
+        //Si el grupo esta asignado
 
-            $this->respondJsonOk($responseData);
+
+
+        //Realoizar comprobaciones antes de eliminar el grupo ver db.
+
+        if(!Asignacion::dbAnyByGrupo($uniqueId)){
+
+            if ( !Asignacion::dbAnyByGrupo($uniqueId) && Grupo::dbEliminar($uniqueId)) {
+                $responseData = array(
+                    'status' => 'ok',
+                    'messages' => array(
+                        'Grupo eliminado correctamente.'
+                    )
+                );
+    
+                $this->respondJsonOk($responseData);
+            } else {
+                $errors[] = 'Hubo un problema al eliminar el grupo.';
+    
+                $this->respondJsonError(400, $errors); // Bad request.
+            }
+
         } else {
             $errors[] = 'Hubo un problema al eliminar el grupo.';
 

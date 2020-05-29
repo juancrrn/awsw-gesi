@@ -18,6 +18,9 @@
 namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate;
 use Awsw\Gesi\Vistas\Grupo\GrupoPsList;
 use Awsw\Gesi\Vistas\Vista as V;
 
@@ -25,9 +28,19 @@ class Grupo extends Controlador
 {
 
     public static function controla() : void
-    {
+    {   
+
         /**
-         * Formularios AJAX de grupos
+         * Ver lista de Grupos 
+         */
+
+        parent::get('/ps/grupos/', function () {
+            V::dibuja(new GrupoPsList());
+        });
+
+
+        /**
+         * Formularios AJAX de grupos personal de secretar
          */
 
         parent::get('/ps/grupo/create/', function(){
@@ -36,14 +49,29 @@ class Grupo extends Controlador
         parent::post('/ps/grupo/create/', function(){
             (new GrupoPsCreate())->manage();
         });
-        
-        /**
-         * Personal de Secretaría.
-         */
 
-        parent::get('/ps/grupos/', function () {
-            V::dibuja(new GrupoPsList());
+        parent::get('/ps/grupo/read/', function(){
+            (new GrupoPsRead())->manage();
         });
+        parent::post('/ps/grupo/read/', function(){
+            (new GrupoPsRead())->manage();
+        });
+
+        parent::get('/ps/grupo/update/', function(){
+            (new GrupoPsUpdate())->manage();
+        });
+        parent::patch('/ps/grupo/update/', function(){
+            (new GrupoPsUpdate())->manage();
+        });
+
+        parent::get('/ps/grupo/delete/', function(){
+            (new GrupoPsDelete())->manage();
+        });
+        parent::delete('/ps/grupo/delete/', function(){
+            (new GrupoPsDelete())->manage();
+        });
+        
+      
     }
 }
 

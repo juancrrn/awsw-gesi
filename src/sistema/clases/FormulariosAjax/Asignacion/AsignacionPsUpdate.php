@@ -3,10 +3,14 @@
 namespace Awsw\Gesi\FormulariosAjax\Asignacion;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Datos\Asignacion;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\GesiScheduleSlot;
 
 /**
  * Formulario AJAX de actualización una asignación profesor-asignatura-grupo 
@@ -38,13 +42,13 @@ class AsignacionPsUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-update';
-    private const FORM_NAME = 'Editar estudiante';
-    private const TARGET_OBJECT_NAME = 'Usuario';
-    private const SUBMIT_URL = '/admin/usuarios/est/update/';
+    private const FORM_ID = 'asignacion-ps-update';
+    private const FORM_NAME = 'Editar asignación profesor-grupo-asignatura';
+    private const TARGET_OBJECT_NAME = 'Asignacion';
+    private const SUBMIT_URL = '/ps/asignacion/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
+    private const ON_SUCCESS_EVENT_NAME = 'updated.asignacion';
+    private const ON_SUCCESS_EVENT_TARGET = '#asignacion-ps-list';
 
     /**
      * Constructs the form object
@@ -68,8 +72,7 @@ class AsignacionPsUpdate extends FormularioAjax
     }
 
     protected function getDefaultData(array $requestData) : array
-    {  
-        // Mapear los datos para que coincidan con los nombres de los inputs.
+    {
         if(! isset($requestData['uniqueId'])){
             $responseData = array(
                 'status' => 'error',
@@ -83,33 +86,58 @@ class AsignacionPsUpdate extends FormularioAjax
         $uniqueId = $requestData['uniqueId'];
 
         // Comprobar que el uniqueId es válido.
-        if (! Usuario::dbExisteId($uniqueId)) {
+        if (! Asignacion::dbExisteId($uniqueId)) {
             $responseData = array(
                 'status' => 'error',
                 'error' => 404, // Not found.
                 'messages' => array(
-                    'El usuario estudiante solicitado no existe.'
+                    'La asignación solicitada no existe.'
                 )
             );
 
             return $responseData;
         }
+
+        $asignacion = Asignacion::dbGet($uniqueId);
+
+        // Formalización HATEOAS de profesor.
+        $profesorLink = FormularioAjax::generateHateoasSelectLink(
+            'profesor',
+            'single',
+            Usuario::dbGetByRol(2)
+        );
         
-        // Formalización HATEOAS de grupos.
+        // Formalización HATEOAS de asignatura.
+        $asignaturaLink = FormularioAjax::generateHateoasSelectLink(
+            'asignatura',
+            'single',
+            Asignatura::dbGetAll()
+        );
+        
+        // Formalización HATEOAS de grupo.
         $grupoLink = FormularioAjax::generateHateoasSelectLink(
             'grupo',
             'single',
             Grupo::dbGetAll()
         );
+        
+        // Formalización HATEOAS de foro.
+        $foroLink = FormularioAjax::generateHateoasSelectLink(
+            'foroPrincipal',
+            'single',
+            Foro::dbGetAll()
+        );
 
-        $usuario = Usuario::dbGet($uniqueId);
-
+        // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
             'links' => array(
-                $grupoLink
+                $profesorLink,
+                $asignaturaLink,
+                $grupoLink,
+                $foroLink
             ),
-            self::TARGET_OBJECT_NAME => $usuario
+            self::TARGET_OBJECT_NAME => $asignacion
         );
 
         return $responseData;
@@ -120,32 +148,28 @@ class AsignacionPsUpdate extends FormularioAjax
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
         <div class="form-group">
-            <label for="nif">NIF</label>
-            <input class="form-control" type="text" name="nif" id="nif" placeholder="NIF" required="required">
+            <label for="profesor">Profesor</label>
+            <select class="form-control" id="profesor" name="profesor" required="required">
+            </select>
         </div>
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required">
-        </div>
-        <div class="form-group">
-            <label for="apellidos">Apellidos</label>
-            <input class="form-control" type="text" name="apellidos" id="apellidos" placeholder="Apellidos" required="required">
-        </div>
-        <div class="form-group">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fechaNacimiento" id="fechaNacimiento" placeholder="Fecha de nacimiento" required="required">
-        </div>
-        <div class="form-group">
-            <label for="numeroTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="numeroTelefono" id="numeroTelefono" placeholder="Número de teléfono" required="required">
-        </div>
-        <div class="form-group">
-            <label for="email">Dirección de correo electrónico</label>
-            <input class="form-control" type="text" name="email" id="email" placeholder="Dirección de correo electrónico" required="required">
+            <label for="asignatura">Asignatura</label>
+            <select class="form-control" id="asignatura" name="asignatura" required="required">
+            </select>
         </div>
         <div class="form-group">
             <label for="grupo">Grupo</label>
-            <select class="form-control" name="grupo" id="grupo" required="required">
+            <select class="form-control" id="grupo" name="grupo" required="required">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="horario">Horario</label>
+            <input class="form-control" type="text" id="horario" name="horario" required="required">
+            <small class="form-text text-muted">En formato <code>L 9:00 10:40; X 10:40 12:20;</code>.</small>
+        </div>
+        <div class="form-group">
+            <label for="foroPrincipal">Foro principal</label>
+            <select class="form-control" id="foroPrincipal" name="foroPrincipal" required="required">
             </select>
         </div>
         HTML;
@@ -156,115 +180,128 @@ class AsignacionPsUpdate extends FormularioAjax
     public function processSubmit(array $data = array()) : void
     {
         $uniqueId = $data['uniqueId'] ?? null;
-        
-        // Check Record's uniqueId is valid
-        if (! Usuario::dbExisteId($uniqueId)) {
-            $errors[] = 'El usuario estudiante solicitado no existe.';
+
+        // Mapear los datos para que coincidan con los nombres de los inputs.
+        if (! $uniqueId) {
+            $errors[] = 'Falta el parámetro "uniqueId".';
+
+            $this->respondJsonError(400, $errors); // Bad request.
+        } elseif (! Asignacion::dbExisteId($uniqueId)) {
+            $errors[] = 'La asignación solicitada no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
+        
+        $profesorId = $data['profesor'] ?? null;
+        $asignaturaId = $data['asignatura'] ?? null;
+        $grupoId = $data['grupo'] ?? null;
+        $horario = $data['horario'] ?? null;
+        $foroPrincipalId = $data['foroPrincipal'] ?? null;
 
-        $nif = $data['nif'] ?? null;
-        $nombre = $data['nombre'] ?? null;
-        $apellidos = $data['apellidos'] ?? null;
-        $fechaNacimiento = $data['fechaNacimiento'] ?? null;
-        $numeroTelefono = $data['numeroTelefono'] ?? null;
-        $email = $data['email'] ?? null;
+        if (! empty($asignaturaId) && ! empty($grupoId) && 
+            Asignacion::dbExisteByAsignaturaGrupo($asignaturaId, $grupoId)) {
+            $errors[] = 'Ya existe una asignación para la asignatura y el grupo indicados.';
 
-        if (empty($nif)) {
-            $errors[] = 'El campo NIF no puede estar vacío.';
+            $this->respondJsonError(409, $errors); // Conflict.
         }
 
-        if (empty($nombre)) {
-            $errors[] = 'El campo nombre no puede estar vacío.';
-        } elseif (! Valido::testStdString($nombre)) {
-            $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($apellidos)) {
-            $errors[] = 'El campo apellidos no puede estar vacío.';
-        } elseif (! Valido::testStdString($apellidos)) {
-            $errors[] = 'El campo apellidos no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
-        }
-
-        if (empty($fechaNacimiento)) {
-            $errors[] = 'El campo fecha de nacimiento no puede estar vacío.';
+        if (empty($profesorId)) {
+            $errors[] = 'El campo profesor no puede estar vacío.';
+        } elseif (! Usuario::dbExisteId($profesorId)) {
+            $errors[] = 'El campo profesor no es válido. Comprueba que el profesor existe.';
         } else {
-            $fechaNacimiento = Valido::testDate($fechaNacimiento);
-            
-            if (! $fechaNacimiento) {
-                $errors[] = 'El campo fecha de nacimiento no es válido. El formato debe ser dd/mm/yyyy.';
+            $profesor = Usuario::dbGet($profesorId);
+
+            if (! $profesor->isPd()) {
+                $errors[] = 'El campo profesor no es válido. Comprueba que el usuario seleccionado tiene el rol de personal docente.';
             }
         }
 
-        if (empty($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no puede estar vacío.';
-        } elseif (! Valido::testNumeroTelefono($numeroTelefono)) {
-            $errors[] = 'El campo número de teléfono no es válido.';
+        if (empty($asignaturaId)) {
+            $errors[] = 'El campo asignatura no puede estar vacío.';
+        } elseif (! Asignatura::dbExisteId($asignaturaId)) {
+            $errors[] = 'El campo asignatura no es válido. Comprueba que la asignatura existe.';
         }
 
-        if (empty($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no puede estar vacío.';
-        } elseif (! Valido::testEmail($email)) {
-            $errors[] = 'El campo dirección de correo electrónico no es válido.';
-        }
-
-        // Comprobar grupo.
-        
-        $grupo = $data['grupo'] ?? null;
-
-        if (empty($grupo)) {
+        if (empty($grupoId)) {
             $errors[] = 'El campo grupo no puede estar vacío.';
-        } elseif (! Grupo::dbExisteId($grupo)) {
+        } elseif (! Grupo::dbExisteId($grupoId)) {
             $errors[] = 'El campo grupo no es válido. Comprueba que el grupo existe.';
         }
-        
+
+        if (empty($horario)) {
+            $errors[] = 'El campo horario no puede estar vacío.';
+        } elseif (! GesiScheduleSlot::validaGesiSchedule($horario)) {
+            $errors[] = 'El campo horario no es válido. Comprueba que el formato es correcto.';
+        }
+
+        if (empty($foroPrincipalId)) {
+            $errors[] = 'El campo foro principal no puede estar vacío.';
+        } elseif (! Foro::dbExisteId($foroPrincipalId)) {
+            $errors[] = 'El campo foro principal no es válido. Comprueba que el foro existe.';
+        }
+
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            // Obtener datos que no se habían modificado.
-            $anteriores = Usuario::dbGet($uniqueId);
-
-            $fechaUltimoAcceso = $anteriores->getFechaUltimoAcceso();
-            $fechaUltimoAcceso = ($fechaUltimoAcceso && $fechaUltimoAcceso !== '') ? Valido::testDateTime($fechaUltimoAcceso) : null;
-
-            $fechaRegistro = $anteriores->getFechaRegistro();
-            
-            $fechaRegistro = ($fechaRegistro && $fechaRegistro !== '') ?Valido::testDateTime($fechaRegistro) : null;
-
-            $usuario = new Usuario(
+            $asignacion = new Asignacion(
                 $uniqueId,
-                $nif,
-                1,
-                $nombre,
-                $apellidos,
-                $fechaNacimiento,
-                $numeroTelefono,
-                $email,
-                $fechaUltimoAcceso,
-                $fechaRegistro,
-                $grupo
+                $asignaturaId,
+                $grupoId,
+                $profesorId,
+                $horario,
+                $foroPrincipalId
             );
 
-            $actualizar = $usuario->dbActualizar();
+            if ($asignacion->dbActualizar()) {
+                // Formalización HATEOAS de profesor.
+                $profesorLink = FormularioAjax::generateHateoasSelectLink(
+                    'profesor',
+                    'single',
+                    $profesor
+                );
+                
+                // Formalización HATEOAS de asignatura.
+                $asignaturaLink = FormularioAjax::generateHateoasSelectLink(
+                    'asignatura',
+                    'single',
+                    Asignatura::dbGet($asignacion->getAsignatura())
+                );
+                
+                // Formalización HATEOAS de grupo.
+                $grupoLink = FormularioAjax::generateHateoasSelectLink(
+                    'grupo',
+                    'single',
+                    Grupo::dbGet($asignacion->getGrupo())
+                );
+                
+                // Formalización HATEOAS de foro.
+                $foroLink = FormularioAjax::generateHateoasSelectLink(
+                    'foroPrincipal',
+                    'single',
+                    Foro::dbGet($asignacion->getForoPrincipal())
+                );
 
-            if ($actualizar) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Usuario estudiante actualizado correctamente.'),
-                    self::TARGET_OBJECT_NAME => $usuario
+                    'links' => array(
+                        $profesorLink,
+                        $asignaturaLink,
+                        $grupoLink,
+                        $foroLink
+                    ),
+                    'messages' => array('Asignación actualizada correctamente.'),
+                    self::TARGET_OBJECT_NAME => $asignacion
                 );
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Error al actualizar usuario estudiante.';
+                $errors[] = 'Hubo un error al crear la asignación.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
-
         }
-    
     }
 }
 

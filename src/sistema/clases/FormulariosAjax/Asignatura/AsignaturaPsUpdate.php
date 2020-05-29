@@ -146,38 +146,43 @@ class AsignaturaPsUpdate extends FormularioAjax
     {
         $uniqueId = $data['uniqueId'] ?? null;
 
-        $curso_escolar = $data['curso_escolar'] ?? null;
-        $nombre_corto = $data['nombre_corto'] ?? null;
-        $nombre_completo = $data['nombre_completo'] ?? null;
+        // Mapear los datos para que coincidan con los nombres de los inputs.
+        if (! $uniqueId) {
+            $errors[] = 'Falta el parámetro "uniqueId".';
 
-        // Comprobar nivel.
-        if(! Asignatura::dbExisteId($uniqueId)){
+            $this->respondJsonError(400, $errors); // Bad request.
+        } elseif (! Asignatura::dbExisteId($uniqueId)) {
             $errors[] = 'La asignatura solicitada no existe.';
 
             $this->respondJsonError(404, $errors); // Not found.
         }
-        
+
+        $curso_escolar = $data['curso_escolar'] ?? null;
+        $nombre_corto = $data['nombre_corto'] ?? null;
+        $nombre_completo = $data['nombre_completo'] ?? null;
         $nivel = $data['nivel'] ?? null;
 
         if (empty($nivel)) {
             $errors[] = 'El campo nivel no puede estar vacío.';
+        } elseif (! Valido::testNivelRaw($nivel)) {
+            $errors[] = 'El campo nivel no es válido.';
         }
 
-        if(empty($curso_escolar)){
+        if (empty($curso_escolar)) {
             $errors[] = 'El campo curso escolar no puede estar vacío.';
-        }elseif(!Valido::testStdInt($curso_escolar)){
+        } elseif(!Valido::testStdInt($curso_escolar)) {
             $errors[] = 'El campo curso escolar no es válido.';
         }
 
         if (empty($nombre_corto)) {
             $errors[] = 'El campo nombre corto es obligatorio.';
-        } elseif (!Valido::testCadenaB($nombre_corto)){
+        } elseif (!Valido::testCadenaB($nombre_corto)) {
             $errors[] = 'El campo nombre corto no es válido.';
         }
 
         if (empty($nombre_completo)) {
             $errors[] = 'El campo nombre completo es obligatorio.';
-        } elseif (!Valido::testCadenaB($nombre_completo)){
+        } elseif (!Valido::testCadenaB($nombre_completo)) {
             $errors[] = 'El campo nombre completo no es válido.';
         }
         
@@ -185,14 +190,13 @@ class AsignaturaPsUpdate extends FormularioAjax
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-
             $asignatura = new Asignatura(
                 $uniqueId,
                 $nivel,
                 $curso_escolar,
                 $nombre_corto,
                 $nombre_completo
-              );
+            );
   
             $actualizar = $asignatura->dbActualizar();
 
@@ -209,7 +213,6 @@ class AsignaturaPsUpdate extends FormularioAjax
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }
-
         }
     }
 }

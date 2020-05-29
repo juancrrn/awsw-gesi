@@ -190,19 +190,19 @@ class Asignacion
                 (?, ?, ?, ?, ?)
         ");
 
-        $profesor = $this->getProfesor();
-        $grupo = $this->getGrupo();
-        $asignatura = $this->getAsignatura();
+        $profesorId = $this->getProfesor();
+        $grupoId = $this->getGrupo();
+        $asignaturaId = $this->getAsignatura();
         $horario = $this->getHorario();
-        $foro_principal = $this->getForoPrincipal();
+        $foroPrincipalId = $this->getForoPrincipal();
         
         $sentencia->bind_param(
-            "iiisi", 
-            $profesor,
-            $grupo,
-            $asignatura,
+            'iiisi',
+            $profesorId,
+            $grupoId,
+            $asignaturaId,
             $horario,
-            $foro_principal
+            $foroPrincipalId
         );
 
         $sentencia->execute();
@@ -517,15 +517,13 @@ class Asignacion
         $query = <<< SQL
         SELECT id
         FROM gesi_asignaciones
-        WHERE
-            asignatura = ?
-        AND
-            grupo = ?
+        WHERE asignatura = ?
+        AND grupo = ?
         LIMIT 1
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-        $sentencia->bind_param('ii', $$asignatura, $grupo);
+        $sentencia->bind_param('ii', $asignatura, $grupo);
         $sentencia->execute();
         $sentencia->store_result();
         $existe = $sentencia->num_rows > 0;
@@ -638,38 +636,39 @@ class Asignacion
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            UPDATE
-                gesi_asignaciones
-            SET
-                profesor = ?,
-                grupo = ?,
-                asignatura = ?,
-                horario = ?,
-                foro_principal = ?
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        UPDATE
+            gesi_asignaciones
+        SET
+            profesor = ?,
+            grupo = ?,
+            asignatura = ?,
+            horario = ?,
+            foro_principal = ?
+        WHERE
+            id = ?
+        SQL;
 
-        $id = $this->getId();
-        $profesor = $this->getProfesor();
-        $grupo = $this->getGrupo();
-        $asignatura = $this->getAsignatura();
+        $sentencia = $bbdd->prepare($query);
+
+        $profesorId = $this->getProfesor();
+        $grupoId = $this->getGrupo();
+        $asignaturaId = $this->getAsignatura();
         $horario = $this->getHorario();
-        $foro_principal = $this->getForoPrincipal();
+        $foroPrincipalId = $this->getForoPrincipal();
+        $id = $this->getId();
 
         $sentencia->bind_param(
-            "iiiisi", 
-            $profesor,
-            $grupo,
-            $asignatura,
+            'iiisii', 
+            $profesorId,
+            $grupoId,
+            $asignaturaId,
             $horario,
-            $foro_principal,
+            $foroPrincipalId,
             $id
         );
 
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;

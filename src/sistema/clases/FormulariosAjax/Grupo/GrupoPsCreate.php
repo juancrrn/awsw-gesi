@@ -44,7 +44,7 @@ class GrupoPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/grupo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list'; // TODO
 
 
     public function __construct(){
@@ -110,11 +110,11 @@ class GrupoPsCreate extends FormularioAjax
         </div>
         <div class="form-group">
             <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre Completo" required="required" />
         </div>
         <div class="form-group">
             <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto"  placeholder="Nombre" required="required" />
+            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto"  placeholder="Nombre Corto" required="required" />
         </div>
         <div class="form-group">
         <label for="tutor">Tutor</label>

@@ -22,6 +22,7 @@ namespace Awsw\Gesi\Vistas\Sesion;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 
@@ -45,9 +46,8 @@ class SesionPerfil extends Modelo
 
     public function procesaContent() : void
     {
-        $nombre_completo = $this->usuario->getNombreCompleto();
-
-        $nif = $this->usuario->getNif();
+        $app = App::getSingleton();
+        $urlSecretaria = $app->getUrl() . '/ses/secretaria/';
 
         switch ($this->usuario->getRol()) {
             case 1: $rol = 'Estudiante'; break;
@@ -55,87 +55,60 @@ class SesionPerfil extends Modelo
             case 3: $rol = 'Personal de Secretaría'; break;
         }
 
-        $fecha_nacimiento = date("d/m/Y", $this->usuario->getFechaNacimiento());
-        $numero_telefono = $this->usuario->getNumeroTelefono();
+        $nif = $this->usuario->getNif();
+        $nombre = $this->usuario->getNombre();
+        $apellidos = $this->usuario->getApellidos();
         $email = $this->usuario->getEmail();
-        $fecha_ultimo_acceso = date("d/m/Y", $this->usuario->getFechaUltimoAcceso());
-        $fecha_registro = date("d/m/Y", $this->usuario->getFechaRegistro());
-        
-        $lista_grupo = $this->generaGrupo();
+        $numeroTelefono = $this->usuario->getNumeroTelefono();
+        $fechaNacimiento = $this->usuario->getFechaNacimiento();
+        $fechaUltimoAcceso = $this->usuario->getFechaUltimoAcceso();
 
         $html = <<< HTML
-        <header class ="page-header">
-            <h1>$nombre_completo</h1>
-        </header>
-        <section class="page-content">
-            <div class="data-field-wrapper">
-                <div class="data-field">
-                    <span class="label">NIF</span>
-                    <span class="value">$nif</span>
-                </div>
-                <div class="data-field">
-                    <span class="label">Fecha nacimiento</span>
-                    <span class="value">$fecha_nacimiento</span>
-                </div>
-                <div class="data-field">
-                    <span class="label">Número de teléfono</span>
-                    <span class="value">$numero_telefono</span>
-                </div>
-                <div class="data-field">
-                    <span class="label">Dirección de correo electrónico</span>
-                    <span class="value">$email</span>
-                </div>
+        <h2 class="mb-4">$this->nombre</h2>
+        <p class="mb-3">A continuación se muestran los datos personales recogidos en Gesi sobre tu usuario. Si necesitas modificar alguno, por favor, <a href="$urlSecretaria">ponte en contacto con Secretaría</a>.</p>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Rol</label>
+                <input type="text" class="form-control" value="$rol" disabled="disabled">
             </div>
-            <h2>Grupo</h2>
-            <div id="usuario-admin-ver-grupo-lista" class="grid-table">
-                <div class="grid-table-header">
-                    <div class="grid-table-row">
-                        <div></div>
-                        <div>Nombre</div>
-                        <div>Nivel</div>
-                    </div>
-                </div>
-                <div class="grid-table-body">
-                    $lista_grupo
-                </div>
+            <div class="form-group col-md-6">
+                <label>NIF o NIE</label>
+                <input type="text" class="form-control" value="$nif" disabled="disabled">
             </div>
-        </section>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" value="$nombre" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Apellidos</label>
+                <input type="text" class="form-control" value="$apellidos" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Dirección de correo electrónico</label>
+                <input type="text" class="form-control" value="$email" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Número de teléfono</label>
+                <input type="text" class="form-control" value="$numeroTelefono" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Fecha de nacimiento</label>
+                <input type="text" class="form-control" value="$fechaNacimiento" disabled="disabled">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Fecha y hora de último acceso</label>
+                <input type="text" class="form-control" value="$fechaUltimoAcceso" disabled="disabled">
+            </div>
+        </div>
         HTML;
 
         echo $html;
-
-    }
-
-    public function generaGrupo() : string
-    {
-        $grupo_id = $this->usuario->getGrupo();
-
-        $html = '';
-
-        if ($grupo_id) {
-            $grupo = Grupo::dbGet($grupo_id);
-            $completo = $grupo->getNombreCompleto();
-            $corto = $grupo->getNombreCorto();
-            $nivel = $grupo->getNivel();
-
-            $html .= <<< HTML
-            <div class="grid-table-row">
-                <div>$corto</div>
-                <div>$completo</div>
-                <div>$nivel</div>
-            </div>
-
-HTML;
-        } else {
-            $html = <<< HTML
-            <div class="grid-table-row-empty">
-                Este usuario no está matriculado en ningún grupo.
-            </div>
-
-HTML;
-        }
-
-        return $html;
     }
 }
 

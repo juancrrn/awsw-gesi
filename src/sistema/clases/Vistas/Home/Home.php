@@ -50,7 +50,7 @@ class Home extends Modelo
         <h2 class="mb-4">$this->nombre</h2>
         <div class="row">
             <div class="col"></div>
-            <div class="col-5 text-center">
+            <div class="col-mb-5 px-2 text-center">
                 $saludo
             </div>
             <div class="col"></div>

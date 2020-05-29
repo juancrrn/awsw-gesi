@@ -19,7 +19,7 @@ namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
-
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
 use Awsw\Gesi\Vistas\Vista;
@@ -49,6 +49,14 @@ class Asignacion extends Controlador
 		// Read.
 		parent::get('/ps/asignacion/read/', function () {
 			(new AsignacionPsRead)->manage();
+		});
+
+		// Update.
+		parent::get('/ps/asignacion/update/', function () {
+			(new AsignacionPsUpdate)->manage();
+		});
+		parent::patch('/ps/asignacion/update/', function () {
+			(new AsignacionPsUpdate)->manage();
 		});
 
 		/**

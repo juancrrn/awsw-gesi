@@ -170,6 +170,7 @@ $headerFinalHtmlBuffer .= <<< HTML
 
             <nav>
                 <div class="list-group list-group-flush">
+                    <div class="d-mb-block" id="user-menu-mobile">$userMenuBuffer</div>
                     $sideMenuBuffer
                 </div>
             </nav>
@@ -178,11 +179,11 @@ $headerFinalHtmlBuffer .= <<< HTML
         <nav id="main-header" class="navbar navbar-expand-lg navbar-light bg-light">
             <button type="button" id="btn-side-menu-show" class="btn btn-sm btn-outline-secondary mr-4">Menu</button>
 
-            <a class=" navbar-brand" href="#">
+            <a class=" navbar-brand" href="$urlInicio">
                 <img src="$urlInicio/img/logo.svg" height="30" alt="" class="d-block mr-3">
             </a>
 
-            <div class="ml-auto">
+            <div class="ml-auto" id="user-menu">
                 <ul class="navbar-nav">
                     $userMenuBuffer
                 </ul>

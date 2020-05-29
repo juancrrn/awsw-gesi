@@ -482,7 +482,8 @@ class Grupo
             'cursoEscolar' => $this->getCursoEscolar(),
             'nombreCorto' => $this->getNombreCorto(),
             'nombreCompleto' => $this->getNombreCompleto(),
-            'tutor' => $this->getTutor()
+            'tutor' => $this->getTutor(),
+            'checkbox' => $this->getId()
         ];
     }
 }

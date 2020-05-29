@@ -38,13 +38,13 @@ class GrupoPsUpdate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'grupo-update';
+    private const FORM_ID = 'grupo-ps-update';
     private const FORM_NAME = 'Editar grupo';
     private const TARGET_OBJECT_NAME = 'Grupo';
-    private const SUBMIT_URL = '/admin/grupo/update/';
+    private const SUBMIT_URL = '/ps/grupo/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
     private const ON_SUCCESS_EVENT_NAME = 'updated.grupo';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-lista';
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-list';
 
     /**
      * Constructs the form object
@@ -131,27 +131,24 @@ class GrupoPsUpdate extends FormularioAjax
             </select>
         </div>
         <div class="form-group">
-        <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required">
+            <label for="curso_escolar">Curso escolar</label>
+            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required" />
         </div>
         <div class="form-group">
-        <label for="nombre_completo">Nombre completo</label>
+            <label for="nombre_completo">Nombre completo</label>
             <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-            <input class="form-control" type="text" name="fecha_nacimiento" id="fecha_nacimiento" placeholder="Fecha de nacimiento" required="required" />
+            <label for="nombre_corto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
         <label for="tutor">Tutor</label>
             <select class="form-control" name="tutor" id="tutor" required="required">
             </select>
         </div>
-        
-            
-            
-        
         HTML;
+
 
         return $html;
       
@@ -206,8 +203,6 @@ class GrupoPsUpdate extends FormularioAjax
         }
 
 
-
-        
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
@@ -217,7 +212,7 @@ class GrupoPsUpdate extends FormularioAjax
 
            
             $grupo = new Grupo(
-                null,
+                $uniqueId,
                 $nivel,
                 $curso_escolar,
                 $nombre_corto,
