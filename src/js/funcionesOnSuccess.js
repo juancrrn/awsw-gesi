@@ -327,12 +327,12 @@ onSuccessFn.listaPsAsignaturasCreated = (e, params) =>
     
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-		<td scope="row" data-col-name="nombreCorto">'+ corto + '</td>\
-		<td data-col-name="nivel">'+ nivel +'</td>\
+        <td scope="row" data-col-name="nombreCorto">'+ corto + '</td>\
+        <td data-col-name="nivel">'+ nivel +'</td>\
         <td data-col-name="curso">'+ curso + '</td>\
         <td data-col-name="nombreCompleto">'+ largo + '</td>\
         <td class="text-right">' + buttons + '</td>\
-	</tr>';
+    </tr>';
     
     $list.append($rowHtml);
 }
@@ -468,12 +468,12 @@ onSuccessFn.listaPsEventoCreated = (e, params) =>
 
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-		<td scope="row" data-col-name="fecha">'+ fecha + '</td>\
-		<td data-col-name="nombre">'+ nombre +'</td>\
+        <td scope="row" data-col-name="fecha">'+ fecha + '</td>\
+        <td data-col-name="nombre">'+ nombre +'</td>\
         <td data-col-name="descripcion">'+ descripcion + '</td>\
         <td data-col-name="lugar">'+ lugar + '</td>\
         <td class="text-right">' + buttons + '</td>\
-	</tr>';
+    </tr>';
     
     $list.append($rowHtml);
 }
@@ -552,12 +552,12 @@ onSuccessFn.listaPdEventoCreated = (e, params) =>
     
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-		<td scope="row" data-col-name="fecha">'+ fecha + '</td>\
-		<td data-col-name="nombre">'+ nombre +'</td>\
+        <td scope="row" data-col-name="fecha">'+ fecha + '</td>\
+        <td data-col-name="nombre">'+ nombre +'</td>\
         <td data-col-name="descripcion">'+ descripcion + '</td>\
         <td data-col-name="lugar">'+ lugar + '</td>\
         <td class="text-right">' + buttons + '</td>\
-	</tr>';
+    </tr>';
     
     $list.append($rowHtml);
 }
@@ -634,9 +634,9 @@ onSuccessFn.listaPsForosCreated = (e, params) =>
     
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-		<td scope="row" data-col-name="foroNombre">'+ nombre + '</td>\
+        <td scope="row" data-col-name="foroNombre">'+ nombre + '</td>\
         <td class="text-right">' + buttons + '</td>\
-	</tr>';
+    </tr>';
     
     $list.append($rowHtml);
 

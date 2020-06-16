@@ -163,7 +163,7 @@
 }
 
 #form-logout button {
-	cursor: pointer;
+    cursor: pointer;
     color: rgb(123, 31, 162);
     font-family: inherit;
     line-height: 20px;
@@ -173,3 +173,188 @@
     display: block;
     padding: .5rem 1rem;
 }
+
+/*
+ * Horarios.
+ */
+
+.gesi-schedule {
+    position: relative;
+    width: calc(100% - 1.25em);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90rem;
+}
+
+.gesi-schedule__timeline {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+}
+
+.gesi-schedule__timeline ul {
+    list-style: none;
+}
+
+.gesi-schedule__timeline li {
+    position: relative;
+    height: 50px;
+}
+
+.gesi-schedule__timeline li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    height: 1px;
+    background: #ebebeb;
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+.gesi-schedule__events {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.gesi-schedule__events ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.gesi-schedule__column {
+    flex-basis: 0;
+    flex-grow: 1;
+    border: 1px solid #ebebeb;
+    margin-bottom: 0;
+}
+
+.gesi-schedule__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    border-bottom: 1px solid #ebebeb;
+    padding: 0;
+}
+
+.gesi-schedule__column > ul {
+    list-style: none;
+    height: 950px;
+    overflow: visible;
+    padding: 0;
+    position: relative;
+    display: flex;
+}
+
+.gesi-schedule__event {
+    float: left;
+    position: absolute;
+    z-index: 3;
+    width: calc(100% + 2px);
+    left: -1px;
+    max-width: none;
+    margin-right: 0;
+}
+
+.gesi-schedule__event a {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    padding: .75em;
+    background: #588093;
+    /*box-shadow: 0 10px 20px rgba(0,0,0,.1),inset 0 -3px 0 rgba(0,0,0,.2);*/
+}
+
+.gesi-schedule__time {
+    color: #ffffff;
+    opacity: .9;
+    font-size: .8em;
+    display: block;
+}
+
+.gesi-schedule__subject {
+    color: #ffffff;
+    opacity: .9;
+    display: block;
+}
+
+.gesi-schedule__teacher {
+    color: #ffffff;
+    opacity: .9;
+    font-size: .8em;
+    display: block;
+}
+
+
+/*.gesi-schedule-full {
+    display: block;
+    width: 100%;
+    border: 1px solid #777;
+    border-radius: 4px;
+}
+
+.gesi-schedule-full__column {
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid #777;
+}
+
+.gesi-schedule-full__column:last-child {
+    border-right: none;
+}
+
+.gesi-schedule-full__slot {
+    display: block;
+    position: relative;
+    left: 0;
+    width: 100%;
+    background-color: #777;
+}
+
+.gesi-schedule-full__slot .nombre {
+    display: block;
+    font-weight: bold;
+    color: #fff;
+}
+
+.gesi-schedule-full__slot .franja {
+    display: block;
+    color: #fff;
+}
+
+.gesi-schedule-mini {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    max-height: 400px;
+    border: 1px solid #777;
+    border-radius: 4px;
+}
+
+.gesi-schedule-mini__column {
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid #777;
+}
+
+.gesi-schedule-mini__column:last-child {
+    border-right: none;
+}
+
+.gesi-schedule-mini__slot {
+    display: block;
+    position: relative;
+    left: 0;
+    width: 100%;
+    background-color: #777;
+}*/

@@ -28,10 +28,10 @@ $v = (! $app->isDesarrollo()) ? '' : '?v=0.0.0' . time();
 $footerFinalHtmlBuffer = '';
 
 $footerFinalHtmlBuffer .= <<< HTML
-		<footer id="main-footer" class="page-footer font-small bg-light pt-4">
+        <footer id="main-footer" class="page-footer font-small bg-light pt-4">
             <div class="footer-copyright text-center p-3">
-				<p>© 2020 Gesi</p>
-				<p>Versión 0.0.4</p>
+                <p>© 2020 Gesi</p>
+                <p>Versión 0.0.4</p>
             </div>
         </footer>
 
@@ -50,6 +50,7 @@ $footerFinalHtmlBuffer .= <<< HTML
         <!-- Scripts de la aplicación -->
         <script src="$appUrl/js/app.js$v"></script>
         <script src="$appUrl/js/funcionesOnSuccess.js$v"></script>
+        <script src="$appUrl/js/gesiSchedule.js$v"></script>
     </body>
 </html>
 HTML;

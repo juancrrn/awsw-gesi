@@ -40,7 +40,7 @@ class Cerrar extends Formulario
         $url_restablecer = App::getSingleton()->getUrl() . '/sesion/reset/';
 
         $this->html .= <<< HTML
-						    <button type="submit">Cerrar sesión</button>
+                        <button type="submit">Cerrar sesión</button>
 
 HTML;
 
@@ -51,8 +51,8 @@ HTML;
      */
     protected function procesa(array & $datos): void
     {
-		Sesion::cierra();
+        Sesion::cierra();
 
-		Vista::encolaMensajeExito('Se ha cerrado la sesión correctamente.', '');
+        Vista::encolaMensajeExito('Se ha cerrado la sesión correctamente.', '');
     }
 }

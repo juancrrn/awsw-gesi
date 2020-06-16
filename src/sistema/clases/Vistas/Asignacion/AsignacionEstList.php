@@ -31,7 +31,7 @@ class AsignacionEstList extends Modelo
 {
 
     public const VISTA_NOMBRE = "Ver mis asignaciones";
-    public const VISTA_ID = "asignacion-Est-list";
+    public const VISTA_ID = "asignacion-est-list";
     
     private $listado;
     

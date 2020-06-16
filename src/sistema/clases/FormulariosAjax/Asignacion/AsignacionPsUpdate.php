@@ -201,7 +201,12 @@ class AsignacionPsUpdate extends FormularioAjax
         $horario = $data['horario'] ?? null;
         $foroPrincipalId = $data['foroPrincipal'] ?? null;
 
-        if (! empty($asignaturaId) && ! empty($grupoId) && 
+        $datosAnteriores = Asignacion::dbGet($uniqueId);
+
+        // Comprobar si se han modificado la asignatura o el grupo.
+        if (! empty($asignaturaId) && ! empty($grupoId) &&
+            ($asignaturaId != $datosAnteriores->getAsignatura() ||
+            $grupoId != $datosAnteriores->getGrupo()) &&
             Asignacion::dbExisteByAsignaturaGrupo($asignaturaId, $grupoId)) {
             $errors[] = 'Ya existe una asignación para la asignatura y el grupo indicados.';
 

@@ -22,7 +22,7 @@ use \Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
 
 class MensajeForo 
-	implements JsonSerializable
+    implements JsonSerializable
 {
     /**
      * @var int $id Identificador único.
@@ -72,9 +72,9 @@ class MensajeForo
             $o->fecha,
             $o->contenido
         );
-	}
-	
-	
+    }
+    
+    
 
     /*
      *
@@ -252,9 +252,9 @@ class MensajeForo
         $sentencia->close();
 
         return $existe;
-	}
-	
-	public function jsonSerialize()
+    }
+    
+    public function jsonSerialize()
     {
         return [
             'uniqueId' => $this->getId(),

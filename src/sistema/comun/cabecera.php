@@ -19,6 +19,7 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Sesion\Cerrar as FormularioSesionCerrar;
 use Awsw\Gesi\Vistas\Vista;
 use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
@@ -68,7 +69,9 @@ if (Sesion::isSesionIniciada()) {
         /* $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/est/asignaturas/', 'Asignaturas', '');*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/est/asignaciones/horario/', AsignacionEstList::class);
+            '/est/asignaciones/', AsignacionEstList::class);
+        $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/est/asignaciones/horario/', AsignacionEstHorario::class);
     } elseif (Sesion::getUsuarioEnSesion()->isPd()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de personal docente');

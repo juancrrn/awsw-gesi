@@ -22,130 +22,130 @@ use Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
 
 class Asignatura
-	implements JsonSerializable
+    implements JsonSerializable
 {
 
-	private $id;
+    private $id;
 
-	private $nivel;
+    private $nivel;
 
-	private $curso_escolar;
+    private $curso_escolar;
 
-	private $nombre_corto;
+    private $nombre_corto;
 
-	private $nombre_completo;
+    private $nombre_completo;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct(
-		$id,
-		$nivel,
-		$curso_escolar,
-		$nombre_corto,
-		$nombre_completo
-	)
-	{
-		$this->id = $id;
-		$this->nivel = $nivel;
-		$this->curso_escolar = $curso_escolar;
-		$this->nombre_corto = $nombre_corto;
-		$this->nombre_completo = $nombre_completo;
-	}
+    /**
+     * Constructor.
+     */
+    public function __construct(
+        $id,
+        $nivel,
+        $curso_escolar,
+        $nombre_corto,
+        $nombre_completo
+    )
+    {
+        $this->id = $id;
+        $this->nivel = $nivel;
+        $this->curso_escolar = $curso_escolar;
+        $this->nombre_corto = $nombre_corto;
+        $this->nombre_completo = $nombre_completo;
+    }
 
-	public static function fromMysqlFetch(Object $o) : Asignatura
-	{
-		return new self(
-			$o->id,
-			$o->nivel,
-			$o->curso_escolar,
-			$o->nombre_corto,
-			$o->nombre_completo
-		);
-	}
+    public static function fromMysqlFetch(Object $o) : Asignatura
+    {
+        return new self(
+            $o->id,
+            $o->nivel,
+            $o->curso_escolar,
+            $o->nombre_corto,
+            $o->nombre_completo
+        );
+    }
 
-	public function getId()
-	{
-		return $this->id;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	public function getNivel()
-	{
-		return Valido::rawToNivel($this->nivel);
-	}
+    public function getNivel()
+    {
+        return Valido::rawToNivel($this->nivel);
+    }
 
-	public function getNivelRaw()
-	{
-		return $this->nivel;
-	}
+    public function getNivelRaw()
+    {
+        return $this->nivel;
+    }
 
-	public function getCursoEscolar()
-	{
-		return Valido::rawToCursoEscolar($this->curso_escolar);
-	}
+    public function getCursoEscolar()
+    {
+        return Valido::rawToCursoEscolar($this->curso_escolar);
+    }
 
-	public function getCursoEscolarRaw()
-	{
-		return $this->curso_escolar;
-	}
+    public function getCursoEscolarRaw()
+    {
+        return $this->curso_escolar;
+    }
 
-	public function getNombreCorto()
-	{
-		return $this->nombre_corto;
-	}
+    public function getNombreCorto()
+    {
+        return $this->nombre_corto;
+    }
 
-	public function getNombreCompleto()
-	{
-		return $this->nombre_completo;
-	}
+    public function getNombreCompleto()
+    {
+        return $this->nombre_completo;
+    }
 
-	/*
-	 *
-	 * 
-	 * Funciones de acceso a la base de datos (patrón de acceso a datos).
-	 * 
-	 * 
-	 */
+    /*
+     *
+     * 
+     * Funciones de acceso a la base de datos (patrón de acceso a datos).
+     * 
+     * 
+     */
 
-	/*
-	 *
-	 * Operaciones INSERT.
-	 *  
-	 */
-	
-	/** 
-	 * Insertar una nueva Asignatura en la base de datos
-	 * 
-	 * @param Asignatura $this
-	 * 
-	 * @return int
-	 */
-	public function dbInsertar(): int
-	{
-		$bbdd = App::getSingleton()->bbddCon();
+    /*
+     *
+     * Operaciones INSERT.
+     *  
+     */
+    
+    /** 
+     * Insertar una nueva Asignatura en la base de datos
+     * 
+     * @param Asignatura $this
+     * 
+     * @return int
+     */
+    public function dbInsertar(): int
+    {
+        $bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			INSERT
-			INTO
-				gesi_asignaturas(
-					id,
-					nivel,
-					curso_escolar,
-					nombre_corto,
-					nombre_completo
-				)
-			VALUES
-				(?, ?, ?, ?, ?)	
-		");
+        $sentencia = $bbdd->prepare("
+            INSERT
+            INTO
+                gesi_asignaturas(
+                    id,
+                    nivel,
+                    curso_escolar,
+                    nombre_corto,
+                    nombre_completo
+                )
+            VALUES
+                (?, ?, ?, ?, ?)    
+        ");
 
-		$id = $this->getId();
-		$nivel = $this->getNivelRaw();
-		$curso_escolar = $this->getCursoEscolarRaw();
-		$nombre_corto = $this->getNombreCorto();
-		$nombre_completo = $this->getNombreCompleto();
+        $id = $this->getId();
+        $nivel = $this->getNivelRaw();
+        $curso_escolar = $this->getCursoEscolarRaw();
+        $nombre_corto = $this->getNombreCorto();
+        $nombre_completo = $this->getNombreCompleto();
 
-		$sentencia->bind_param(
-			"iiiss",
+        $sentencia->bind_param(
+        	"iiiss",
 			$id,
 			$nivel,
 			$curso_escolar,

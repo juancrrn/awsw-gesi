@@ -90,7 +90,7 @@ Controlador::setGetBase(App::getSingleton()->getBaseControlador());
  */
 
 Controlador::default(function () {
-	\Awsw\Gesi\Vistas\Vista::dibuja(new \Awsw\Gesi\Vistas\Error\Error404());
+    \Awsw\Gesi\Vistas\Vista::dibuja(new \Awsw\Gesi\Vistas\Error\Error404());
 });
 
 ?>

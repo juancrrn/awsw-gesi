@@ -22,8 +22,8 @@ use Awsw\Gesi\Vistas\Vista;
 
 class Sesion
 {
-	// Valor de $_SESSION donde se almacena la información de sesión.
-	const SESSION_SESION = "gesi_sesion";
+    // Valor de $_SESSION donde se almacena la información de sesión.
+    const SESSION_SESION = "gesi_sesion";
 
     // Usuario que ha iniciado sesión.
     private static $usuario_en_sesion = null;
@@ -44,13 +44,13 @@ class Sesion
         }
     }
 
-	/**
-	 * Inicia la sesión de un usuario.
-	 *
-	 * @requires No hay ninguna sesión ya iniciada.
-	 */
-	public static function inicia(Usuario $usuario): void
-	{
+    /**
+     * Inicia la sesión de un usuario.
+     *
+     * @requires No hay ninguna sesión ya iniciada.
+     */
+    public static function inicia(Usuario $usuario): void
+    {
         // Actualizamos la última vez que el usuario inició sesión a ahora.
         $usuario->dbActualizaUltimaSesion();
 
@@ -58,22 +58,22 @@ class Sesion
         // si la han capturado antes de hacer login.
         session_regenerate_id(true);
 
-		self::$usuario_en_sesion = $usuario;
+        self::$usuario_en_sesion = $usuario;
         $_SESSION[self::SESSION_SESION] = self::$usuario_en_sesion;
-	}
+    }
 
-	/**
-	 * Cierra la sesión de un usuario.
-	 */
-	public static function cierra(): void
-	{
+    /**
+     * Cierra la sesión de un usuario.
+     */
+    public static function cierra(): void
+    {
         self::$usuario_en_sesion = null;
-		unset($_SESSION[self::SESSION_SESION]);
+        unset($_SESSION[self::SESSION_SESION]);
 
-		session_destroy();
+        session_destroy();
 
-		session_start();
-	}
+        session_start();
+    }
 
     /**
      * Comprueba si la sesión está iniciada.
@@ -88,13 +88,13 @@ class Sesion
         return self::$usuario_en_sesion !== null;
     }
 
-	/**
-	 * Devuelve el usuario que ha iniciado sesión.
+    /**
+     * Devuelve el usuario que ha iniciado sesión.
      *
      * @requires Que haya una sesión iniciada.
-	 */
-	public static function getUsuarioEnSesion() : Usuario
-	{
+     */
+    public static function getUsuarioEnSesion() : Usuario
+    {
         return self::$usuario_en_sesion;
     }
 

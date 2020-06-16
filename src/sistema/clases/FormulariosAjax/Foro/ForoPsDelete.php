@@ -105,6 +105,7 @@ use Awsw\Gesi\Datos\Foro;
     
     public function generateFormInputs(): string
     {
+        // TODO eliminar recursivamente
         $html = <<< HTML
         <input type="hidden" name="uniqueId">
         <div class="form-group">

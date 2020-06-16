@@ -23,7 +23,7 @@ use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
-
+use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
 
 use Awsw\Gesi\Vistas\Vista;
@@ -31,62 +31,66 @@ use Awsw\Gesi\Vistas\Vista;
 class Asignacion extends Controlador
 {
 
-	public static function controla(): void
-	{
+    public static function controla(): void
+    {
 
-		/**
-		 * Personal de Secretaría.
-		 */
+        /**
+         * Personal de Secretaría.
+         */
 
-		parent::get('/ps/asignaciones/', function () {
-			Vista::dibuja(new AsignacionPsList());
-		});
+        parent::get('/ps/asignaciones/', function () {
+            Vista::dibuja(new AsignacionPsList());
+        });
 
-		// Create.
-		parent::get('/ps/asignacion/create/', function () {
-			(new AsignacionPsCreate(true))->manage();
-		});
-		parent::post('/ps/asignacion/create/', function () {
-			(new AsignacionPsCreate(true))->manage();
-		});
+        // Create.
+        parent::get('/ps/asignacion/create/', function () {
+            (new AsignacionPsCreate(true))->manage();
+        });
+        parent::post('/ps/asignacion/create/', function () {
+            (new AsignacionPsCreate(true))->manage();
+        });
 
-		// Read.
-		parent::get('/ps/asignacion/read/', function () {
-			(new AsignacionPsRead(true))->manage();
-		});
+        // Read.
+        parent::get('/ps/asignacion/read/', function () {
+            (new AsignacionPsRead(true))->manage();
+        });
 
-		// Update.
-		parent::get('/ps/asignacion/update/', function () {
-			(new AsignacionPsUpdate(true))->manage();
-		});
-		parent::patch('/ps/asignacion/update/', function () {
-			(new AsignacionPsUpdate(true))->manage();
-		});
+        // Update.
+        parent::get('/ps/asignacion/update/', function () {
+            (new AsignacionPsUpdate(true))->manage();
+        });
+        parent::patch('/ps/asignacion/update/', function () {
+            (new AsignacionPsUpdate(true))->manage();
+        });
 
-		// Delete.
-		parent::get('/ps/asignacion/delete/', function () {
-			(new AsignacionPsDelete(true))->manage();
-		});
-		parent::delete('/ps/asignacion/delete/', function () {
-			(new AsignacionPsDelete(true))->manage();
-		});
+        // Delete.
+        parent::get('/ps/asignacion/delete/', function () {
+            (new AsignacionPsDelete(true))->manage();
+        });
+        parent::delete('/ps/asignacion/delete/', function () {
+            (new AsignacionPsDelete(true))->manage();
+        });
 
-		/**
-		 * Personal Docente
-		 */
-		
-		parent::get('/pd/asignaciones/', function() {
-			Vista::dibuja(new AsignacionPdList());
-		});
+        /**
+         * Personal Docente
+         */
+        
+        parent::get('/pd/asignaciones/', function() {
+            Vista::dibuja(new AsignacionPdList());
+        });
 
-		/**
-		 * Estudiante.
-		 */
+        /**
+         * Estudiante.
+         */
 
-		parent::get('/est/asignaciones/horario/', function () {
-			Vista::dibuja(new AsignacionEstList());
-		});
-	}
+        parent::get('/est/asignaciones/', function () {
+            Vista::dibuja(new AsignacionEstList());
+        });
+
+        parent::get('/est/asignaciones/horario/', function () {
+            Vista::dibuja(new AsignacionEstHorario());
+        });
+    }
 }
 
 ?>

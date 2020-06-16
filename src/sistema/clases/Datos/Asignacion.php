@@ -411,7 +411,7 @@ class Asignacion
         $sentencia->close();
 
         return $as;    
-	}
+    }
 
     /**
      * Comprueba si una asignación existe en la base de datos en base a su
