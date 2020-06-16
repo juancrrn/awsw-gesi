@@ -78,6 +78,9 @@ distintas restricciones y se han generado datos de demostración (carpeta
 - Vista de recuperar contraseña.
 - Que un profesor pueda crear eventos para asignaturas enteras.
 - ...
-- Permisos de vistas (est, pd, ps)
+- Permisos de vistas (est, pd, ps) Falta
+      - MensajeForoPdList
+      - MensajeForoPsList
+      - (Biblioteca)
 - Foro Eventos
 - Revisar descripciones de métodos y clases

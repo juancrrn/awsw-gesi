@@ -34,7 +34,6 @@ class EventoEstList extends Modelo
 
 	public function __construct()
 	{
-		$this->nombre = self::VISTA_NOMBRE;
 		$this->id = self::VISTA_ID;
 
 		$this->listado = array(); // TODO: recuperar el listado de eventos (calendario)

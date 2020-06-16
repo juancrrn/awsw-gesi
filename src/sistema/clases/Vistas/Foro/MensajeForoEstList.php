@@ -22,6 +22,7 @@ namespace Awsw\Gesi\Vistas\Foro;
 
 use Awsw\Gesi\Sesion;
 
+
 use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Foro;

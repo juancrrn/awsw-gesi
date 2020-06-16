@@ -31,8 +31,7 @@ class MiLista extends Modelo
 
     public function __construct()
     {
-        $this->nombre = self::VISTA_NOMBRE;
-        $this->id = self::VISTA_ID;
+        // Sesion::requerirSesionPd();
 
         $this->listado = array(); // TODO: recuperar el listado de eventos (calendario)
     }
