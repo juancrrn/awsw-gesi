@@ -31,6 +31,7 @@ class AdminLista extends Modelo
 
     public function __construct()
     {
+        // Sesion::requerirSesionPs();
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
 

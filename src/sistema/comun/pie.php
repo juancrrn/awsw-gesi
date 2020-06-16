@@ -66,7 +66,10 @@ $footerFinalHtmlBuffer = <<< HTML
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
         <!-- Scripts de la aplicación -->
+        <script src="$appUrl/js/auxfn.js$v"></script>
+        <script src="$appUrl/js/toast.js$v"></script>
         <script src="$appUrl/js/app.js$v"></script>
+        <script src="$appUrl/js/formulariosAjax.js$v"></script>
         <script src="$appUrl/js/funcionesOnSuccess.js$v"></script>
         <script src="$appUrl/js/gesiSchedule.js$v"></script>
     </body>

@@ -27,6 +27,7 @@ Controlador::setGetBase(App::getSingleton()->getBaseControlador());
  */
 
 \Awsw\Gesi\Controladores\Asignacion::controla();
+
 /**
  * Puntos de entrada de vistas relacionadas con landing.
  */

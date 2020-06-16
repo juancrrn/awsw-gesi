@@ -80,7 +80,7 @@ class Usuario
         $this->grupo = $grupo;
     }
 
-    public static function fromMysqlFetch(Object $o) : Usuario
+    public static function fromMysqlFetch(Object $o): Usuario
     {
         // Convertir fechas al formato correcto.
 
@@ -296,7 +296,7 @@ class Usuario
      *
      * @return Usuario
      */
-    public static function dbGet(int $id) : Usuario
+    public static function dbGet(int $id): Usuario
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -375,7 +375,7 @@ class Usuario
      *
      * @return array<Usuario>
      */
-    public static function dbGetAll() : array
+    public static function dbGetAll(): array
     {
 
         $bbdd = App::getSingleton()->bbddCon();
@@ -560,13 +560,91 @@ class Usuario
     }
 
     /**
+     * Comprueba si un usuario existe en la base de datos en base a su NIF o 
+     * NIE y su dirección de correo electrónico.
+     *
+     * @param string $nif
+     * @param string $email
+     *
+     * @return bool
+     */
+    public static function dbExisteNifYEmail(string $nif, string $email): bool
+    {        
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT id
+        FROM gesi_usuarios
+        WHERE nif = ?
+        AND email = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('ss', $nif, $email);
+        $sentencia->execute();
+        $sentencia->store_result();
+        $existe = $sentencia->num_rows > 0;
+        $sentencia->close();
+
+        return $existe;
+    }
+
+    /**
+     * Trae un usuario a partir de un NIF o NIE y dirección de correo 
+     * electrónico.
+     * 
+     * @requires Se ha validado previamente que ese usuario existe.
+     *
+     * @param string $nif
+     * @param string $email
+     *
+     * @return self
+     */
+    public static function dbGetByNifYEmail(string $nif, string $email): self
+    {
+
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT 
+            id,
+            nif,
+            rol,
+            nombre,
+            apellidos,
+            fecha_nacimiento,
+            numero_telefono,
+            email,
+            fecha_ultimo_acceso,
+            fecha_registro,
+            grupo
+        FROM
+            gesi_usuarios
+        WHERE
+            nif = ?
+        AND
+            email = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('ss', $nif, $email);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $usuario = Usuario::fromMysqlFetch($resultado->fetch_object());
+        $sentencia->close();
+
+        return $usuario;    
+    }
+
+    /**
      * Trae todos los usuarios de la base de datos de un rol específico.
      *
      * @param int $tipo
      *
      * @return array<Usuario>
      */
-    public static function dbGetByRol(int $rol) : array
+    public static function dbGetByRol(int $rol): array
     {
 
         $bbdd = App::getSingleton()->bbddCon();
@@ -616,7 +694,7 @@ class Usuario
      *
      * @return array<Usuario>
      */
-    public static function dbGetEstudiantesByGrupo(int $grupo_id) : array
+    public static function dbGetEstudiantesByGrupo(int $grupo_id): array
     {
 
         $bbdd = App::getSingleton()->bbddCon();
@@ -761,6 +839,35 @@ class Usuario
 
         $resultado = $sentencia->execute();
 
+        $sentencia->close();
+
+        return $resultado;
+    }
+
+    /**
+     * Actualiza la contraseña de un usuario.
+     * 
+     * @param string $password Contraseña hasheada.
+     * 
+     * @return bool Resultado de la ejecución de la sentencia.
+     */
+    public function dbActualizaPassword(string $password): bool
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        UPDATE
+            gesi_usuarios
+        SET
+            password = ?
+        WHERE
+            id = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $id = $this->getId();
+        $sentencia->bind_param('si', $password, $id);
+        $resultado = $sentencia->execute();
         $sentencia->close();
 
         return $resultado;

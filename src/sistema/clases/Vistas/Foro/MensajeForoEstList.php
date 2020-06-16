@@ -44,6 +44,7 @@ class MensajeForoEstList extends Modelo
 
     public function __construct($foroId)
     {
+        Sesion::requerirSesionEst();
         if (! Foro::dbExisteId($foroId)) {
             Vista::encolaMensajeError('El foro solicitado no existe.', '');
         } elseif (! Foro::dbEstTienePermiso(Sesion::getUsuarioEnSesion()->getId(), $foroId)) {
