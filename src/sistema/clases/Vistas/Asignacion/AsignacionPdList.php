@@ -26,6 +26,7 @@ use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Validacion\GesiScheduleSlot;
 
 class AsignacionPdList extends Modelo
 {
@@ -54,19 +55,7 @@ class AsignacionPdList extends Modelo
         $html = <<< HTML
         <h2 class="mb-4">$this->nombre</h2>
         <p>A continuación se muestra una lista con sus asignaciones.</p>
-        <table id="asignacion-pd-list" class="table table-borderless table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Asignatura</th>
-                    <th scope="col">Grupo</th>
-                    <th scope="col">Horario</th>
-                    <th scope="col">Participantes</th>
-                </tr>
-            </thead>
-            <tbody>
-                $listaAsignaciones
-            </tbody>
-        </table>
+        $listaAsignaciones
         HTML;
 
         echo $html;
@@ -76,23 +65,27 @@ class AsignacionPdList extends Modelo
     public function generaListaAsignaciones(): string
     {   
         $app = App::getSingleton();
+        $baseUrlForo = $app->getUrl() . '/pd/foros/';
 
         $buffer = '';
+        $bufferModales = '';
 
         if (! empty($this->listado)) {
             foreach ($this->listado as $asignacion) {
-
-                $horarios = $asignacion->getHorario();
                 $asignatura = Asignatura::dbGet($asignacion->getAsignatura());
                 $asignaturaNombre = $asignatura->getNombreCompleto();
                 
                 $grupo = Grupo::dbGet($asignacion->getGrupo());
                 $grupoNombre = $grupo->getNombreCompleto();
 
-                $foro = $app->getUrl() . '/mi/foros/' . $asignacion->getForoPrincipal() . '/ver/';
+                $foro = $app->getUrl() . '/pd/foros/' . $asignacion->getForoPrincipal() . '/';  // Puedes navegar por el directorio?
 
                 $estudiantes = Usuario::dbGetEstudiantesByGrupo($grupo->getId());
                 $stringEstudiantes = '';
+                
+                $modalId = 'modal-horario-asignacion-' . $asignacion->getId();
+                $botonModalHorario = GesiScheduleSlot::generateModalButton($modalId);
+                $bufferModales .= GesiScheduleSlot::generateScheduleModal($modalId, array($asignacion), $baseUrlForo);
 
                 if (! empty($estudiantes)) {
                     for ($i = 0; $i < sizeof($estudiantes); $i++) {
@@ -118,7 +111,7 @@ class AsignacionPdList extends Modelo
                         $asignaturaNombre
                     </td>
                     <td>$grupoNombre</td>
-                    <td>$horarios</td>
+                    <td>$botonModalHorario</td>
                     <td><small>$stringEstudiantes</small></td>
                 </tr>
                 HTML;
@@ -134,7 +127,25 @@ class AsignacionPdList extends Modelo
             HTML;
         }
 
-        return $buffer;
+        
+        $html = <<< HTML
+        <table id="asignacion-pd-list" class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Asignatura</th>
+                    <th scope="col">Grupo</th>
+                    <th scope="col">Horario</th>
+                    <th scope="col">Participantes</th>
+                </tr>
+            </thead>
+            <tbody>
+                $buffer
+            </tbody>
+        </table>
+        $bufferModales
+        HTML;
+
+        return $html;
     }
 
 }

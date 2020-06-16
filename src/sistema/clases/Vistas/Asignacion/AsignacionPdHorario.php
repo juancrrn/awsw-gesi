@@ -21,37 +21,32 @@ use Awsw\Gesi\App;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Validacion\GesiScheduleSlot;
 
-class AsignacionEstHorario extends Modelo
+class AsignacionPdHorario extends Modelo
 {
 
     public const VISTA_NOMBRE = "Ver mi horario";
-    public const VISTA_ID = "asignacion-est-horario";
+    public const VISTA_ID = "asignacion-pd-horario";
     
     private $listado;
     
     public function __construct()
     {
-        Sesion::requerirSesionEst();
+        Sesion::requerirSesionPd();
 
         $this->nombre = self::VISTA_NOMBRE;
         $this->id = self::VISTA_ID;
     
         $usuario = Sesion::getUsuarioEnSesion();
 
-        if($usuario->getGrupo() !== null){
-            $this->listado = Asignacion::dbGetByGrupo($usuario->getGrupo());
-        }
+        $this->listado = Asignacion::dbGetByProfesor($usuario->getId());
     }
 
     public function procesaContent(): void
     {
         $app = App::getSingleton();
-        $baseUrlForo = $app->getUrl() . '/est/foros/';
-
+        $baseUrlForo = $app->getUrl() . '/pd/foros/';
         $autoSchedule = GesiScheduleSlot::generateAutoSchedule($this->listado, $baseUrlForo);
 
         $html = <<< HTML

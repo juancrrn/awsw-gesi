@@ -24,6 +24,7 @@ use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPdHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
 
 use Awsw\Gesi\Vistas\Vista;
@@ -77,6 +78,10 @@ class Asignacion extends Controlador
         
         parent::get('/pd/asignaciones/', function() {
             Vista::dibuja(new AsignacionPdList());
+        });
+
+        parent::get('/pd/asignaciones/horario/', function () {
+            Vista::dibuja(new AsignacionPdHorario());
         });
 
         /**

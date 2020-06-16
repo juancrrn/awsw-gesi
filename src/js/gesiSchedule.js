@@ -40,19 +40,32 @@ gesiSchedule.compare = function (a, b)
 }
 
 /**
+ * Convierte una hora 'hh:mm' a minutos.
+ * 
+ * @param {string} time Hora en formato 'hh:mm'.
+ * 
+ * @return {int} Tiempo en minutos.
+ */
+gesiSchedule.getTimeStamp = function (time)
+{
+    const hhmm = new RegExp('(\\d?\\d):(\\d\\d)');
+    
+    const result = hhmm.exec(time);
+
+    const timeStamp = parseInt(result[1]) * 60 + parseInt(result[2]);
+    
+    return timeStamp;
+}
+
+/**
  * Genera las filas de la tabla del horario.
  * 
  * @return {string} Cadena de HTML con elementos <li>.
  */
 gesiSchedule.rows = function ()
 {
-    const hi = new RegExp('(\\d?\\d):(\\d\\d)');
-    
-    const limiteInicio = hi.exec(autoconf.GESI_SCHEDULE_TIME_START_LIMIT);
-    const limiteFinal = hi.exec(autoconf.GESI_SCHEDULE_TIME_END_LIMIT);
-
-    const minutosInicio = limiteInicio[1] * 60 + parseInt(limiteInicio[2]);
-    const minutosFinal = limiteFinal[1] * 60 + parseInt(limiteFinal[2]);
+    const minutosInicio = gesiSchedule.getTimeStamp(autoconf.GESI_SCHEDULE_TIME_START_LIMIT);
+    const minutosFinal = gesiSchedule.getTimeStamp(autoconf.GESI_SCHEDULE_TIME_END_LIMIT);
 
     var lineas = '';
 
@@ -67,7 +80,36 @@ gesiSchedule.rows = function ()
 }
 
 /**
- * Genera el horario.
+ * Genera las posiciones de los eventos del hoario.
+ * 
+ * @param {HTMLElement} schedule
+ */
+gesiSchedule.organize = function (schedule)
+{
+    const globalStart = gesiSchedule.getTimeStamp(autoconf.GESI_SCHEDULE_TIME_START_LIMIT);
+    const globalEnd = gesiSchedule.getTimeStamp(autoconf.GESI_SCHEDULE_TIME_END_LIMIT);
+    const globalDuration = globalEnd - globalStart;
+
+    const $scheduleEvents = $(schedule).find('.gesi-schedule__event');
+
+    const colHeaderHeight = $(schedule).find('.gesi-schedule__header:first-child').height();
+
+    const scheduleHeight = $(schedule).find('.gesi-schedule__column > ul').height() - colHeaderHeight;
+
+    for (var i = 0; i < $scheduleEvents.length; i++) {
+        const $a = $($scheduleEvents[i]).find('> a');
+        const start = gesiSchedule.getTimeStamp($a.data('start'));
+        const duration = gesiSchedule.getTimeStamp($a.data('end')) - start;
+
+        const eventTop = scheduleHeight / (globalDuration / (start - globalStart));
+        const eventHeight = scheduleHeight * duration / globalDuration;
+
+        $($scheduleEvents[i]).css({ top: eventTop, height: eventHeight });
+    }
+}
+
+/**
+ * Genera el HTML base del horario.
  * 
  * @param {HTMLElement} schedule
  */
@@ -92,8 +134,8 @@ gesiSchedule.launch = function (schedule)
             if (slots[slot].dia == diasValidos[dia]) {
                 const slotActual = '\
                 <li class="gesi-schedule__event">\
-                    <a data-start="' + slots[slot].inicio + '" data-end="' + slots[slot].final + '" href="' + slots[slot].foroUrl + '">\
-                        <span class="gesi-schedule__time">' + slots[slot].inicioHora + ' - ' + slots[slot].finalHora + '</span>\
+                    <a data-start="' + slots[slot].inicio + '" data-end="' + slots[slot].final + '" href="' + slots[slot].foroUrl + '" style="background-color: ' + slots[slot].nameColor + ';";>\
+                        <span class="gesi-schedule__time">' + slots[slot].inicio + ' - ' + slots[slot].final + '</span>\
                         <span class="gesi-schedule__subject">' + slots[slot].asignaturaNombre + '</span>\
                         <span class="gesi-schedule__teacher">' + slots[slot].profesorNombre + '</span>\
                     </a>\
@@ -110,15 +152,27 @@ gesiSchedule.launch = function (schedule)
         </li>';
     }
 
-    const content = '\
+    const timelineContent = '\
     <div class="gesi-schedule__timeline">\
         <ul>' + lineas + '</ul>\
-    </div>\
+    </div>';
+
+    const $timeline = $(timelineContent);
+    $(schedule).append($timeline);
+
+    const eventsContent = '\
     <div class="gesi-schedule__events">\
         <ul>' + columnas + '</ul>\
     </div>';
 
-    $(schedule).html(content);
+    const $events = $(eventsContent);
+    $(schedule).append($events);
+
+    // Set columns height.
+    $(schedule).find('.gesi-schedule__column > ul').height($timeline.height());
+    
+    // Organize events.
+    gesiSchedule.organize(schedule);
 }
 
 /**
@@ -127,9 +181,16 @@ gesiSchedule.launch = function (schedule)
 $(() => {
     const autoLanuched = $('.gesi-schedule[data-autolaunch="true"]');
 
-    if (autoLanuched.length) {
-        for (var i = 0; i < autoLanuched.length; i++) {
-            gesiSchedule.launch(autoLanuched[i]);
-        }
+    for (var i = 0; i < autoLanuched.length; i++) {
+        gesiSchedule.launch(autoLanuched[i]);
     }
+
+    $('.gesi-schedule-modal').on('shown.bs.modal', function () {
+        gesiSchedule.launch($(this).find('.gesi-schedule'));
+        $(this).modal('handleUpdate');
+    });
+
+    $('.gesi-schedule-modal').on('hidden.bs.modal', function () {
+        $(this).find('.gesi-schedule').empty();
+    });
 });

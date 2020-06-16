@@ -206,6 +206,27 @@ class Sesion
     }
     
     /**
+     * Requiere que haya una sesión iniciada con permisos de estudiante para 
+     * acceder al contenido. En caso negativo, redirige al inicio de sesión.
+     * 
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
+     */
+    public static function requerirSesionEst($api = false): void
+    {
+        self::requerirSesionIniciada($api);
+
+        if (! self::$usuario_en_sesion->isEst()) {
+            if (! $api) {
+                Vista::encolaMensajeError('No tienes permisos suficientes para acceder a este contenido.', '');
+            } else {
+                self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
+            }
+        }
+    }
+    
+    /**
      * Requiere que haya una sesión iniciada pero SIN permisos de personal de 
      * secretaría para acceder al contenido. En caso negativo, redirige al 
      * inicio de sesión.

@@ -3,6 +3,8 @@
 namespace Awsw\Gesi\Validacion;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Usuario;
 use DateTime;
 use JsonSerializable;
 
@@ -86,7 +88,9 @@ class GesiScheduleSlot implements JsonSerializable
 
     public function getInicio(): string
     {
-        return $this->horaInicio . ':' . $this->minutosInicio;
+        $zeroFilledHora = ($this->horaInicio < 10 ? '0' : '') . $this->horaInicio;
+        $zeroFilledMinutos = ($this->minutosInicio < 10 ? '0' : '') . $this->minutosInicio;
+        return $zeroFilledHora . ':' . $zeroFilledMinutos;
     }
 
     public function getInicioEnMinutos(): int
@@ -96,7 +100,9 @@ class GesiScheduleSlot implements JsonSerializable
 
     public function getFinal(): string
     {
-        return $this->horaFinal . ':' . $this->minutosFinal;
+        $zeroFilledHora = ($this->horaFinal < 10 ? '0' : '') . $this->horaFinal;
+        $zeroFilledMinutos = ($this->minutosFinal < 10 ? '0' : '') . $this->minutosFinal;
+        return $zeroFilledHora . ':' . $zeroFilledMinutos;
     }
 
     public function getFinalEnMinutos(): int
@@ -215,6 +221,134 @@ class GesiScheduleSlot implements JsonSerializable
         return $result;
     }
 
+    /**
+     * Genera un color a partir del nombre de la asignatura del slot.
+     * 
+     * @return string
+     */
+    public function generateColor(): string
+    {
+        if (! $this->getAsignaturaNombre()) return null;
+
+        // Color de base.
+        $hMin = 295;
+        $hMax = 305;
+        $sMin = 30;
+        $sMax = 60;
+        $lMin = 40;
+        $lMax = 70;
+
+        // Convertir nombre a entero.
+        $i = crc32($this->getAsignaturaNombre());
+
+        // Calcular color.
+        $h = $i % ($hMax - $hMin) + $hMin;
+        $s = $i % ($sMax - $sMin) + $sMin;
+        $l = $i % ($lMax - $lMin) + $lMin;
+
+        return 'hsl(' . $h . ',' . $s . '%,' . $l . '%)';
+    }
+
+    /**
+     * Genera una cadena JSON con los slots a partir de una lista de 
+     * asignaciones.
+     * 
+     * @param array $asignaciones
+     * @param string $baseUrlForo
+     * 
+     * @return string
+     */
+    public static function generaJson(array $asignaciones, string $baseUrlForo): string
+    {
+        $app = App::getSingleton();
+
+        $jsonBuffer = array();
+
+        if (! empty($asignaciones)) {
+            foreach ($asignaciones as $asignacion) {
+                $asignatura = Asignatura::dbGet($asignacion->getAsignatura());
+                $profesor = Usuario::dbGet($asignacion->getProfesor());
+
+                $jsonBuffer = array_merge(
+                    $jsonBuffer,  
+                    GesiScheduleSlot::convierteGesiSchedule(
+                        $asignacion->getHorario(),
+                        $asignatura->getNombreCorto(),
+                        $profesor->getNombreCompleto(),
+                        $baseUrlForo . $asignacion->getForoPrincipal() . '/'
+                    )
+                );
+            }
+        }
+
+        $json = htmlspecialchars(json_encode($jsonBuffer));
+
+        return $json;
+    }
+
+    /**
+     * Genera un elemento HTML de horario que se autocarga al estar lista la 
+     * página.
+     * 
+     * @param array $asignaciones
+     * @param string $baseUrlForo
+     * 
+     * @return string
+     */
+    public static function generateAutoSchedule(array $asignaciones, string $baseUrlForo): string
+    {
+        $json = self::generaJson($asignaciones, $baseUrlForo);
+        $autoSchedule = '<div class="gesi-schedule" data-autolaunch="true" data-json="' . $json . '"></div>';
+
+        return $autoSchedule;
+    }
+
+    /**
+     * Genera un botón HTML para abrir un modal con un horario.
+     * 
+     * @param string $modalId
+     * 
+     * @return string
+     */
+    public static function generateModalButton(string $modalId): string
+    {
+        $button = '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#' . $modalId . '">Ver horario</button>';
+
+        return $button;
+    }
+
+    /**
+     * Genera un modal con un horario.
+     * 
+     * @param string $modalId
+     * @param array $asignaciones
+     * @param string $baseUrlForo
+     * 
+     * @return string
+     */
+    public static function generateScheduleModal(string $modalId, array $asignaciones, string $baseUrlForo): string
+    {
+        $json = self::generaJson($asignaciones, $baseUrlForo);
+
+        $modal = <<< HTML
+        <div class="modal gesi-schedule-modal fade" id="$modalId" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ver horario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="gesi-schedule" data-autolaunch="false" data-json="$json"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        HTML;
+
+        return $modal;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -222,10 +356,9 @@ class GesiScheduleSlot implements JsonSerializable
             'profesorNombre' => $this->getProfesorNombre(),
             'foroUrl' => $this->getForoUrl(),
             'dia' => $this->getDia(),
-            'inicio' => $this->getInicioEnMinutos(),
-            'inicioHora' => $this->getInicio(),
-            'final' => $this->getFinalEnMinutos(),
-            'finalHora' => $this->getFinal()
+            'inicio' => $this->getInicio(),
+            'final' => $this->getFinal(),
+            'nameColor' => $this->generateColor()
         ];
     }
 }

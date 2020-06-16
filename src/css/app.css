@@ -191,7 +191,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    /*height: 100%;*/
     width: 100%;
     padding-top: 50px;
 }
@@ -247,7 +247,7 @@
 
 .gesi-schedule__column > ul {
     list-style: none;
-    height: 950px;
+    /*height: 950px;*/
     overflow: visible;
     padding: 0;
     position: relative;
@@ -270,7 +270,7 @@
     text-decoration: none;
     padding: .75em;
     background: #588093;
-    /*box-shadow: 0 10px 20px rgba(0,0,0,.1),inset 0 -3px 0 rgba(0,0,0,.2);*/
+    white-space: nowrap;
 }
 
 .gesi-schedule__time {
@@ -278,12 +278,16 @@
     opacity: .9;
     font-size: .8em;
     display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .gesi-schedule__subject {
     color: #ffffff;
     opacity: .9;
     display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .gesi-schedule__teacher {
@@ -291,6 +295,8 @@
     opacity: .9;
     font-size: .8em;
     display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 

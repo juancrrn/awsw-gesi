@@ -21,6 +21,7 @@ use Awsw\Gesi\Vistas\Vista;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
+use Awsw\Gesi\Vistas\Asignacion\AsignacionPdHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
 use Awsw\Gesi\Vistas\Foro\ForoPsList;
@@ -83,7 +84,9 @@ if (Sesion::isSesionIniciada()) {
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/grupos/', );*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaciones/', AsignacionPdList::class); 
+            '/pd/asignaciones/', AsignacionPdList::class);
+        $sideMenuBuffer .= Vista::generarSideMenuLink(
+            '/pd/asignaciones/horario/', AsignacionPdHorario::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/eventos/', EventoPdList::class );
     } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
