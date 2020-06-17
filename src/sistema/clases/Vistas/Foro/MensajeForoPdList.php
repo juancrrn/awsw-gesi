@@ -15,7 +15,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Vistas\Foro;
@@ -28,7 +28,9 @@ use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\MensajeForo;
 use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Formularios\MensajeForo\MensajeForoRespuestaCreate as MensajeForoMensajeForoRespuestaCreate;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoCreate;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Vistas\Vista;
 
@@ -57,6 +59,10 @@ class MensajeForoPdList extends Modelo
         $this->id = self::VISTA_ID;
 
         $this->foro = Foro::dbGet($foroId);
+
+        $this->formRespuesta = new MensajeForoMensajeForoRespuestaCreate('/pd/foros/' . $this->foro->getId() . '/', $this->foro->getId());
+        $this->formRespuesta->gestiona();
+
         $this->mensajes = MensajeForo::getAllByForo($foroId);
         $this->asignacion = Asignacion::dbGetByForoPrincipal($foroId);
         $this->profesor = Usuario::dbGet($this->asignacion->getProfesor());
@@ -69,6 +75,10 @@ class MensajeForoPdList extends Modelo
         $nombreAsignatura = $this->asignatura->getNombreCompleto();
         $nombreProfesor = $this->profesor->getNombreCompleto();
 
+        $formMensajePrincipal = new MensajeForoCreate(true, $this->foro->getId());
+        $modalMensajePrincipal = $formMensajePrincipal->generateModal();
+        $botonMensajePrincipal = $formMensajePrincipal->generateButton('Crear un mensaje nuevo', null);
+
         $mensajes = $this->generaListaMensajes();
         
         echo <<< HTML
@@ -77,17 +87,19 @@ class MensajeForoPdList extends Modelo
             <h3 class="mb-3">$nombreForo</h3>
             <p class="mb-3">Este foro figura como foro principal de asignatura con los siguientes datos:</p>
             <p class="mb-2">
-                <span class="badge badge-secondary">Asignatura</span>
+                <span class="badge badge-primary">Asignatura</span>
                 $nombreAsignatura
             </p>
-            <p>
-                <span class="badge badge-secondary">Profesor</span>
+            <p class="mb-4">
+                <span class="badge badge-primary">Profesor</span>
                 $nombreProfesor
             </p>
+            <p>$botonMensajePrincipal</p>
         </header>
         <div id="mensaje-foro-ses-list">
             $mensajes
         </div>
+        $modalMensajePrincipal
         HTML;
 
     }
@@ -98,25 +110,31 @@ class MensajeForoPdList extends Modelo
             $buffer = '';
 
             foreach ($this->mensajes as $mensaje) {
-                $autor = Usuario::dbGet($mensaje->getUsuario())
-                    ->getNombreCompleto();
+                $usuario = Usuario::dbGet($mensaje->getUsuario());
+                $autor = $usuario->getNombreCompleto();
                 $fecha = \DateTime::createFromFormat(Valido::MYSQL_DATETIME_FORMAT, $mensaje->getFecha())
                     ->format(Valido::ESP_DATETIME_SHORT_FORMAT);
-                $contenido = $mensaje->getContenido();
-                $respuestas = $this->generaRespuestasMensajes($mensaje);
+                $contenido = htmlspecialchars($mensaje->getContenido());
+                $respuestas = $this->generaRespuestasMensaje($mensaje);
+                $badgeProfesor = $usuario->getId() == $this->profesor->getId() ? '<span class="badge badge-primary">Profesor</span>' : '';
 
+                $mensajeId = $mensaje->getId();
+                $contenedorRespuestas = 'mensaje-foro-respuestas-' . $mensajeId;
+
+                $default = array('padreId' => $mensajeId);
+                $this->formRespuesta->genera($default);
+                $textarea = $this->formRespuesta->getHtml();
+                
                 $buffer .= <<< HTML
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header">
-                        <p><strong>$autor</strong></p>
-                        <p>$fecha</p>
+                    <p class="mb-2"><span class="badge badge-secondary">Mensaje principal ($fecha)</span></p>
+                        <p class="mb-2"><strong>$autor</strong> $badgeProfesor</p>
+                        <p class="mb-4">$contenido</p>
                     </div>
-                    <div class="card-body">
-                        $contenido
-                        <p class="mt-3 text-right"><button class="btn btn-sm btn-primary">Responder</button></p>
-                    </div>
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush mensaje-foro-ses-respuestas-list" id="$contenedorRespuestas">
                         $respuestas
+                        <li class="list-group-item">$textarea</li>
                     </ul>
                 </div>
                 HTML;
@@ -134,17 +152,28 @@ class MensajeForoPdList extends Modelo
         return $buffer;
     }
 
-    private function generaRespuestasMensajes(MensajeForo $mensaje): string
+    private function generaRespuestasMensaje(MensajeForo $mensaje): string
     {
         $buffer = '';
 
-        // TODO recoger respuestas de los mensajes.
+        $respuestas = $mensaje->dbGetRespuestas();
 
-        $buffer .= <<< HTML
-        <li class="list-group-item">Respuesta</li>
-        <li class="list-group-item">Respuesta</li>
-        <li class="list-group-item">Respuesta</li>
-        HTML;
+        foreach ($respuestas as $respuesta) {
+            $usuario = Usuario::dbGet($respuesta->getUsuario());
+            $nombre = $usuario->getNombreCompleto();
+            $fecha = \DateTime::createFromFormat(Valido::MYSQL_DATETIME_FORMAT, $respuesta->getFecha())
+            ->format(Valido::ESP_DATETIME_SHORT_FORMAT);
+            $contenido = htmlspecialchars($respuesta->getContenido());
+            $badgeProfesor = $usuario->getId() == $this->profesor->getId() ? '<span class="badge badge-primary">Profesor</span>' : '';
+
+            $buffer .= <<< HTML
+            <li class="list-group-item">
+                <p class="mb-2"><span class="badge badge-secondary">Respuesta ($fecha)</span></p>
+                <p class="mb-2"><strong>$nombre</strong> $badgeProfesor</p>
+                <p>$contenido</p>
+            </li>
+            HTML;
+        }
 
         return $buffer;
     }

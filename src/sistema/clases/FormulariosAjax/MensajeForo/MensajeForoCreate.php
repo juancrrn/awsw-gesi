@@ -22,7 +22,7 @@ use SessionHandler;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 class MensajeForoCreate extends FormularioAjax
@@ -44,7 +44,7 @@ class MensajeForoCreate extends FormularioAjax
     private const TARGET_CLASS_NAME = 'MensajeForo';
     private const SUBMIT_URL = '/ses/mensajeforo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'created.ses.mensajesforo';
+    private const ON_SUCCESS_EVENT_NAME = 'created.mensajeforo.ses';
     private const ON_SUCCESS_EVENT_TARGET = '#mensaje-foro-ses-list';
 
     private $foroId;

@@ -25,7 +25,7 @@ use Awsw\Gesi\Datos\Asignacion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 class EventoPsDelete extends FormularioAjax
@@ -42,7 +42,7 @@ class EventoPsDelete extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-delete';
+    private const FORM_ID = 'evento-ps-delete';
     private const FORM_NAME = 'Eliminar Evento';
     private const TARGET_CLASS_NAME = 'Evento';
     private const SUBMIT_URL = '/ps/eventos/delete/';
@@ -100,13 +100,13 @@ class EventoPsDelete extends FormularioAjax
             return $responseData;
         }
 
-        $record = Evento::dbGet($uniqueId);
+        $evento = Evento::dbGet($uniqueId);
 
         // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
             // Link are not necessary in this case
-            self::TARGET_CLASS_NAME => $record
+            self::TARGET_CLASS_NAME => $evento
         );
 
         return $responseData;
@@ -132,57 +132,47 @@ class EventoPsDelete extends FormularioAjax
         $uniqueId = $data['uniqueId'] ?? null;
         $checkbox = $data['checkbox'] ?? null;
 
-               // Check all required fields were sent
-               if (empty($uniqueId) || empty($checkbox)) {
-                if (empty($uniqueId)) {
-                    $errors[] = 'Falta el parámetro "uniqueId".';
-                }
-    
-                if (empty($checkbox)) {
-                    $errors[] = 'El campo "checkbox" es obligatorio.';
-                }
-    
-                $this->respondJsonError(400, $errors); // Bad request
+            // Check all required fields were sent
+        if (empty($uniqueId) || empty($checkbox)) {
+            if (empty($uniqueId)) {
+                $errors[] = 'Falta el parámetro "uniqueId".';
             }
-    
-            // Check if confirmation checkbox is valid
-            if ($uniqueId !== $checkbox) {
-                $this->respondJsonError(400, array('El campo "checkbox" no es válido.')); // Bad request.
-            }
-            
-            // Check Record's uniqueId is valid
-            if (! Evento::dbExisteId($uniqueId)) {
-                $errors[] = 'El Evento solicitado no existe.';
-    
-                $this->respondJsonError(404, $errors); // Not found.
-            }
-    
-            //Si el Evento esta asignado
-    
-    
-    
-            //Realoizar comprobaciones antes de eliminar el evento ver db.
-    
-           
-                if ( Evento::dbEliminar($uniqueId)) {
-                    $responseData = array(
-                        'status' => 'ok',
-                        'messages' => array(
-                            'Evento eliminado correctamente.'
-                        )
-                    );
-        
-                    $this->respondJsonOk($responseData);
-                } else {
-                    $errors[] = 'Hubo un problema al eliminar el evento.';
-        
-                    $this->respondJsonError(400, $errors); // Bad request.
-                }
-    
 
+            if (empty($checkbox)) {
+                $errors[] = 'El campo "checkbox" es obligatorio.';
+            }
+
+            $this->respondJsonError(400, $errors); // Bad request
+        }
+
+        // Check if confirmation checkbox is valid
+        if ($uniqueId !== $checkbox) {
+            $this->respondJsonError(400, array('El campo "checkbox" no es válido.')); // Bad request.
+        }
+        
+        // Check Record's uniqueId is valid
+        if (! Evento::dbExisteId($uniqueId)) {
+            $errors[] = 'El Evento solicitado no existe.';
+
+            $this->respondJsonError(404, $errors); // Not found.
+        }
+
+        
+        if ( Evento::dbEliminar($uniqueId)) {
+            $responseData = array(
+                'status' => 'ok',
+                'messages' => array(
+                    'Evento eliminado correctamente.'
+                )
+            );
+
+            $this->respondJsonOk($responseData);
+        } else {
+            $errors[] = 'Hubo un problema al eliminar el evento.';
+
+            $this->respondJsonError(400, $errors); // Bad request.
+        }
     }
-
-
 }
 
 ?>

@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Formularios\Sesion;
@@ -29,7 +29,7 @@ class Iniciar extends Formulario
         parent::__construct('form-login', array('action' => $action));
     }
     
-    protected function generaCampos(array & $datos_iniciales = array()): void
+    protected function generaCampos(array & $datos_iniciales = array()): string
     {
         $nif = '';
 
@@ -37,7 +37,7 @@ class Iniciar extends Formulario
             $nif = isset($datos_iniciales['nif']) ? $datos_iniciales['nif'] : $nif;
         }
 
-        $this->html .= <<< HTML
+        $html = <<< HTML
         <div class="form-group">
             <label for="nif">NIF o NIE</label>
             <input class="form-control" id="nif" type="text" name="nif" placeholder="NIF o NIE" value="$nif">
@@ -49,11 +49,9 @@ class Iniciar extends Formulario
         <button type="submit" class="btn btn-primary" name="login">Continuar</button>
         HTML;
 
+        return $html;
     }
     
-    /**
-     * Procesa un formulario enviado.
-     */
     protected function procesa(array & $datos): void
     {
         $nif = isset($datos['nif']) ? $datos['nif'] : null;

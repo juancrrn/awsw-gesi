@@ -19,7 +19,7 @@ use Awsw\Gesi\Datos\Foro;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
  class ForoPsDelete extends FormularioAjax

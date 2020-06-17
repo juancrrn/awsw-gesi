@@ -24,7 +24,7 @@ use Awsw\Gesi\App;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 class EventoPsRead extends FormularioAjax
@@ -48,11 +48,14 @@ class EventoPsRead extends FormularioAjax
      */
     public function __construct()
     {
+        $app = App::getSingleton();
+
         parent::__construct(
+
             self::FORM_ID,
             self::FORM_NAME,
             self::TARGET_CLASS_NAME,
-            self::SUBMIT_URL,
+            $app->getUrl() . self::SUBMIT_URL,
             null
         );
 
@@ -88,20 +91,12 @@ class EventoPsRead extends FormularioAjax
 
             return $responseData;
         }
-        // Formalizacion HATEOAS de asignaciones.
-        $asignacionLink = FormularioAjax::generateHateoasSelectLink(
-            'asignacion',
-            'single', 
-            Asignacion::dbGetAll()
-        );
 
+        $evento = Evento::dbGet($uniqueId);
 
         $responseData = array(
             'status' => 'ok',
-            'links' => array(
-                $asignacionLink,
-                //$asignaturasLink,
-            )
+            self::TARGET_CLASS_NAME => $evento
         );
 
         return $responseData;
@@ -126,13 +121,7 @@ class EventoPsRead extends FormularioAjax
             <label for="lugar">Lugar</label>
             <input class="form-control" type="text" name="lugar" disabled="disabled" />
         </div>
-        <div class="form-group">
-            <label for="asignacion">Asignacion</label>
-            <input class="form-control" type="text" name="asignacion" id="asignacion" disabled="disabled" />
-        </div>
-        
-        
-        
+           
         HTML;
 
         return $html;

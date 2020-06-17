@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
@@ -21,8 +21,10 @@ use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate;
 use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete;
 use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead;
 use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate;
+
 use Awsw\Gesi\Vistas\Grupo\GrupoPsList;
-use Awsw\Gesi\Vistas\Vista as V;
+
+use Awsw\Gesi\Vistas\Vista;
 
 class Grupo extends Controlador
 {
@@ -35,7 +37,7 @@ class Grupo extends Controlador
          */
 
         parent::get('/ps/grupos/', function () {
-            V::dibuja(new GrupoPsList());
+            Vista::dibuja(new GrupoPsList());
         });
 
         // Create.

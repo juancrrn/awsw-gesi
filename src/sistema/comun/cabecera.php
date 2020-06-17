@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 use Awsw\Gesi\App;
@@ -33,8 +33,7 @@ use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
 use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
 use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
 use Awsw\Gesi\Vistas\Evento\EventoPsList;
-use Awsw\Gesi\Vistas\Evento\EventoPdList;
-use Awsw\Gesi\Vistas\Evento\EventoEstList;
+use Awsw\Gesi\Vistas\Evento\EventoInvList;
 
 $app = App::getSingleton();
 
@@ -42,6 +41,7 @@ $v = (! $app->isDesarrollo()) ? '' : '?v=0.0.0' . time();
 
 $formulario_logout = new FormularioSesionCerrar('');
 $formulario_logout->gestiona();
+$formulario_logout->genera();
 
 $paginaActualNombre = Vista::getPaginaActualNombre();
 $urlInicio = $app->getUrl();
@@ -58,8 +58,8 @@ if (Sesion::isSesionIniciada()) {
 
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/secretaria/', MensajeSecretariaSesList::class);
-    /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/eventos/', 'Eventos', 'evento-lista'); */
+    $sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/est/eventos/', EventoInvList::class);
 
     if (Sesion::getUsuarioEnSesion()->isEst()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
@@ -78,7 +78,7 @@ if (Sesion::isSesionIniciada()) {
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/asignaciones/horario/', AsignacionPdHorario::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/eventos/', EventoPdList::class );
+            '/pd/eventos/', EventoInvList::class );
     } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de administración');
@@ -102,7 +102,7 @@ if (Sesion::isSesionIniciada()) {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/inv/mensajesecretaria/', MensajeSecretariaInvList::class);
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/eventos/', EventoEstList::class);
+        '/inv/eventos/', EventoInvList::class);
 }
 
 // Generar elementos de la navegación del menú de sesión de usuario.

@@ -14,7 +14,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Vistas\Evento;
@@ -33,7 +33,7 @@ class EventoPsList extends Modelo
 {
 
     public const VISTA_NOMBRE = "Gestionar eventos";
-        public const VISTA_ID = "eventos-ps-list";
+        public const VISTA_ID = "evento-ps-list";
 
         private $listadoEvento;
 
@@ -44,8 +44,6 @@ class EventoPsList extends Modelo
             $this->nombre = self::VISTA_NOMBRE;
             $this->id = self::VISTA_ID;
 
-           
-             
             $this->listadoEvento= Evento::dbGetAll();
         }
 
@@ -95,14 +93,10 @@ class EventoPsList extends Modelo
                     
                     $uniqueId = $u->getId();
                     $fecha = $u->getfecha();
-                  //  $curso_escolar = $u->getCursoEscolarRaw();
-                   // $nombre_corto = $u->getNombreCorto();
                     $nombre = $u->getNombre();
-                  //  $tutor = $u->getTutor();
                     $lugar = $u->getLugar();
 
-                    $asignatura = $u->getAsignatura();
-                    $asignacion = $u->getAsignacion();
+                    $descripcion = $u->getDescripcion();
 
                     $formEventoReadButton = $formEventoPsRead->generateButton('Ver',$uniqueId,true);
                     $formEventoUpdateButton = $formEventoPsUpdate->generateButton('Editar',$uniqueId,true);
@@ -113,8 +107,7 @@ class EventoPsList extends Modelo
                         <td scope="row" data-col-name="nif">$fecha</td>
                         <td data-col-name="nombre-completo">$nombre</td>
                         <td data-col-name="lugar">$lugar</td>
-                        <td data-col-name="asignatura">$asignatura</td>
-                        <td data-col-name="asignacion">$asignacion</td>
+                        <td data-col-name="descripcion">$descripcion</td>
                         <td class="text-right">$formEventoReadButton $formEventoUpdateButton $formEventoDeleteButton</td>
                     </tr>
                     HTML;
@@ -127,6 +120,8 @@ class EventoPsList extends Modelo
                     <td></td>
                     <td>No se han encontrado Eventos.</td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 HTML;
                 }
@@ -135,14 +130,13 @@ class EventoPsList extends Modelo
             $formEventoPsCreateButton = $formEventoPsCreate->generateButton('Crear',null,true);
             $html = <<< HTML
             <h3 class="mb-4">$formEventoPsCreateButton</h3>
-            <table id="evento-lista" class="table table-borderless table-striped">
+            <table id="evento-ps-list" class="table table-borderless table-striped">
             <thead>
                 <tr>
                     <th scope="col">Fecha</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Lugar</th>
-                    <th scope="col">Asignatura</th>
-                    <th scope="col">Asignacion</th>
+                    <th scope="col">Descripcion</th>
                     <th scope="col" class="text-right">Acciones</th>
                 </tr>
             </thead>

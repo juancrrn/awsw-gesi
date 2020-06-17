@@ -24,7 +24,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 class EventoPsCreate extends FormularioAjax
@@ -47,7 +47,7 @@ class EventoPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/eventos/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.evento.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-list';
 
     /**
      * Constructs the form object.
@@ -74,19 +74,8 @@ class EventoPsCreate extends FormularioAjax
 
     protected function getDefaultData(array $requestData) : array
     {
-        // Formalizacion HATEOAS de asignaciones.
-        $asignacionLink = FormularioAjax::generateHateoasSelectLink(
-            'asignacion',
-            'single', 
-            Asignacion::dbGetAll()
-        );
-
         $responseData = array(
-            'status' => 'ok',
-            'links' => array(
-                $asignacionLink,
-                //$asignaturasLink,
-            )
+            'status' => 'ok'
         );
 
         return $responseData;
@@ -97,23 +86,19 @@ class EventoPsCreate extends FormularioAjax
         $html = <<< HTML
         <div class="form-group">
             <label for="fecha">Fecha</label>
-            <input class="form-control" type="text" name="fecha" id="fecha" placeholder="fecha" required="required" />
+            <input class="form-control" type="text" name="fecha" id="fecha" placeholder="Fecha" required="required" />
         </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="nombre" required="required" />
+            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
             <label for="descripcion">Descripcion</label>
-            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="descripcion" required="required" />
+            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Descripcion" required="required" />
         </div>
         <div class="form-group">
             <label for="lugar">Lugar</label>
-            <input class="form-control" type="text" name="lugar" id="lugar" placeholder="lugar" required="required" />
-        </div>
-        <div class="form-group">
-            <label for="asignacion">Asignacion</label>
-            <input class="form-control" type="text" name="asignacion" id="asignacion" placeholder="asignacion" required="required" />
+            <input class="form-control" type="text" name="lugar" id="lugar" placeholder="Lugar" required="required" />
         </div>
         
         HTML;
@@ -127,8 +112,6 @@ class EventoPsCreate extends FormularioAjax
         $nombre = $data['nombre'] ?? null;
         $descripcion = $data['descripcion'] ?? null;
         $lugar = $data['lugar'] ?? null;
-        $asignacion = $data['asignacion'] ?? null;
-        $tutor = $data['tutor'] ?? null;   
 
         if (empty($nombre)) {
             $errors[] = 'El campo nombre no puede estar vacío.';
@@ -152,37 +135,26 @@ class EventoPsCreate extends FormularioAjax
             $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
 
-
-
-        if(empty($asignacion) ||Valido::testStdInt($asignacion) || !Asignacion::dbExisteId($asignacion)){
-            $error[] = 'El campo asignacion no es valido.';
-        }
-
-        //El creador del evento tiene que estar vinculado con asignatura y la asignacion
-
-
-
-
-
         // Comprobar si hay errores.
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
+
+            $fechaEvento = Valido::testDate($fecha);
           
-            $mensaje = new Evento(
+            $evento = new Evento(
               null,
-              $fecha,
+              $fechaEvento,
               $nombre,
               $descripcion,
-              $lugar,
-              null,
-              $asignacion
+              $lugar
             );
 
-            if ($mensaje->dbInsertar()) {
+            if ($evento->dbInsertar()) {
                 $responseData = array(
                     'status' => 'ok',
-                    'messages' => array('Evento creado correctamente.')
+                    'messages' => array('Evento creado correctamente.'),
+                    self::TARGET_CLASS_NAME => $evento
                 );
                 
                 $this->respondJsonOk($responseData);

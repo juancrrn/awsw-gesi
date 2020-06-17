@@ -32,7 +32,7 @@ abstract class Formulario
      * al inicio del script de vista, nos permite adelantar eventos y, por 
      * ejemplo, usar el mecanismo de mensajes de \Awsw\Gesi\Vistas\Vista.
      */
-    protected $html = "";
+    protected $html = '';
 
     /**
      * Crea un nuevo formulario.
@@ -68,9 +68,7 @@ abstract class Formulario
      */
     public function gestiona()
     {   
-        if (! $this->enviado($_POST)) {
-            $this->genera();
-        } else {
+        if ($this->enviado($_POST)) {
             $this->procesa($_POST);
         }  
     }
@@ -95,9 +93,9 @@ abstract class Formulario
      * 
      * @return string HTML asociado a los campos del formulario.
      */
-    protected function generaCampos(array & $datos_iniciales = array()): void
+    protected function generaCampos(array & $datos_iniciales = array()): string
     {
-        return;
+        return '';
     }
 
     /**
@@ -120,28 +118,20 @@ abstract class Formulario
     /**
      * Función que genera el HTML necesario para el formulario.
      *
-     * @param string[] $errores (opcional) Array con los mensajes de error de validación y/o procesamiento del formulario.
-     *
      * @param string[] $datos (opcional) Array con los valores por defecto de los campos del formulario.
      *
      * @return string HTML asociado al formulario.
      */
-    protected function genera(array & $datos = array()): void
+    public function genera(array & $datos = array()): void
     {
+        $campos = $this->generaCampos($datos);
 
-        $this->html .= <<< HTML
+        $this->html = <<< HTML
         <form method="post" action="$this->action" id="$this->form_id" class="default-form">
             <input type="hidden" name="action" value="$this->form_id" />
-
-HTML;
-
-        $this->generaCampos($datos);
-        
-        $this->html .= <<< HTML
+            $campos
         </form>
-
-HTML;
-
+        HTML;
     }
 
     /**

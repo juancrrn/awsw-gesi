@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 require_once __DIR__ . "/sistema/configuracion.php";
@@ -39,12 +39,6 @@ Controlador::setGetBase(App::getSingleton()->getBaseControlador());
  */
 
 \Awsw\Gesi\Controladores\Asignatura::controla();
-
-/**
- * Puntos de entrada de vistas relacionadas con la biblioteca.
- */
-
-\Awsw\Gesi\Controladores\Biblioteca::controla();
 
 /**
  * Puntos de entrada de vistas relacionadas con eventos.

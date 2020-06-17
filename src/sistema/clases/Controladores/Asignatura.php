@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
@@ -21,6 +21,7 @@ use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate;
 use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete;
+
 use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
 
 use Awsw\Gesi\Vistas\Vista;

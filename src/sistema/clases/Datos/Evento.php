@@ -12,34 +12,36 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Valido;
+use JsonSerializable;
+use stdClass;
 
 class Evento
+    implements JsonSerializable
 {
-    // Identificador único de evento
+    /**
+     * @var $id          Identificador único de evento
+     * @var $fecha       Fecha del evento
+     * @var $nombre      Nombre del evento
+     * @var $descripcion Descripcion del evento
+     * @var $lugar       Lugar donde se va a producir el evento
+     */
     private $id;
-
-    // Fecha del evento
     private $fecha;
-
-    // Nombre del evento
     private $nombre;
-
-    //Descripcion del evento
     private $descripcion;
-
-    // Lugar donde se va a producir el evento
     private $lugar;
 
     /**
      * Constructor.
      */
-    private function __construct($id, $fecha, $nombre, $descripcion, $lugar)
+    public function __construct($id, $fecha, $nombre, $descripcion, $lugar)
     {
         $this->id = $id;
         $this->fecha = $fecha;
@@ -48,11 +50,23 @@ class Evento
         $this->lugar = $lugar;
     }
 
-    private static function fromMysqlFetch(Object $o) :Evento
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    public static function fromMysqlFetch(stdClass $o): self
     {
+        $fecha = \DateTime::createFromFormat(
+            Valido::MYSQL_DATETIME_FORMAT, $o->fecha)
+                ->format(Valido::ESP_DATE_FORMAT);
+                
         return new self(
             $o->id,
-            $o->fecha,
+            $fecha,
             $o->nombre,
             $o->descripcion,
             $o->lugar
@@ -60,8 +74,10 @@ class Evento
         
     }
 
-    /**
-     * GETTERS
+    /*
+     *
+     * Getters.
+     * 
      */
     
     public function getId(){
@@ -91,6 +107,20 @@ class Evento
     public function getDescripcion(){
         return $this->descripcion;
     }
+
+    /*
+     *
+     * 
+     * Funciones de acceso a la base de datos (patrón de acceso a datos).
+     * 
+     * 
+     */
+
+    /*
+     *
+     * Operaciones INSERT.
+     *  
+     */
 
     /**
      * Inserta un nuevo evento en la base de datos
@@ -127,7 +157,7 @@ class Evento
         $lugar = $this->getLugar();
         
         $sentencia->bind_param(
-            "isss", 
+            'ssss', 
             $fecha,
             $nombre,
             $descripcion,
@@ -135,59 +165,18 @@ class Evento
         );
 
         $sentencia->execute();
-        
         $id_insertado = $bbdd->insert_id;
-
         $this->id = $id_insertado;
-
         $sentencia->close();
 
         return $id_insertado;
     }
 
-    public function dbActualizar(): bool{
-    
-        $bbdd = App::getSingleton()->bbddCon();
-
-        $query = <<<SQL
-        UPDATE
-            gesi_eventos
-        SET
-            fecha = ?,
-            nombre = ?,
-            descripcion = ?,
-            lugar = ?,
-            asignatura, = ?
-            asignacion = ?
-        WHERE
-            id = ?
-        SQL;
-
-        $sentencia = $bbdd->prepare($query);
-
-        $id= $this->getId();
-        $fecha= $this->getFecha();
-        $nombre= $this->getNombre();
-        $descripcion = $this->getDescripcion();
-        $lugar= $this->getLugar();
-
-        $sentencia->bind_param(
-            "iisss", 
-            $id,
-            $fecha,
-            $nombre,
-            $descripcion,
-            $lugar
-        );
-
-        $resultado = $sentencia->execute();
-
-        $sentencia->close();
-
-        return $resultado;
-    }
-
-    
+    /*
+     *
+     * Operaciones SELECT.
+     *  
+     */
 
     /**
      * Trae todos los eventos de la base de datos.
@@ -201,14 +190,14 @@ class Evento
         $bbdd = App::getSingleton()->bbddCon();
     
         $query = <<< SQL
-            SELECT 
-                id,
-                fecha,
-                nombre,
-                descripcion,
-                lugar
-            FROM
-                gesi_eventos
+        SELECT 
+            id,
+            fecha,
+            nombre,
+            descripcion,
+            lugar
+        FROM
+            gesi_eventos
         SQL;
 
         $sentencia = $bbdd->prepare($query);
@@ -240,7 +229,7 @@ class Evento
 
         $bbdd = App::getSingleton()->bbddCon();
 
-        $query = <<<SQL
+        $query = <<< SQL
         SELECT 
             id,
             fecha,
@@ -255,7 +244,7 @@ class Evento
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-        $sentencia->bind_param("i", $id );
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
         $evento = self::fromMysqlFetch($resultado->fetch_object());
@@ -265,7 +254,11 @@ class Evento
     }
     
     /**
-     * Comprueba si existe el evento id en el la base de datos
+     * Comprueba si existe el evento id en la base de datos.
+     * 
+     * @param int $id
+     * 
+     * @return bool
      */
     public static function dbExisteId(int $id): bool
     {        
@@ -282,24 +275,74 @@ class Evento
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-        $sentencia->execute($query);
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
     }
+
+    /*
+     *
+     * Operaciones UPDATE.
+     *  
+     */
+
+    /**
+     * Actualiza un evento en la base de datos.
+     * 
+     * @param self $this
+     * 
+     * @return bool
+     */
+    public function dbActualizar(): bool
+    {
+    
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<<SQL
+        UPDATE
+            gesi_eventos
+        SET
+            fecha = ?,
+            nombre = ?,
+            descripcion = ?,
+            lugar = ?
+        WHERE
+            id = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+
+        $id= $this->getId();
+        $fecha= $this->getFecha();
+        $nombre= $this->getNombre();
+        $descripcion = $this->getDescripcion();
+        $lugar= $this->getLugar();
+
+        $sentencia->bind_param(
+            'issss', 
+            $id,
+            $fecha,
+            $nombre,
+            $descripcion,
+            $lugar
+        );
+
+        $resultado = $sentencia->execute();
+
+        $sentencia->close();
+
+        return $resultado;
+    }
+
+    /*
+     *
+     * Operaciones DELETE.
+     *  
+     */
     
     /**
      * Elimina un evento de la base de datos.
@@ -327,5 +370,17 @@ class Evento
         $sentencia->close();
 
         return $resultado;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'uniqueId' => $this->getId(),
+            'fecha' => $this->getFecha(),
+            'nombre' => $this->getNombre(),
+            'descripcion' => $this->getDescripcion(),
+            'lugar' => $this->getLugar(),
+            'checkbox' => $this->getId()
+        ];
     }
 }

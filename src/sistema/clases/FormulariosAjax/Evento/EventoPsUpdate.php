@@ -24,7 +24,7 @@ use Awsw\Gesi\Sesion;
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 class EventoPsUpdate extends FormularioAjax
@@ -99,20 +99,14 @@ class EventoPsUpdate extends FormularioAjax
             return $responseData;
         }
 
-        $asignacionLink = FormularioAjax::generateHateoasSelectLink(
-            'asignacion',
-            'single', 
-            Asignacion::dbGetAll()
-        );
-
+        $evento = Evento::dbGet($uniqueId);
 
         //Mapear datos para que coincidan con los nombres de los inputs.$app
 
         $responseData = array(
             'status' => 'ok',
-            'links' => array(
-                $asignacionLink
-            )
+            self::TARGET_CLASS_NAME => $evento
+
         );
 
         return $responseData;
@@ -121,6 +115,7 @@ class EventoPsUpdate extends FormularioAjax
     public function generateFormInputs(): string
     {
         $html = <<< HTML
+        <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label for="fecha">Fecha</label>
             <input class="form-control" type="text" name="fecha" id="fecha" placeholder="fecha" required="required" />
@@ -137,13 +132,7 @@ class EventoPsUpdate extends FormularioAjax
             <label for="lugar">Lugar</label>
             <input class="form-control" type="text" name="lugar" id="lugar" placeholder="lugar" required="required" />
         </div>
-        <div class="form-group">
-            <label for="asignacion">Asignacion</label>
-            <input class="form-control" type="text" name="asignacion" id="asignacion" placeholder="asignacion" required="required" />
-        </div>
-        
-        
-        
+             
         HTML;
 
         return $html;
@@ -200,19 +189,15 @@ class EventoPsUpdate extends FormularioAjax
         if (! empty($errors)) {
             $this->respondJsonError(400, $errors); // Bad request.
         } else {
-            // Obtener datos que no se habían modificado.
-        
 
-           
+            $fechaEvento = Valido::testDate($fecha);
+             
             $evento = new Evento(
                 $uniqueId,
-                $fecha,
+                $fechaEvento,
                 $nombre,
                 $descripcion,
-                $lugar,
-                null,
-                $asignacion
-
+                $lugar
             );
 
             $actualizar = $evento->dbActualizar();
@@ -226,7 +211,7 @@ class EventoPsUpdate extends FormularioAjax
                 
                 $this->respondJsonOk($responseData);
             } else {
-                $errors[] = 'Evento usuario estudiante.';
+                $errors[] = 'Error durante la actualizacion del evento.';
 
                 $this->respondJsonError(400, $errors); // Bad request.
             }

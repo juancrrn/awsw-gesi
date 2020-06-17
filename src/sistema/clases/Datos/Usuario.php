@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -20,6 +20,7 @@ namespace Awsw\Gesi\Datos;
 use Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
+use stdClass;
 
 class Usuario
     implements JsonSerializable
@@ -80,7 +81,15 @@ class Usuario
         $this->grupo = $grupo;
     }
 
-    public static function fromMysqlFetch(Object $o): Usuario
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    public static function fromMysqlFetch(stdClass $o): self
     {
         // Convertir fechas al formato correcto.
 
@@ -178,7 +187,6 @@ class Usuario
         return $this->email;
     }
 
-    // Puede devolver null.
     public function getFechaUltimoAcceso()
     {
         return $this->fecha_ultimo_acceso;
@@ -189,7 +197,6 @@ class Usuario
         return $this->fecha_registro;    
     }
     
-    // Puede devolver null.
     public function getGrupo()
     {
         return $this->grupo;
@@ -257,7 +264,7 @@ class Usuario
         $grupo = $this->getGrupo();
         
         $sentencia->bind_param(
-            "sisssssssi", 
+            'sisssssssi', 
             $nif,
             $rol,
             $nombre,
@@ -271,11 +278,8 @@ class Usuario
         );
 
         $sentencia->execute();
-        
         $id_insertado = $bbdd->insert_id;
-
         $sentencia->close();
-
         $this->id = $id_insertado;
 
         return $this->id;
@@ -331,8 +335,11 @@ class Usuario
     }
 
     /**
-     * Selecciona el nombre de un usuario mediante en id
+     * Selecciona el nombre de un usuario mediante el id.
      * 
+     * @param int $id
+     * 
+     * @return string
      */
     public static function dbGetNombreDesdeId(int $id): string
     {
@@ -350,23 +357,14 @@ class Usuario
 
         $sentencia = $bbdd->prepare($query);
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-
         $resultado = $sentencia->get_result()->fetch_object();
-
         $return = $resultado->nombre;
-
         $sentencia->close();
 
         return $return;
     }
-
-
 
     /**
      * Trae todos los usuarios de la base de datos.
@@ -435,18 +433,10 @@ class Usuario
         SQL;
 
         $sentencia = $bbdd->prepare($query);
-
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-
         $resultado = $sentencia->get_result()->fetch_object();
-
         $return = $resultado->password;
-
         $sentencia->close();
 
         return $return;
@@ -465,30 +455,18 @@ class Usuario
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT id
-            FROM gesi_usuarios
-            WHERE nif = ?
-            LIMIT 1
-        ");
-        $sentencia->bind_param(
-            "s",
-            $nif
-        );
-        
+        $query = <<< SQL
+        SELECT id
+        FROM gesi_usuarios
+        WHERE nif = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('s', $nif);
         $sentencia->execute();
-        $sentencia->store_result();
-
-        $sentencia->bind_result(
-            $result_id
-        );
-        
-        $id = null;
-
-        while($sentencia->fetch()) {
-            $id = $result_id;
-        }
-        
+        $resultado = $sentencia->get_result();
+        $id = $resultado->fetch_object()->id;
         $sentencia->close();
 
         return $id;
@@ -532,28 +510,18 @@ class Usuario
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT id
-            FROM gesi_usuarios
-            WHERE nif = ?
-            LIMIT 1
-        ");
+        $query = <<< SQL
+        SELECT id
+        FROM gesi_usuarios
+        WHERE nif = ?
+        LIMIT 1
+        SQL;
 
-        $sentencia->bind_param(
-            "s",
-            $nif
-        );
-        
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('s', $nif);
         $sentencia->execute();
-        
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
@@ -649,33 +617,29 @@ class Usuario
 
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                nif,
-                rol,
-                nombre,
-                apellidos,
-                fecha_nacimiento,
-                numero_telefono,
-                email,
-                fecha_ultimo_acceso,
-                fecha_registro,
-                grupo
-            FROM
-                gesi_usuarios
-            WHERE
-                rol = ?
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            nif,
+            rol,
+            nombre,
+            apellidos,
+            fecha_nacimiento,
+            numero_telefono,
+            email,
+            fecha_ultimo_acceso,
+            fecha_registro,
+            grupo
+        FROM
+            gesi_usuarios
+        WHERE
+            rol = ?
+        SQL;
 
-        $sentencia->bind_param(
-            'i',
-            $rol
-        );
-    
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $rol);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
@@ -696,36 +660,31 @@ class Usuario
      */
     public static function dbGetEstudiantesByGrupo(int $grupo_id): array
     {
-
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                nif,
-                rol,
-                nombre,
-                apellidos,
-                fecha_nacimiento,
-                numero_telefono,
-                email,
-                fecha_ultimo_acceso,
-                fecha_registro,
-                grupo
-            FROM
-                gesi_usuarios
-            WHERE
-                grupo = ?
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            nif,
+            rol,
+            nombre,
+            apellidos,
+            fecha_nacimiento,
+            numero_telefono,
+            email,
+            fecha_ultimo_acceso,
+            fecha_registro,
+            grupo
+        FROM
+            gesi_usuarios
+        WHERE
+            grupo = ?
+        SQL;
 
-        $sentencia->bind_param(
-            'i',
-            $grupo_id
-        );
-    
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $grupo_id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
-
         $usuarios = array();
 
         while ($a = $resultado->fetch_object()) {
@@ -819,26 +778,20 @@ class Usuario
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            UPDATE
-                gesi_usuarios
-            SET
-                fecha_ultimo_acceso = ?
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        UPDATE
+            gesi_usuarios
+        SET
+            fecha_ultimo_acceso = ?
+        WHERE
+            id = ?
+        SQL;
 
+        $sentencia = $bbdd->prepare($query);
         $id = $this->getId();
         $fecha_ultimo_acceso = date('Y-m-d H:i:s');
-
-        $sentencia->bind_param(
-            "si",
-            $fecha_ultimo_acceso,
-            $id
-        );
-
+        $sentencia->bind_param('si', $fecha_ultimo_acceso, $id);
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
@@ -892,29 +845,22 @@ class Usuario
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            DELETE
-            FROM
-                gesi_usuarios
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        DELETE
+        FROM
+            gesi_usuarios
+        WHERE
+            id = ?
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
     }
 
-    /**
-     * Implementa la interfaz JsonSerializable.
-     */
     public function jsonSerialize()
     {
         return [

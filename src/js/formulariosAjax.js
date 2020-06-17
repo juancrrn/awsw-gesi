@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 /**
@@ -108,8 +108,11 @@ $(() => {
                         }
                     }
                     
-                    // Hide loader and show modal
+                    // Hide loader and show modal.
                     $loadingProgressBar.fadeOut();
+
+                    // Show the modal.
+
                     $modal.modal('show');
                 },
                 error: (result) => {
@@ -273,23 +276,12 @@ $(() => {
      * Vista de lista de eventos (personal de Secretaría).
      */
 
-    $('#evento-ps-lista').on('created.evento.ps',
+    $('#evento-ps-list').on('created.evento.ps',
     onSuccessFn.listaEventoPsCreated);
-    $('#evento-ps-lista').on('updated.evento.ps',
+    $('#evento-ps-list').on('updated.evento.ps',
     onSuccessFn.listaEventoPsUpdated);
-    $('#evento-ps-lista').on('deleted.evento.ps',
+    $('#evento-ps-list').on('deleted.evento.ps',
     onSuccessFn.listaEventoPsDeleted);  
-
-    /**
-     * Vista de lista de eventos (personal Docente).
-     */
-
-    $('#evento-pd-lista').on('created.evento.pd',
-    onSuccessFn.listaEventoPdCreated);
-    $('#evento-pd-lista').on('updated.evento.pd',
-    onSuccessFn.listaEventoPdUpdated);
-    $('#evento-pd-lista').on('deleted.evento.pd',
-    onSuccessFn.listaEventoPdDeleted);  
 
     /**
      * Vista de lista de foros (personal de Secretaría).
@@ -302,5 +294,10 @@ $(() => {
     $('#foro-ps-list').on('deleted.foro.ps',
         onSuccessFn.listaPsForosDeleted);
 
+    /**
+     * Vista de lista de mensajes de foros (estudiante o personal docente).
+     */
 
+    $('#mensaje-foro-ses-list').on('created.mensajeforo.ses',
+        onSuccessFn.listaMensajeForoCreated);
 });

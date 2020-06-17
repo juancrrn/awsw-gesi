@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -20,19 +20,16 @@ namespace Awsw\Gesi\Datos;
 use \Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
+use stdClass;
 
 class Asignatura
     implements JsonSerializable
 {
 
     private $id;
-
     private $nivel;
-
     private $curso_escolar;
-
     private $nombre_corto;
-
     private $nombre_completo;
 
     /**
@@ -53,7 +50,15 @@ class Asignatura
         $this->nombre_completo = $nombre_completo;
     }
 
-    public static function fromMysqlFetch(Object $o) : Asignatura
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    public static function fromMysqlFetch(stdClass $o): self
     {
         return new self(
             $o->id,
@@ -62,7 +67,13 @@ class Asignatura
             $o->nombre_corto,
             $o->nombre_completo
         );
-    }
+	}
+	
+	/*
+	 *
+	 * Getters.
+	 * 
+	 */
 
     public function getId()
     {
@@ -122,21 +133,23 @@ class Asignatura
      */
     public function dbInsertar(): int
     {
-        $bbdd = App::getSingleton()->bbddCon();
+		$bbdd = App::getSingleton()->bbddCon();
+		
+		$query = <<< SQL
+		INSERT
+		INTO
+			gesi_asignaturas(
+				id,
+				nivel,
+				curso_escolar,
+				nombre_corto,
+				nombre_completo
+			)
+		VALUES
+			(?, ?, ?, ?, ?)    
+		SQL;
 
-        $sentencia = $bbdd->prepare("
-            INSERT
-            INTO
-                gesi_asignaturas(
-                    id,
-                    nivel,
-                    curso_escolar,
-                    nombre_corto,
-                    nombre_completo
-                )
-            VALUES
-                (?, ?, ?, ?, ?)    
-        ");
+        $sentencia = $bbdd->prepare($query);
 
         $id = $this->getId();
         $nivel = $this->getNivelRaw();
@@ -145,7 +158,7 @@ class Asignatura
         $nombre_completo = $this->getNombreCompleto();
 
         $sentencia->bind_param(
-        	"iiiss",
+        	'iiiss',
 			$id,
 			$nivel,
 			$curso_escolar,
@@ -181,31 +194,21 @@ class Asignatura
 	{		
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			SELECT
-				id
-			FROM
-				gesi_asignaturas
-			WHERE
-				id = ?
-			LIMIT 1
-		");
+		$query = <<< SQL
+		SELECT
+			id
+		FROM
+			gesi_asignaturas
+		WHERE
+			id = ?
+		LIMIT 1
+		SQL;
 
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
+		$sentencia = $bbdd->prepare($query);
+		$sentencia->bind_param('i', $id);
 		$sentencia->execute();
-		
 		$sentencia->store_result();
-
-		if ($sentencia->num_rows > 0) {
-			$existe = true;
-		} else {
-			$existe = false;
-		}
-
+		$existe = $sentencia->num_rows > 0;
 		$sentencia->close();
 
 		return $existe;
@@ -216,24 +219,24 @@ class Asignatura
 	 * 
 	 * @return array<Asignatura>
 	 */
-	public static function dbGetAll() : array
+	public static function dbGetAll(): array
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				nivel,
-				curso_escolar,
-				nombre_corto,
-				nombre_completo
-			FROM
-				gesi_asignaturas			
-		");
-	
+		$query = <<< SQL
+		SELECT 
+			id,
+			nivel,
+			curso_escolar,
+			nombre_corto,
+			nombre_completo
+		FROM
+			gesi_asignaturas
+		SQL;
+
+		$sentencia = $bbdd->prepare($query);
 		$sentencia->execute();
 		$resultado = $sentencia->get_result();
-
 		$asignaturas = array();
 
 		while ($a = $resultado->fetch_object()) {
@@ -256,27 +259,23 @@ class Asignatura
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				nivel,
-				curso_escolar,
-				nombre_corto,
-				nombre_completo
-			FROM
-				gesi_asignaturas		
-			WHERE
-				curso_escolar = ?	
-		");
+		$query = <<< SQL
+		SELECT 
+			id,
+			nivel,
+			curso_escolar,
+			nombre_corto,
+			nombre_completo
+		FROM
+			gesi_asignaturas		
+		WHERE
+			curso_escolar = ?
+		SQL;
 
-		$sentencia->bind_param(
-			"i",
-			$curso_escolar
-		);
-
+		$sentencia = $bbdd->prepare($query);
+		$sentencia->bind_param('i', $curso_escolar);
 		$sentencia->execute();
 		$resultado = $sentencia->get_result();
-
 		$asignaturas = array();
 
 		while ($a = $resultado->fetch_object()) {
@@ -301,30 +300,25 @@ class Asignatura
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			SELECT 
-				id,
-				nivel,
-				curso_escolar,
-				nombre_corto,
-				nombre_completo
-			FROM
-				gesi_asignaturas
-			WHERE
-				id = ?
-			LIMIT 1
-		");
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-		
+		$query = <<< SQL
+		SELECT 
+			id,
+			nivel,
+			curso_escolar,
+			nombre_corto,
+			nombre_completo
+		FROM
+			gesi_asignaturas
+		WHERE
+			id = ?
+		LIMIT 1
+		SQL;
+
+		$sentencia = $bbdd->prepare($query);
+		$sentencia->bind_param('i', $id);
 		$sentencia->execute();
-
 		$resultado = $sentencia->get_result();
-
 		$asignatura = Asignatura::fromMysqlFetch($resultado->fetch_object());
-
 		$sentencia->close();
 		
 		return $asignatura;
@@ -347,17 +341,19 @@ class Asignatura
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			UPDATE
-				gesi_asignaturas
-			SET
-				nivel = ?,
-				curso_escolar = ?,
-				nombre_corto = ?,
-				nombre_completo = ?
-			WHERE
-				id = ?
-		");
+		$query = <<< SQL
+		UPDATE
+			gesi_asignaturas
+		SET
+			nivel = ?,
+			curso_escolar = ?,
+			nombre_corto = ?,
+			nombre_completo = ?
+		WHERE
+			id = ?
+		SQL;
+
+		$sentencia = $bbdd->prepare($query);
 		
 		$id = $this->getId();
 		$nivel = $this->getNivelRaw();
@@ -366,7 +362,7 @@ class Asignatura
 		$nombre_completo = $this->getNombreCompleto();
 
 		$sentencia->bind_param(
-			"iissi",
+			'iissi',
 			$nivel,
 			$curso_escolar,
 			$nombre_corto,
@@ -381,34 +377,27 @@ class Asignatura
 		return $resultado;
 	}
 
-
 	/*
 	 *
 	 * Operaciones DELETE.
 	 *  
 	 */
 
-
-
 	public static function dbEliminar(int $id): bool
 	{
 		$bbdd = App::getSingleton()->bbddCon();
 
-		$sentencia = $bbdd->prepare("
-			DELETE
-			FROM
-				gesi_asignaturas
-			WHERE
-				id = ?
-		");
+		$query = <<< SQL
+		DELETE
+		FROM
+			gesi_asignaturas
+		WHERE
+			id = ?
+		SQL;
 
-		$sentencia->bind_param(
-			"i",
-			$id
-		);
-
+		$sentencia = $bbdd->prepare($query);
+		$sentencia->bind_param('i', $id);
 		$resultado = $sentencia->execute();
-
 		$sentencia->close();
 
 		return $resultado;

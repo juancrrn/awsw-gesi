@@ -12,28 +12,20 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\Vistas\Vista;
-use Awsw\Gesi\Vistas\Evento\EventoEstList;
 
-use Awsw\Gesi\Vistas\Evento\EventoPdList;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPdCreate;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPdDelete;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPdUpdate;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPdRead;
-
-
+use Awsw\Gesi\Vistas\Evento\EventoInvList;
 use Awsw\Gesi\Vistas\Evento\EventoPsList;
+
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPsCreate;
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPsDelete;
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPsUpdate;
 use Awsw\Gesi\FormulariosAjax\Evento\EventoPsRead;
-
-
 
 class Evento extends Controlador
 {
@@ -45,45 +37,9 @@ class Evento extends Controlador
          */
         
         parent::get('/inv/eventos/', function () {
-            Vista::dibuja(new EventoEstList());
+            Vista::dibuja(new EventoInvList());
         });
 
-        /**
-         * Personal docente.
-         */
-
-        parent::get('/pd/eventos/', function () {
-            Vista::dibuja(new EventoPdList());
-        });
-
-        // Create.
-        parent::get('/pd/eventos/create/', function () {
-            (new EventoPdCreate(true))->manage();
-        });
-        parent::post('/pd/eventos/create/', function () {
-            (new EventoPdCreate(true))->manage();
-        });
-        
-        // Read.
-        parent::get('/pd/eventos/read/', function () {
-            (new EventoPdRead(true))->manage();
-        });
-
-        // Update.
-        parent::get('/pd/eventos/update/', function(){
-            (new EventoPdUpdate(true))->manage();
-        });
-        parent::patch('/pd/eventos/update/', function(){
-            (new EventoPdUpdate(true))->manage();
-        });
-
-        // Delete.
-           parent::get('/pd/eventos/delete/', function(){
-            (new EventoPdDelete(true))->manage();
-        });
-        parent::delete('/pd/eventos/delete/', function(){
-            (new EventoPdDelete(true))->manage();
-        });
 
         /**
          * Personal de Secretaría.
@@ -107,15 +63,15 @@ class Evento extends Controlador
         });
 
         // Update.
-        parent::get('/pd/eventos/update/', function(){
-            (new EventoPdUpdate(true))->manage();
+        parent::get('/ps/eventos/update/', function(){
+            (new EventoPsUpdate(true))->manage();
         });
         parent::patch('/ps/eventos/update/', function(){
             (new EventoPsUpdate(true))->manage();
         });
 
         // Delete.
-           parent::get('/ps/eventos/delete/', function(){
+         parent::get('/ps/eventos/delete/', function(){
             (new EventoPsDelete(true))->manage();
         });
         parent::delete('/ps/eventos/delete/', function(){

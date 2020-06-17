@@ -6,23 +6,19 @@ use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Evento;
 use Awsw\Gesi\Sesion;
 
-use Awsw\Gesi\FormulariosAjax\Evento\EventoRead as FormEventoRead;
 
-
-
-class EventoEstList extends Modelo
+class EventoInvList extends Modelo
 {
-	public const VISTA_NOMBRE = "Eventos";
-	public const VISTA_ID = "evento-lista";
+	public const VISTA_NOMBRE = "Ver Eventos";
+	public const VISTA_ID = "evento-inv-list";
 
 	private $listado;
 
-	public function __construct()
-	{	
-		Sesion::requerirSesionNoIniciada();
-		$this->nombre = self::VISTA_NOMBRE;
+	public function __construct($api = false)
+	{
+       //Sesion::requerirNoPs($api);
+        $this->nombre = self::VISTA_NOMBRE; 
 		$this->id = self::VISTA_ID;
-
 		$this->listado = Evento::dbGetAll();
 	}
 
@@ -44,36 +40,27 @@ class EventoEstList extends Modelo
          */
         public function generarListaEventos(): string
         {
-           
-            //Read Evento
-
-		   
-			$formEventoRead = new FormEventoRead();
-            $formEventoReadModal = $formEventoRead->generateModal();
-
             $listaEventoBuffer = '';
 
-            if(! empty($this->listadoEvento)){
-                $eventos = array();
+            if(! empty($this->listado)){
              
-                foreach($this->listadoEvento as $u){
+                foreach($this->listado as $u){
                     
                     $uniqueId = $u->getId();
                     $fecha = $u->getfecha();
                   //  $curso_escolar = $u->getCursoEscolarRaw();
                    // $nombre_corto = $u->getNombreCorto();
                     $nombre = $u->getNombre();
+                    $descripcion = $u->getDescripcion();
                   //  $tutor = $u->getTutor();
                     $lugar = $u->getLugar();
-
-                    $formEventoReadButton = $formEventoRead->generateButton('Ver',$uniqueId,true);
 
                     $listaEventoBuffer .= <<< HTML
                     <tr data-unique-id="$uniqueId">
                         <td scope="row" data-col-name="nif">$fecha</td>
                         <td data-col-name="nombre-completo">$nombre</td>
+                        <td data-col-name="descripcion">$descripcion</td>
                         <td data-col-name="lugar">$lugar</td>
-                        <td class="text-right">$formEventoReadButton</td>
                     </tr>
                     HTML;
                 }
@@ -87,19 +74,17 @@ class EventoEstList extends Modelo
                     <td></td>
                 </tr>
                 HTML;
-                }
+            }
             
-
-            $formEventoPsCreateButton = $formEventoPsCreate->generateButton('Crear',null,true);
             $html = <<< HTML
-            <h3 class="mb-4">$formEventoPsCreateButton</h3>
+            <h3 class="mb-4"></h3>
             <table id="evento-lista" class="table table-borderless table-striped">
             <thead>
                 <tr>
                     <th scope="col">Fecha</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
                     <th scope="col">Lugar</th>
-                    <th scope="col" class="text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,10 +92,6 @@ class EventoEstList extends Modelo
             </tbody>
             
             </table>
-            $formEventoPsCreateModal
-            $formEventoPsReadModal
-            $formEventoPsUpdateModal
-            $formEventoPsDeleteModal
             HTML;
 
             return $html;

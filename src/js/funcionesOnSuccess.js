@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 /**
@@ -159,7 +159,6 @@ onSuccessFn.listaUsuariosUpdated = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
 
     $row.find('td[data-col-name="nif"]').text(nif);
     $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
@@ -256,7 +255,6 @@ onSuccessFn.listaPsAsignacionesUpdated = (e, params) =>
  */
 onSuccessFn.listaPsAsignacionesDeleted = (e, params) =>
 {
-    console.log(params);
     const $modalData = params.modalData;
 
     const uniqueId = $modalData.find('input[name="uniqueId"]').val();
@@ -358,7 +356,6 @@ onSuccessFn.listaPsAsignaturasUpdated = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
 
     $row.find('td[data-col-name="nombreCorto"]').text(corto);
     $row.find('td[data-col-name="nivel"]').text(nivel);
@@ -425,7 +422,6 @@ onSuccessFn.listaGruposPsUpdated = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
 
     $row.find('td[data-col-name="nif"]').text(nif);
     $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
@@ -444,7 +440,7 @@ onSuccessFn.listaGruposPsDeleted = (e, params) =>
 }
 
 
-/**aqui nuevo */
+/** Eventos */
 
 onSuccessFn.listaPsEventoCreated = (e, params) =>
 {
@@ -470,8 +466,8 @@ onSuccessFn.listaPsEventoCreated = (e, params) =>
     <tr data-unique-id="' + uniqueId + '">\
         <td scope="row" data-col-name="fecha">'+ fecha + '</td>\
         <td data-col-name="nombre">'+ nombre +'</td>\
-        <td data-col-name="descripcion">'+ descripcion + '</td>\
         <td data-col-name="lugar">'+ lugar + '</td>\
+        <td data-col-name="descripcion">'+ descripcion + '</td>\
         <td class="text-right">' + buttons + '</td>\
     </tr>';
     
@@ -498,7 +494,6 @@ onSuccessFn.listaPsEventoUpdated = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
 
     $row.find('td[data-col-name="fecha"]').text(fecha);
     $row.find('td[data-col-name="nombre"]').text(nombre);
@@ -524,90 +519,6 @@ onSuccessFn.listaPsEventoDeleted = (e, params) =>
     $row.remove();
 }
 
-
-/**
- * aqui pd
- */
-
-
-onSuccessFn.listaPdEventoCreated = (e, params) =>
-{
-    const $modalData = params.modalData;
-    const result = params.result;
-
-    const targetObjectName = $modalData.data('ajax-target-object-name');
-    
-    const uniqueId = result[targetObjectName].uniqueId;
-    const fecha = result[targetObjectName].fecha;
-    const nombre = result[targetObjectName].nombre;
-    const descripcion = result[targetObjectName].descripcion;
-    const lugar = result[targetObjectName].lugar;
-
-    const buttons =
-        x.genBtn('evento-pd-read', uniqueId, 'Ver') +
-        x.genBtn('evento-pd-update', uniqueId, 'Editar') +
-        x.genBtn('evento-pd-delete', uniqueId, 'Eliminar');
-
-    const $list = $(e.currentTarget).find('tbody');
-    
-    $rowHtml = '\
-    <tr data-unique-id="' + uniqueId + '">\
-        <td scope="row" data-col-name="fecha">'+ fecha + '</td>\
-        <td data-col-name="nombre">'+ nombre +'</td>\
-        <td data-col-name="descripcion">'+ descripcion + '</td>\
-        <td data-col-name="lugar">'+ lugar + '</td>\
-        <td class="text-right">' + buttons + '</td>\
-    </tr>';
-    
-    $list.append($rowHtml);
-}
-
-/**
- * Actualiza la lista de Asignaturas cuando se actualiza una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
-onSuccessFn.listaPdEventoUpdated = (e, params) =>
-{
-    const $modalData = params.modalData;
-    const result = params.result;
-
-    const targetObjectName = $modalData.data('ajax-target-object-name');
-
-    const fecha = result[targetObjectName].fecha;
-    const nombre = result[targetObjectName].nombre;
-    const descripcion = result[targetObjectName].descripcion;
-    const lugar = result[targetObjectName].lugar;
-
-    const $list = $(e.currentTarget).find('tbody');
-    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
-
-    $row.find('td[data-col-name="fecha"]').text(fecha);
-    $row.find('td[data-col-name="nombre"]').text(nombre);
-    $row.find('td[data-col-name="descripcion"]').text(descripcion);
-    $row.find('td[data-col-name="lugar"]').text(lugar);
-}
-
-/**
- * Actualiza la lista de asignaturas cuando se elimina una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
-onSuccessFn.listaPdEventoDeleted = (e, params) =>
-{
-    const $modalData = params.modalData;
-
-    const uniqueId = $modalData.find('input[name="uniqueId"]').val();
-
-    const $list = $(e.currentTarget).find('tbody');
-    const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-
-    $row.remove();
-}
-
 /**
  * Actualiza la lista de Foros cuando se crea uno.
  * 
@@ -616,7 +527,6 @@ onSuccessFn.listaPdEventoDeleted = (e, params) =>
  */
 onSuccessFn.listaPsForosCreated = (e, params) =>
 {
-    console.log(params);
     const $modalData = params.modalData;
     const result = params.result;
 
@@ -660,7 +570,6 @@ onSuccessFn.listaPsForosUpdated = (e, params) =>
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
-    console.log($row);
 
     $row.find('td[data-col-name="foroNombre"]').text(nombre);
 }
@@ -680,7 +589,36 @@ onSuccessFn.listaPsForosDeleted = (e, params) =>
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
 
-    console.log(params);
-
     $row.remove();
+}
+
+/**
+ * Actualiza la lista de mensajes de foro cuando se añade uno.
+ * 
+ * @param {eventObject} e Evento.
+ * @param {Object} params Contiene el modal y el resultado.
+ */
+onSuccessFn.listaMensajeForoCreated = (e, params) =>
+{
+    const $modalData = params.modalData;
+    const result = params.result;
+
+    const data = result[$modalData.data('ajax-target-object-name')];
+
+    const fecha = data.fecha;
+    const usuarioNombre = data.usuarioNombre;
+    const contenido = data.contenido;
+
+    const mensaje = '\
+    <div class="card mb-2">\
+        <div class="card-header">\
+            <p class="mb-2"><span class="badge badge-secondary">Mensaje principal (' + fecha + ')</span></p>\
+            <p class="mb-2"><strong>' + usuarioNombre + '</strong></p>\
+            <p class="mb-4">' + contenido + '</p>\
+            <p>(Recarga la página para poder responder a este mensaje.)</p>\
+        </div>\
+        <ul class="list-group list-group-flush mensaje-foro-ses-respuestas-list"></ul>\
+    </div>';
+
+    $(e.currentTarget).append(mensaje);
 }

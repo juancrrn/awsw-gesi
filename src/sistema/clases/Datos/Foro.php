@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -42,14 +42,28 @@ class Foro
         $this->id = $id;
         $this->nombre = $nombre;
     }
-
-    private static function fromMysqliFetch($o) : self
+    
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    private static function fromMysqliFetch($o): self
     {
         return new self(
             $o->id,
             $o->nombre
         );
     }
+
+    /*
+     *
+     * Getters.
+     * 
+     */
 
     public function getId(): int
     {
@@ -61,18 +75,13 @@ class Foro
         return $this->nombre;
     }
 
-    public function jsonSerialize() 
-    {
-        $selectName = '(' . $this->getId() . ') ' . $this->getNombre();
-
-        return [
-            'uniqueId' => $this->getId(),
-            'selectName' => $selectName,
-            'id' => $this->getId(),
-            'nombre' => $this->getNombre(),
-            'checkbox' => $this->getId()
-        ];
-    }
+    /*
+     *
+     * 
+     * Funciones de acceso a la base de datos (patrón de acceso a datos).
+     * 
+     * 
+     */
 
     /*
      *
@@ -80,6 +89,13 @@ class Foro
      *  
      */
 
+    /**
+     * Inserta un foro en la base de datos.
+     * 
+     * @param self $this Foro a insertar.
+     * 
+     * @return int Id del foro insertado.
+     */
     public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
@@ -180,6 +196,13 @@ class Foro
         return $foro;
     }
 
+    /**
+     * Comprueba si un foro existe por su id.
+     * 
+     * @param int $id
+     * 
+     * @return bool
+     */
     public static function dbExisteId($id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
@@ -196,36 +219,6 @@ class Foro
         $sentencia->close();
 
         return $existe;
-    }
-
-    /**
-     * Elimina un foro de la base de datos.
-     *
-     * @param int $id
-     *
-     */
-    public static function dbEliminar($id){
-
-        $bbdd = App::getSingleton()->bbddCon();
-
-        $sentencia = $bbdd->prepare("
-            DELETE
-            FROM 
-                gesi_foros
-            WHERE
-                id = ?
-        ");
-
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
-        $resultado = $sentencia->execute();
-
-        $sentencia->close();
-
-        return $resultado;
     }
 
     /**
@@ -318,33 +311,78 @@ class Foro
      *  
      */
 
+    /**
+     * Actualiza un foro en la base de datos.
+     * 
+     * @param self $this
+     * 
+     * @return bool
+     */
     public function dbActualizar(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            UPDATE 
-                gesi_foros
-            SET
-                nombre = ?
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        UPDATE 
+            gesi_foros
+        SET
+            nombre = ?
+        WHERE
+            id = ?
+        SQL;
 
+        $sentencia = $bbdd->prepare($query);
         $id = $this->getId();
         $nombre = $this->getNombre();
-
-        $sentencia->bind_param(
-            "si",
-            $nombre,
-            $id
-        );
-
+        $sentencia->bind_param('si', $nombre, $id);
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
+    }
+
+    /*
+     *
+     * Operaciones DELETE.
+     *  
+     */
+
+    /**
+     * Elimina un foro de la base de datos.
+     *
+     * @param int $id
+     */
+    public static function dbEliminar($id){
+
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        DELETE
+        FROM 
+            gesi_foros
+        WHERE
+            id = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $resultado = $sentencia->execute();
+        $sentencia->close();
+
+        return $resultado;
+    }
+
+    public function jsonSerialize() 
+    {
+        $selectName = '(' . $this->getId() . ') ' . $this->getNombre();
+
+        return [
+            'uniqueId' => $this->getId(),
+            'selectName' => $selectName,
+            'id' => $this->getId(),
+            'nombre' => $this->getNombre(),
+            'checkbox' => $this->getId()
+        ];
     }
 }
 

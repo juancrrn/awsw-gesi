@@ -76,14 +76,11 @@ distintas restricciones y se han generado datos de demostración (carpeta
 - Vista de recuperar contraseña.
 - Que un profesor pueda crear eventos para asignaturas enteras.
 - ...
-- Permisos de vistas (est, pd, ps) Falta
-      - MensajeForoPdList
-      - MensajeForoPsList
+- Permisos de vistas (est, pd, ps) Falta comprobar las nuevas clase añadidas desde el miercoles 17
 - Foro Eventos
-
 - Estudiante
-    - Foro crear (formulario y boton) y responder (formulario)
-    - Evento FormularioAjax>EventoEst... (invitados tiene formulario de crear eventos pero no deberia)
+    - Foro responder (formulario)
+    - Evento FormularioAjax>EventoEst
 - Profesor
     - Foro crear (formulario y boton) responder (formulario)
     - Eventos (solo esta el boton de crear y no funciona)

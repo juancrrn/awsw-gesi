@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Puntos de entrada relacionados con la vistas vistas relacionadas con asignacion.
+ * Puntos de entrada relacionados con la vistas vistas relacionadas con 
+ * asignaciones.
  * 
  * @package awsw-gesi
  * Gesi
@@ -12,17 +13,19 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
+
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
+
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;

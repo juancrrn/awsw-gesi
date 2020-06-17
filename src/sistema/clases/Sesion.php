@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi;
@@ -246,6 +246,29 @@ class Sesion
                 self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
             }
         }
+    }
+
+    /**
+     * Requiere que no haya sesión iniciada, O que haya una sesión iniciada
+     * pero SIN permisos de personal de secretaría para acceder al contenido. 
+     * En caso negativo, redirige al inicio de sesión.
+     * 
+     * @param bool $api Indica si se está utilizano el método en la API, por lo 
+     *                  que, en lugar de redirigir, debería mostrar un error 
+     *                  HTTP.
+     */
+    public static function requerirNoPs($api = false): void
+    {
+        if(self::isSesionIniciada())
+        {
+            if (self::$usuario_en_sesion->isPs()) {
+                if (! $api) {
+                    Vista::encolaMensajeError('Esta vista solo permite el acceso de personal docente, estudiantes, e invitados.', '');
+                } else {
+                    self::apiRespondError(403, array('No autorizado.')); // HTTP 401 Forbidden.
+                }
+            }
+        }       
     }
 }
 ?>

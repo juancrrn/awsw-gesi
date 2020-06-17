@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -20,16 +20,17 @@ namespace Awsw\Gesi\Datos;
 use \Awsw\Gesi\App;
 use \Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
+use stdClass;
 
 class MensajeForo 
-    /* implements JsonSerializable TODO */
+    implements JsonSerializable
 {
     /**
-     * @var int $id Identificador único.
-     * @var int $foro Foro al que pertenece.
-     * @var int|null $padre Mensaje al que responde, nulo si es raíz.
-     * @var int $usuraio Usuario autor.
-     * @var string $fecha Fecha de creación.
+     * @var int $id           Identificador único.
+     * @var int $foro         Foro al que pertenece.
+     * @var int|null $padre   Mensaje al que responde, nulo si es raíz.
+     * @var int $usuraio      Usuario autor.
+     * @var string $fecha     Fecha de creación.
      * @var string $contenido Contenido.
      */
     private $id;
@@ -60,9 +61,14 @@ class MensajeForo
     }
 
     /**
-     * Constructor desde un objeto de mysqli_result::fetch_object.
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
      */
-    public static function fromMysqlFetch(Object $o) : self
+    public static function fromMysqlFetch(stdClass $o): self
     {
         return new self(
             $o->id,
@@ -171,6 +177,7 @@ class MensajeForo
 
         $sentencia->execute();
         $id_insertado = $bbdd->insert_id;
+        $this->id = $id_insertado;
         $sentencia->close();
 
         return $id_insertado;
@@ -329,21 +336,26 @@ class MensajeForo
         return $mensajes;
     }
     
-    /* TODO BORRAR ? 
     public function jsonSerialize()
     {
+        $usuario = Usuario::dbGet($this->getUsuario());
+        $fecha = \DateTime::createFromFormat(
+            Valido::MYSQL_DATETIME_FORMAT, $this->getFecha())
+                ->format(Valido::ESP_DATETIME_SHORT_FORMAT);
+
         return [
             'uniqueId' => $this->getId(),
             'checkbox' => $this->getId(),
             'id' => $this->getId(),
             'usuario' => $this->getUsuario(),
+            'usuarioNombre' => $usuario->getNombreCompleto(),
             'foro' => $this->getForo(),
             'padre' => $this->getPadre(),
-            'fecha' => $this->getFecha(Valido::ESP_DATETIME_SHORT_FORMAT),
+            'fecha' => $fecha,
             'contenido' => $this->getContenido(),
             'extractoContenido' => $this->getContenido(32)
         ];
-    }*/
+    }
 }
 
 ?>

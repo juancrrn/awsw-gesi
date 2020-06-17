@@ -13,7 +13,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Vistas\Sesion;
@@ -40,6 +40,7 @@ class SesionRestablecerContrasena extends Modelo
         $this->form = new FormularioRestablecerContrasena('/sesion/reset/'); 
 
         $this->form->gestiona();
+        $this->form->genera();
     }
 
     public function procesaContent(): void

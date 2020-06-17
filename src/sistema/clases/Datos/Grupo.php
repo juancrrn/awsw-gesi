@@ -12,7 +12,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -20,33 +20,30 @@ namespace Awsw\Gesi\Datos;
 use \Awsw\Gesi\App;
 use Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
+use stdClass;
 
 class Grupo
     implements JsonSerializable
 {
-    
-    // Identificador único de grupo
+
+    /**
+     * @var $id              Identificador único de grupo
+     * @var $nivel           Tipo 1 - 6 (desde ESO 1 hasta Bach. 2)
+     * @var $curso_escolar   Tipo 2019 (para el curso 2019 - 2020)
+     * @var $nombre_corto    Tipo “B1A”
+     * @var $nombre_completo Tipo “Primer curso de Bachillerato A”
+     * @var $tutor           Profesor responsable del grupo
+     */
     private $id;
-
-    // Tipo 1 - 6 (desde ESO 1 hasta Bach. 2)
     private $nivel;
-
-    // Tipo 2019 (para el curso 2019 - 2020)
     private $curso_escolar;
-
-    // Tipo “B1A”
     private $nombre_corto;
-
-    // Tipo “Primer curso de Bachillerato A”
     private $nombre_completo;
-
-    // Profesor responsable del grupo
     private $tutor;
     
     /**
      * Constructor.
      */
-
     public function __construct(
         $id,
         $nivel,
@@ -64,7 +61,15 @@ class Grupo
         $this->tutor = $tutor; 
     }
 
-    public static function fromMysqlFetch(Object $o) : Grupo
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    public static function fromMysqlFetch(stdClass $o): self
     {
         return new self(
             $o->id,
@@ -75,6 +80,12 @@ class Grupo
             $o->tutor
         );
     }
+
+    /*
+     *
+     * Getters.
+     * 
+     */
 
     public function getId()
     {
@@ -141,20 +152,22 @@ class Grupo
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            INSERT
-            INTO
-                gesi_grupos(
-                    id,
-                    nivel,
-                    curso_escolar,
-                    nombre_corto,
-                    nombre_completo,
-                    tutor
-                )
-            VALUES
-                (?, ?, ?, ?, ?, ?)    
-        ");
+        $query = <<< SQL
+        INSERT
+        INTO
+            gesi_grupos(
+                id,
+                nivel,
+                curso_escolar,
+                nombre_corto,
+                nombre_completo,
+                tutor
+            )
+        VALUES
+            (?, ?, ?, ?, ?, ?)  
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
 
         $id = $this->getId();
         $nivel = $this->getNivelRaw();
@@ -164,7 +177,7 @@ class Grupo
         $tutor = $this->getTutor();
 
         $sentencia->bind_param(
-            "iiisss",
+            'iiisss',
             $id,
             $nivel,
             $curso_escolar,
@@ -174,9 +187,8 @@ class Grupo
         );
 
         $sentencia->execute();
-
         $id_insertado = $bbdd->insert_id;
-
+        $this->id = $id_insertado;
         $sentencia->close();
 
         return $id_insertado;
@@ -195,35 +207,30 @@ class Grupo
      * 
      * @return Grupo Grupo seleccionado
      */
-    public static function dbGet(int $id) : Grupo{
+    public static function dbGet(int $id): self
+    {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                nivel,
-                curso_escolar,
-                nombre_corto,
-                nombre_completo,
-                tutor
-            FROM
-                gesi_grupos
-            WHERE
-                id = ?
-            LIMIT 1
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            nivel,
+            curso_escolar,
+            nombre_corto,
+            nombre_completo,
+            tutor
+        FROM
+            gesi_grupos
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-
         $resultado = $sentencia->get_result();
-
         $grupo = self::fromMysqlFetch($resultado->fetch_object());
-
         $sentencia->close();
 
         return $grupo;        
@@ -234,7 +241,7 @@ class Grupo
      *
      * @return array
      */
-    public static function dbGetAll() : array
+    public static function dbGetAll(): array
     {
 
         $bbdd = App::getSingleton()->bbddCon();
@@ -270,13 +277,13 @@ class Grupo
      *
      * @return array<Grupo>
      */
-    public static function dbGetGruposId($id) : array
+    public static function dbGetGruposId($id): array
     {
 
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
+        $query = <<< SQL
+        SELECT 
             id,
             nivel,
             curso_escolar,
@@ -287,12 +294,11 @@ class Grupo
             gesi_grupos
         WHERE
             id = ?
-        ");
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
+        $sentencia = $bbdd->prepare($query);
+
+        $sentencia->bind_param('i', $id);
     
         $sentencia->execute();
         $resultado = $sentencia->get_result();
@@ -317,33 +323,24 @@ class Grupo
      * @return bool
      */
     public static function dbExisteId(int $id): bool
-    {        
+    {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT
-                id
-            FROM
-                gesi_grupos
-            WHERE
-                id = ?
-            LIMIT 1
-        ");
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_grupos
+        WHERE
+            id = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-        
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
@@ -358,33 +355,24 @@ class Grupo
      * @return bool
      */
     public static function dbAnyByTutor(int $id): bool
-    {        
+    {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT
-                id
-            FROM
-                gesi_grupos
-            WHERE
-                tutor = ?
-            LIMIT 1
-        ");
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-        
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_grupos
+        WHERE
+            tutor = ?
+        LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
-        
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
@@ -396,23 +384,32 @@ class Grupo
      *  
      */
 
+    /**
+     * Actualiza un grupo en la base de datos.
+     * 
+     * @param self $this
+     * 
+     * @return bool
+     */
     public function dbActualizar(): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            UPDATE
-                gesi_grupos
-            SET
-                id = ?,
-                nivel = ?,
-                curso_escolar = ?,
-                nombre_corto = ?,
-                nombre_completo = ?,
-                tutor = ?
-                WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        UPDATE
+            gesi_grupos
+        SET
+            id = ?,
+            nivel = ?,
+            curso_escolar = ?,
+            nombre_corto = ?,
+            nombre_completo = ?,
+            tutor = ?
+        WHERE
+            id = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
 
         $id = $this->getId();
         $nivel = $this->getNivelRaw();
@@ -421,9 +418,8 @@ class Grupo
         $nombre_completo = $this->getNombreCompleto();
         $tutor= $this->getTutor();
         
-
         $sentencia->bind_param(
-            "iiisssi",
+            'iiisssi',
             $id,
             $nivel,
             $curso_escolar,
@@ -434,43 +430,44 @@ class Grupo
         );
 
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
     }
 
+    /*
+     *
+     * Operaciones DELETE.
+     *  
+     */
 
     /**
-     * Eliminar un grupo
+     * Elimina un grupo de la base de datos por su id.
+     * 
+     * @param int $id
+     * 
+     * @return bool
      */
     public static function dbEliminar(int $id): bool
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            DELETE
-            FROM
-                gesi_grupos
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        DELETE
+        FROM
+            gesi_grupos
+        WHERE
+            id = ?
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
     }
 
-    /**
-     * Implementa la interfaz JsonSerializable.
-     */
     public function jsonSerialize()
     {
         return [

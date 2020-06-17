@@ -13,7 +13,7 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Datos;
@@ -61,7 +61,15 @@ class Asignacion
         $this->foro_principal = $foro_principal;
     }
 
-    private static function fromMysqlFetch(Object $o) : Asignacion
+    /**
+     * Construye un nuevo objeto de la clase a partir de un objeto resultado
+     * de una consulta de MySQL.
+     * 
+     * @param stdClass $o Objeto resultado de la consulta MySQL.
+     * 
+     * @return self Objeto de la clase construido.
+     */
+    private static function fromMysqlFetch(Object $o): self
     {
         return new self(
             $o->id,
@@ -73,9 +81,12 @@ class Asignacion
         );
     }
     
-    /**
+    /*
+     *
      * Getters.
+     * 
      */
+
     public function getId()
     {
         return $this->id;
@@ -105,34 +116,7 @@ class Asignacion
     {
         return $this->foro_principal;
     }
-
-    /**
-     * Implementa la interfaz JsonSerializable
-     */
-    public function jsonSerialize()
-    {
-        $profesorNombre = Usuario::dbGet($this->getProfesor())
-            ->getNombreCompleto();
-        $asignaturaNombre = Asignatura::dbGet($this->getAsignatura())
-            ->getNombreCompleto();
-        $grupoNombre = Grupo::dbGet($this->getGrupo())
-            ->getNombreCompleto();
-
-        return [
-            'uniqueId' => $this->getId(),
-            'id' => $this->getId(),
-            'checkbox' => $this->getId(),
-            'asignatura' => $this->getAsignatura(),
-            'grupo' => $this->getGrupo(),
-            'profesor' => $this->getProfesor(),
-            'horario' => $this->getHorario(),
-            'foroPrincipal' => $this->getForoPrincipal(),
-            'profesorNombre' => $profesorNombre,
-            'asignaturaNombre' => $asignaturaNombre,
-            'grupoNombre' => $grupoNombre
-        ];
-    }
-
+    
     /*
      *
      * 
@@ -159,21 +143,23 @@ class Asignacion
     public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        INSERT
+        INTO
+            gesi_asignaciones
+            (
+                profesor,
+                grupo,
+                asignatura,
+                horario,
+                foro_principal
+            )
+        VALUES
+            (?, ?, ?, ?, ?)
+        SQL;
         
-        $sentencia = $bbdd->prepare("
-            INSERT
-            INTO
-                gesi_asignaciones
-                (
-                    profesor,
-                    grupo,
-                    asignatura,
-                    horario,
-                    foro_principal
-                )
-            VALUES
-                (?, ?, ?, ?, ?)
-        ");
+        $sentencia = $bbdd->prepare($query);
 
         $profesorId = $this->getProfesor();
         $grupoId = $this->getGrupo();
@@ -191,11 +177,8 @@ class Asignacion
         );
 
         $sentencia->execute();
-        
         $id_insertado = $bbdd->insert_id;
-
         $sentencia->close();
-
         $this->id = $id_insertado;
 
         return $this->id;
@@ -216,7 +199,7 @@ class Asignacion
      *
      * @return Asignacion
      */
-    public static function dbGet(int $id) : Asignacion
+    public static function dbGet(int $id): self
     {
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -252,21 +235,23 @@ class Asignacion
      * 
      * @return array<Asignacion>
      */
-    public static function dbGetAll(): array {
-
+    public static function dbGetAll(): array
+    {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                profesor,
-                grupo,
-                asignatura,
-                horario,
-                foro_principal
-            FROM
-                gesi_asignaciones
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            profesor,
+            grupo,
+            asignatura,
+            horario,
+            foro_principal
+        FROM
+            gesi_asignaciones
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
     
         $sentencia->execute();
         $resultado = $sentencia->get_result();
@@ -293,31 +278,21 @@ class Asignacion
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT
-                id
-            FROM
-                gesi_asignaciones
-            WHERE
-                asignatura = ?
-            LIMIT 1
-        
-        ");
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_asignaciones
+        WHERE
+            asignatura = ?
+        LIMIT 1
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
@@ -330,34 +305,28 @@ class Asignacion
      * 
      * @return array<Asignacion>
      */
-    public static function dbGetByGrupo(int $grupo_id) : array
+    public static function dbGetByGrupo(int $grupo_id): array
     {
-
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                profesor,
-                grupo,
-                asignatura,
-                horario,
-                foro_principal
-            FROM
-                gesi_asignaciones
-            WHERE
-                grupo = ?
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            profesor,
+            grupo,
+            asignatura,
+            horario,
+            foro_principal
+        FROM
+            gesi_asignaciones
+        WHERE
+            grupo = ?
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $grupo_id
-        );
-    
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $grupo_id);
         $sentencia->execute();
-
         $r = $sentencia->get_result();
-
         $as = array();
 
         while ($a = $r->fetch_object()) {
@@ -365,6 +334,7 @@ class Asignacion
         }
 
         $sentencia->close();
+
         return $as;    
     }
 
@@ -375,36 +345,31 @@ class Asignacion
      * 
      * @return array
      */
-    public static function dbGetByProfesor(int $profesor) : array
+    public static function dbGetByProfesor(int $profesor): array
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT 
-                id,
-                profesor,
-                asignatura,
-                grupo,
-                horario,
-                foro_principal
-            FROM
-                gesi_asignaciones
-            WHERE
-                profesor = ?    
-        ");
+        $query = <<< SQL
+        SELECT 
+            id,
+            profesor,
+            asignatura,
+            grupo,
+            horario,
+            foro_principal
+        FROM
+            gesi_asignaciones
+        WHERE
+            profesor = ? 
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $profesor
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $profesor);
         $sentencia->execute();
-
-        $r = $sentencia->get_result();
-
+        $resultado = $sentencia->get_result();
         $as = array();
 
-        while ($a = $r->fetch_object()) {
+        while ($a = $resultado->fetch_object()) {
             $as[] = self::fromMysqlFetch($a);
         }
 
@@ -447,10 +412,7 @@ class Asignacion
      *
      * @return bool
      */
-    public static function dbExisteByAsignaturaGrupo(
-        int $asignatura,
-        int $grupo
-    ): bool
+    public static function dbExisteByAsignaturaGrupo(int $asignatura, int $grupo): bool
     {        
         $bbdd = App::getSingleton()->bbddCon();
 
@@ -473,7 +435,6 @@ class Asignacion
     }
 
     /**
-     * 
      * Comprueba si un grupo tiene alguna asignación.
      * 
      * @param int $id_grupo
@@ -484,31 +445,21 @@ class Asignacion
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT
-                id
-            FROM
-                gesi_asignaciones
-            WHERE
-                grupo = ?
-            LIMIT 1
-        
-        ");
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_asignaciones
+        WHERE
+            grupo = ?
+        LIMIT 1
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id_grupo
-            );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id_grupo);
         $sentencia->execute();
         $sentencia->store_result();
-
-        if ($sentencia->num_rows > 0) {
-            $existe = true;
-        } else {
-            $existe = false;
-        }
-
+        $existe = $sentencia->num_rows > 0;
         $sentencia->close();
 
         return $existe;
@@ -525,29 +476,24 @@ class Asignacion
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            SELECT
-                id,
-                profesor,
-                asignatura,
-                grupo,
-                horario,
-                foro_principal
-            FROM
-                gesi_asignaciones
-            WHERE
-                asignatura = ?        
-        ");
+        $query = <<< SQL
+        SELECT
+            id,
+            profesor,
+            asignatura,
+            grupo,
+            horario,
+            foro_principal
+        FROM
+            gesi_asignaciones
+        WHERE
+            asignatura = ?   
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id_asignatura
-            );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id_asignatura);
         $sentencia->execute();
-            
         $r = $sentencia->get_result();
-
         $asignaciones = array();
 
         while ($a = $r->fetch_object()) {
@@ -667,24 +613,44 @@ class Asignacion
     {
         $bbdd = App::getSingleton()->bbddCon();
 
-        $sentencia = $bbdd->prepare("
-            DELETE
-            FROM
-                gesi_asignaciones
-            WHERE
-                id = ?
-        ");
+        $query = <<< SQL
+        DELETE
+        FROM
+            gesi_asignaciones
+        WHERE
+            id = ?
+        SQL;
 
-        $sentencia->bind_param(
-            "i",
-            $id
-        );
-
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
         $resultado = $sentencia->execute();
-
         $sentencia->close();
 
         return $resultado;
+    }
+
+    public function jsonSerialize()
+    {
+        $profesorNombre = Usuario::dbGet($this->getProfesor())
+            ->getNombreCompleto();
+        $asignaturaNombre = Asignatura::dbGet($this->getAsignatura())
+            ->getNombreCompleto();
+        $grupoNombre = Grupo::dbGet($this->getGrupo())
+            ->getNombreCompleto();
+
+        return [
+            'uniqueId' => $this->getId(),
+            'id' => $this->getId(),
+            'checkbox' => $this->getId(),
+            'asignatura' => $this->getAsignatura(),
+            'grupo' => $this->getGrupo(),
+            'profesor' => $this->getProfesor(),
+            'horario' => $this->getHorario(),
+            'foroPrincipal' => $this->getForoPrincipal(),
+            'profesorNombre' => $profesorNombre,
+            'asignaturaNombre' => $asignaturaNombre,
+            'grupoNombre' => $grupoNombre
+        ];
     }
 }
 

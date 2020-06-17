@@ -12,12 +12,13 @@
  * @author Pablo Román Morer Olmos
  * @author Juan Francisco Carrión Molina
  *
- * @version 0.0.4-beta.01
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Controladores;
 
-use Awsw\Gesi\Vistas\Home\Home as HomeHome;
+use Awsw\Gesi\Vistas\Home\Home as VistaHome;
+
 use Awsw\Gesi\Vistas\Vista;
 
 class Home extends Controlador
@@ -26,7 +27,7 @@ class Home extends Controlador
     public static function controla(): void
     {
         parent::get('/?', function () {
-            Vista::dibuja(new HomeHome());
+            Vista::dibuja(new VistaHome());
         });
     }
 }
