@@ -24,7 +24,7 @@ use Awsw\Gesi\Vistas\Modelo;
 
 class AdminLista extends Modelo
 {
-    private const VISTA_NOMBRE = "Foros";
+    private const VISTA_NOMBRE = "Lista Fo";
     private const VISTA_ID = "foro-lista";
 
     private $listado;

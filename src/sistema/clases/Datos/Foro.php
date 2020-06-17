@@ -275,6 +275,43 @@ class Foro
         return $result;
     }
 
+    /**
+     * Comprueba si un profesor tiene permiso para acceder a un foro, es 
+     * decir, si existe alguna asignación para él que tiene el foro como 
+     * principal.
+     * 
+     * @requires $foroId existe en la base de datos.
+     * 
+     * @param int $usuarioId
+     * @param int $foroId
+     * 
+     * @return bool
+     */
+    public static function dbPdTienePermiso(int $usuarioId, int $foroId): bool
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT
+            id
+        FROM
+            gesi_asignaciones
+        WHERE
+            profesor = ?
+        AND
+            foro_principal = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('ii', $usuarioId, $foroId);
+        $sentencia->execute();
+        $sentencia->store_result();
+        $result = $sentencia->num_rows > 0;
+        $sentencia->close();
+
+        return $result;
+    }
+
     /*
      *
      * Operaciones UPDATE.

@@ -21,8 +21,11 @@ use Awsw\Gesi\FormulariosAjax\Foro\ForoPsCreate;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsDelete;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsRead;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoCreate;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoRespuestaCreate;
 use Awsw\Gesi\Vistas\Foro\ForoPsList;
 use Awsw\Gesi\Vistas\Foro\MensajeForoEstList;
+use Awsw\Gesi\Vistas\Foro\MensajeForoPdList;
 use Awsw\Gesi\Vistas\Vista;
 
 class Foro extends Controlador
@@ -75,7 +78,34 @@ class Foro extends Controlador
         parent::get('/est/foros/([0-9]+)/', function ($foroId) {
             Vista::dibuja(new MensajeForoEstList($foroId));
         });
+        
+        /**
+         * Personal docente.
+         */
+
+        parent::get('/pd/foros/([0-9]+)/', function ($foroId) {
+            Vista::dibuja(new MensajeForoPdList($foroId));
+        });
+
+        /**
+         * Formulario de creación de mensajes de foros.
+         */
+
+        parent::get('/ses/mensajeforo/create/', function () {
+            (new MensajeForoCreate(true))->manage();
+        });
+
+        parent::post('/ses/mensajeforo/create/', function () {
+            (new MensajeForoCreate(true))->manage();
+        });
+
+        parent::get('/ses/mensajeforo/respuesta/create/', function () {
+            (new MensajeForoRespuestaCreate(true))->manage();
+        });
+
+        parent::post('/ses/mensajeforo/respuesta/create/', function () {
+            (new MensajeForoRespuestaCreate(true))->manage();
+        });
     }
 }
-
 ?>

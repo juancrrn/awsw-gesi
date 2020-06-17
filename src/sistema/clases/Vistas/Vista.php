@@ -285,3 +285,4 @@ class Vista
         return $li;
     }
 }
+?>

@@ -1,5 +1,6 @@
 // Vista pública para que cualquiera vea libros y ejemplares disponibles
-<?php 
+<?php
+ 
 
 /**
  * Vista de la biblioteca (libros y ejemplares disponibles)

@@ -39,7 +39,7 @@ class EstPsCreate extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'usuario-est-ps-create';
+    private const FORM_ID = 'usuario-est-ps-create'; 
     private const FORM_NAME = 'Crear estudiante';
     private const TARGET_CLASS_NAME = 'Usuario';
     private const SUBMIT_URL = '/ps/usuarios/est/create/';

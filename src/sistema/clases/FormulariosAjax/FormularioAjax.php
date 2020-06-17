@@ -98,6 +98,12 @@ abstract class FormularioAjax
     private const CSRF_TOKEN_FIELD = 'csrf-token';
 
     /**
+     * @var string BTN_META_PREFIX       Button metadata data-* attributes 
+     *                                   prefix.
+     */
+    private const BTN_META_PREFIX = 'meta';
+
+    /**
      * @var string JSON_ADMITTED_CONTENT_TYPE JSON admitted content type.
      */
     private const JSON_ADMITTED_CONTENT_TYPE = 'application/json; charset=utf-8';
@@ -469,7 +475,7 @@ abstract class FormularioAjax
      * @param int|null $uniqueId
      * @param bool $small
      */
-    public function generateButton($content = null, $uniqueId = null, $small = false): string
+    public function generateButton($content = null, $uniqueId = null, $small = false, $metadata = array()): string
     {
         $formId = $this->formId;
         $buttonContent = $content ? $content : $this->formName;
@@ -478,8 +484,13 @@ abstract class FormularioAjax
 
         $smallClass = $small ? 'btn-sm' : '';
 
+        $metadataAttr = '';
+        foreach ($metadata as $m => $d) {
+            $metadataAttr .= ' data-' . self::BTN_META_PREFIX . '-' . $m . '="' . $d . '" ';
+        }
+
         $button = <<< HTML
-        <button class="btn-ajax-modal-fire btn $smallClass btn-primary mb-1 mx-1" data-ajax-form-id="$formId" $uniqueIdData>$buttonContent</button>
+        <button class="btn-ajax-modal-fire btn $smallClass btn-primary mb-1 mx-1" data-ajax-form-id="$formId" $uniqueIdData $metadataAttr>$buttonContent</button>
         HTML;
 
         return $button;

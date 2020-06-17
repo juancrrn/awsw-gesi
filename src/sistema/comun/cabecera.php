@@ -34,6 +34,8 @@ use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
 use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
 use Awsw\Gesi\Vistas\Evento\EventoPsList;
 use Awsw\Gesi\Vistas\Evento\EventoPdList;
+use Awsw\Gesi\Vistas\Evento\EventoEstList;
+
 $app = App::getSingleton();
 
 $v = (! $app->isDesarrollo()) ? '' : '?v=0.0.0' . time();
@@ -57,18 +59,12 @@ if (Sesion::isSesionIniciada()) {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/secretaria/', MensajeSecretariaSesList::class);
     /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/eventos/', 'Eventos', 'evento-lista');
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/foros/', 'Foros', 'foro-lista');
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/ses/biblioteca/', 'Biblioteca', 'mi-biblioteca'); */
+        '/ses/eventos/', 'Eventos', 'evento-lista'); */
 
     if (Sesion::getUsuarioEnSesion()->isEst()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de estudiantes');
 
-        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/est/asignaturas/', 'Asignaturas', '');*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/est/asignaciones/', AsignacionEstList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
@@ -77,12 +73,6 @@ if (Sesion::isSesionIniciada()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de personal docente');
 
-        /* $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaturas/', );
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/asignaciones/horario/', );
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/grupos/', );*/
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/asignaciones/', AsignacionPdList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
@@ -107,16 +97,12 @@ if (Sesion::isSesionIniciada()) {
             '/ps/eventos/', EventoPsList::class );
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/ps/foros/', ForoPsList::class);
-        /*$sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/biblioteca/', ); */
     }
 } else {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/inv/mensajesecretaria/', MensajeSecretariaInvList::class);
-    /*$sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/eventos/', 'Eventos públicos', '');*/
-    /*  $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/foros/', 'Foros públicos', ''); */
+    $sideMenuBuffer .= Vista::generarSideMenuLink(
+        '/inv/eventos/', EventoEstList::class);
 }
 
 // Generar elementos de la navegación del menú de sesión de usuario.
@@ -200,7 +186,5 @@ $headerFinalHtmlBuffer .= <<< HTML
             </div>
         </nav>
 HTML;
-
 echo $headerFinalHtmlBuffer;
-
 ?>

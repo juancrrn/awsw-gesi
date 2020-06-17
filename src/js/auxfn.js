@@ -80,9 +80,9 @@ aux.findObjectInArray = (array, attributeName, attributeValue) =>
  */
 aux.doEmptyForm = ($form) =>
 {
-    $form.find('input, select, textarea').val('');
-    $form.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
-    $form.find('select, textarea').empty();
+    $form.find('input:not(.do-not-empty), select:not(.do-not-empty), textarea:not(.do-not-empty)').val('');
+    $form.find('input[type="checkbox"]:not(.do-not-empty), input[type="radio"]:not(.do-not-empty)').prop('checked', false);
+    $form.find('select:not(.do-not-empty), textarea:not(.do-not-empty)').empty();
 
     const $formElement = $form.find('form');
 

@@ -67,10 +67,8 @@ distintas restricciones y se han generado datos de demostración (carpeta
 - Finalización de vistas, URL de controladores y enlaces del menú lateral.
 - Comprobar, al insertar usuarios, que NIF y email no existen ya, ya que son
   UNIQUE.
-- Habilitar verificación formato NIF.
 - Verificación antes de enviar los formularios, en el cliente; campos required y
   asterisco.
-- Representación gráfica de horarios.
 - Al eliminar una asignación, si procede, eliminar también el foro y los
   mensajes (CASCADE).
 - Que un foro solo pueda ser foro principal de una asignatura (en curso).
@@ -81,6 +79,19 @@ distintas restricciones y se han generado datos de demostración (carpeta
 - Permisos de vistas (est, pd, ps) Falta
       - MensajeForoPdList
       - MensajeForoPsList
-      - (Biblioteca)
 - Foro Eventos
+
+- Estudiante
+    - Foro crear (formulario y boton) y responder (formulario)
+    - Evento FormularioAjax>EventoEst... (invitados tiene formulario de crear eventos pero no deberia)
+- Profesor
+    - Foro crear (formulario y boton) responder (formulario)
+    - Eventos (solo esta el boton de crear y no funciona)
+- P Secretaria
+    - Mensajes da error headers already sent en cabecera 204 y vista 106
+    - Falta eliminar asignaciones
+    - Formularios de foros
 - Revisar descripciones de métodos y clases
+- Borrar todo lo referente a la biblioteca
+- Habilitar verificación formato NIF.
+- Verificar constraints y checkboxes de los formularios de update y delete: que por ejemplo cuando se elimina un foro se eliminen todos sus mensajes y respuestas, que se verifique que un usuario no es tutor etc antes de eliminarlo, etc

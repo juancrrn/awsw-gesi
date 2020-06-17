@@ -22,7 +22,7 @@ use \Awsw\Gesi\Formularios\Valido;
 use JsonSerializable;
 
 class MensajeForo 
-    implements JsonSerializable
+    /* implements JsonSerializable TODO */
 {
     /**
      * @var int $id Identificador único.
@@ -73,8 +73,6 @@ class MensajeForo
             $o->contenido
         );
     }
-    
-    
 
     /*
      *
@@ -135,7 +133,6 @@ class MensajeForo
      * 
      * @return int Identificador del mensaje de foro insertado.
      */
-
     public function dbInsertar(): int
     {
         $bbdd = App::getSingleton()->bbddCon();
@@ -144,8 +141,7 @@ class MensajeForo
         INSERT
         INTO 
             gesi_mensajes_foros
-            (    
-                id,
+            (
                 foro,
                 padre,
                 usuario,
@@ -161,11 +157,11 @@ class MensajeForo
         $foro = $this->getForo();
         $padre = $this->getPadre();
         $usuario = $this->getUsuario();
+        $fecha = $this->getFecha();
         $contenido = $this->getContenido();
 
         $sentencia->bind_param(
-            'iiiiss',
-            $id,
+            'iiiss',
             $foro,
             $padre,
             $usuario,
@@ -185,6 +181,41 @@ class MensajeForo
      * Operaciones SELECT.
      *  
      */
+
+    /**
+     * Trae de la base de datos un mensaje.
+     * 
+     * @param int $mensajeForoId Id del mensaje.
+     * 
+     * @return array Mensajes hijos (respuestas) del mensaje.
+    */
+    public static function dbGet($mensajeForoId): self
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT
+            id,
+            foro,
+            padre,
+            usuario,
+            fecha,
+            contenido
+        FROM
+            gesi_mensajes_foros
+        WHERE
+            id = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $mensajeForoId);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $mensaje = self::fromMysqlFetch($resultado->fetch_object());
+        $sentencia->close();
+
+        return $mensaje;
+    }
 
     /**
      * Trae de la base de datos todos los mensajes raíz de un foro a partir del
@@ -210,6 +241,8 @@ class MensajeForo
             gesi_mensajes_foros
         WHERE
             foro = ?
+        AND
+            padre IS NULL
         SQL;
 
         $sentencia = $bbdd->prepare($query);
@@ -253,7 +286,50 @@ class MensajeForo
 
         return $existe;
     }
+
+    /**
+     * Trae de la base de datos todos los mensajes hijos (respuestas) de un 
+     * mensaje. Según la especificación, solo se admite un nivel de respuestas.
+     * 
+     * @param self $this Mensaje padre.
+     * 
+     * @return array Mensajes hijos (respuestas) del mensaje.
+    */
+    public function dbGetRespuestas(): array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $query = <<< SQL
+        SELECT
+            id,
+            foro,
+            padre,
+            usuario,
+            fecha,
+            contenido
+        FROM
+            gesi_mensajes_foros
+        WHERE
+            padre = ?
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $id = $this->getId();
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
+        $mensajes = array();
+
+        while ($mensaje = $resultado->fetch_object()) {
+            $mensajes[] = self::fromMysqlFetch($mensaje);
+        }
+        
+        $sentencia->close();
+
+        return $mensajes;
+    }
     
+    /* TODO BORRAR ? 
     public function jsonSerialize()
     {
         return [
@@ -267,7 +343,7 @@ class MensajeForo
             'contenido' => $this->getContenido(),
             'extractoContenido' => $this->getContenido(32)
         ];
-    }
+    }*/
 }
 
 ?>

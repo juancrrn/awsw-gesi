@@ -1,61 +1,120 @@
 <?php 
 
-/**
- * Vistas de calendario.
- *
- * - PDI: puede editar todos los calendarios.
- * - PD: puede editar los calendarios de sus asignaturas.
- * - Estudiantes: pueden ver el calendario de sus asignaturas.
- * - Resto: pueden ver el calendario público.
- *
- * @package awsw-gesi
- * Gesi
- * Aplicación de gestión de institutos de educación secundaria
- *
- * @author Andrés Ramiro Ramiro
- * @author Nicolás Pardina Popp
- * @author Pablo Román Morer Olmos
- * @author Juan Francisco Carrión Molina
- *
- * @version 0.0.4-beta.01
- */
-
 namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Evento;
 use Awsw\Gesi\Sesion;
 
-class EventoInvList extends Modelo
+use Awsw\Gesi\FormulariosAjax\Evento\EventoRead as FormEventoRead;
+
+
+
+class EventoEstList extends Modelo
 {
-    private const VISTA_NOMBRE = "Eventos públicos";
-    private const VISTA_ID = "evento-lista";
+	public const VISTA_NOMBRE = "Eventos";
+	public const VISTA_ID = "evento-lista";
 
-    public function __construct()
-    {
-        Sesion::requerirSesionNoIniciada();
+	private $listado;
 
-        $this->nombre = self::VISTA_NOMBRE;
-        $this->id = self::VISTA_ID;
-    }
+	public function __construct()
+	{	
+		Sesion::requerirSesionNoIniciada();
+		$this->nombre = self::VISTA_NOMBRE;
+		$this->id = self::VISTA_ID;
 
-    public function procesaContent(): void
-    {
-        $form = new EventoInvCreate();
-        $formModal = $form->generateModal();
-        $formButton = $form_>generateButton('Eventos programados');
+		$this->listado = Evento::dbGetAll();
+	}
 
-        $html = <<< HTML
-        <header class="page-header">
-            <h1>$this->nombre</h1>
-        </header>
-        
-        <section class="page-content">
-            Esta vista aún no está implementada.
-        </section>
-        
-        HTML;
+	public function procesaContent(): void
+	{	
+		$html = <<< HTML
+		<h2 class="mb-4">$this->nombre</h2>
+		HTML;
 
-    }
+		$html .= $this->generarListaEventos();
+
+		echo $html;
+	}
+
+	 /**
+         * Genera el listado de Eventos.
+         * 
+         * @return string Listado de Eventos.
+         */
+        public function generarListaEventos(): string
+        {
+           
+            //Read Evento
+
+		   
+			$formEventoRead = new FormEventoRead();
+            $formEventoReadModal = $formEventoRead->generateModal();
+
+            $listaEventoBuffer = '';
+
+            if(! empty($this->listadoEvento)){
+                $eventos = array();
+             
+                foreach($this->listadoEvento as $u){
+                    
+                    $uniqueId = $u->getId();
+                    $fecha = $u->getfecha();
+                  //  $curso_escolar = $u->getCursoEscolarRaw();
+                   // $nombre_corto = $u->getNombreCorto();
+                    $nombre = $u->getNombre();
+                  //  $tutor = $u->getTutor();
+                    $lugar = $u->getLugar();
+
+                    $formEventoReadButton = $formEventoRead->generateButton('Ver',$uniqueId,true);
+
+                    $listaEventoBuffer .= <<< HTML
+                    <tr data-unique-id="$uniqueId">
+                        <td scope="row" data-col-name="nif">$fecha</td>
+                        <td data-col-name="nombre-completo">$nombre</td>
+                        <td data-col-name="lugar">$lugar</td>
+                        <td class="text-right">$formEventoReadButton</td>
+                    </tr>
+                    HTML;
+                }
+
+
+            } else{
+                $listaEventoBuffer .= <<< HTML
+                <tr>
+                    <td></td>
+                    <td>No se han encontrado Eventos.</td>
+                    <td></td>
+                </tr>
+                HTML;
+                }
+            
+
+            $formEventoPsCreateButton = $formEventoPsCreate->generateButton('Crear',null,true);
+            $html = <<< HTML
+            <h3 class="mb-4">$formEventoPsCreateButton</h3>
+            <table id="evento-lista" class="table table-borderless table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Lugar</th>
+                    <th scope="col" class="text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                $listaEventoBuffer
+            </tbody>
+            
+            </table>
+            $formEventoPsCreateModal
+            $formEventoPsReadModal
+            $formEventoPsUpdateModal
+            $formEventoPsDeleteModal
+            HTML;
+
+            return $html;
+        }
 }
 
 ?>

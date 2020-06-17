@@ -29,6 +29,8 @@ use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\MensajeForo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoCreate as MensajeForoCreate;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoRespuestaCreate;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Vistas\Vista;
 
@@ -68,7 +70,13 @@ class MensajeForoEstList extends Modelo
         $nombreAsignatura = $this->asignatura->getNombreCompleto();
         $nombreProfesor = $this->profesor->getNombreCompleto();
 
-        $mensajes = $this->generaListaMensajes();
+        $formMensajePrincipal = new MensajeForoCreate(true, $this->foro->getId());
+        $modalMensajePrincipal = $formMensajePrincipal->generateModal();
+        $botonMensajePrincipal = $formMensajePrincipal->generateButton('Crear un mensaje nuevo', null);
+
+        $formMensajeRespuesta = new MensajeForoRespuestaCreate();
+        $modalMensajeRespuesta = $formMensajeRespuesta->generateModal();
+        $mensajes = $this->generaListaMensajes($formMensajeRespuesta);
         
         echo <<< HTML
         <h2 class="mb-4">$this->nombre</h2>
@@ -76,45 +84,53 @@ class MensajeForoEstList extends Modelo
             <h3 class="mb-3">$nombreForo</h3>
             <p class="mb-3">Este foro figura como foro principal de asignatura con los siguientes datos:</p>
             <p class="mb-2">
-                <span class="badge badge-secondary">Asignatura</span>
+                <span class="badge badge-primary">Asignatura</span>
                 $nombreAsignatura
             </p>
-            <p>
-                <span class="badge badge-secondary">Profesor</span>
+            <p class="mb-4">
+                <span class="badge badge-primary">Profesor</span>
                 $nombreProfesor
             </p>
+            <p>$botonMensajePrincipal</p>
         </header>
-        <div id="mensaje-foro-est-list">
+        <div id="mensaje-foro-ses-list">
             $mensajes
         </div>
+        $modalMensajePrincipal
+        $modalMensajeRespuesta
         HTML;
-
     }
 
-    private function generaListaMensajes(): string
+    private function generaListaMensajes(MensajeForoRespuestaCreate $formMensajeRespuesta): string
     {
+        $bufferModales = '';
+
         if (! empty($this->mensajes)) {
             $buffer = '';
 
             foreach ($this->mensajes as $mensaje) {
-                $autor = Usuario::dbGet($mensaje->getUsuario())
-                    ->getNombreCompleto();
+                $usuario = Usuario::dbGet($mensaje->getUsuario());
+                $autor = $usuario->getNombreCompleto();
                 $fecha = \DateTime::createFromFormat(Valido::MYSQL_DATETIME_FORMAT, $mensaje->getFecha())
                     ->format(Valido::ESP_DATETIME_SHORT_FORMAT);
                 $contenido = $mensaje->getContenido();
                 $respuestas = $this->generaRespuestasMensajes($mensaje);
+                $badgeProfesor = $usuario->getId() == $this->profesor->getId() ? '<span class="badge badge-primary">Profesor</span>' : '';
 
+                $mensajeId = $mensaje->getId();
+                $contenedorRespuestas = 'mensaje-foro-respuestas-' . $mensajeId;
+
+                $botonMensajeRespuesta = $formMensajeRespuesta->generateButton('Responder', null, true, array('mensaje-foro-padre-id' => $mensajeId, 'override-on-success-event-target' => $contenedorRespuestas));
+                
                 $buffer .= <<< HTML
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header">
-                        <p><strong>$autor</strong></p>
-                        <p>$fecha</p>
+                    <p class="mb-2"><span class="badge badge-secondary">Mensaje principal ($fecha)</span></p>
+                        <p class="mb-2"><strong>$autor</strong> $badgeProfesor</p>
+                        <p class="mb-4">$contenido</p>
+                        <p>$botonMensajeRespuesta</p>
                     </div>
-                    <div class="card-body">
-                        $contenido
-                        <p class="mt-3 text-right"><button class="btn btn-sm btn-primary">Responder</button></p>
-                    </div>
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush" id="$contenedorRespuestas">
                         $respuestas
                     </ul>
                 </div>
@@ -130,20 +146,30 @@ class MensajeForoEstList extends Modelo
             HTML;
         }
 
-        return $buffer;
+        return $buffer . $bufferModales;
     }
 
     private function generaRespuestasMensajes(MensajeForo $mensaje): string
     {
         $buffer = '';
 
-        // TODO recoger respuestas de los mensajes.
+        $respuestas = $mensaje->dbGetRespuestas();
 
-        $buffer .= <<< HTML
-        <li class="list-group-item">Respuesta</li>
-        <li class="list-group-item">Respuesta</li>
-        <li class="list-group-item">Respuesta</li>
-        HTML;
+        foreach ($respuestas as $respuesta) {
+            $usuario = Usuario::dbGet($respuesta->getUsuario());
+            $nombre = $usuario->getNombreCompleto();
+            $fecha = \DateTime::createFromFormat(Valido::MYSQL_DATETIME_FORMAT, $respuesta->getFecha())
+            ->format(Valido::ESP_DATETIME_SHORT_FORMAT);
+            $contenido = $respuesta->getContenido();
+
+            $buffer .= <<< HTML
+            <li class="list-group-item">
+                <p class="mb-2"><span class="badge badge-secondary">Respuesta ($fecha)</span></p>
+                <p class="mb-2"><strong>$nombre</strong></p>
+                <p>$contenido</p>
+            </li>
+            HTML;
+        }
 
         return $buffer;
     }

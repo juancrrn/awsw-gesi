@@ -24,7 +24,7 @@ use Awsw\Gesi\Sesion;
  * @version 0.0.4-beta.01
  */
 
-class MensajeSecretariaInvCreate extends FormularioAjax
+class EventoInvCreate extends FormularioAjax
 {
 
     /**
