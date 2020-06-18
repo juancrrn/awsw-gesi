@@ -44,7 +44,7 @@ use Awsw\Gesi\Sesion;
     private const SUBMIT_URL = '/ps/usuarios/pd/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
     private const ON_SUCCESS_EVENT_NAME = 'deleted.usuario.pd';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista';
 
     public function __construct($api = false)
     {

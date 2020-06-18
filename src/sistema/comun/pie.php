@@ -17,8 +17,6 @@
 
 use Awsw\Gesi\App;
 
-// TODO: cargar modales
-
 $app = App::getSingleton();
 
 $appUrl = $app->getUrl();

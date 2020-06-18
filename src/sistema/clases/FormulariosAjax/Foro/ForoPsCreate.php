@@ -43,7 +43,7 @@ class ForoPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/foros/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.foro';
-    private const ON_SUCCESS_EVENT_TARGET = '#foro-ps-list'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#foro-ps-list';
 
     /**
      * Constructs the form object

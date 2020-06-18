@@ -45,7 +45,7 @@ class GrupoPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/grupo/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.grupo.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#grupo-ps-list'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#grupo-ps-list';
 
 
     public function __construct($api = false)
@@ -169,15 +169,11 @@ class GrupoPsCreate extends FormularioAjax
 
         /*
          * Comprobar que el tutor no está vacío y existe.
-         * 
-         * TODO: log si pasa algo que no nos gusta
          */
 
         if (empty($tutor) || ! Valido::testStdInt($tutor) || ! Usuario::dbExisteId($tutor)) {
             $errors[] ='El campo tutor no es válido.';
         }
-
-
 
         //Comprobar si hay errores
 

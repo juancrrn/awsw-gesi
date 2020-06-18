@@ -197,8 +197,6 @@ class GrupoPsUpdate extends FormularioAjax
 
         /*
          * Comprobar que el tutor no está vacío y existe.
-         * 
-         * TODO: log si pasa algo que no nos gusta
          */
 
         if (empty($tutor) || ! Valido::testStdInt($tutor) || ! Usuario::dbExisteId($tutor)) {

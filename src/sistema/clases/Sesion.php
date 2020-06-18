@@ -76,12 +76,8 @@ class Sesion
     }
 
     /**
-     * Comprueba si la sesión está iniciada.
-     *
-     * Para ello, simplemente comprueba si self::$usuario_en_sesion no es nula.
-     *
-     * TODO: Comprobar que los valores de self::$usuario_en_sesion aún coindicen
-     * con los que hay en la base de datos.
+     * Comprueba si la sesión está iniciada. Para ello, simplemente comprueba 
+     * si self::$usuario_en_sesion no es nula.
      */
     public static function isSesionIniciada(): bool
     {

@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * TODO
+ * Vista de horario completo de un profesor.
  *
  * @package awsw-gesi
  * Gesi

@@ -44,7 +44,7 @@ class PdPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/usuarios/pd/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.usuario.pd';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-pd-lista';
 
     /**
      * Constructs the form object

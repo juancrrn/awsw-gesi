@@ -45,7 +45,7 @@ class EstPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/usuarios/est/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.usuario.est';
-    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#usuario-est-lista';
 
     /**
      * Constructs the form object

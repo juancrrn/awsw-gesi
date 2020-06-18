@@ -44,7 +44,7 @@ class AsignaturaPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/asignaturas/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.asignatura';
-    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#asignatura-ps-list';
 
     /**
      * Constructs the form object

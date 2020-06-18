@@ -48,7 +48,7 @@ class EventoPsDelete extends FormularioAjax
     private const SUBMIT_URL = '/ps/eventos/delete/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'delete.evento.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista'; // TODO
+    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista';
 
     /**
      * Constructs the form object
