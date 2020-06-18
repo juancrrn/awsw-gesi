@@ -36,7 +36,7 @@ class GrupoPsRead extends FormularioAjax
      * @var string TARGET_CLASS_NAME
      * @var string SUBMIT_URL
      */
-    private const FORM_ID = 'grupo-read';
+    private const FORM_ID = 'grupo-ps-read';
     private const FORM_NAME = 'Ver Grupo';
     private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/read/';

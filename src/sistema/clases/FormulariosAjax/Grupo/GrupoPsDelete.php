@@ -37,7 +37,7 @@ class GrupoPsDelete extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'grupo-delete';
+    private const FORM_ID = 'grupo-ps-delete';
     private const FORM_NAME = 'Eliminar grupo';
     private const TARGET_CLASS_NAME = 'Grupo';
     private const SUBMIT_URL = '/ps/grupo/delete/';
