@@ -18,7 +18,7 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use JsonSerializable;
 use stdClass;
 
@@ -778,7 +778,7 @@ class Usuario
      * Operaciones UPDATE.
      *  
      */
-
+    
     /**
      * Actualiza la información de un usuario en la base de datos.
      * 

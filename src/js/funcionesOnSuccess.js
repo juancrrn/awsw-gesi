@@ -381,7 +381,6 @@ onSuccessFn.listaPsAsignaturasDeleted = (e, params) =>
     $row.remove();
 }
 
-
 onSuccessFn.listaGruposPsCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -389,6 +388,7 @@ onSuccessFn.listaGruposPsCreated = (e, params) =>
 
     const targetObjectName = $modalData.data('ajax-target-object-name');
 
+    const uniqueId = result[targetObjectName].uniqueId;
     const nivel = result[targetObjectName].nivel;
     const nombre_completo = result[targetObjectName].nombre_completo; 
 
@@ -409,7 +409,6 @@ onSuccessFn.listaGruposPsCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-
 onSuccessFn.listaGruposPsUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -417,8 +416,7 @@ onSuccessFn.listaGruposPsUpdated = (e, params) =>
 
     const targetObjectName = $modalData.data('ajax-target-object-name');
 
-    const nivel = result[targetObjectName].nivel;
-    const nombre_completo = result[targetObjectName].nombre_completo; 
+    const uniqueId = result[targetObjectName].uniqueId;
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
@@ -487,6 +485,7 @@ onSuccessFn.listaEventoPsUpdated = (e, params) =>
 
     const targetObjectName = $modalData.data('ajax-target-object-name');
 
+    const uniqueId = result[targetObjectName].uniqueId;
     const fecha = result[targetObjectName].fecha;
     const nombre = result[targetObjectName].nombre;
     const descripcion = result[targetObjectName].descripcion;

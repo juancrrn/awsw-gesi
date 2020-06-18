@@ -19,7 +19,7 @@ namespace Awsw\Gesi\Formularios\Sesion;
 
 use Awsw\Gesi\Formularios\Formulario;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\Vistas\Vista;
 
 class RestablecerContrasena extends Formulario

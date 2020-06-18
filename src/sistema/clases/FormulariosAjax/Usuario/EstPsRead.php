@@ -9,7 +9,7 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de visualización de un usuario de personal docente por parte 
+ * Formulario AJAX de visualización de un usuario estudiante por parte 
  * de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi

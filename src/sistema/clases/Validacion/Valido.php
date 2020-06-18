@@ -15,7 +15,7 @@
  * @version 0.0.4
  */
 
-namespace Awsw\Gesi\Formularios;
+namespace Awsw\Gesi\Validacion;
 
 use stdClass;
 

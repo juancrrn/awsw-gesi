@@ -8,7 +8,6 @@ use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Validacion\GesiScheduleSlot;

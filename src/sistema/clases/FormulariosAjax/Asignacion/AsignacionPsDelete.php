@@ -12,8 +12,8 @@ use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal docente por parte de 
- * un administrador (personal de Secretaría).
+ * Formulario AJAX para eliminar una asignación profesor-asignatura-grupo por 
+ * parte de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi

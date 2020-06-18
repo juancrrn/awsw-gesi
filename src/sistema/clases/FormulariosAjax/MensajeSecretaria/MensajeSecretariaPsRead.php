@@ -4,13 +4,13 @@ namespace Awsw\Gesi\FormulariosAjax\MensajeSecretaria;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\MensajeSecretaria;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de creación de un mensaje de Secretaría por parte de un 
- * usuario invitado (sin sesión iniciada).
+ * Formulario AJAX de leer un mensaje de secretaría por parte de un 
+ * usuario personal de secretaría.
  *
  * @package awsw-gesi
  * Gesi
@@ -26,7 +26,6 @@ use Awsw\Gesi\Sesion;
 
 class MensajeSecretariaPsRead extends FormularioAjax
 {
-
     /**
      * Initialize specific form constants
      *
@@ -38,10 +37,10 @@ class MensajeSecretariaPsRead extends FormularioAjax
      * @var string ON_SUCCESS_EVENT_NAME
      * @var string ON_SUCCESS_EVENT_TARGET
      */
-    private const FORM_ID = 'mensaje-secretaria-inv-create';
-    private const FORM_NAME = 'Crear mensaje de Secretaría';
+    private const FORM_ID = 'mensaje-secretaria-ps-read';
+    private const FORM_NAME = 'Leer mensaje de Secretaría';
     private const TARGET_CLASS_NAME = 'MensajeSecretaria';
-    private const SUBMIT_URL = '/inv/mensajesecretaria/create/';
+    private const SUBMIT_URL = '/ps/mensajesecretaria/read/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
 
     /**
@@ -71,7 +70,7 @@ class MensajeSecretariaPsRead extends FormularioAjax
         return $responseData;
     }
 
-    public function generateFormInputs(): string
+    public function generateFormInputs(): string    // TODO no muestra los campos
     {
         $html = <<< HTML
         <div class="form-group">

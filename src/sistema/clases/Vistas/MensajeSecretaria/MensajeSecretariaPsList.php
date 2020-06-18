@@ -19,7 +19,7 @@ namespace Awsw\Gesi\Vistas\MensajeSecretaria;
 
 use Awsw\Gesi\Datos\MensajeSecretaria;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaPsRead;
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Sesion;

@@ -5,13 +5,11 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Datos\MensajeSecretaria;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX para eliminar un usuario de personal docente por parte de 
- * un administrador (personal de Secretaría).
+ * Formulario AJAX para eliminar un usuario de personal docente por parte 
+ * de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi

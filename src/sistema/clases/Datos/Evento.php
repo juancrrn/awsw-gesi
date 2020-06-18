@@ -18,7 +18,7 @@
 namespace Awsw\Gesi\Datos;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use JsonSerializable;
 use stdClass;
 
@@ -43,6 +43,8 @@ class Evento
      */
     public function __construct($id, $fecha, $nombre, $descripcion, $lugar)
     {   
+        var_dump($fecha);
+
         $this->id = $id;
         $this->fecha = $fecha;
         $this->nombre = $nombre;
@@ -85,6 +87,7 @@ class Evento
     }
 
     public function getFecha(){
+
         return $this->fecha;
     }
     

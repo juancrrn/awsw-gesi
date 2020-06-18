@@ -25,7 +25,7 @@ use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
 use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;

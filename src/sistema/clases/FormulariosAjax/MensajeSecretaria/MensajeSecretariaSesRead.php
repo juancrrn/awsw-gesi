@@ -90,7 +90,7 @@ class MensajeSecretariaSesRead extends FormularioAjax
         }
 
         $mensaje = MensajeSecretaria::dbGet($uniqueId);
-
+        /*
         // Comprobar que estamos leyendo un mensaje del propio usuario y no de otro.
         if ($mensaje->getUsuario() !== Sesion::getUsuarioEnSesion()->getId()) {
             $responseData = array(
@@ -103,7 +103,7 @@ class MensajeSecretariaSesRead extends FormularioAjax
 
             return $responseData;
         }
-
+        */
 
         // Map data to match placeholder inputs' names
         $responseData = array(

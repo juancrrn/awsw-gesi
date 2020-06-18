@@ -4,13 +4,13 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de creación de un usuario de personal docente por parte de 
- * un administrador (personal de Secretaría).
+ * Formulario AJAX de creación de un usuario de personal docente por 
+ * parte de un administrador (personal de Secretaría).
  *
  * @package awsw-gesi
  * Gesi

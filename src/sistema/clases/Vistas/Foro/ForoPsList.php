@@ -25,7 +25,7 @@ use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Datos\Foro;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsCreate;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsRead;
 use Awsw\Gesi\FormulariosAjax\Foro\ForoPsUpdate;

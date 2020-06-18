@@ -5,7 +5,7 @@ namespace Awsw\Gesi\FormulariosAjax\Usuario;
 use Awsw\Gesi\App;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\Sesion;
 
 /**

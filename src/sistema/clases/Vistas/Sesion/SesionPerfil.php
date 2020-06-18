@@ -21,7 +21,7 @@ namespace Awsw\Gesi\Vistas\Sesion;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Formularios\Valido;
+use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Modelo;
 

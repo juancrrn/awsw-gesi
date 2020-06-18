@@ -9,7 +9,7 @@ use Awsw\Gesi\Sesion;
 
 /**
  * Formulario AJAX de visualizacion de un usuario de personal 
- * de Secretaría por parte de un administrador (Personal de secretaria)
+ * de Secretaría por parte de un administrador (personal de Secretaría).
  * 
  * @package awsw-gesi
  * Gesi

@@ -5,7 +5,7 @@ namespace Awsw\Gesi\FormulariosAjax;
 use stdClass;
 
 /**
- * Clase para la gesión centralizada de formularios AJX:
+ * Clase para la gesión centralizada de formularios AJAX.
  *
  * @package awsw-gesi
  * Gesi

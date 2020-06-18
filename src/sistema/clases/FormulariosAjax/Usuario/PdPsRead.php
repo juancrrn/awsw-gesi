@@ -8,8 +8,8 @@ use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
 
 /**
- * Formulario AJAX de visualizacion de un usuario de peronal 
- * docente por parte de un administrador (Personal de secretaria)
+ * Formulario AJAX de visualizacion de un usuario de personal docente 
+ * por parte de un administrador (Personal de secretaria)
  * 
  * @package awsw-gesi
  * Gesi
