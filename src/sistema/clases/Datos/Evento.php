@@ -346,12 +346,12 @@ class Evento
         $lugar= $this->getLugar();
 
         $sentencia->bind_param(
-            'issss', 
-            $id,
+            'ssssi',
             $fecha,
             $nombre,
             $descripcion,
-            $lugar
+            $lugar,
+            $id
         );
 
          // Convertir fecha al formato Español.

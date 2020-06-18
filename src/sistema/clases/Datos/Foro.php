@@ -323,13 +323,8 @@ class Foro
 
         $restricciones = array();
 
-        // TODO
-        return $restricciones;
-
-        // gesi_mensajes_secretaria.usuario
-
         $query = <<< SQL
-        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SELECT id FROM gesi_asignaciones WHERE foro_principal = ? LIMIT 1
         SQL;
 
         $sentencia = $bbdd->prepare($query);
@@ -337,7 +332,19 @@ class Foro
         $sentencia->execute();
         $sentencia->store_result();
         if ($sentencia->num_rows > 0)
-            $restricciones[] = 'mensaje de Secretaría (usuario)';
+            $restricciones[] = 'asignacion (foro principal)';
+        $sentencia->close();
+
+        $query = <<< SQL
+        SELECT id FROM gesi_mensajes_foros WHERE foro = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'mensajes de foros (foro)';
         $sentencia->close();
         
         return $restricciones;

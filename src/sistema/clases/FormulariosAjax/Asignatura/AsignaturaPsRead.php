@@ -120,16 +120,16 @@ class AsignaturaPsRead extends FormularioAjax
             </select>
         </div>
         <div class="form-group">
-            <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" placeholder="Curso escolar" disabled="disabled">
+            <label for="cursoEscolar">Curso escolar</label>
+            <input class="form-control" type="number" name="cursoEscolar" id="cursoEscolar" placeholder="Curso escolar" disabled="disabled">
         </div>
         <div class="form-group">
-            <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto" placeholder="Nombre corto" disabled="disabled">
+            <label for="nombreCorto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombreCorto" id="nombreCorto" placeholder="Nombre corto" disabled="disabled">
         </div>
         <div class="form-group">
-            <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo" placeholder="Nombre completo" disabled="disabled">
+            <label for="nombreCompleto">Nombre completo</label>
+            <input class="form-control" type="text" name="nombreCompleto" id="nombreCompleto" placeholder="Nombre completo" disabled="disabled">
         </div>
         HTML;
 

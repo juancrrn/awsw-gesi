@@ -123,8 +123,7 @@ class EventoPsUpdate extends FormularioAjax
             <input class="form-control" type="text" name="nombre" id="nombre" placeholder="nombre" required="required" />
         </div>
         <div class="form-group">
-            <label for="descripcion">Descripcion</label>
-            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="descripcion" required="required" />
+            <label for="descripcion">Descripcion</label><textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripcion" required="required"></textarea>
         </div>
         <div class="form-group">
             <label for="lugar">Lugar</label>

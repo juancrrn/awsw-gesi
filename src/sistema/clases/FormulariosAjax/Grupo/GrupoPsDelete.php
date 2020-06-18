@@ -117,7 +117,7 @@ class GrupoPsDelete extends FormularioAjax
         </div>
         <div class="form-group">
             <label>Nivel</label>
-            <input name="nivel" type="text" class="form-control" disabled="disabled">
+            <input name="nivelNombre" type="text" class="form-control" disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
@@ -161,29 +161,41 @@ class GrupoPsDelete extends FormularioAjax
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        //Si el grupo esta asignado
+        //Si el grupo esta asignadO
 
+        //Realizar comprobaciones antes de eliminar el grupo ver db.
 
+         // Comprobar restricciones.
+         $restricciones = Grupo::dbCompruebaRestricciones($uniqueId);
 
-        //Realoizar comprobaciones antes de eliminar el grupo ver db.
+         if (! empty($restricciones)) {
+             $lista = '';
+ 
+             for ($i = 0; $i < sizeof($restricciones); $i++) {
+                 $lista .= $restricciones[$i];
+ 
+                 if ($i == sizeof($restricciones) - 2) {
+                     $lista .= ' y ';
+                 } elseif ($i != sizeof($restricciones) - 1) {
+                     $lista .= ', ';
+                 }
+             }
+ 
+             $errors[] = 'No se puede eliminar este grupo porque existen referencias al mismo en otros datos (restricciones de integridad): ' . $lista . '.';
+             
+             $this->respondJsonError(409, $errors); // HTTP 409 Conflict.
+        }
+       
 
-        if(!Asignacion::dbAnyByGrupo($uniqueId)){
+        if (Grupo::dbEliminar($uniqueId)) {
+            $responseData = array(
+                'status' => 'ok',
+                'messages' => array(
+                    'Grupo eliminado correctamente.'
+                )
+            );
 
-            if ( !Asignacion::dbAnyByGrupo($uniqueId) && Grupo::dbEliminar($uniqueId)) {
-                $responseData = array(
-                    'status' => 'ok',
-                    'messages' => array(
-                        'Grupo eliminado correctamente.'
-                    )
-                );
-    
-                $this->respondJsonOk($responseData);
-            } else {
-                $errors[] = 'Hubo un problema al eliminar el grupo.';
-    
-                $this->respondJsonError(400, $errors); // Bad request.
-            }
-
+            $this->respondJsonOk($responseData);
         } else {
             $errors[] = 'Hubo un problema al eliminar el grupo.';
 

@@ -2,6 +2,9 @@
  * Funciones AJAX on-success.
  * 
  * Usando el símbolo $ para variables de tipo objeto de jQuery.
+ * 
+ * Todas las funciones reciben un parámetro {eventObject} e (evento generado) y
+ * otro {Object} params (contiene el modal y el resultado).
  *
  * @package awsw-gesi
  * Gesi
@@ -37,12 +40,12 @@ x.genBtn = (formId, uniqueId, content) =>
  */
 var onSuccessFn = {};
 
-/**
- * Actualiza la lista de usuarios cuando se crea uno, del rol estudiante.
+/*
+ *
+ * Usuarios.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaUsuariosEstCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -70,12 +73,6 @@ onSuccessFn.listaUsuariosEstCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de usuarios cuando se crea uno, del rol personal docente.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaUsuariosPdCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -105,13 +102,6 @@ onSuccessFn.listaUsuariosPdCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de usuarios cuando se crea uno, del rol personal de 
- * Secretaría.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaUsuariosPsCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -140,12 +130,6 @@ onSuccessFn.listaUsuariosPsCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de usuarios cuando se edita uno, del rol que sea.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaUsuariosUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -164,12 +148,6 @@ onSuccessFn.listaUsuariosUpdated = (e, params) =>
     $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
 }
 
-/**
- * Actualiza la lista de usuarios cuando se elimina uno, del rol que sea.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaUsuariosDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -182,13 +160,12 @@ onSuccessFn.listaUsuariosDeleted = (e, params) =>
     $row.remove();
 }
 
-/**
- * Actualiza la lista de asignaciones (personal de Secretaría) cuando se crea 
- * una.
+/*
+ *
+ * Asignaciones.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaPsAsignacionesCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -219,13 +196,6 @@ onSuccessFn.listaPsAsignacionesCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de asignaciones (personal de Secretaría) cuando se 
- * acutaliza una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsAsignacionesUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -246,13 +216,6 @@ onSuccessFn.listaPsAsignacionesUpdated = (e, params) =>
     $row.find('td[data-col-name="grupoNombre"]').text(grupoNombre);
 }
 
-/**
- * Actualiza la lista de asignaciones (personal de Secretaría) cuando se 
- * elimina una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsAsignacionesDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -265,12 +228,12 @@ onSuccessFn.listaPsAsignacionesDeleted = (e, params) =>
     $row.remove();
 }
 
-/**
- * Actualiza la lista de mensajes de Secretaría cuando se elimina uno.
+/*
+ *
+ * Mensajes de Secretaría.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -297,12 +260,12 @@ onSuccessFn.listaSesMensajesSecretariaCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de Asignaturas cuando se crea una.
+/*
+ *
+ * Asignaturas.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaPsAsignaturasCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -335,12 +298,6 @@ onSuccessFn.listaPsAsignaturasCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de Asignaturas cuando se actualiza una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsAsignaturasUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -363,12 +320,6 @@ onSuccessFn.listaPsAsignaturasUpdated = (e, params) =>
     $row.find('td[data-col-name="nombreCompleto"]').text(largo);
 }
 
-/**
- * Actualiza la lista de asignaturas cuando se elimina una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsAsignaturasDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -381,16 +332,23 @@ onSuccessFn.listaPsAsignaturasDeleted = (e, params) =>
     $row.remove();
 }
 
+/*
+ *
+ * Grupos.
+ * 
+ */
+
 onSuccessFn.listaGruposPsCreated = (e, params) =>
 {
+    console.log("helloooo");
     const $modalData = params.modalData;
     const result = params.result;
 
     const targetObjectName = $modalData.data('ajax-target-object-name');
 
     const uniqueId = result[targetObjectName].uniqueId;
-    const nivel = result[targetObjectName].nivel;
-    const nombre_completo = result[targetObjectName].nombre_completo; 
+    const nivelNombre = result[targetObjectName].nivelNombre;
+    const nombreCompleto = result[targetObjectName].nombreCompleto; 
 
     const buttons =
         x.genBtn('grupo-ps-read', uniqueId, 'Ver') +
@@ -401,8 +359,8 @@ onSuccessFn.listaGruposPsCreated = (e, params) =>
     
     $rowHtml = '\
     <tr data-unique-id="' + uniqueId + '">\
-        <td data-col-name="nivel">'+ nivel +'</td>\
-        <td scope="row" data-col-name="nombre-completo">'+ nombre_completo + '</td>\
+        <td scope="row" data-col-name="nivel">'+ nivelNombre +'</td>\
+        <td data-col-name="nombreCompleto">'+ nombreCompleto + '</td>\
         <td class="text-right">' + buttons + '</td>\
     </tr>';
 
@@ -417,12 +375,14 @@ onSuccessFn.listaGruposPsUpdated = (e, params) =>
     const targetObjectName = $modalData.data('ajax-target-object-name');
 
     const uniqueId = result[targetObjectName].uniqueId;
+    const nivelNombre = result[targetObjectName].nivelNombre;
+    const nombreCompleto = result[targetObjectName].nombreCompleto; 
 
     const $list = $(e.currentTarget).find('tbody');
     const $row = $list.find('tr[data-unique-id="' + uniqueId + '"]');
 
-    $row.find('td[data-col-name="nif"]').text(nif);
-    $row.find('td[data-col-name="nombre-completo"]').text(nombreCompleto);
+    $row.find('td[data-col-name="nivel"]').text(nivelNombre);
+    $row.find('td[data-col-name="nombreCompleto"]').text(nombreCompleto);
 }
 
 onSuccessFn.listaGruposPsDeleted = (e, params) =>
@@ -437,8 +397,11 @@ onSuccessFn.listaGruposPsDeleted = (e, params) =>
     $row.remove();
 }
 
-
-/** Eventos */
+/*
+ *
+ * Eventos.
+ * 
+ */
 
 onSuccessFn.listaEventoPsCreated = (e, params) =>
 {
@@ -472,12 +435,6 @@ onSuccessFn.listaEventoPsCreated = (e, params) =>
     $list.append($rowHtml);
 }
 
-/**
- * Actualiza la lista de Asignaturas cuando se actualiza una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaEventoPsUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -500,12 +457,6 @@ onSuccessFn.listaEventoPsUpdated = (e, params) =>
     $row.find('td[data-col-name="lugar"]').text(lugar);
 }
 
-/**
- * Actualiza la lista de asignaturas cuando se elimina una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaEventoPsDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -518,12 +469,12 @@ onSuccessFn.listaEventoPsDeleted = (e, params) =>
     $row.remove();
 }
 
-/**
- * Actualiza la lista de Foros cuando se crea uno.
+/*
+ *
+ * Foros.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaPsForosCreated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -551,12 +502,6 @@ onSuccessFn.listaPsForosCreated = (e, params) =>
 
 }
 
-/**
- * Actualiza la lista de foros cuando se actualiza uno.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsForosUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -573,12 +518,6 @@ onSuccessFn.listaPsForosUpdated = (e, params) =>
     $row.find('td[data-col-name="foroNombre"]').text(nombre);
 }
 
-/**
- * Actualiza la lista de foros cuando se elimina una.
- * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
- */
 onSuccessFn.listaPsForosDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
@@ -591,12 +530,12 @@ onSuccessFn.listaPsForosDeleted = (e, params) =>
     $row.remove();
 }
 
-/**
- * Actualiza la lista de mensajes de foro cuando se añade uno.
+/*
+ *
+ * Mensajes principales de foros.
  * 
- * @param {eventObject} e Evento.
- * @param {Object} params Contiene el modal y el resultado.
  */
+
 onSuccessFn.listaMensajeForoCreated = (e, params) =>
 {
     const $modalData = params.modalData;

@@ -92,7 +92,7 @@ class EventoPsCreate extends FormularioAjax
         </div>
         <div class="form-group">
             <label for="descripcion">Descripcion</label>
-            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Descripcion" required="required" />
+            <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripcion" required="required"></textarea>
         </div>
         <div class="form-group">
             <label for="lugar">Lugar</label>

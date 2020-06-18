@@ -52,9 +52,6 @@ class Grupo extends Controlador
         parent::get('/ps/grupo/read/', function(){
             (new GrupoPsRead(true))->manage();
         });
-        parent::post('/ps/grupo/read/', function(){
-            (new GrupoPsRead(true))->manage();
-        });
 
         // Update.
         parent::get('/ps/grupo/update/', function(){

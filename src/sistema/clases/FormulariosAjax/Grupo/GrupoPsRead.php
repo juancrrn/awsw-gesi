@@ -116,8 +116,6 @@ class GrupoPsRead extends FormularioAjax
             self::TARGET_CLASS_NAME => $grupo
         );
 
-        
-
         return $responseData;
     }
 

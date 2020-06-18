@@ -127,17 +127,17 @@ class AsignaturaPsUpdate extends FormularioAjax
             </select>
         </div>
         <div class="form-group">
-            <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar" placeholder="Curso escolar" required="required">
+            <label for="cursoEscolar">Curso escolar</label>
+            <input class="form-control" type="number" name="cursoEscolar" id="cursoEscolar" placeholder="Curso escolar" required="required">
             <small class="form-text text-muted">Introduce el año de inicio del curso escolar. Por ejemplo, para el curso 2018 - 2019, introduce 2018.</small>
         </div>
         <div class="form-group">
-            <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto" placeholder="Nombre corto" required="required">
+            <label for="nombreCorto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombreCorto" id="nombreCorto" placeholder="Nombre corto" required="required">
         </div>
         <div class="form-group">
-            <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo" placeholder="Nombre completo" required="required">
+            <label for="nombreCompleto">Nombre completo</label>
+            <input class="form-control" type="text" name="nombreCompleto" id="nombreCompleto" placeholder="Nombre completo" required="required">
         </div>
         HTML;
 
@@ -160,9 +160,9 @@ class AsignaturaPsUpdate extends FormularioAjax
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        $curso_escolar = $data['curso_escolar'] ?? null;
-        $nombre_corto = $data['nombre_corto'] ?? null;
-        $nombre_completo = $data['nombre_completo'] ?? null;
+        $curso_escolar = $data['cursoEscolar'] ?? null;
+        $nombre_corto = $data['nombreCorto'] ?? null;
+        $nombre_completo = $data['nombreCompleto'] ?? null;
         $nivel = $data['nivel'] ?? null;
 
         if (empty($nivel)) {

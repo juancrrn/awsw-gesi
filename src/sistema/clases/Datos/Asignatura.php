@@ -342,10 +342,8 @@ class Asignatura
 
         $restricciones = array();
 
-        // gesi_mensajes_secretaria.usuario
-
         $query = <<< SQL
-        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SELECT id FROM gesi_asignaciones WHERE asignatura = ? LIMIT 1
         SQL;
 
         $sentencia = $bbdd->prepare($query);
@@ -353,7 +351,7 @@ class Asignatura
         $sentencia->execute();
         $sentencia->store_result();
         if ($sentencia->num_rows > 0)
-            $restricciones[] = 'mensaje de Secretaría (usuario)';
+            $restricciones[] = 'asignacion (asignatura)';
         $sentencia->close();
         
         return $restricciones;

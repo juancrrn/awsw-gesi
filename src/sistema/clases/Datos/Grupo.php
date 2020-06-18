@@ -396,13 +396,8 @@ class Grupo
 
         $restricciones = array();
 
-        // TODO
-        return $restricciones;
-
-        // gesi_mensajes_secretaria.usuario
-
         $query = <<< SQL
-        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SELECT id FROM gesi_asignaciones WHERE grupo = ? LIMIT 1
         SQL;
 
         $sentencia = $bbdd->prepare($query);
@@ -410,7 +405,19 @@ class Grupo
         $sentencia->execute();
         $sentencia->store_result();
         if ($sentencia->num_rows > 0)
-            $restricciones[] = 'mensaje de Secretaría (usuario)';
+            $restricciones[] = 'asignaciones (grupo)';
+        $sentencia->close();
+
+        $query = <<< SQL
+        SELECT id FROM gesi_usuarios WHERE grupo = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'usuarios (grupo)';
         $sentencia->close();
         
         return $restricciones;
@@ -512,8 +519,10 @@ class Grupo
             'uniqueId' => $this->getId(),
             'selectName' => $this->getNombreCompleto(),
             'id' => $this->getId(),
-            'nivel' => $this->getNivel(),
-            'cursoEscolar' => $this->getCursoEscolar(),
+            'nivel' => $this->getNivelRaw(),
+            'nivelNombre' => $this->getNivel(),
+            'cursoEscolar' => $this->getCursoEscolarRaw(),
+            'cursoEscolarNombre' => $this->getCursoEscolar(),
             'nombreCorto' => $this->getNombreCorto(),
             'nombreCompleto' => $this->getNombreCompleto(),
             'tutor' => $this->getTutor(),

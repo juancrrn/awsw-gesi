@@ -225,6 +225,18 @@ class MensajeForo
     }
 
     /**
+     * Trae todos los mensajes de foro de la base de datos.
+     * 
+     * @return array
+     */
+    public static function dbGetAll(): array
+    {
+        // Este método es solo para completar la interfaz.
+        
+        return array();
+    }
+
+    /**
      * Trae de la base de datos todos los mensajes raíz de un foro a partir del
      * identificador de este.
      * 
@@ -353,6 +365,44 @@ class MensajeForo
         // Los mensajes de foros no se pueden eliminar, así que no comprobamos restricciones.
 
         return array();
+    }
+
+    /*
+     *
+     * Operaciones UPDATE.
+     *  
+     */
+
+    /**
+     * Actualiza un mensaje de foro en la base de datos.
+     * 
+     * @param self $this
+     * 
+     * @return bool
+     */
+    public function dbActualizar(): bool
+    {
+        // Los mensajes de foro no se actualizan.
+
+        return false;
+    }
+
+    /*
+     *
+     * Operaciones DELETE.
+     *  
+     */
+
+    /**
+     * Elimina un mensaje de foro de la base de datos.
+     *
+     * @param int $id
+     */
+    public static function dbEliminar(int $id): bool
+    {
+        // Los mensajes de foro no se eliminan.
+
+        return false;
     }
     
     public function jsonSerialize()

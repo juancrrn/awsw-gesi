@@ -69,6 +69,7 @@ $footerFinalHtmlBuffer = <<< HTML
         <script src="$appUrl/js/app.js$v"></script>
         <script src="$appUrl/js/formulariosAjax.js$v"></script>
         <script src="$appUrl/js/funcionesOnSuccess.js$v"></script>
+        <script src="$appUrl/js/handlersOnSuccess.js$v"></script>
         <script src="$appUrl/js/gesiSchedule.js$v"></script>
     </body>
 </html>

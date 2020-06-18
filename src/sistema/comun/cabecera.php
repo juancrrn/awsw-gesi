@@ -16,22 +16,33 @@
  */
 
 use Awsw\Gesi\App;
+
 use Awsw\Gesi\Formularios\Sesion\Cerrar as FormularioSesionCerrar;
-use Awsw\Gesi\Vistas\Vista;
+
 use Awsw\Gesi\Sesion;
+
+use Awsw\Gesi\Vistas\Vista;
+
+use Awsw\Gesi\Vistas\Home\Home;
+
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionEstList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdHorario;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPsList;
 use Awsw\Gesi\Vistas\Asignacion\AsignacionPdList;
+
 use Awsw\Gesi\Vistas\Foro\ForoPsList;
+
 use Awsw\Gesi\Vistas\Grupo\GrupoPsList;
-use Awsw\Gesi\Vistas\Home\Home;
+
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaInvList;
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaPsList;
 use Awsw\Gesi\Vistas\MensajeSecretaria\MensajeSecretariaSesList;
+
 use Awsw\Gesi\Vistas\Asignatura\AsignaturaPsList;
+
 use Awsw\Gesi\Vistas\Usuario\UsuarioPsList;
+
 use Awsw\Gesi\Vistas\Evento\EventoPsList;
 use Awsw\Gesi\Vistas\Evento\EventoInvList;
 
@@ -53,13 +64,15 @@ $sideMenuBuffer = '';
 $sideMenuBuffer .= Vista::generarSideMenuLink(
     '', Home::class);
 
+$sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones públicas');
+$sideMenuBuffer .= Vista::generarSideMenuLink(
+    '/inv/eventos/', EventoInvList::class);
+
 if (Sesion::isSesionIniciada()) {
     $sideMenuBuffer .= Vista::generarSideMenuDivider('Acciones personales');
 
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/secretaria/', MensajeSecretariaSesList::class);
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/eventos/', EventoInvList::class);
 
     if (Sesion::getUsuarioEnSesion()->isEst()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
@@ -77,8 +90,6 @@ if (Sesion::isSesionIniciada()) {
             '/pd/asignaciones/', AsignacionPdList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/pd/asignaciones/horario/', AsignacionPdHorario::class);
-        $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/pd/eventos/', EventoInvList::class );
     } elseif (Sesion::getUsuarioEnSesion()->isPs()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
             'Acciones de administración');
@@ -94,15 +105,13 @@ if (Sesion::isSesionIniciada()) {
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/ps/asignaciones/', AsignacionPsList::class);
          $sideMenuBuffer .= Vista::generarSideMenuLink(
-            '/ps/eventos/', EventoPsList::class );
+            '/ps/eventos/', EventoPsList::class);
         $sideMenuBuffer .= Vista::generarSideMenuLink(
             '/ps/foros/', ForoPsList::class);
     }
 } else {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/inv/mensajesecretaria/', MensajeSecretariaInvList::class);
-    $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/inv/eventos/', EventoInvList::class);
 }
 
 // Generar elementos de la navegación del menú de sesión de usuario.

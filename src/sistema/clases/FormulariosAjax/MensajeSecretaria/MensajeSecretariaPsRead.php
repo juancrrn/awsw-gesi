@@ -59,35 +59,68 @@ class MensajeSecretariaPsRead extends FormularioAjax
             $app->getUrl() . self::SUBMIT_URL,
             self::EXPECTED_SUBMIT_METHOD
         );
+
+        $this->setReadOnlyTrue();
     }
 
     protected function getDefaultData(array $requestData) : array
     {
+        // Check that uniqueId was provided
+        if (! isset($requestData['uniqueId'])) {
+            $responseData = array(
+                'status' => 'error',
+                'error' => 400, // Bad request
+                'messages' => array(
+                    'Falta el parámetro "uniqueId".'
+                )
+            );
+
+            return $responseData;
+        }
+
+        $uniqueId = $requestData['uniqueId'];
+
+        // Comprobar que el uniqueId es válido.
+        if (! MensajeSecretaria::dbExisteId($uniqueId)) {
+            $responseData = array(
+                'status' => 'error',
+                'error' => 404, // Not found.
+                'messages' => array(
+                    'El mensaje de Secretaría solicitado no existe.'
+                )
+            );
+
+            return $responseData;
+        }
+
+        $mensaje = MensajeSecretaria::dbGet($uniqueId);
+        // Map data to match placeholder inputs' names
         $responseData = array(
             'status' => 'ok',
+            self::TARGET_CLASS_NAME => $mensaje
         );
 
         return $responseData;
     }
 
-    public function generateFormInputs(): string    // TODO no muestra los campos
+    public function generateFormInputs(): string
     {
         $html = <<< HTML
         <div class="form-group">
             <label for="fromNombre">Nombre</label>
-            <input class="form-control" type="text" name="fromNombre" id="fromNombre" placeholder="Nombre" required="required" />
+            <input class="form-control" type="text" name="fromNombre" id="fromNombre" placeholder="Nombre" disabled="disabled" />
         </div>
         <div class="form-group">
             <label for="fromEmail">Dirección de correo electrónico</label>
-            <input class="form-control" type="email" name="fromEmail" id="fromEmail" placeholder="Dirección de correo electrónico" required="required" />
+            <input class="form-control" type="email" name="fromEmail" id="fromEmail" placeholder="Dirección de correo electrónico" disabled="disabled" />
         </div>
         <div class="form-group">
             <label for="fromTelefono">Número de teléfono</label>
-            <input class="form-control" type="text" name="fromTelefono" id="fromTelefono" placeholder="Número de teléfono" required="required" />
+            <input class="form-control" type="text" name="fromTelefono" id="fromTelefono" placeholder="Número de teléfono" disabled="disabled" />
         </div>
         <div class="form-group">
             <label for="contenido">Contenido del mensaje</label>
-            <textarea class="form-control" name="contenido" id="contenido" rows="3" placeholder="Contenido del mensaje"></textarea>
+            <textarea class="form-control" name="contenido" id="contenido" rows="3" disabled="disabled" placeholder="Contenido del mensaje"></textarea>
         </div>
         HTML;
 

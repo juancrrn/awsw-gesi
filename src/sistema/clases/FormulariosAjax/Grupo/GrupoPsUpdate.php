@@ -112,6 +112,8 @@ class GrupoPsUpdate extends FormularioAjax
             Usuario::dbGetByRol(2)
         );
 
+        $grupo = Grupo::dbGet($uniqueId);
+
         //Mapear datos para que coincidan con los nombres de los inputs.$app
 
         $responseData = array(
@@ -119,7 +121,8 @@ class GrupoPsUpdate extends FormularioAjax
             'links' => array(
                 $nivelesLink,
                 $tutoresLink
-            )
+            ),
+            self::TARGET_CLASS_NAME => $grupo
         );
 
         return $responseData;
@@ -128,22 +131,23 @@ class GrupoPsUpdate extends FormularioAjax
     public function generateFormInputs(): string
     {
         $html = <<< HTML
+        <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label for="nivel">Nivel</label>
             <select class="form-control" name="nivel" id="nivel" required="required">
             </select>
         </div>
         <div class="form-group">
-            <label for="curso_escolar">Curso escolar</label>
-            <input class="form-control" type="number" name="curso_escolar" id="curso_escolar"  placeholder="Curso escolar" required="required" />
+            <label for="cursoEscolar">Curso escolar</label>
+            <input class="form-control" type="number" name="cursoEscolar" id="cursoEscolar"  placeholder="Curso escolar" required="required" />
         </div>
         <div class="form-group">
-            <label for="nombre_completo">Nombre completo</label>
-            <input class="form-control" type="text" name="nombre_completo" id="nombre_completo"  placeholder="Nombre" required="required" />
+            <label for="nombreCompleto">Nombre completo</label>
+            <input class="form-control" type="text" name="nombreCompleto" id="nombreCompleto"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
-            <label for="nombre_corto">Nombre corto</label>
-            <input class="form-control" type="text" name="nombre_corto" id="nombre_corto"  placeholder="Nombre" required="required" />
+            <label for="nombreCorto">Nombre corto</label>
+            <input class="form-control" type="text" name="nombreCorto" id="nombreCorto"  placeholder="Nombre" required="required" />
         </div>
         <div class="form-group">
         <label for="tutor">Tutor</label>
@@ -168,9 +172,9 @@ class GrupoPsUpdate extends FormularioAjax
             $this->respondJsonError(404, $errors); // Not found.
         }
         $nivel = $data['nivel'] ?? null;
-        $curso_escolar = $data['curso_escolar'] ?? null;
-        $nombre_corto = $data['nombre_corto'] ?? null;
-        $nombre_completo = $data['nombre_completo'] ?? null;
+        $curso_escolar = $data['cursoEscolar'] ?? null;
+        $nombre_corto = $data['nombreCorto'] ?? null;
+        $nombre_completo = $data['nombreCompleto'] ?? null;
         $tutor = $data['tutor'] ?? null;
 
         if (empty($nivel))  {

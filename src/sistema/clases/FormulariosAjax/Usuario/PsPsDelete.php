@@ -177,7 +177,7 @@ use Awsw\Gesi\Sesion;
 
             $errors[] = 'No se puede eliminar este usuario porque existen referencias al mismo en otros datos (restricciones de integridad): ' . $lista . '.';
 
-            $this->respondJsonError(400, $errors); // Bad request.
+            $this->respondJsonError(409, $errors); // HTTP 409 Conflict.
         }
 
         if (Usuario::dbEliminar($uniqueId)) {

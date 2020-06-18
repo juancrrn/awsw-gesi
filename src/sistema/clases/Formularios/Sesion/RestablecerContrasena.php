@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Gesión del formulario de inicio de sesión.
+ * Gesión del formulario de restablecer contraseña.
  *
  * @package awsw-gesi
  * Gesi

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 16, 2020 at 03:35 PM
+-- Generation Time: Jun 18, 2020 at 02:31 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -74,11 +74,7 @@ CREATE TABLE IF NOT EXISTS `gesi_eventos` (
   `nombre` varchar(256) NOT NULL,
   `descripcion` mediumtext NOT NULL,
   `lugar` varchar(256) NOT NULL,
-  `asignatura` int(16) DEFAULT NULL,
-  `asignacion` int(16) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `asignatura` (`asignatura`),
-  KEY `asignacion` (`asignacion`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -188,13 +184,6 @@ ALTER TABLE `gesi_asignaciones`
   ADD CONSTRAINT `gesi_asignaciones_fk_foro_principal` FOREIGN KEY (`foro_principal`) REFERENCES `gesi_foros` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `gesi_asignaciones_fk_grupo` FOREIGN KEY (`grupo`) REFERENCES `gesi_grupos` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `gesi_asignaciones_fk_profesor` FOREIGN KEY (`profesor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
-
---
--- Constraints for table `gesi_eventos`
---
-ALTER TABLE `gesi_eventos`
-  ADD CONSTRAINT `gesi_eventos_fk_asignacion` FOREIGN KEY (`asignacion`) REFERENCES `gesi_asignaciones` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `gesi_eventos_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `gesi_grupos`

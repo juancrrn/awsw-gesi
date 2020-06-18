@@ -112,11 +112,11 @@ use Awsw\Gesi\Sesion;
         <input type="hidden" name="uniqueId">
         <div class="form-group">
             <label>Nombre</label>
-            <input name="nombre_completo" type="text" class="form-control"  disabled="disabled">
+            <input name="nombreCompleto" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <label>Curso</label>
-            <input name="curso_escolar" type="text" class="form-control"  disabled="disabled">
+            <input name="cursoEscolar" type="text" class="form-control"  disabled="disabled">
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
@@ -177,7 +177,7 @@ use Awsw\Gesi\Sesion;
 
             $errors[] = 'No se puede eliminar esta asignatura porque existen referencias al mismo en otros datos (restricciones de integridad): ' . $lista . '.';
             
-            $this->respondJsonError(400, $errors); // Bad request.
+            $this->respondJsonError(409, $errors); // HTTP 409 Conflict.
         }
         
         if (Asignatura::dbEliminar($uniqueId)) {

@@ -31,7 +31,7 @@ class GrupoPsList extends Modelo
 {
 
     public const VISTA_NOMBRE = "Gestionar grupos";
-        public const VISTA_ID = "grupo-list";
+        public const VISTA_ID = "grupo-ps-list";
 
         private $listado;
 
@@ -63,35 +63,29 @@ class GrupoPsList extends Modelo
          */
         public function generarListaGrupos(): string
         {
-            //Create grupo
+            // Create grupo.
             $formGrupoPsCreate = new FormGrupoPsCreate();
             $formGrupoPsCreateModal = $formGrupoPsCreate->generateModal();
-
-            //Editar grupo
-
-            $formGrupoPsUpdate = new FormGrupoPsUpdate();
-            $formGrupoPsUpdateModal = $formGrupoPsUpdate->generateModal();
-            //Read grupo
-
+            
+            // Read grupo.
             $formGrupoPsRead = new FormGrupoPsRead();
             $formGrupoPsReadModal = $formGrupoPsRead->generateModal();
 
+            // Update grupo.
+            $formGrupoPsUpdate = new FormGrupoPsUpdate();
+            $formGrupoPsUpdateModal = $formGrupoPsUpdate->generateModal();
 
-            //Delete grupo
-
+            // Delete grupo.
             $formGrupoPsDelete = new FormGrupoPsDelete();
             $formGrupoPsDeleteModal = $formGrupoPsDelete->generateModal();
 
             $listaGrupoBuffer = '';
 
-            if(! empty($this->listadoGrupo)){
-                foreach($this->listadoGrupo as $u){
+            if (! empty($this->listadoGrupo)) {
+                foreach ($this->listadoGrupo as $u) {
                     $uniqueId = $u->getId();
                     $nivel = $u->getNivel();
-                  //  $curso_escolar = $u->getCursoEscolarRaw();
-                   // $nombre_corto = $u->getNombreCorto();
                     $nombre_completo = $u->getNombreCompleto();
-                  //  $tutor = $u->getTutor();
 
                     $formGrupoReadButton = $formGrupoPsRead->generateButton('Ver',$uniqueId,true);
                     $formGrupoUpdateButton = $formGrupoPsUpdate->generateButton('Editar',$uniqueId,true);
@@ -99,14 +93,12 @@ class GrupoPsList extends Modelo
 
                     $listaGrupoBuffer .= <<< HTML
                     <tr data-unique-id="$uniqueId">
-                        <td scope="row" data-col-name="nif">$nivel</td>
-                        <td data-col-name="nombre-completo">$nombre_completo</td>
+                        <td scope="row" data-col-name="nivel">$nivel</td>
+                        <td data-col-name="nombreCompleto">$nombre_completo</td>
                         <td class="text-right">$formGrupoReadButton $formGrupoUpdateButton $formGrupoDeleteButton</td>
                     </tr>
                     HTML;
                 }
-
-
             } else{
                 $listaGrupoBuffer .= <<< HTML
                 <tr>
@@ -115,24 +107,23 @@ class GrupoPsList extends Modelo
                     <td></td>
                 </tr>
                 HTML;
-                }
+            }
             
 
             $formGrupoPsCreateButton = $formGrupoPsCreate->generateButton('Crear',null,true);
             $html = <<< HTML
             <h3 class="mb-4">$formGrupoPsCreateButton</h3>
-            <table id="grupo-lista" class="table table-borderless table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Nivel</th>
-                    <th scope="col">Nombre Curso</th>
-                    <th scope="col" class="text-right">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                $listaGrupoBuffer
-            </tbody>
-            
+            <table id="grupo-ps-list" class="table table-borderless table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nivel</th>
+                        <th scope="col">Nombre Curso</th>
+                        <th scope="col" class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $listaGrupoBuffer
+                </tbody>
             </table>
             $formGrupoPsCreateModal
             $formGrupoPsReadModal

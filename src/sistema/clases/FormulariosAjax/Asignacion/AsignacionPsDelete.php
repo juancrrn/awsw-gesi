@@ -170,14 +170,8 @@ use Awsw\Gesi\Sesion;
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="checkbox" id="asignacion-delete-foro-principal" disabled="disabled">
-                <label class="custom-control-label" for="asignacion-delete-foro-principal">Eliminar también el foro principal de la asignación y todos sus mensajes.</label>
-                <small class="form-text text-danger">TODO: Esta funcionalidad no está implementada aún.</small>
-                <small class="form-text text-warning">Al eliminar una asignación sin elimnar el foro, este quedará huérfano y podrá ser asignado como foro principal a otra asignación.</small>
+                <small class="form-text text-danger">Al eliminar una asignación, su foro quedará huérfano y podrá ser asignado como foro principal a otra asignación.</small>
             </div>
-        </div>
-        <div class="mt-4">
-            
         </div>
         HTML;
 
@@ -213,8 +207,6 @@ use Awsw\Gesi\Sesion;
 
             $this->respondJsonError(404, $errors); // Not found.
         }
-
-        // TODO comprobar si hay que eliminar el foro y hacerlo.
 
         if (Asignacion::dbEliminar($uniqueId)) {
             $responseData = array(
