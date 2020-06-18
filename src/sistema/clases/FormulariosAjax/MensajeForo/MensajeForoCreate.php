@@ -7,7 +7,6 @@ use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\Datos\MensajeForo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Sesion;
-use SessionHandler;
 
 /**
  * Formulario AJAX de creación de un mensaje de Foro por parte de un 

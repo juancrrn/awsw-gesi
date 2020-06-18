@@ -1,5 +1,10 @@
 <?php
 
+namespace Awsw\Gesi\Datos;
+
+use Awsw\Gesi\App;
+use JsonSerializable;
+
 /**
  * Métodos relacionados con la relación asignatura-profesor-grupo.
  * Para abreviar, esta relación se denomina "asignación".
@@ -15,11 +20,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Datos;
-
-use Awsw\Gesi\App;
-use JsonSerializable;
 
 class Asignacion
     implements DAO, JsonSerializable

@@ -4,7 +4,6 @@ namespace Awsw\Gesi\FormulariosAjax\Foro;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Foro;
-use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 
 /**

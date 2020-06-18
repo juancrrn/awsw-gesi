@@ -1,22 +1,5 @@
 <?php 
 
-/**
- * Vista de gestión de usuarios.
- *
- * - PAS: único permitido.
- *
- * @package awsw-gesi
- * Gesi
- * Aplicación de gestión de institutos de educación secundaria
- *
- * @author Andrés Ramiro Ramiro
- * @author Nicolás Pardina Popp
- * @author Pablo Román Morer Olmos
- * @author Juan Francisco Carrión Molina
- *
- * @version 0.0.4
- */
-
 namespace Awsw\Gesi\Vistas\Usuario;
 
 use Awsw\Gesi\Vistas\Modelo;
@@ -37,6 +20,21 @@ use Awsw\Gesi\FormulariosAjax\Usuario\PsPsCreate;
 use Awsw\Gesi\FormulariosAjax\Usuario\PsPsRead;
 use Awsw\Gesi\FormulariosAjax\Usuario\PsPsUpdate;
 use Awsw\Gesi\FormulariosAjax\Usuario\PsPsDelete;
+
+/**
+ * Vista de gestión de usuarios.
+ *
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.4
+ */
 
 class UsuarioPsList extends Modelo
 {

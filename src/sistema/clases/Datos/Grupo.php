@@ -1,5 +1,12 @@
 <?php
 
+namespace Awsw\Gesi\Datos;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Validacion\Valido;
+use JsonSerializable;
+use stdClass;
+
 /**
  * Métodos relacionados con los grupos.
  *
@@ -14,13 +21,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Datos;
-
-use \Awsw\Gesi\App;
-use Awsw\Gesi\Validacion\Valido;
-use JsonSerializable;
-use stdClass;
 
 class Grupo
     implements DAO, JsonSerializable

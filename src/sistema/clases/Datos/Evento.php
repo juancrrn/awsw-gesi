@@ -1,5 +1,12 @@
 <?php
 
+namespace Awsw\Gesi\Datos;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Validacion\Valido;
+use JsonSerializable;
+use stdClass;
+
 /**
  * Métodos relacionados con los eventos.
  *
@@ -14,13 +21,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Datos;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Validacion\Valido;
-use JsonSerializable;
-use stdClass;
 
 class Evento
     implements DAO, JsonSerializable
@@ -43,8 +43,6 @@ class Evento
      */
     public function __construct($id, $fecha, $nombre, $descripcion, $lugar)
     {   
-        var_dump($fecha);
-
         $this->id = $id;
         $this->fecha = $fecha;
         $this->nombre = $nombre;
@@ -166,6 +164,11 @@ class Evento
             $descripcion,
             $lugar
         );
+
+        // Convertir fecha al formato Español.
+        $this->fecha = \DateTime::createFromFormat(
+            Valido::MYSQL_DATE_FORMAT, $this->getFecha())
+                ->format(Valido::ESP_DATE_FORMAT);
 
         $sentencia->execute();
         $id_insertado = $bbdd->insert_id;
@@ -351,6 +354,11 @@ class Evento
             $lugar
         );
 
+         // Convertir fecha al formato Español.
+         $this->fecha = \DateTime::createFromFormat(
+            Valido::MYSQL_DATE_FORMAT, $this->getFecha())
+                ->format(Valido::ESP_DATE_FORMAT);
+
         $resultado = $sentencia->execute();
 
         $sentencia->close();
@@ -393,7 +401,7 @@ class Evento
     }
 
     public function jsonSerialize()
-    {
+    {   
         return [
             'uniqueId' => $this->getId(),
             'fecha' => $this->getFecha(),

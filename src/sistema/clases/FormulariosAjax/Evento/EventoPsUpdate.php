@@ -3,10 +3,7 @@
 namespace Awsw\Gesi\FormulariosAjax\Evento;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\Datos\Evento;
 use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\Sesion;

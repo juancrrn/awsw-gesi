@@ -1,5 +1,10 @@
 <?php
 
+namespace Awsw\Gesi;
+
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Vistas\Vista;
+
 /**
  * Métodos de sesión de usuario.
  *
@@ -14,11 +19,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi;
-
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Vistas\Vista;
 
 class Sesion
 {

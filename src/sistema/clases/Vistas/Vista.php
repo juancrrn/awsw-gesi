@@ -1,5 +1,9 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas;
+
+use Awsw\Gesi\App;
+
 /**
  * Métodos relacionados con las vistas y la generación de contenido visible 
  * para el usuario en el navegador.
@@ -15,10 +19,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas;
-
-use Awsw\Gesi\App;
 
 class Vista
 {

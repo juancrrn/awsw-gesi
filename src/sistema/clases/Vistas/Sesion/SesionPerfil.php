@@ -1,5 +1,11 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Sesion;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Modelo;
+
 /**
  * Vista de perfil de un usuario en particular.
  *
@@ -16,14 +22,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Sesion;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Validacion\Valido;
-use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Vistas\Modelo;
 
 class SesionPerfil extends Modelo
 {

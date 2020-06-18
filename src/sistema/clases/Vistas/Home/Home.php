@@ -1,10 +1,13 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Home;
+
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\App;
+use Awsw\Gesi\Vistas\Modelo;
+
 /**
  * Vista de landing.
- *
- * Invitados: verán información de acceso público.
- * Usuarios registrados: verán información personalizada.
  *
  * @package awsw-gesi
  * Gesi
@@ -17,12 +20,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Home;
-
-use \Awsw\Gesi\Sesion;
-use \Awsw\Gesi\App;
-use Awsw\Gesi\Vistas\Modelo;
 
 class Home extends Modelo
 {

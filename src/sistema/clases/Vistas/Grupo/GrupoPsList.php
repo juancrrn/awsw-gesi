@@ -1,9 +1,19 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Grupo;
+
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Grupo;
+
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate as FormGrupoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate as FormGrupoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead as FormGrupoPsRead;
+use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete as FormGrupoPsDelete;
+
+use Awsw\Gesi\Sesion;
+
 /**
- * Vista de gestión de usuarios.
- *
- * - PAS: único permitido.
+ * Vista de gestión de grupos.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,18 +26,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Grupo;
-
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Grupo;
-
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsCreate as FormGrupoPsCreate;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsUpdate as FormGrupoPsUpdate;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsRead as FormGrupoPsRead;
-use Awsw\Gesi\FormulariosAjax\Grupo\GrupoPsDelete as FormGrupoPsDelete;
-
-use Awsw\Gesi\Sesion;
 
 class GrupoPsList extends Modelo
 {

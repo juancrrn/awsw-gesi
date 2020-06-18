@@ -1,9 +1,20 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Asignacion;
+
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Asignacion;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
+use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
+
 /**
- * Vista de  de usuarios.
- *
- * - PAS: único permitido.
+ * Vista de todos los usuarios.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,20 +27,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Asignacion;
-
-use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Validacion\Valido;
-use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsCreate;
-use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsDelete;
-use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsRead;
-use Awsw\Gesi\FormulariosAjax\Asignacion\AsignacionPsUpdate;
 
 class AsignacionPsList extends Modelo
 {

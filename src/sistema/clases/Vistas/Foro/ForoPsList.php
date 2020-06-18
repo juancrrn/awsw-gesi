@@ -1,9 +1,17 @@
-<?php 
+<?php
+
+namespace Awsw\Gesi\Vistas\Foro;
+
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Foro;
+use Awsw\Gesi\FormulariosAjax\Foro\ForoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Foro\ForoPsRead;
+use Awsw\Gesi\FormulariosAjax\Foro\ForoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Foro\ForoPsDelete;
 
 /**
- * Vista de  de usuarios.
- *
- * - PAS: único permitido.
+ * Vista de gestión de foros.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,20 +24,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Foro;
-
-use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Foro;
-use Awsw\Gesi\Validacion\Valido;
-use Awsw\Gesi\FormulariosAjax\Foro\ForoPsCreate;
-use Awsw\Gesi\FormulariosAjax\Foro\ForoPsRead;
-use Awsw\Gesi\FormulariosAjax\Foro\ForoPsUpdate;
-use Awsw\Gesi\FormulariosAjax\Foro\ForoPsDelete;
 
 class ForoPsList extends Modelo
 {

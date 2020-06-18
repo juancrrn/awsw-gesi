@@ -1,5 +1,14 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\MensajeSecretaria;
+
+use Awsw\Gesi\Datos\MensajeSecretaria;
+use Awsw\Gesi\Validacion\Valido;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesCreate;
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesRead;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
+
 /**
  * Vista de mensajes de Secretaría por un usuario registrado, del rol que sea.
  *
@@ -14,15 +23,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\MensajeSecretaria;
-
-use Awsw\Gesi\Datos\MensajeSecretaria;
-use Awsw\Gesi\Validacion\Valido;
-use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesCreate;
-use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaSesRead;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Sesion;
 
 class MensajeSecretariaSesList extends Modelo
 {

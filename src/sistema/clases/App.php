@@ -1,5 +1,9 @@
 <?php 
 
+namespace Awsw\Gesi;
+
+use DateTime;
+
 /**
  * Inicialización y métodos de la aplicación.
  *
@@ -14,10 +18,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi;
-
-use DateTime;
 
 class App
 {

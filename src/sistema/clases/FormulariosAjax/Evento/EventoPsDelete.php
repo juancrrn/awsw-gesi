@@ -4,14 +4,8 @@ namespace Awsw\Gesi\FormulariosAjax\Evento;
 
 use Awsw\Gesi\App;
 use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Validacion\Valido;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Evento;
-
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Asignacion;
 
 /**
  * Formulario AJAX de creación de un usuario estudiante por parte de un 

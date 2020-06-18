@@ -1,5 +1,12 @@
 <?php
 
+namespace Awsw\Gesi\Vistas\Sesion;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Sesion\RestablecerContrasena as FormularioRestablecerContrasena;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
+
 /**
  * Vista de restablecimiento de contraseña por parte de cualquier persona que 
  * no haya iniciado sesión.
@@ -15,13 +22,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Sesion;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Sesion\RestablecerContrasena as FormularioRestablecerContrasena;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Sesion;
 
 class SesionRestablecerContrasena extends Modelo
 {

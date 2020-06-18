@@ -1,5 +1,9 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Error;
+
+use Awsw\Gesi\Vistas\Modelo;
+
 /**
  * Error 404: no encontrado.
  *
@@ -14,10 +18,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Error;
-
-use Awsw\Gesi\Vistas\Modelo;
 
 class Error404 extends Modelo
 {

@@ -1,5 +1,12 @@
 <?php
 
+namespace Awsw\Gesi\Vistas\Sesion;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Formularios\Sesion\Iniciar as FormularioSesionIniciar;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
+
 /**
  * Vista de inicio de sesión.
  *
@@ -16,13 +23,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Sesion;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Formularios\Sesion\Iniciar as FormularioSesionIniciar;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Sesion;
 
 class SesionIniciar extends Modelo
 {

@@ -1,10 +1,25 @@
-<?php 
+<?php
+
+namespace Awsw\Gesi\Vistas\Foro;
+
+use Awsw\Gesi\Sesion;
+
+use Awsw\Gesi\Datos\Asignacion;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Foro;
+use Awsw\Gesi\Datos\MensajeForo;
+use Awsw\Gesi\Datos\Usuario;
+
+use Awsw\Gesi\Formularios\MensajeForo\MensajeForoRespuestaCreate as MensajeForoMensajeForoRespuestaCreate;
+use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoCreate as MensajeForoCreate;
+
+use Awsw\Gesi\Validacion\Valido;
+
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Vistas\Vista;
 
 /**
- * Vistas de foros.
- *
- * - PDI: puede ver y gestionar todos los foros.
- * - Resto: pueden ver los foros a los que tienen acceso.
+ * Vistas de foro de un estudiante.
  *
  * @package awsw-gesi
  * Gesi
@@ -17,22 +32,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Foro;
-
-use Awsw\Gesi\Sesion;
-
-
-use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Foro;
-use Awsw\Gesi\Datos\MensajeForo;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Formularios\MensajeForo\MensajeForoRespuestaCreate as MensajeForoMensajeForoRespuestaCreate;
-use Awsw\Gesi\Validacion\Valido;
-use Awsw\Gesi\FormulariosAjax\MensajeForo\MensajeForoCreate as MensajeForoCreate;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Vistas\Vista;
 
 class MensajeForoEstList extends Modelo
 {

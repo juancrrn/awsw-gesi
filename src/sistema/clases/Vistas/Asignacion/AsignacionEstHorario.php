@@ -1,5 +1,13 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Asignacion;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Asignacion;
+use Awsw\Gesi\Validacion\GesiScheduleSlot;
+
 /**
  * Vista de horario completo de un estudiante.
  *
@@ -14,16 +22,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Asignacion;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Validacion\GesiScheduleSlot;
 
 class AsignacionEstHorario extends Modelo
 {

@@ -18,10 +18,10 @@
 namespace Awsw\Gesi\Formularios\Sesion;
 
 use Awsw\Gesi\App;
-use \Awsw\Gesi\Formularios\Formulario;
-use \Awsw\Gesi\Datos\Usuario;
-use \Awsw\Gesi\Sesion;
-use \Awsw\Gesi\Vistas\Vista;
+use Awsw\Gesi\Formularios\Formulario;
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Vista;
 
 class Iniciar extends Formulario
 {

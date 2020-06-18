@@ -1,9 +1,19 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Asignatura;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Sesion;
+
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete;
+
 /**
  * Vista de administración de asignaturas.
- *
- * - PS: puede editar todas las asignaturas.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,18 +26,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Asignatura;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Sesion;
-
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsCreate;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsRead;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsUpdate;
-use Awsw\Gesi\FormulariosAjax\Asignatura\AsignaturaPsDelete;
 
 class AsignaturaPsList extends Modelo
 {

@@ -3,7 +3,6 @@
 namespace Awsw\Gesi\FormulariosAjax\Asignatura;
 
 use Awsw\Gesi\App;
-use Awsw\Gesi\Datos\Asignacion;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
 use Awsw\Gesi\Datos\Asignatura;
 use Awsw\Gesi\Sesion;

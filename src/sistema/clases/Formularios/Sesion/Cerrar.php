@@ -17,9 +17,9 @@
 
 namespace Awsw\Gesi\Formularios\Sesion;
 
-use \Awsw\Gesi\Formularios\Formulario;
-use \Awsw\Gesi\Sesion;
-use \Awsw\Gesi\Vistas\Vista;
+use Awsw\Gesi\Formularios\Formulario;
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Vista;
 
 class Cerrar extends Formulario
 {

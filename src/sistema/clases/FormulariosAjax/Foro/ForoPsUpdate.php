@@ -5,7 +5,6 @@ namespace Awsw\Gesi\FormulariosAjax\Foro;
 use Awsw\Gesi\App;
 use Awsw\Gesi\Datos\Foro;
 use Awsw\Gesi\FormulariosAjax\FormularioAjax;
-use Awsw\Gesi\Validacion\Valido;
 
 /**
  * Formulario AJAX de creación de un usuario de personal docente por parte de 

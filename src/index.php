@@ -75,7 +75,7 @@ Controlador::setGetBase(App::getSingleton()->getBaseControlador());
 \Awsw\Gesi\Controladores\Sesion::controla();
 
 /**
- * Vistas relacionadas con usuarios
+ * Vistas relacionadas con usuarios.
  */
 
 \Awsw\Gesi\Controladores\Usuario::controla();

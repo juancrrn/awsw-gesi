@@ -1,5 +1,7 @@
 <?php
 
+namespace Awsw\Gesi\Vistas;
+
 /**
  * Representa un modelo para las vistas.
  *
@@ -14,8 +16,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas;
 
 abstract class Modelo
 {

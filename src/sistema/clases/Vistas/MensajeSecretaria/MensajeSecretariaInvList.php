@@ -1,5 +1,11 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\MensajeSecretaria;
+
+use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaInvCreate;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Sesion;
+
 /**
  * Vista de mensajes de Secretaría por un invitado.
  *
@@ -14,12 +20,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\MensajeSecretaria;
-
-use Awsw\Gesi\FormulariosAjax\MensajeSecretaria\MensajeSecretariaInvCreate;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Sesion;
 
 class MensajeSecretariaInvList extends Modelo
 {

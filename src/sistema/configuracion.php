@@ -38,7 +38,6 @@ define('GESI_DB_HOST', 'localhost');
 define('GESI_DB_USER', 'gesi');
 define('GESI_DB_PASSWORD', 'gesigesi');
 define('GESI_DB_NAME', 'gesidemo');
-define('GESI_DB_TABLE_PREFIX', 'gesi_');
 
 define('GESI_ROOT', '__DIR__');
 define('GESI_URL', 'http://localhost:60001');
@@ -121,8 +120,7 @@ $app->init(
         'host' => GESI_DB_HOST,
         'user' => GESI_DB_USER,
         'password' => GESI_DB_PASSWORD,
-        'name' => GESI_DB_NAME,
-        'table_prefix' => GESI_DB_TABLE_PREFIX
+        'name' => GESI_DB_NAME
     ),
 
     GESI_ROOT,

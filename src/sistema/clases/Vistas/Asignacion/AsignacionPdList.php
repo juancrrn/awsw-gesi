@@ -1,9 +1,18 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Asignacion;
+
+use Awsw\Gesi\App;
+use Awsw\Gesi\Sesion;
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Asignacion;
+use Awsw\Gesi\Datos\Asignatura;
+use Awsw\Gesi\Datos\Usuario;
+use Awsw\Gesi\Datos\Grupo;
+use Awsw\Gesi\Validacion\GesiScheduleSlot;
+
 /**
- * Vista de las asignaciones de un usuario personal docente.
- *
- * - PD: único permitido.
+ * Vista de las asignaciones de un usuario de personal docente.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,17 +25,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Asignacion;
-
-use Awsw\Gesi\App;
-use Awsw\Gesi\Sesion;
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Asignacion;
-use Awsw\Gesi\Datos\Asignatura;
-use Awsw\Gesi\Datos\Usuario;
-use Awsw\Gesi\Datos\Grupo;
-use Awsw\Gesi\Validacion\GesiScheduleSlot;
 
 class AsignacionPdList extends Modelo
 {

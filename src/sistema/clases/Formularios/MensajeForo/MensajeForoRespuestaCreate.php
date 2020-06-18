@@ -18,7 +18,7 @@
 namespace Awsw\Gesi\Formularios\MensajeForo;
 
 use Awsw\Gesi\Datos\MensajeForo;
-use \Awsw\Gesi\Formularios\Formulario;
+use Awsw\Gesi\Formularios\Formulario;
 use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Vistas\Vista;
 

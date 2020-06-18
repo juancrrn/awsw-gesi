@@ -1,5 +1,9 @@
 <?php
 
+namespace Awsw\Gesi\Validacion;
+
+use stdClass;
+
 /**
  * Ofrece funcionalidad para la validación de datos y tipos.
  *
@@ -14,10 +18,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Validacion;
-
-use stdClass;
 
 class Valido
 {

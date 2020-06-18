@@ -4,8 +4,21 @@ namespace Awsw\Gesi\Vistas\Evento;
 
 use Awsw\Gesi\Vistas\Modelo;
 use Awsw\Gesi\Datos\Evento;
-use Awsw\Gesi\Sesion;
 
+/**
+ * Vista de lista de eventos pública.
+ *
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.4
+ */
 
 class EventoInvList extends Modelo
 {
@@ -16,9 +29,9 @@ class EventoInvList extends Modelo
 
 	public function __construct($api = false)
 	{
-       //Sesion::requerirNoPs($api);
         $this->nombre = self::VISTA_NOMBRE; 
-		$this->id = self::VISTA_ID;
+        $this->id = self::VISTA_ID;
+        
 		$this->listado = Evento::dbGetAll();
 	}
 

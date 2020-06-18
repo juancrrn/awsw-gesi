@@ -1,5 +1,10 @@
 <?php
 
+namespace Awsw\Gesi\Datos;
+
+use Awsw\Gesi\App;
+use JsonSerializable;
+
 /**
  * Métodos relacionados con los foros.
  *
@@ -14,11 +19,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Datos;
-
-use Awsw\Gesi\App;
-use JsonSerializable;
 
 class Foro
     implements DAO, JsonSerializable

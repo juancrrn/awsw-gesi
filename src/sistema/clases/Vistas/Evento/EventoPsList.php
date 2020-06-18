@@ -1,9 +1,19 @@
 <?php 
 
+namespace Awsw\Gesi\Vistas\Evento;
+
+use Awsw\Gesi\Vistas\Modelo;
+use Awsw\Gesi\Datos\Evento;
+
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsCreate as FormEventoPsCreate;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsUpdate as FormEventoPsUpdate;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsRead as FormEventoPsRead;
+use Awsw\Gesi\FormulariosAjax\Evento\EventoPsDelete as FormEventoPsDelete;
+
+use Awsw\Gesi\Sesion;
+
 /**
- * Vista de gestión de usuarios.
- *
- * - PAS: único permitido.
+ * Vista de gestión de eventos.
  *
  * @package awsw-gesi
  * Gesi
@@ -16,18 +26,6 @@
  *
  * @version 0.0.4
  */
-
-namespace Awsw\Gesi\Vistas\Evento;
-
-use Awsw\Gesi\Vistas\Modelo;
-use Awsw\Gesi\Datos\Evento;
-
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsCreate as FormEventoPsCreate;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsUpdate as FormEventoPsUpdate;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsRead as FormEventoPsRead;
-use Awsw\Gesi\FormulariosAjax\Evento\EventoPsDelete as FormEventoPsDelete;
-
-use Awsw\Gesi\Sesion;
 
 class EventoPsList extends Modelo
 {
