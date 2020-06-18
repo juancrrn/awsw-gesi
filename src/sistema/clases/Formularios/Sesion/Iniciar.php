@@ -25,8 +25,12 @@ use \Awsw\Gesi\Vistas\Vista;
 
 class Iniciar extends Formulario
 {
-    public function __construct(string $action) {
-        parent::__construct('form-login', array('action' => $action));
+
+    private const FORM_ID = 'form-login';
+
+    public function __construct(string $action)
+    {
+        parent::__construct(self::FORM_ID, array('action' => $action));
     }
     
     protected function generaCampos(array & $datos_iniciales = array()): string
@@ -91,3 +95,5 @@ class Iniciar extends Formulario
         $this->genera();
     }
 }
+
+?>

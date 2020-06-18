@@ -25,10 +25,12 @@ use Awsw\Gesi\Vistas\Vista;
 class MensajeForoRespuestaCreate extends Formulario
 {
 
+    private const FORM_ID = 'form-mensaje-foro-respuesta-create';
+
     private $foroId;
 
     public function __construct(string $action, int $foroId) {
-        parent::__construct('form-mensaje-foro-respuesta-create', array('action' => $action));
+        parent::__construct(self::FORM_ID, array('action' => $action));
 
         $this->foroId = $foroId;
     }
@@ -48,9 +50,6 @@ class MensajeForoRespuestaCreate extends Formulario
         return $html;
     }
     
-    /**
-     * Procesa un formulario enviado.
-     */
     protected function procesa(array & $datos): void
     {
         $padreId = $datos['padreId'] ?? null;
@@ -92,3 +91,5 @@ class MensajeForoRespuestaCreate extends Formulario
         }
     }
 }
+
+?>

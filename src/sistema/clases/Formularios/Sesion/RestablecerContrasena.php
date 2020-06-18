@@ -24,8 +24,12 @@ use Awsw\Gesi\Vistas\Vista;
 
 class RestablecerContrasena extends Formulario
 {
-    public function __construct(string $action) {
-        parent::__construct('form-acceso-restablecer-contrasena', array('action' => $action));
+
+    private const FORM_ID = 'form-acceso-restablecer-contrasena';
+
+    public function __construct(string $action)
+    {
+        parent::__construct(self::FORM_ID, array('action' => $action));
     }
     
     protected function generaCampos(array & $datos_iniciales = array()): void
@@ -51,10 +55,7 @@ class RestablecerContrasena extends Formulario
         HTML;
 
     }
-    
-    /**
-     * Procesa un formulario enviado.
-     */
+
     protected function procesa(array & $datos): void
     {
         $nif = isset($datos['nif']) ? $datos['nif'] : null;
@@ -100,3 +101,5 @@ class RestablecerContrasena extends Formulario
         }
     }
 }
+
+?>

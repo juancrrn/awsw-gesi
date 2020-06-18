@@ -23,8 +23,12 @@ use \Awsw\Gesi\Vistas\Vista;
 
 class Cerrar extends Formulario
 {
-    public function __construct(string $action) {
-        parent::__construct('form-logout', array('action' => $action));
+
+    private const FORM_ID = 'form-logout';
+
+    public function __construct(string $action)
+    {
+        parent::__construct(self::FORM_ID, array('action' => $action));
     }
     
     protected function generaCampos(array & $datos_iniciales = array()): string
@@ -43,3 +47,5 @@ class Cerrar extends Formulario
         Vista::encolaMensajeExito('Se ha cerrado la sesión correctamente.', '');
     }
 }
+
+?>
