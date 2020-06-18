@@ -64,32 +64,6 @@ CREATE TABLE IF NOT EXISTS `gesi_asignaturas` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_ejemplar_libro`
---
-
-DROP TABLE IF EXISTS `gesi_ejemplar_libro`;
-CREATE TABLE IF NOT EXISTS `gesi_ejemplar_libro` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
-  `numero` int(16) NOT NULL,
-  `libro` int(16) NOT NULL,
-  `prestado` tinyint(1) DEFAULT 0,
-  `usuario_prestamo` int(16) DEFAULT NULL,
-  `fecha_alta_prestamo` int(11) DEFAULT NULL,
-  `fecha_expiracion_prestamo` int(11) DEFAULT NULL,
-  `reserva` tinyint(1) DEFAULT 0,
-  `usuario_reserva` int(16) DEFAULT NULL,
-  `fecha_alta_reserva` int(11) DEFAULT NULL,
-  `fecha_expiracion_reserva` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_numero_libro` (`numero`,`libro`) USING BTREE,
-  KEY `libro` (`libro`),
-  KEY `usuario_prestamo` (`usuario_prestamo`),
-  KEY `usuario_reserva` (`usuario_reserva`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `gesi_eventos`
 --
 
@@ -136,25 +110,6 @@ CREATE TABLE IF NOT EXISTS `gesi_grupos` (
   `tutor` int(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `tutor` (`tutor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `gesi_libros`
---
-
-DROP TABLE IF EXISTS `gesi_libros`;
-CREATE TABLE IF NOT EXISTS `gesi_libros` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
-  `autor` varchar(256) NOT NULL,
-  `titulo` varchar(256) NOT NULL,
-  `asignatura` int(16) DEFAULT NULL,
-  `isbn` varchar(13) NOT NULL,
-  `editorial` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `isbn` (`isbn`),
-  KEY `asignatura` (`asignatura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -235,14 +190,6 @@ ALTER TABLE `gesi_asignaciones`
   ADD CONSTRAINT `gesi_asignaciones_fk_profesor` FOREIGN KEY (`profesor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `gesi_ejemplar_libro`
---
-ALTER TABLE `gesi_ejemplar_libro`
-  ADD CONSTRAINT `gesi_ejemplar_libro_fk_libro` FOREIGN KEY (`libro`) REFERENCES `gesi_libros` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `gesi_ejemplar_libro_fk_usuario_prestamo` FOREIGN KEY (`usuario_prestamo`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `gesi_ejemplar_libro_fk_usuario_reserva` FOREIGN KEY (`usuario_reserva`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
-
---
 -- Constraints for table `gesi_eventos`
 --
 ALTER TABLE `gesi_eventos`
@@ -254,12 +201,6 @@ ALTER TABLE `gesi_eventos`
 --
 ALTER TABLE `gesi_grupos`
   ADD CONSTRAINT `gesi_grupos_fk_tutor` FOREIGN KEY (`tutor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
-
---
--- Constraints for table `gesi_libros`
---
-ALTER TABLE `gesi_libros`
-  ADD CONSTRAINT `gesi_libros_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `gesi_mensajes_foros`

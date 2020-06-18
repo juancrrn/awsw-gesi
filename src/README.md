@@ -89,6 +89,5 @@ distintas restricciones y se han generado datos de demostración (carpeta
     - Falta eliminar asignaciones
     - Formularios de foros
 - Revisar descripciones de métodos y clases
-- Borrar todo lo referente a la biblioteca
 - Habilitar verificación formato NIF.
 - Verificar constraints y checkboxes de los formularios de update y delete: que por ejemplo cuando se elimina un foro se eliminen todos sus mensajes y respuestas, que se verifique que un usuario no es tutor etc antes de eliminarlo, etc
