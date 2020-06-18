@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.9.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Jun 18, 2020 at 02:31 PM
--- Server version: 10.4.10-MariaDB
--- PHP Version: 7.3.12
+-- Servidor: vm02.db.swarm.test
+-- Tiempo de generación: 18-06-2020 a las 20:56:28
+-- Versión del servidor: 10.4.12-MariaDB-1:10.4.12+maria~bionic
+-- Versión de PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,11 +19,11 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gesidemo`
+-- Base de datos: `gesi`
 --
 
 --
--- Dumping data for table `gesi_asignaciones`
+-- Volcado de datos para la tabla `gesi_asignaciones`
 --
 
 INSERT INTO `gesi_asignaciones` (`id`, `profesor`, `grupo`, `asignatura`, `horario`, `foro_principal`) VALUES
@@ -95,7 +95,7 @@ INSERT INTO `gesi_asignaciones` (`id`, `profesor`, `grupo`, `asignatura`, `horar
 (66, 19, 8, 54, 'X 9:00 10:00; X 10:00 11:00;', 66);
 
 --
--- Dumping data for table `gesi_asignaturas`
+-- Volcado de datos para la tabla `gesi_asignaturas`
 --
 
 INSERT INTO `gesi_asignaturas` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nombre_completo`) VALUES
@@ -155,7 +155,7 @@ INSERT INTO `gesi_asignaturas` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, 
 (54, 6, 2019, 'B2LC', 'Lengua castellana y Literatura Bach. 2');
 
 --
--- Dumping data for table `gesi_eventos`
+-- Volcado de datos para la tabla `gesi_eventos`
 --
 
 INSERT INTO `gesi_eventos` (`id`, `fecha`, `nombre`, `descripcion`, `lugar`) VALUES
@@ -165,7 +165,7 @@ INSERT INTO `gesi_eventos` (`id`, `fecha`, `nombre`, `descripcion`, `lugar`) VAL
 (4, '2020-07-22 00:00:00', 'Partido de fútbol', 'Partido de fútbol entre profesores y estudiantes.', 'Madrid');
 
 --
--- Dumping data for table `gesi_foros`
+-- Volcado de datos para la tabla `gesi_foros`
 --
 
 INSERT INTO `gesi_foros` (`id`, `nombre`) VALUES
@@ -237,7 +237,7 @@ INSERT INTO `gesi_foros` (`id`, `nombre`) VALUES
 (66, 'Foro Lengua castellana y Literatura Bach. 2 (Grupo B Bach. 2)');
 
 --
--- Dumping data for table `gesi_grupos`
+-- Volcado de datos para la tabla `gesi_grupos`
 --
 
 INSERT INTO `gesi_grupos` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nombre_completo`, `tutor`) VALUES
@@ -251,7 +251,7 @@ INSERT INTO `gesi_grupos` (`id`, `nivel`, `curso_escolar`, `nombre_corto`, `nomb
 (8, 6, 2019, 'B1B', 'Grupo B Bach. 2', 18);
 
 --
--- Dumping data for table `gesi_mensajes_foros`
+-- Volcado de datos para la tabla `gesi_mensajes_foros`
 --
 
 INSERT INTO `gesi_mensajes_foros` (`id`, `foro`, `padre`, `usuario`, `fecha`, `contenido`) VALUES
@@ -323,7 +323,7 @@ INSERT INTO `gesi_mensajes_foros` (`id`, `foro`, `padre`, `usuario`, `fecha`, `c
 (66, 66, NULL, 19, '2019-09-14 00:53:49', '¡Hola!\nOs doy la bienvenida al foro de Lengua castellana y Literatura Bach. 2 (Grupo B Bach. 2).\nAquí pondré los recursos de la asignatura.\n¡Ánimo!');
 
 --
--- Dumping data for table `gesi_mensajes_secretaria`
+-- Volcado de datos para la tabla `gesi_mensajes_secretaria`
 --
 
 INSERT INTO `gesi_mensajes_secretaria` (`id`, `usuario`, `from_nombre`, `from_email`, `from_telefono`, `fecha`, `contenido`) VALUES
@@ -469,12 +469,12 @@ INSERT INTO `gesi_mensajes_secretaria` (`id`, `usuario`, `from_nombre`, `from_em
 (140, NULL, 'Ainslie Chimienti', 'achimienti13@eepurl.com', '388 596 3274', '2019-11-30 12:37:16', 'Synergized scalable hierarchy');
 
 --
--- Dumping data for table `gesi_usuarios`
+-- Volcado de datos para la tabla `gesi_usuarios`
 --
 
 INSERT INTO `gesi_usuarios` (`id`, `nif`, `rol`, `nombre`, `apellidos`, `password`, `fecha_nacimiento`, `numero_telefono`, `email`, `fecha_ultimo_acceso`, `fecha_registro`, `grupo`) VALUES
 (1, '40565712Z', 3, 'Jenny', 'Emerson Trevino', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1555-11-17', '612345678', 'jenny.emersontrevino@email.invalid', '2020-05-27 19:45:51', '2020-05-27 16:04:59', NULL),
-(2, '06213239L', 3, 'Brynn', 'Cox Baker', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1997-04-18', '972716831', 'brynn.coxbaker@email.invalid', NULL, '2020-05-27 00:00:00', NULL),
+(2, '06213239L', 3, 'Brynn', 'Cox Baker', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1997-04-18', '972716831', 'brynn.coxbaker@email.invalid', '2020-06-18 22:56:08', '2020-05-27 00:00:00', NULL),
 (3, '66032825D', 3, 'Irma', 'Nixon Floyd', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '2005-10-02', '552167628', 'irma.nixonfloyd@email.invalid', NULL, '2020-05-27 00:00:00', NULL),
 (4, '94830874B', 3, 'Ima', 'Cooke Trujillo', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '1994-02-18', '284083290', 'ima.cooketrujillo@email.invalid', NULL, '2020-05-27 00:00:00', NULL),
 (5, '21467053A', 2, 'Reuben', 'James Mayo', '$2y$10$hvALymDhxCnbWjlO5hkAl.aCsA9pSSVTcF4m/3cXfh7A/m8oFtiyu', '2005-06-24', '232067986', 'reuben.jamesmayo@email.invalid', NULL, '2020-05-27 00:00:00', NULL),

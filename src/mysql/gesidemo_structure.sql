@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.9.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Jun 18, 2020 at 02:31 PM
--- Server version: 10.4.10-MariaDB
--- PHP Version: 7.3.12
+-- Servidor: vm02.db.swarm.test
+-- Tiempo de generación: 18-06-2020 a las 20:56:09
+-- Versión del servidor: 10.4.12-MariaDB-1:10.4.12+maria~bionic
+-- Versión de PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,143 +19,117 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gesidemo`
+-- Base de datos: `gesi`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_asignaciones`
+-- Estructura de tabla para la tabla `gesi_asignaciones`
 --
 
-DROP TABLE IF EXISTS `gesi_asignaciones`;
-CREATE TABLE IF NOT EXISTS `gesi_asignaciones` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_asignaciones` (
+  `id` int(16) NOT NULL,
   `profesor` int(16) NOT NULL,
   `grupo` int(16) NOT NULL,
   `asignatura` int(16) NOT NULL,
   `horario` varchar(512) NOT NULL,
-  `foro_principal` int(16) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_grupo_asignatura` (`grupo`,`asignatura`),
-  UNIQUE KEY `unique_foro_principal` (`foro_principal`),
-  KEY `profesor` (`profesor`),
-  KEY `grupo` (`grupo`),
-  KEY `asignatura` (`asignatura`),
-  KEY `foro_principal` (`foro_principal`)
+  `foro_principal` int(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_asignaturas`
+-- Estructura de tabla para la tabla `gesi_asignaturas`
 --
 
-DROP TABLE IF EXISTS `gesi_asignaturas`;
-CREATE TABLE IF NOT EXISTS `gesi_asignaturas` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_asignaturas` (
+  `id` int(16) NOT NULL,
   `nivel` int(1) NOT NULL,
   `curso_escolar` int(16) NOT NULL,
   `nombre_corto` varchar(256) NOT NULL,
-  `nombre_completo` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
+  `nombre_completo` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_eventos`
+-- Estructura de tabla para la tabla `gesi_eventos`
 --
 
-DROP TABLE IF EXISTS `gesi_eventos`;
-CREATE TABLE IF NOT EXISTS `gesi_eventos` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_eventos` (
+  `id` int(16) NOT NULL,
   `fecha` datetime NOT NULL,
   `nombre` varchar(256) NOT NULL,
   `descripcion` mediumtext NOT NULL,
-  `lugar` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
+  `lugar` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_foros`
+-- Estructura de tabla para la tabla `gesi_foros`
 --
 
-DROP TABLE IF EXISTS `gesi_foros`;
-CREATE TABLE IF NOT EXISTS `gesi_foros` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `gesi_foros` (
+  `id` int(16) NOT NULL,
+  `nombre` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_grupos`
+-- Estructura de tabla para la tabla `gesi_grupos`
 --
 
-DROP TABLE IF EXISTS `gesi_grupos`;
-CREATE TABLE IF NOT EXISTS `gesi_grupos` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_grupos` (
+  `id` int(16) NOT NULL,
   `nivel` int(1) NOT NULL,
   `curso_escolar` int(16) NOT NULL,
   `nombre_corto` varchar(256) NOT NULL,
   `nombre_completo` varchar(256) NOT NULL,
-  `tutor` int(16) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `tutor` (`tutor`)
+  `tutor` int(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_mensajes_foros`
+-- Estructura de tabla para la tabla `gesi_mensajes_foros`
 --
 
-DROP TABLE IF EXISTS `gesi_mensajes_foros`;
-CREATE TABLE IF NOT EXISTS `gesi_mensajes_foros` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_mensajes_foros` (
+  `id` int(16) NOT NULL,
   `foro` int(16) NOT NULL,
   `padre` int(16) DEFAULT NULL,
   `usuario` int(16) NOT NULL,
   `fecha` datetime NOT NULL,
-  `contenido` mediumtext NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `foro` (`foro`),
-  KEY `padre` (`padre`),
-  KEY `usuario` (`usuario`)
+  `contenido` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_mensajes_secretaria`
+-- Estructura de tabla para la tabla `gesi_mensajes_secretaria`
 --
 
-DROP TABLE IF EXISTS `gesi_mensajes_secretaria`;
-CREATE TABLE IF NOT EXISTS `gesi_mensajes_secretaria` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_mensajes_secretaria` (
+  `id` int(16) NOT NULL,
   `usuario` int(16) DEFAULT NULL,
   `from_nombre` varchar(256) DEFAULT NULL,
   `from_email` varchar(256) DEFAULT NULL,
   `from_telefono` varchar(32) DEFAULT NULL,
   `fecha` datetime NOT NULL,
-  `contenido` mediumtext NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `usuario` (`usuario`)
+  `contenido` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gesi_usuarios`
+-- Estructura de tabla para la tabla `gesi_usuarios`
 --
 
-DROP TABLE IF EXISTS `gesi_usuarios`;
-CREATE TABLE IF NOT EXISTS `gesi_usuarios` (
-  `id` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `gesi_usuarios` (
+  `id` int(16) NOT NULL,
   `nif` varchar(256) NOT NULL,
   `rol` int(1) NOT NULL,
   `nombre` varchar(256) NOT NULL,
@@ -166,18 +140,132 @@ CREATE TABLE IF NOT EXISTS `gesi_usuarios` (
   `email` varchar(256) NOT NULL,
   `fecha_ultimo_acceso` datetime DEFAULT NULL,
   `fecha_registro` datetime NOT NULL,
-  `grupo` int(16) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nif_nie` (`nif`),
-  UNIQUE KEY `email` (`email`)
+  `grupo` int(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Constraints for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Constraints for table `gesi_asignaciones`
+-- Indices de la tabla `gesi_asignaciones`
+--
+ALTER TABLE `gesi_asignaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_grupo_asignatura` (`grupo`,`asignatura`),
+  ADD UNIQUE KEY `unique_foro_principal` (`foro_principal`),
+  ADD KEY `profesor` (`profesor`),
+  ADD KEY `grupo` (`grupo`),
+  ADD KEY `asignatura` (`asignatura`),
+  ADD KEY `foro_principal` (`foro_principal`);
+
+--
+-- Indices de la tabla `gesi_asignaturas`
+--
+ALTER TABLE `gesi_asignaturas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `gesi_eventos`
+--
+ALTER TABLE `gesi_eventos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `gesi_foros`
+--
+ALTER TABLE `gesi_foros`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `gesi_grupos`
+--
+ALTER TABLE `gesi_grupos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tutor` (`tutor`);
+
+--
+-- Indices de la tabla `gesi_mensajes_foros`
+--
+ALTER TABLE `gesi_mensajes_foros`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `foro` (`foro`),
+  ADD KEY `padre` (`padre`),
+  ADD KEY `usuario` (`usuario`);
+
+--
+-- Indices de la tabla `gesi_mensajes_secretaria`
+--
+ALTER TABLE `gesi_mensajes_secretaria`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuario` (`usuario`);
+
+--
+-- Indices de la tabla `gesi_usuarios`
+--
+ALTER TABLE `gesi_usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nif_nie` (`nif`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_asignaciones`
+--
+ALTER TABLE `gesi_asignaciones`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_asignaturas`
+--
+ALTER TABLE `gesi_asignaturas`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_eventos`
+--
+ALTER TABLE `gesi_eventos`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_foros`
+--
+ALTER TABLE `gesi_foros`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_grupos`
+--
+ALTER TABLE `gesi_grupos`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_mensajes_foros`
+--
+ALTER TABLE `gesi_mensajes_foros`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_mensajes_secretaria`
+--
+ALTER TABLE `gesi_mensajes_secretaria`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gesi_usuarios`
+--
+ALTER TABLE `gesi_usuarios`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `gesi_asignaciones`
 --
 ALTER TABLE `gesi_asignaciones`
   ADD CONSTRAINT `gesi_asignaciones_fk_asignatura` FOREIGN KEY (`asignatura`) REFERENCES `gesi_asignaturas` (`id`),
@@ -186,13 +274,13 @@ ALTER TABLE `gesi_asignaciones`
   ADD CONSTRAINT `gesi_asignaciones_fk_profesor` FOREIGN KEY (`profesor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `gesi_grupos`
+-- Filtros para la tabla `gesi_grupos`
 --
 ALTER TABLE `gesi_grupos`
   ADD CONSTRAINT `gesi_grupos_fk_tutor` FOREIGN KEY (`tutor`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `gesi_mensajes_foros`
+-- Filtros para la tabla `gesi_mensajes_foros`
 --
 ALTER TABLE `gesi_mensajes_foros`
   ADD CONSTRAINT `gesi_mensajes_foros_fk_foro` FOREIGN KEY (`foro`) REFERENCES `gesi_foros` (`id`) ON UPDATE CASCADE,
@@ -200,7 +288,7 @@ ALTER TABLE `gesi_mensajes_foros`
   ADD CONSTRAINT `gesi_mensajes_foros_fk_usuario` FOREIGN KEY (`usuario`) REFERENCES `gesi_usuarios` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `gesi_mensajes_secretaria`
+-- Filtros para la tabla `gesi_mensajes_secretaria`
 --
 ALTER TABLE `gesi_mensajes_secretaria`
   ADD CONSTRAINT `gesi_mensajes_secretaria_fk_usuario` FOREIGN KEY (`usuario`) REFERENCES `gesi_usuarios` (`id`);
