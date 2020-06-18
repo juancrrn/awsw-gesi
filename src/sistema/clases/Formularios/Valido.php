@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Validación de datos.
+ * Ofrece funcionalidad para la validación de datos y tipos.
  *
  * @package awsw-gesi
  * Gesi
@@ -17,7 +17,6 @@
 
 namespace Awsw\Gesi\Formularios;
 
-use Awsw\Gesi\Validacion\GesiScheduleSlot;
 use stdClass;
 
 class Valido

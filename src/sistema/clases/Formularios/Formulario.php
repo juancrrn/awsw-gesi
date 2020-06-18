@@ -1,9 +1,18 @@
 <?php
 
 /**
- * Clase base para la gestión de formularios.
+ * Ofrece funcionalidad para la gestión de formularios HTML normales.
  *
- * Además de la gestión básica de los formularios.
+ * @package awsw-gesi
+ * Gesi
+ * Aplicación de gestión de institutos de educación secundaria
+ *
+ * @author Andrés Ramiro Ramiro
+ * @author Nicolás Pardina Popp
+ * @author Pablo Román Morer Olmos
+ * @author Juan Francisco Carrión Molina
+ *
+ * @version 0.0.4
  */
 
 namespace Awsw\Gesi\Formularios;
@@ -14,32 +23,38 @@ abstract class Formulario
 {
 
     /**
-     * @var string Cadena utilizada como valor del atributo "id" de la etiqueta &lt;form&gt; asociada al formulario y 
-     * como parámetro a comprobar para verificar que el usuario ha enviado el formulario.
+     * @var string $form_id Cadena utilizada como valor del atributo "id" de la 
+     *                      etiqueta <form> asociada al formulario y como 
+     *                      parámetro a comprobar para verificar que el usuario 
+     *                      ha enviado el formulario.
      */
     private $form_id;
 
     /**
-     * @var string URL asociada al atributo "action" de la etiqueta &lt;form&gt; del fomrulario y que procesará el 
-     * envío del formulario.
+     * @var string $action  URL asociada al atributo "action" de la etiqueta 
+     *                      <form> del fomrulario y que procesará el envío del 
+     *                      formulario.
      */
     private $action;
 
     /**
-     * Almacena el HTML para generar el formulario.
-     * 
-     * Que el HTML no se imprima directamente y se pueda procesar el formulario
-     * al inicio del script de vista, nos permite adelantar eventos y, por 
-     * ejemplo, usar el mecanismo de mensajes de \Awsw\Gesi\Vistas\Vista.
+     * @var string $html    Almacena el HTML para generar el formulario. Que el 
+     *                      HTML no se imprima directamente y se pueda procesar 
+     *                      el formulario al inicio del script de vista, nos 
+     *                      permite adelantar eventos y, por ejemplo, usar el 
+     *                      mecanismo de mensajes de \Awsw\Gesi\Vistas\Vista.
      */
     protected $html = '';
 
     /**
      * Crea un nuevo formulario.
-     * @param string $form_id    Cadena utilizada como valor del atributo "id" de la etiqueta &lt;form&gt; asociada al
-     *                          formulario y como parámetro a comprobar para verificar que el usuario ha enviado el formulario.
+     * 
+     * @param string $form_id Cadena utilizada como valor del atributo "id" de 
+     *                        la etiqueta <form> asociada al formulario y como 
+     *                        parámetro a comprobar para verificar que el 
+     *                        usuario ha enviado el formulario.
      *
-     * @param array $opciones (ver más arriba).
+     * @param array $opciones (Ver más arriba.)
      */
     public function __construct($form_id, $opciones = array())
     {
@@ -64,7 +79,7 @@ abstract class Formulario
     }
   
     /**
-     * Orquesta todo el proceso de gestión de un formulario.
+     * Procesa el envío de un formulario.
      */
     public function gestiona()
     {   
@@ -77,9 +92,11 @@ abstract class Formulario
      * Verifica si el usuario ha enviado el formulario y para ello comprueba si 
      * existe el parámetro $form_id en $params.
      *
-     * @param array<string> $params Array que contiene los datos recibidos en el envío formulario.
+     * @param array $params Array que contiene los datos recibidos en el envío 
+     *                      formulario.
      *
-     * @return boolean Devuelve true si $form_id existe como clave en $params.
+     * @return bool         Devuelve true si $form_id existe como clave en 
+     *                      $params.
      */
     private function enviado(& $params)
     {
@@ -89,9 +106,10 @@ abstract class Formulario
     /**
      * Genera el HTML necesario para presentar los campos del formulario.
      *
-     * @param array<string> $datos_iniciales Datos iniciales para los campos del formulario (normalmente $_POST).
+     * @param array $datos_iniciales Datos iniciales para los campos del 
+     *                               formulario (normalmente $_POST).
      * 
-     * @return string HTML asociado a los campos del formulario.
+     * @return string                HTML asociado a los campos del formulario.
      */
     protected function generaCampos(array & $datos_iniciales = array()): string
     {
@@ -108,7 +126,7 @@ abstract class Formulario
      * En tal caso, es la propia función la que vuelve a generar el formulario
      * con los datos iniciales.
      *
-     * @param array<string> $datos Datos enviado por el usuario (normalmente $_POST).
+     * @param array $datos Datos enviado por el usuario (normalmente $_POST).
      */
     protected function procesa(array & $datos): void
     {
@@ -118,9 +136,10 @@ abstract class Formulario
     /**
      * Función que genera el HTML necesario para el formulario.
      *
-     * @param string[] $datos (opcional) Array con los valores por defecto de los campos del formulario.
+     * @param string? $datos Array con los valores por defecto de los campos 
+     *                       del formulario.
      *
-     * @return string HTML asociado al formulario.
+     * @return string        HTML asociado al formulario.
      */
     public function genera(array & $datos = array()): void
     {
@@ -150,3 +169,5 @@ abstract class Formulario
         return $this->html;
     }
 }
+
+?>
