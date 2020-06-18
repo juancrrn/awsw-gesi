@@ -47,7 +47,7 @@ class EventoPsCreate extends FormularioAjax
     private const SUBMIT_URL = '/ps/eventos/create/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
     private const ON_SUCCESS_EVENT_NAME = 'created.evento.ps';
-    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-list';
+    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista';
 
     /**
      * Constructs the form object.
@@ -87,6 +87,7 @@ class EventoPsCreate extends FormularioAjax
         <div class="form-group">
             <label for="fecha">Fecha</label>
             <input class="form-control" type="text" name="fecha" id="fecha" placeholder="Fecha" required="required" />
+            <small class="form-text text-muted">En formato <code>dd/mm/yyyy</code>.</small>
         </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -141,7 +142,7 @@ class EventoPsCreate extends FormularioAjax
         } else {
 
             $fechaEvento = Valido::testDate($fecha);
-          
+
             $evento = new Evento(
               null,
               $fechaEvento,

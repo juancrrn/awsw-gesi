@@ -160,25 +160,39 @@ use Awsw\Gesi\Sesion;
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        //Comprobamos si la asignatura esta asignada
-        if(!Asignacion::dbAnyByAsignatura($uniqueId)){
-            if (Asignatura::dbEliminar($uniqueId)) {
-                $responseData = array(
-                    'status' => 'ok',
-                    'messages' => array(
-                        'Asignatura eliminada correctamente.'
-                    )
-                );
-    
-                $this->respondJsonOk($responseData);
-            } else {
-                $errors[] = 'Hubo un problema al eliminar la asignatura.';
-    
-                $this->respondJsonError(400, $errors); // Bad request.
+        // Comprobar restricciones.
+        $restricciones = Asignatura::dbCompruebaRestricciones($uniqueId);
+
+        if (! empty($restricciones)) {
+            $lista = '';
+
+            for ($i = 0; $i < sizeof($restricciones); $i++) {
+                $lista .= $restricciones[$i];
+
+                if ($i == sizeof($restricciones) - 2) {
+                    $lista .= ' y ';
+                } elseif ($i != sizeof($restricciones) - 1) {
+                    $lista .= ', ';
+                }
             }
-        }else{
+
+            $errors[] = 'No se puede eliminar esta asignatura porque existen referencias al mismo en otros datos (restricciones de integridad): ' . $lista . '.';
+            
+            $this->respondJsonError(400, $errors); // Bad request.
+        }
+        
+        if (Asignatura::dbEliminar($uniqueId)) {
+            $responseData = array(
+                'status' => 'ok',
+                'messages' => array(
+                    'Asignatura eliminada correctamente.'
+                )
+            );
+
+            $this->respondJsonOk($responseData);
+        } else {
             $errors[] = 'Hubo un problema al eliminar la asignatura.';
-    
+
             $this->respondJsonError(400, $errors); // Bad request.
         }
     }

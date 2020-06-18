@@ -32,7 +32,7 @@ class RestablecerContrasena extends Formulario
         parent::__construct(self::FORM_ID, array('action' => $action));
     }
     
-    protected function generaCampos(array & $datos_iniciales = array()): void
+    protected function generaCampos(array & $datos_iniciales = array()): string
     {
         $this->html .= <<< HTML
         <div class="form-group">
@@ -53,7 +53,7 @@ class RestablecerContrasena extends Formulario
         </div>
         <button type="submit" class="btn btn-primary">Continuar</button>
         HTML;
-
+        return $this->html;
     }
 
     protected function procesa(array & $datos): void

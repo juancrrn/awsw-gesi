@@ -87,7 +87,6 @@ class EventoPsList extends Modelo
             $listaEventoBuffer = '';
 
             if(! empty($this->listadoEvento)){
-                $eventos = array();
              
                 foreach($this->listadoEvento as $u){
                     
@@ -130,7 +129,7 @@ class EventoPsList extends Modelo
             $formEventoPsCreateButton = $formEventoPsCreate->generateButton('Crear',null,true);
             $html = <<< HTML
             <h3 class="mb-4">$formEventoPsCreateButton</h3>
-            <table id="evento-ps-list" class="table table-borderless table-striped">
+            <table id="evento-ps-lista" class="table table-borderless table-striped">
             <thead>
                 <tr>
                     <th scope="col">Fecha</th>

@@ -49,7 +49,7 @@ class MensajeSecretariaPsRead extends FormularioAjax
      */
     public function __construct($api = false)
     {
-        Sesion::requerirSesionNoIniciada($api);
+        Sesion::requerirSesionPs($api);
 
         $app = App::getSingleton();
 

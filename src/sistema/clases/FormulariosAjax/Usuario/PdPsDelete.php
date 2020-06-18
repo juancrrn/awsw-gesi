@@ -160,32 +160,41 @@ use Awsw\Gesi\Sesion;
             $this->respondJsonError(404, $errors); // Not found.
         }
 
-        // Si no tiene ningun mensaje de secretaria y no tiene ningun grupo asignado lo eliminamos
+        // Comprobar restricciones.
+        $restricciones = Usuario::dbCompruebaRestricciones($uniqueId);
 
-        if (! Grupo::dbAnyByTutor($uniqueId) && ! MensajeSecretaria::dbAnyByUsuario($uniqueId)) {
+        if (! empty($restricciones)) {
+            $lista = '';
 
-            if (Usuario::dbEliminar($uniqueId)) {
-                $responseData = array(
-                    'status' => 'ok',
-                    'messages' => array(
-                        'Usuario de personal docente eliminado correctamente.'
-                    )
-                );
-    
-                $this->respondJsonOk($responseData);
-            } else {
-                $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
-    
-                $this->respondJsonError(400, $errors); // Bad request.
+            for ($i = 0; $i < sizeof($restricciones); $i++) {
+                $lista .= $restricciones[$i];
+
+                if ($i == sizeof($restricciones) - 2) {
+                    $lista .= ' y ';
+                } elseif ($i != sizeof($restricciones) - 1) {
+                    $lista .= ', ';
+                }
             }
+
+            $errors[] = 'No se puede eliminar este usuario porque existen referencias al mismo en otros datos (restricciones de integridad): ' . $lista . '.';
+
+            $this->respondJsonError(400, $errors); // Bad request.
+        }
+
+        if (Usuario::dbEliminar($uniqueId)) {
+            $responseData = array(
+                'status' => 'ok',
+                'messages' => array(
+                    'Usuario de personal docente eliminado correctamente.'
+                )
+            );
+
+            $this->respondJsonOk($responseData);
         } else {
             $errors[] = 'Hubo un problema al eliminar el usuario de personal docente.';
 
             $this->respondJsonError(400, $errors); // Bad request.
         }
-
-
-        
     }
  }
 

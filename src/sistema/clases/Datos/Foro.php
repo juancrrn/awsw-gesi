@@ -21,7 +21,7 @@ use Awsw\Gesi\App;
 use JsonSerializable;
 
 class Foro
-    implements JsonSerializable
+    implements DAO, JsonSerializable
 {
 
     /**
@@ -305,6 +305,44 @@ class Foro
         return $result;
     }
 
+    /**
+     * Comprueba si un foro se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El foro existe.
+     * 
+     * @param int $id Identificador del foro.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al foro. Si no 
+     *                   las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $restricciones = array();
+
+        // TODO
+        return $restricciones;
+
+        // gesi_mensajes_secretaria.usuario
+
+        $query = <<< SQL
+        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'mensaje de Secretaría (usuario)';
+        $sentencia->close();
+        
+        return $restricciones;
+    }
+
     /*
      *
      * Operaciones UPDATE.
@@ -352,7 +390,8 @@ class Foro
      *
      * @param int $id
      */
-    public static function dbEliminar($id){
+    public static function dbEliminar(int $id): bool
+    {
 
         $bbdd = App::getSingleton()->bbddCon();
 

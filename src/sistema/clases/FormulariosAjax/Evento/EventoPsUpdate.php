@@ -46,8 +46,8 @@ class EventoPsUpdate extends FormularioAjax
     private const TARGET_CLASS_NAME = 'Evento';
     private const SUBMIT_URL = '/ps/eventos/update/';
     private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_PATCH;
-    private const ON_SUCCESS_EVENT_NAME = 'updated.evento';
-    private const ON_SUCCESS_EVENT_TARGET = '#evento-list';
+    private const ON_SUCCESS_EVENT_NAME = 'updated.evento.ps';
+    private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista';
 
     /**
      * Constructs the form object
@@ -119,6 +119,7 @@ class EventoPsUpdate extends FormularioAjax
         <div class="form-group">
             <label for="fecha">Fecha</label>
             <input class="form-control" type="text" name="fecha" id="fecha" placeholder="fecha" required="required" />
+            <small class="form-text text-muted">En formato <code>dd/mm/yyyy</code>.</small>
         </div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -152,9 +153,7 @@ class EventoPsUpdate extends FormularioAjax
         $fecha = $data['fecha'] ?? null;
         $nombre = $data['nombre'] ?? null;
         $descripcion = $data['descripcion'] ?? null;
-        $lugar = $data['lugar'] ?? null;
-        $asignacion = $data['asignacion'] ?? null;
-        $tutor = $data['tutor'] ?? null;  
+        $lugar = $data['lugar'] ?? null; 
 
         if (empty($nombre)) {
             $errors[] = 'El campo nombre no puede estar vacío.';
@@ -177,13 +176,6 @@ class EventoPsUpdate extends FormularioAjax
         } elseif (! Valido::testStdString($lugar)) {
             $errors[] = 'El campo nombre no es válido. Solo puede contener letras, espacios y guiones; y debe tener entre 3 y 128 caracteres.';
         }
-
-
-
-        if(empty($asignacion) ||Valido::testStdInt($asignacion) || !Asignacion::dbExisteId($asignacion)){
-            $error[] = 'El campo asignacion no es valido.';
-        }
-
 
         // Comprobar si hay errores.
         if (! empty($errors)) {

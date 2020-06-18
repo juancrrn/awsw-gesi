@@ -3,6 +3,7 @@
 namespace Awsw\Gesi\FormulariosAjax\Evento;
 
 use Awsw\Gesi\App;
+use Awsw\Gesi\Sesion;
 use Awsw\Gesi\Datos\Grupo;
 use Awsw\Gesi\Datos\Usuario;
 use Awsw\Gesi\Formularios\Valido;
@@ -46,15 +47,17 @@ class EventoPsDelete extends FormularioAjax
     private const FORM_NAME = 'Eliminar Evento';
     private const TARGET_CLASS_NAME = 'Evento';
     private const SUBMIT_URL = '/ps/eventos/delete/';
-    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_POST;
-    private const ON_SUCCESS_EVENT_NAME = 'delete.evento.ps';
+    private const EXPECTED_SUBMIT_METHOD = FormularioAjax::HTTP_DELETE;
+    private const ON_SUCCESS_EVENT_NAME = 'deleted.evento.ps';
     private const ON_SUCCESS_EVENT_TARGET = '#evento-ps-lista';
 
     /**
      * Constructs the form object
      */
-    public function __construct()
-    {
+    public function __construct($api = false)
+    {   
+        Sesion::requerirSesionPs($api);
+
         $app = App::getSingleton();
 
         parent::__construct(

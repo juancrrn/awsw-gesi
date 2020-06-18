@@ -22,7 +22,7 @@ use Awsw\Gesi\App;
 use JsonSerializable;
 
 class Asignacion
-    implements JsonSerializable
+    implements DAO, JsonSerializable
 {
 
     /**
@@ -539,6 +539,23 @@ class Asignacion
         $sentencia->close();
         
         return $asignacion;
+    }
+
+    /**
+     * Comprueba si una asignación se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      La asignación existe.
+     * 
+     * @param int $id Identificador de la asignación.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias a la asignación. Si no 
+     *                las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        return array();
     }
 
     /*

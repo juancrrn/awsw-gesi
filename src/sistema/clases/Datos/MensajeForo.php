@@ -23,7 +23,7 @@ use JsonSerializable;
 use stdClass;
 
 class MensajeForo 
-    implements JsonSerializable
+    implements DAO, JsonSerializable
 {
     /**
      * @var int $id           Identificador único.
@@ -334,6 +334,25 @@ class MensajeForo
         $sentencia->close();
 
         return $mensajes;
+    }
+
+    /**
+     * Comprueba si un mensaje de foro se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El mensaje de foro existe.
+     * 
+     * @param int $id Identificador del mensaje de foro.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al mensaje de foro. Si 
+     *                no las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        // Los mensajes de foros no se pueden eliminar, así que no comprobamos restricciones.
+
+        return array();
     }
     
     public function jsonSerialize()

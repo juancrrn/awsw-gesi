@@ -696,6 +696,83 @@ class Usuario
         return $usuarios;    
     }
 
+    /**
+     * Comprueba si un usuario se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El usuario existe.
+     * 
+     * @param int $id Identificador del usuario.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al usuario. Si no las 
+     *                hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $restricciones = array();
+
+        // gesi_mensajes_secretaria.usuario
+
+        $query = <<< SQL
+        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'mensaje de Secretaría (usuario)';
+        $sentencia->close();
+
+        // gesi_asignaciones.profesor
+
+        $query = <<< SQL
+        SELECT id FROM gesi_asignaciones WHERE profesor = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'asignación (profesor)';
+        $sentencia->close();
+
+        // gesi_mensajes_foros.usuario
+
+        $query = <<< SQL
+        SELECT id FROM gesi_mensajes_foros WHERE usuario = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'mensaje de foro (usuario)';
+        $sentencia->close();
+
+        // gesi_grupos.tutor
+
+        $query = <<< SQL
+        SELECT id FROM gesi_grupos WHERE tutor = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'grupo (tutor)';
+        $sentencia->close();
+        
+        return $restricciones;
+    }
+
     /*
      *
      * Operaciones UPDATE.

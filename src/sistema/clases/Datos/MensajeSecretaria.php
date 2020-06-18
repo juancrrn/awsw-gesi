@@ -420,6 +420,25 @@ class MensajeSecretaria
         return $existe;
     }
 
+    /**
+     * Comprueba si un mensaje de Secretaría se puede eliminar, es decir, que 
+     * no está referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El mensaje de Secretaría existe.
+     * 
+     * @param int $id Identificador del mensaje de Secretaría.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al mensaje de 
+     *                Secretaría. Si no las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        // Los mensajes de Secretaría no se pueden eliminar, así que no comprobamos restricciones.
+
+        return array();
+    }
+
     public function jsonSerialize()
     {
         if ($this->getUsuario()) {

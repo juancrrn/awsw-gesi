@@ -23,7 +23,7 @@ use JsonSerializable;
 use stdClass;
 
 class Evento
-    implements JsonSerializable
+    implements DAO, JsonSerializable
 {
     /**
      * @var $id          Identificador único de evento
@@ -42,7 +42,7 @@ class Evento
      * Constructor.
      */
     public function __construct($id, $fecha, $nombre, $descripcion, $lugar)
-    {
+    {   
         $this->id = $id;
         $this->fecha = $fecha;
         $this->nombre = $nombre;
@@ -282,6 +282,23 @@ class Evento
         $sentencia->close();
 
         return $existe;
+    }
+
+    /**
+     * Comprueba si un evento se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El evento existe.
+     * 
+     * @param int $id Identificador del evento.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al evento. Si no 
+     *                   las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        return array();
     }
 
     /*

@@ -442,7 +442,7 @@ onSuccessFn.listaGruposPsDeleted = (e, params) =>
 
 /** Eventos */
 
-onSuccessFn.listaPsEventoCreated = (e, params) =>
+onSuccessFn.listaEventoPsCreated = (e, params) =>
 {
     const $modalData = params.modalData;
     const result = params.result;
@@ -480,7 +480,7 @@ onSuccessFn.listaPsEventoCreated = (e, params) =>
  * @param {eventObject} e Evento.
  * @param {Object} params Contiene el modal y el resultado.
  */
-onSuccessFn.listaPsEventoUpdated = (e, params) =>
+onSuccessFn.listaEventoPsUpdated = (e, params) =>
 {
     const $modalData = params.modalData;
     const result = params.result;
@@ -507,7 +507,7 @@ onSuccessFn.listaPsEventoUpdated = (e, params) =>
  * @param {eventObject} e Evento.
  * @param {Object} params Contiene el modal y el resultado.
  */
-onSuccessFn.listaPsEventoDeleted = (e, params) =>
+onSuccessFn.listaEventoPsDeleted = (e, params) =>
 {
     const $modalData = params.modalData;
 

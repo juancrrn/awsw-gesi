@@ -276,11 +276,11 @@ $(() => {
      * Vista de lista de eventos (personal de Secretaría).
      */
 
-    $('#evento-ps-list').on('created.evento.ps',
+    $('#evento-ps-lista').on('created.evento.ps',
     onSuccessFn.listaEventoPsCreated);
-    $('#evento-ps-list').on('updated.evento.ps',
+    $('#evento-ps-lista').on('updated.evento.ps',
     onSuccessFn.listaEventoPsUpdated);
-    $('#evento-ps-list').on('deleted.evento.ps',
+    $('#evento-ps-lista').on('deleted.evento.ps',
     onSuccessFn.listaEventoPsDeleted);  
 
     /**

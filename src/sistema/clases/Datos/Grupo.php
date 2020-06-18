@@ -23,7 +23,7 @@ use JsonSerializable;
 use stdClass;
 
 class Grupo
-    implements JsonSerializable
+    implements DAO, JsonSerializable
 {
 
     /**
@@ -376,6 +376,44 @@ class Grupo
         $sentencia->close();
 
         return $existe;
+    }
+
+    /**
+     * Comprueba si un grupo se puede eliminar, es decir, que no está 
+     * referenciado como clave ajena en otra tabla.
+     * 
+     * @requires      El grupo existe.
+     * 
+     * @param int $id Identificador del grupo.
+     * 
+     * @return array  En caso de haberlas, devuelve un array con los nombres de 
+     *                las tablas donde hay referencias al grupo. Si no 
+     *                   las hay, devuelve un array vacío.
+     */
+    public static function dbCompruebaRestricciones(int $id): array
+    {
+        $bbdd = App::getSingleton()->bbddCon();
+
+        $restricciones = array();
+
+        // TODO
+        return $restricciones;
+
+        // gesi_mensajes_secretaria.usuario
+
+        $query = <<< SQL
+        SELECT id FROM gesi_mensajes_secretaria WHERE usuario = ? LIMIT 1
+        SQL;
+
+        $sentencia = $bbdd->prepare($query);
+        $sentencia->bind_param('i', $id);
+        $sentencia->execute();
+        $sentencia->store_result();
+        if ($sentencia->num_rows > 0)
+            $restricciones[] = 'mensaje de Secretaría (usuario)';
+        $sentencia->close();
+        
+        return $restricciones;
     }
 
     /*

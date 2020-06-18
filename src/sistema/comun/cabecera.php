@@ -59,7 +59,7 @@ if (Sesion::isSesionIniciada()) {
     $sideMenuBuffer .= Vista::generarSideMenuLink(
         '/ses/secretaria/', MensajeSecretariaSesList::class);
     $sideMenuBuffer .= Vista::generarSideMenuLink(
-        '/est/eventos/', EventoInvList::class);
+        '/inv/eventos/', EventoInvList::class);
 
     if (Sesion::getUsuarioEnSesion()->isEst()) {
         $sideMenuBuffer .= Vista::generarSideMenuDivider(
